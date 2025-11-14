@@ -177,129 +177,68 @@ const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
           animate="visible"
           variants={containerVariants}
         >
-          {/* Enhanced Subtitle Badge */}
+          {/* Simplified Subtitle Badge */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-4 mb-12 border border-emerald-400/20"
+            className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8 border border-emerald-400/20"
           >
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
-              <span className="text-sm font-bold text-emerald-400 uppercase tracking-wider">AI-Powered Digital Agency</span>
-            </div>
-            <div className="w-px h-4 bg-slate-600" />
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Trusted by 200+ Businesses</span>
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-            </div>
+            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-emerald-400">AI-Powered Digital Agency</span>
           </motion.div>
 
-          {/* Enhanced Main Heading */}
+          {/* Simplified Main Heading */}
           <motion.h1 
             variants={itemVariants} 
-            className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-8"
+            className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6"
           >
-            <span className="block mb-4">Grow Your Business</span>
+            <span className="block mb-2">Grow Your Business</span>
             <span className="block text-gradient bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
               10x Faster with AI
             </span>
-            <span className="block text-2xl md:text-4xl lg:text-5xl mt-6 text-slate-400 font-normal">
-              Digital Excellence Delivered
-            </span>
           </motion.h1>
 
-          {/* Enhanced Description with Stats */}
-          <motion.div variants={itemVariants} className="mb-12">
-            <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto mb-8 leading-relaxed">
-              We've helped <span className="text-emerald-400 font-bold">200+ businesses</span> achieve 
-              <span className="text-blue-400 font-bold"> 300% revenue growth</span> through cutting-edge 
-              <span className="text-purple-400 font-bold">AI-powered strategies</span> and proven digital solutions.
+          {/* Simplified Description */}
+          <motion.div variants={itemVariants} className="mb-10">
+            <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+              We help businesses achieve <span className="text-emerald-400 font-semibold">300% revenue growth</span> 
+              through AI-powered digital strategies and proven solutions.
             </p>
-            
-            {/* Key Benefits */}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm md:text-base">
-              {[
-                { icon: "⚡", text: "60-Second Project Estimates" },
-                { icon: "🎯", text: "400% ROI Guaranteed" },
-                { icon: "🚀", text: "Launch in 30 Days" },
-                { icon: "🔧", text: "24/7 AI Support" }
-              ].map((benefit, index) => (
-                <motion.div
-                  key={index}
-                  className="flex items-center gap-2 glass-effect px-4 py-2 rounded-full"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8 + index * 0.1 }}
-                >
-                  <span className="text-lg">{benefit.icon}</span>
-                  <span className="text-slate-300 font-medium">{benefit.text}</span>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
-          {/* Enhanced CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col lg:flex-row gap-6 justify-center items-center mb-12">
-            {/* Primary CTA */}
+          {/* Simplified CTA Buttons */}
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
             <motion.button
               onClick={onGetStarted}
-              className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 text-white font-bold py-6 px-16 rounded-2xl text-xl shadow-2xl border border-white/20"
-              whileHover={{ scale: 1.05, y: -3 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative z-10 flex items-center gap-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Get Instant Estimate
-                <div className="px-2 py-1 bg-yellow-400 text-black text-xs font-bold rounded-full ml-2">FREE</div>
-              </span>
-            </motion.button>
-            
-            {/* Secondary CTA */}
-            <motion.button
-              className="group flex items-center gap-3 text-white font-bold py-6 px-12 rounded-2xl border-2 border-emerald-400/50 hover:border-emerald-400 bg-emerald-400/5 hover:bg-emerald-400/10 backdrop-blur-sm transition-all duration-300"
+              className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-xl text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-              <span>
-                Watch Our Process
-                <div className="text-xs text-emerald-400 font-normal">2-min demo</div>
-              </span>
+              Get Started Free
+            </motion.button>
+            
+            <motion.button
+              className="text-white font-medium py-4 px-8 rounded-xl border border-slate-600 hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              View Our Work
             </motion.button>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Simplified Trust Indicator */}
           <motion.div 
             variants={itemVariants}
-            className="flex flex-col sm:flex-row items-center justify-center gap-8 text-slate-400"
+            className="flex items-center justify-center gap-6 text-slate-400"
           >
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full border-2 border-slate-800" />
-                ))}
-              </div>
-              <span className="text-sm font-medium">200+ Happy Clients</span>
-            </div>
-            
             <div className="flex items-center gap-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                   </svg>
                 ))}
               </div>
-              <span className="text-sm font-medium">4.9/5 Rating</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">3 Spots Left This Week</span>
+              <span className="text-sm">Trusted by 200+ businesses</span>
             </div>
           </motion.div>
         </motion.div>
