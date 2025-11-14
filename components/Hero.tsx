@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { SERVICES, PROJECTS, TESTIMONIALS, COMPANY_STATS } from '../constants';
+import { SERVICES, PROJECTS, TESTIMONIALS } from '../constants';
 import FAQ from './FAQ';
 import { Project, Service } from '../types';
 import { generateSlogan } from '../services/geminiService';
@@ -600,35 +600,7 @@ const TeamSection: React.FC = () => {
                     ))}
                 </motion.div>
 
-                {/* Team Stats */}
-                <motion.div 
-                    variants={itemVariants}
-                    className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16"
-                >
-                    {[
-                        { number: "50+", label: "Projects Completed", icon: "🚀" },
-                        { number: "6", label: "Team Members", icon: "👥" },
-                        { number: "15+", label: "Years Experience", icon: "⭐" },
-                        { number: "24/7", label: "Support Available", icon: "🔧" }
-                    ].map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            className="glass-effect p-6 rounded-2xl text-center group"
-                            whileHover={{ scale: 1.05, y: -3 }}
-                            transition={{ duration: 0.2 }}
-                        >
-                            <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                                {stat.icon}
-                            </div>
-                            <div className="text-3xl font-black text-gradient mb-2">
-                                {stat.number}
-                            </div>
-                            <div className="text-slate-400 text-sm font-medium">
-                                {stat.label}
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+
 
                 {/* Call to Action */}
                 <motion.div variants={itemVariants} className="text-center">
@@ -1342,35 +1314,7 @@ const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                         </div>
                     </motion.div>
 
-                    {/* Service Statistics */}
-                    <motion.div 
-                        variants={itemVariants}
-                        className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16"
-                    >
-                        {[
-                            { number: '500+', label: 'Projects Delivered', icon: '🎯' },
-                            { number: '98%', label: 'Client Satisfaction', icon: '⭐' },
-                            { number: '24/7', label: 'Support Available', icon: '💬' },
-                            { number: '15+', label: 'Industry Awards', icon: '🏆' }
-                        ].map((stat, index) => (
-                            <motion.div
-                                key={index}
-                                className="glass-effect p-6 rounded-2xl text-center group"
-                                whileHover={{ scale: 1.05, y: -3 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                                    {stat.icon}
-                                </div>
-                                <div className="text-3xl font-black text-gradient mb-2">
-                                    {stat.number}
-                                </div>
-                                <div className="text-slate-400 text-sm font-medium">
-                                    {stat.label}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+
 
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
@@ -1804,35 +1748,7 @@ const ProjectsPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                         )}
                     </motion.div>
 
-                    {/* Project Statistics */}
-                    <motion.div 
-                        variants={itemVariants}
-                        className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16"
-                    >
-                        {[
-                            { number: '150+', label: 'Projects Delivered', icon: '🚀', color: 'from-emerald-500 to-teal-500' },
-                            { number: '98%', label: 'Client Satisfaction', icon: '⭐', color: 'from-blue-500 to-cyan-500' },
-                            { number: '24/7', label: 'Support Available', icon: '🛡️', color: 'from-purple-500 to-pink-500' },
-                            { number: '5+', label: 'Years Experience', icon: '🏆', color: 'from-orange-500 to-red-500' }
-                        ].map((stat, index) => (
-                            <motion.div
-                                key={index}
-                                className="glass-effect p-6 rounded-2xl text-center group"
-                                whileHover={{ scale: 1.05, y: -5 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <div className="text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    {stat.icon}
-                                </div>
-                                <div className={`text-3xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
-                                    {stat.number}
-                                </div>
-                                <div className="text-slate-400 text-sm font-medium">
-                                    {stat.label}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
+
 
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
@@ -2087,73 +2003,12 @@ const TestimonialsSlider: React.FC = () => {
 }
 
 
-// --- Company Stats Section ---
-const CompanyStats: React.FC = () => (
-  <motion.section
-    className="py-20 px-4 relative"
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.3 }}
-    variants={containerVariants}
-  >
-    {/* Background */}
-    <div className="absolute inset-0 bg-gradient-to-b from-slate-900 to-slate-800" />
-    
-    <div className="container mx-auto relative z-10">
-      <motion.div 
-        variants={itemVariants}
-        className="text-center mb-12"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Trusted by <span className="text-gradient">Leading Brands</span>
-        </h2>
-        <p className="text-slate-300 text-lg max-w-2xl mx-auto">
-          Our proven track record speaks for itself with exceptional results across all metrics
-        </p>
-      </motion.div>
 
-      <motion.div
-        variants={containerVariants}
-        className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto"
-      >
-        {COMPANY_STATS.map((stat, index) => (
-          <motion.div
-            key={index}
-            className="glass-effect p-8 rounded-2xl text-center group"
-            variants={itemVariants}
-            whileHover={{ 
-              scale: 1.05, 
-              y: -5,
-              transition: { duration: 0.2 } 
-            }}
-          >
-            <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
-              {stat.icon}
-            </div>
-            <motion.div 
-              className="text-4xl md:text-5xl font-black text-gradient mb-3"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              {stat.number}
-            </motion.div>
-            <div className="text-base text-slate-400 font-medium">
-              {stat.label}
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
-    </div>
-  </motion.section>
-);
 
 export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
   return (
     <>
       <Hero onGetStarted={() => setCurrentPage('projects')} />
-      <CompanyStats />
       <ServicesPreview setCurrentPage={setCurrentPage}/>
       <SloganGenerator />
       <AIBusinessAdvisor />
