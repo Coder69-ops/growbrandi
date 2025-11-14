@@ -456,7 +456,8 @@ export const ServicesPage: React.FC = () => {
               <motion.div
                 key={index}
                 className="glass-effect p-6 rounded-2xl text-center group"
-                whileHover={{ scale: 1.05, y: -3 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

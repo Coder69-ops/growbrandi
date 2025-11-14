@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Footer from './Footer';
 
 // Privacy Policy Page
 export const PrivacyPolicyPage: React.FC = () => {
@@ -117,7 +116,6 @@ export const PrivacyPolicyPage: React.FC = () => {
           </motion.div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };
@@ -235,7 +233,6 @@ export const TermsOfServicePage: React.FC = () => {
           </motion.div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };
@@ -362,7 +359,6 @@ export const CookiePolicyPage: React.FC = () => {
           </motion.div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

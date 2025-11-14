@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation, useInView } from 'framer-motion';
 import { SERVICES, PROJECTS, TESTIMONIALS } from '../constants';
 import FAQ from './FAQ';
 import { Project, Service } from '../types';
 import { generateSlogan } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
+import { useRouter } from './Router';
 
 // Team Data
 const TEAM_MEMBERS = [
@@ -34,10 +35,10 @@ const TEAM_MEMBERS = [
   },
   {
     name: "Elena Rodriguez",
-    role: "AI Solutions Architect",
-    description: "AI/ML specialist focused on integrating intelligent solutions that drive business growth and user engagement.",
+    role: "GrowBrandi Solutions Architect",
+    description: "Technology specialist focused on integrating intelligent solutions that drive business growth and user engagement through GrowBrandi's innovative platform.",
     image: "https://images.stockcake.com/public/5/5/a/55aa0081-3d0d-495b-b649-4838f12aedd3_large/professional-young-man-stockcake.jpg",
-    specialties: ["Machine Learning", "AI Integration", "Data Analytics"],
+    specialties: ["Smart Analytics", "GrowBrandi Integration", "Business Intelligence"],
     social: {
       linkedin: "#",
       twitter: "#",
@@ -82,10 +83,8 @@ const TEAM_MEMBERS = [
   }
 ];
 
-type Page = 'home' | 'services' | 'projects' | 'contact';
-
 interface HomePageProps {
-  setCurrentPage: (page: Page) => void;
+  // No props needed - using router directly
 }
 
 const containerVariants = {
@@ -106,7 +105,8 @@ const itemVariants = {
 };
 
 // --- Enhanced Hero Section ---
-const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
+const Hero: React.FC = () => {
+  const { navigate } = useRouter();
   return (
     <section className="relative overflow-hidden">
       {/* Background Image */}
@@ -122,7 +122,7 @@ const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
       <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-blue-500/10" />
       
       {/* Main Hero Content */}
-      <div className="relative min-h-screen flex items-center justify-center px-4">        
+      <div className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">        
         {/* Enhanced Animated Elements */}
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(5)].map((_, i) => (
@@ -180,36 +180,36 @@ const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
           {/* Simplified Subtitle Badge */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8 border border-emerald-400/20"
+            className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 py-2 sm:py-3 mb-6 sm:mb-8 border border-emerald-400/20 mx-4 sm:mx-0"
           >
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-emerald-400">AI-Powered Digital Agency</span>
+            <span className="text-sm font-medium text-emerald-400">GrowBrandi - Expert Digital Agency</span>
           </motion.div>
 
           {/* Simplified Main Heading */}
           <motion.h1 
             variants={itemVariants} 
-            className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight mb-4 sm:mb-6"
           >
-            <span className="block mb-2">Grow Your Business</span>
+            <span className="block mb-1 sm:mb-2">Grow Your Business</span>
             <span className="block text-gradient bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
               10x Faster with AI
             </span>
           </motion.h1>
 
           {/* Simplified Description */}
-          <motion.div variants={itemVariants} className="mb-10">
-            <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+          <motion.div variants={itemVariants} className="mb-6 sm:mb-8 lg:mb-10">
+            <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed px-2 sm:px-0">
               We help businesses achieve <span className="text-emerald-400 font-semibold">300% revenue growth</span> 
-              through AI-powered digital strategies and proven solutions.
+              through GrowBrandi's data-driven digital strategies and proven solutions.
             </p>
           </motion.div>
 
           {/* Simplified CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-10">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-6 sm:mb-8 lg:mb-10 px-4 sm:px-0">
             <motion.button
-              onClick={onGetStarted}
-              className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-xl text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+              onClick={() => navigate('case-studies')}
+              className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl text-base sm:text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 w-full sm:w-auto"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -217,7 +217,7 @@ const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
             </motion.button>
             
             <motion.button
-              className="text-white font-medium py-4 px-8 rounded-xl border border-slate-600 hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
+              className="text-white font-medium py-3 sm:py-4 px-6 sm:px-8 rounded-xl border border-slate-600 hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300 w-full sm:w-auto"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -296,7 +296,7 @@ const SloganGenerator: React.FC = () => {
             className="py-24 px-4 relative overflow-hidden"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1, margin: "-100px" }}
             variants={containerVariants}
         >
             {/* Background Elements */}
@@ -310,12 +310,12 @@ const SloganGenerator: React.FC = () => {
                         <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                         </svg>
-                        <span className="text-sm font-medium text-emerald-400">AI-POWERED TOOL</span>
+                        <span className="text-sm font-medium text-emerald-400">GROWBRANDI SMART TOOL</span>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-black mb-6">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
                         Try Our <span className="text-gradient">AI Slogan Generator</span>
                     </h2>
-                    <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
                         Experience the power of AI in action! Enter a few keywords about your business 
                         and watch our intelligent system craft compelling slogans tailored to your brand.
                     </p>
@@ -323,9 +323,9 @@ const SloganGenerator: React.FC = () => {
 
                 <motion.div 
                     variants={itemVariants}
-                    className="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl"
+                    className="glass-effect rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl"
                 >
-                    <div className="flex flex-col lg:flex-row gap-6 mb-8">
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
                         <div className="flex-1">
                             <label className="block text-sm font-semibold text-slate-300 mb-3">
                                 Enter Keywords
@@ -382,7 +382,7 @@ const SloganGenerator: React.FC = () => {
                             className="space-y-4"
                         >
                             <h3 className="text-2xl font-bold text-gradient text-center mb-6">
-                                ✨ Your AI-Generated Slogans
+                                ✨ Your GrowBrandi-Generated Slogans
                             </h3>
                             <div className="grid gap-4">
                                 {slogans.map((slogan, i) => (
@@ -435,20 +435,20 @@ const TeamSection: React.FC = () => {
 
             <div className="container mx-auto max-w-7xl relative z-10">
                 {/* Section Header */}
-                <motion.div variants={itemVariants} className="text-center mb-20">
-                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-8 py-3 mb-8">
-                        <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
+                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
                         </svg>
-                        <span className="text-sm font-bold text-emerald-400 tracking-wide">OUR EXPERT TEAM</span>
+                        <span className="text-xs sm:text-sm font-bold text-emerald-400 tracking-wide">OUR EXPERT TEAM</span>
                         <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                         Meet the <span className="text-gradient">Creative Minds</span> Behind Your Success
                     </h2>
-                    <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
                         Our diverse team of experts brings together decades of experience in 
                         <span className="text-emerald-400 font-semibold"> design, development, AI, and marketing</span> to 
                         deliver exceptional results that exceed expectations.
@@ -457,7 +457,7 @@ const TeamSection: React.FC = () => {
 
                 {/* Team Grid */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 px-4 sm:px-0"
                     variants={containerVariants}
                 >
                     {TEAM_MEMBERS.map((member, index) => (
@@ -468,6 +468,7 @@ const TeamSection: React.FC = () => {
                             onMouseEnter={() => setHoveredMember(index)}
                             onMouseLeave={() => setHoveredMember(null)}
                             whileHover={{ y: -12, scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             transition={{ duration: 0.3 }}
                         >
                             <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden">
@@ -683,12 +684,20 @@ const AIBusinessAdvisor: React.FC = () => {
         const industryData = quickInsights[selectedIndustry as keyof typeof quickInsights];
         if (!industryData) return null;
 
+        const goalSpecificInsight = {
+            "Increase Revenue": `GrowBrandi's data shows ${selectedIndustry} businesses can boost revenue by 40-60% through strategic digital optimization.`,
+            "Reduce Costs": `Our analytics reveal ${selectedIndustry} companies typically reduce operational costs by 25-35% with smart automation.`,
+            "Improve Efficiency": `GrowBrandi's efficiency solutions help ${selectedIndustry} businesses streamline operations by 50-70%.`,
+            "Expand Market Share": `Strategic digital expansion in ${selectedIndustry} typically increases market reach by 3-5x within 12 months.`
+        };
+
         return {
-            insight: `For ${selectedIndustry} businesses focusing on "${selectedGoal}", here are key insights:`,
+            insight: goalSpecificInsight[selectedGoal as keyof typeof goalSpecificInsight] || 
+                    `GrowBrandi's intelligence engine identifies key growth opportunities for ${selectedIndustry} businesses focusing on "${selectedGoal}".`,
             opportunities: industryData.opportunities,
             challenges: industryData.challenges,
             trends: industryData.trends,
-            recommendation: `Start with ${industryData.opportunities[0]} and address ${industryData.challenges[0]} first.`
+            recommendation: `GrowBrandi recommends: Prioritize ${industryData.opportunities[0].toLowerCase()} while proactively addressing ${industryData.challenges[0].toLowerCase()} for optimal growth.`
         };
     };
 
@@ -697,7 +706,7 @@ const AIBusinessAdvisor: React.FC = () => {
             className="py-24 px-4 relative overflow-hidden"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1, margin: "-100px" }}
             variants={containerVariants}
         >
             {/* Background Elements */}
@@ -706,33 +715,38 @@ const AIBusinessAdvisor: React.FC = () => {
             <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
 
             <div className="container mx-auto max-w-6xl relative z-10">
-                <motion.div variants={itemVariants} className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
+                <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16">
+                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 py-2 mb-6 mx-4 sm:mx-0">
                         <svg className="w-4 h-4 text-purple-400 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span className="text-sm font-medium text-purple-400">AI BUSINESS ADVISOR</span>
+                        <span className="text-xs sm:text-sm font-medium text-purple-400">GROWBRANDI BUSINESS INTELLIGENCE</span>
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-black mb-6">
-                        Get Instant <span className="text-gradient">Business Insights</span>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
+                        Get Expert <span className="text-gradient">Business Intelligence</span>
                     </h2>
-                    <p className="text-lg md:text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-                        Our AI analyzes your industry and goals to provide personalized growth strategies, 
-                        market opportunities, and actionable recommendations in seconds.
+                    <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+                        GrowBrandi's advanced analytics engine analyzes your industry landscape and business goals to deliver 
+                        personalized growth strategies, untapped market opportunities, and data-driven recommendations that drive results.
                     </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-start">
                     {/* Interactive Selector */}
                     <motion.div 
                         variants={itemVariants}
                         className="glass-effect rounded-3xl p-8 space-y-8"
                     >
-                        <h3 className="text-2xl font-bold text-white mb-6">Quick Business Analysis</h3>
+                        <h3 className="text-2xl font-bold text-white mb-6">GrowBrandi Business Intelligence</h3>
                         
                         <div>
                             <label className="block text-sm font-semibold text-slate-300 mb-4">
-                                Select Your Industry
+                                <span className="flex items-center gap-2">
+                                    <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Select Your Industry
+                                </span>
                             </label>
                             <div className="grid grid-cols-2 gap-3">
                                 {industries.map((industry) => (
@@ -753,7 +767,12 @@ const AIBusinessAdvisor: React.FC = () => {
 
                         <div>
                             <label className="block text-sm font-semibold text-slate-300 mb-4">
-                                Primary Business Goal
+                                <span className="flex items-center gap-2">
+                                    <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                                    </svg>
+                                    Primary Business Goal
+                                </span>
                             </label>
                             <div className="grid grid-cols-1 gap-3">
                                 {goals.map((goal) => (
@@ -786,7 +805,7 @@ const AIBusinessAdvisor: React.FC = () => {
                             >
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                                    <h3 className="text-2xl font-bold text-white">AI Analysis Ready</h3>
+                                    <h3 className="text-2xl font-bold text-white">GrowBrandi Intelligence Ready</h3>
                                 </div>
 
                                 {(() => {
@@ -861,7 +880,7 @@ const AIBusinessAdvisor: React.FC = () => {
                                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                                 </svg>
-                                                Get Detailed AI Strategy Plan
+                                                Get Detailed GrowBrandi Strategy Plan
                                             </motion.button>
                                         </div>
                                     );
@@ -874,8 +893,8 @@ const AIBusinessAdvisor: React.FC = () => {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                                     </svg>
                                 </div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Ready for AI Analysis</h3>
-                                <p className="text-slate-400">Select your industry and primary goal to get personalized insights</p>
+                                <h3 className="text-xl font-semibold text-white mb-2">Ready for GrowBrandi Intelligence</h3>
+                                <p className="text-slate-400">Select your industry and primary goal to unlock personalized growth insights powered by our proprietary analytics</p>
                             </div>
                         )}
                     </motion.div>
@@ -891,7 +910,7 @@ const AIBusinessAdvisor: React.FC = () => {
                             Want a Complete Business Analysis?
                         </h3>
                         <p className="text-slate-300 mb-6">
-                            Get a comprehensive AI-powered business assessment with detailed recommendations, 
+                            Get a comprehensive GrowBrandi business intelligence report with detailed recommendations, 
                             competitor analysis, and a custom growth strategy.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -900,7 +919,7 @@ const AIBusinessAdvisor: React.FC = () => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                Get Full AI Analysis
+                                Get Full GrowBrandi Analysis
                             </motion.button>
                             <motion.button 
                                 className="bg-slate-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-slate-600 transition-all"
@@ -1200,7 +1219,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 );
 
 // --- Enhanced Services Preview Section ---
-const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ setCurrentPage }) => {
+const ServicesPreview: React.FC = () => {
+  const { navigate } = useRouter();
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -1215,7 +1235,7 @@ const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                 className="py-24 px-4 relative overflow-hidden"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: true, amount: 0.1, margin: "-50px" }}
                 variants={containerVariants}
             >
                 {/* Enhanced Background Elements */}
@@ -1226,31 +1246,31 @@ const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
 
                 <div className="container mx-auto max-w-7xl relative z-10">
                     {/* Enhanced Section Header */}
-                    <motion.div variants={itemVariants} className="text-center mb-20">
-                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8">
+                    <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
+                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
                             <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                            <span className="text-sm font-bold text-emerald-400 tracking-wide">PREMIUM SERVICES</span>
+                            <span className="text-sm font-bold text-emerald-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
                             <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                             </svg>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                             Comprehensive <span className="text-gradient">Digital Solutions</span> 
                             <span className="block">For Your Business</span>
                         </h2>
-                        <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed mb-8">
-                            Transform your business with our 
-                            <span className="text-emerald-400 font-semibold"> award-winning services</span> that combine 
-                            <span className="text-blue-400 font-semibold">cutting-edge technology</span> with proven strategies 
-                            to deliver exceptional results.
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
+                            Transform your business with 
+                            <span className="text-emerald-400 font-semibold">GrowBrandi's award-winning services</span> that combine 
+                            <span className="text-blue-400 font-semibold">intelligent technology</span> with data-driven strategies 
+                            to deliver <span className="text-gradient font-semibold">measurable, exceptional results</span>.
                         </p>
                     </motion.div>
 
                     {/* Enhanced Services Grid */}
                     <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-0"
                         variants={containerVariants}
                     >
                         {SERVICES.map((service, index) => (
@@ -1267,16 +1287,16 @@ const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                     {/* Process Overview */}
                     <motion.div variants={itemVariants} className="mb-20">
                         <div className="text-center mb-12">
-                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 px-4 sm:px-0">
                                 Our <span className="text-gradient">Proven Process</span>
                             </h3>
-                            <p className="text-slate-300 text-lg max-w-3xl mx-auto">
+                            <p className="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto px-4 sm:px-0">
                                 Every project follows our streamlined methodology for consistent, 
                                 high-quality results that exceed expectations.
                             </p>
                         </div>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
                             {[
                                 { 
                                     icon: '🔍', 
@@ -1328,7 +1348,7 @@ const ServicesPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                             </p>
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                 <motion.button
-                                    onClick={(e) => { e.preventDefault(); setCurrentPage('services'); }}
+                                    onClick={(e) => { e.preventDefault(); /* Services section is on home page, could scroll to it */ }}
                                     className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
@@ -1612,7 +1632,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
 );
 
 // --- Enhanced Projects Preview Section ---
-const ProjectsPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ setCurrentPage }) => {
+const ProjectsPreview: React.FC = () => {
+  const { navigate } = useRouter();
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string>('All');
@@ -1651,20 +1672,20 @@ const ProjectsPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
 
                 <div className="container mx-auto max-w-7xl relative z-10">
                     {/* Enhanced Section Header */}
-                    <motion.div variants={itemVariants} className="text-center mb-20">
-                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8">
-                            <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
+                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
                             </svg>
-                            <span className="text-sm font-bold text-emerald-400 tracking-wide">FEATURED PROJECTS</span>
+                            <span className="text-xs sm:text-sm font-bold text-emerald-400 tracking-wide">FEATURED PROJECTS</span>
                             <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
                             </svg>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                             Portfolio of <span className="text-gradient">Exceptional Work</span>
                         </h2>
-                        <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed mb-8">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
                             Discover our most impactful projects that showcase 
                             <span className="text-emerald-400 font-semibold"> innovative solutions, cutting-edge design,</span> and 
                             <span className="text-blue-400 font-semibold">measurable business results</span> across various industries.
@@ -1672,8 +1693,8 @@ const ProjectsPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                     </motion.div>
 
                     {/* Enhanced Filter Tabs */}
-                    <motion.div variants={itemVariants} className="flex justify-center mb-16">
-                        <div className="glass-effect rounded-2xl p-2 inline-flex gap-2">
+                    <motion.div variants={itemVariants} className="flex justify-center mb-8 sm:mb-12 lg:mb-16 overflow-x-auto px-4 sm:px-0">
+                        <div className="glass-effect rounded-2xl p-1 sm:p-2 inline-flex gap-1 sm:gap-2 min-w-max">
                             {categories.map((category, index) => (
                                 <motion.button
                                     key={category}
@@ -1762,7 +1783,7 @@ const ProjectsPreview: React.FC<{ setCurrentPage: (page: Page) => void }> = ({ s
                             </p>
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                 <motion.button
-                                    onClick={(e) => { e.preventDefault(); setCurrentPage('projects'); }}
+                                    onClick={(e) => { e.preventDefault(); navigate('case-studies'); }}
                                     className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
@@ -2005,15 +2026,15 @@ const TestimonialsSlider: React.FC = () => {
 
 
 
-export const HomePage: React.FC<HomePageProps> = ({ setCurrentPage }) => {
+export const HomePage: React.FC<HomePageProps> = () => {
   return (
     <>
-      <Hero onGetStarted={() => setCurrentPage('projects')} />
-      <ServicesPreview setCurrentPage={setCurrentPage}/>
+      <Hero />
+      <ServicesPreview />
       <SloganGenerator />
       <AIBusinessAdvisor />
       <TeamSection />
-      <ProjectsPreview setCurrentPage={setCurrentPage} />
+      <ProjectsPreview />
       <TestimonialsSlider />
       <FAQ />
     </>

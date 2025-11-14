@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'%3E%3C/path%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <base href="/" />
     <!-- SEO Meta Tags -->
     <meta name="description" content="GrowBrandi - Transform your business with AI-powered digital solutions. Expert web development, UI/UX design, SEO optimization, and digital marketing services." />
     <meta name="keywords" content="digital agency, web development, UI/UX design, SEO, digital marketing, AI-powered solutions, brand strategy, GrowBrandi" />
@@ -203,6 +204,34 @@
         /* Mobile-only overflow protection */
         body {
           overflow-x: hidden;
+        }
+        
+        /* Mobile animation optimizations */
+        * {
+          will-change: auto;
+          transform: translateZ(0);
+        }
+        
+        /* Optimize scroll performance on mobile */
+        body, html {
+          -webkit-overflow-scrolling: touch;
+          scroll-behavior: smooth;
+        }
+        
+        /* Improve touch targets for mobile */
+        button, a, [role="button"] {
+          min-height: 44px;
+          min-width: 44px;
+          touch-action: manipulation;
+        }
+        
+        /* Reduce motion complexity on mobile for better performance */
+        .animate-pulse-glow {
+          animation-duration: 6s;
+        }
+        
+        .animate-float {
+          animation-duration: 8s;
         }
       }
       

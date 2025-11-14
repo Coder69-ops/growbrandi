@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Footer from './Footer';
 
 interface ServicePageProps {
   title: string;
@@ -354,8 +353,6 @@ const ServicePage: React.FC<ServicePageProps> = ({
           </motion.div>
         </div>
       </section>
-
-      <Footer />
     </>
   );
 };

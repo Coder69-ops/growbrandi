@@ -3,7 +3,7 @@ import { Service, Project, Testimonial, CompanyStat, FAQItem } from './types';
 
 // App Constants
 export const APP_NAME = 'GrowBrandi';
-export const APP_TAGLINE = 'AI-Powered Digital Agency';
+export const APP_TAGLINE = 'GrowBrandi - Expert Digital Growth Agency';
 export const APP_SUBTITLE = 'Transform Your Business with Expert Digital Solutions';
 
 // Company Statistics (similar to ecomixpower.com)
@@ -31,7 +31,7 @@ export const CONTACT_INFO = {
 export const FAQ_DATA: FAQItem[] = [
   {
     question: 'What makes GrowBrandi different from other digital agencies?',
-    answer: 'We combine AI-powered insights with human creativity to deliver exceptional digital solutions. Our data-driven approach, modern tech stack, and focus on ROI set us apart from traditional agencies.'
+    answer: 'GrowBrandi combines intelligent data insights with creative expertise to deliver exceptional digital solutions. Our proprietary growth methodology, cutting-edge tech stack, and obsessive focus on measurable ROI set us apart from traditional agencies.'
   },
   {
     question: 'How long does a typical project take?',
@@ -43,7 +43,7 @@ export const FAQ_DATA: FAQItem[] = [
   },
   {
     question: 'What technologies do you work with?',
-    answer: 'We specialize in modern technologies including React, Next.js, Node.js, TypeScript, and AI/ML integration. We choose the best tech stack based on your specific project requirements and goals.'
+    answer: 'GrowBrandi specializes in cutting-edge technologies including React, Next.js, Node.js, TypeScript, and intelligent automation. Our technical experts choose the optimal tech stack based on your specific project requirements and growth goals.'
   },
   {
     question: 'Can you help with existing website improvements?',
@@ -172,7 +172,7 @@ export const PROJECTS: Project[] = [
 
 export const TESTIMONIALS: Testimonial[] = [
     {
-        quote: "GrowBrandi transformed our digital presence completely. Their AI-powered approach to web development and design resulted in a 300% increase in leads and a stunning website that our customers love.",
+        quote: "GrowBrandi transformed our digital presence completely. Their data-driven approach to web development and intelligent design strategy resulted in a 300% increase in leads and a stunning website that our customers love.",
         author: "Sarah Johnson",
         company: "CEO at TechFlow Solutions",
         rating: 5,

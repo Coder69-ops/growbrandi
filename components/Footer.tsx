@@ -34,23 +34,23 @@ const Footer: React.FC = () => {
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
       
       <div className="relative z-10 glass-effect border-t border-white/10">
-        <div className="container mx-auto px-4 py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
           {/* Call to Action Section */}
           <motion.div 
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-16 lg:mb-20"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.1, margin: "-50px" }}
             transition={{ duration: 0.6 }}
           >
-            <div className="glass-effect rounded-3xl p-12 max-w-4xl mx-auto border border-white/10">
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+            <div className="glass-effect rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 max-w-4xl mx-auto border border-white/10">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-4 sm:mb-6">
                 Ready to Transform Your <span className="text-gradient">Business?</span>
               </h2>
-              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
                 Join 200+ successful businesses that have accelerated their growth with our AI-powered solutions.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <motion.button 
                   className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
                   whileHover={{ scale: 1.02, y: -2 }}
@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
           </motion.div>
 
           {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-12 mb-12 sm:mb-16">
             {/* Brand Section */}
             <div className="lg:col-span-2">
               <div className="flex items-center gap-3 mb-6">
