@@ -44,7 +44,7 @@ const getAIResponse = async (prompt: string, responseSchema: any) => {
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash",
       contents: prompt + CONVERSION_SUFFIX,
       config: {
         responseMimeType: "application/json",
