@@ -1,14 +1,14 @@
 import OpenAI from 'openai';
 
-// OpenRouter configuration
+// OpenRouter configuration - simplified for better compatibility
+const getApiKey = () => {
+  return process.env.OPENROUTER_API_KEY || import.meta.env.VITE_OPENROUTER_API_KEY;
+};
+
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+  apiKey: getApiKey(),
   dangerouslyAllowBrowser: true,
-  defaultHeaders: {
-    "HTTP-Referer": "https://growbrandi.com",
-    "X-Title": "GrowBrandi AI",
-  },
 });
 
 // Chat interface adapter to maintain compatibility
@@ -25,7 +25,13 @@ export class ChatAdapter {
     this.messages.push({ role: 'user', content: message });
 
     try {
-      const stream = await openai.chat.completions.create({
+      const workingOpenai = new OpenAI({
+        baseURL: "https://openrouter.ai/api/v1",
+        apiKey: getApiKey(),
+        dangerouslyAllowBrowser: true,
+      });
+
+      const stream = await workingOpenai.chat.completions.create({
         model: "meta-llama/llama-3.3-70b-instruct:free",
         messages: this.messages as any,
         stream: true,
@@ -67,7 +73,7 @@ export const initializeChat = (systemInstruction: string): ChatAdapter | null =>
 
 
 export const generateSlogan = async (keywords: string): Promise<string[]> => {
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = getApiKey();
     if (!apiKey) {
         throw new Error("OPENROUTER_API_KEY environment variable not set.");
     }
@@ -140,10 +146,6 @@ export const estimateProject = async (requirements: {
             baseURL: "https://openrouter.ai/api/v1",
             apiKey: apiKey,
             dangerouslyAllowBrowser: true,
-            defaultHeaders: {
-                "HTTP-Referer": "https://growbrandi.com",
-                "X-Title": "GrowBrandi AI",
-            },
         });
 
         const response = await workingOpenai.chat.completions.create({
@@ -213,10 +215,6 @@ export const recommendServices = async (businessInfo: {
             baseURL: "https://openrouter.ai/api/v1",
             apiKey: apiKey,
             dangerouslyAllowBrowser: true,
-            defaultHeaders: {
-                "HTTP-Referer": "https://growbrandi.com",
-                "X-Title": "GrowBrandi AI",
-            },
         });
 
         const response = await workingOpenai.chat.completions.create({
@@ -276,10 +274,6 @@ export const analyzeBusinessGrowth = async (businessData: {
             baseURL: "https://openrouter.ai/api/v1",
             apiKey: apiKey,
             dangerouslyAllowBrowser: true,
-            defaultHeaders: {
-                "HTTP-Referer": "https://growbrandi.com",
-                "X-Title": "GrowBrandi AI",
-            },
         });
 
         const response = await workingOpenai.chat.completions.create({
@@ -347,10 +341,6 @@ export const generateConsultationPlan = async (clientInfo: {
             baseURL: "https://openrouter.ai/api/v1",
             apiKey: apiKey,
             dangerouslyAllowBrowser: true,
-            defaultHeaders: {
-                "HTTP-Referer": "https://growbrandi.com",
-                "X-Title": "GrowBrandi AI",
-            },
         });
 
         const response = await workingOpenai.chat.completions.create({

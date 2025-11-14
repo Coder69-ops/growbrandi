@@ -17,7 +17,7 @@ export const ContactPage: React.FC = () => {
         setIsGenerating(true);
         setAiError('');
         
-        const apiKey = process.env.OPENROUTER_API_KEY;
+        const apiKey = process.env.OPENROUTER_API_KEY || import.meta.env.VITE_OPENROUTER_API_KEY;
         if (!apiKey) {
             setAiError("OpenRouter API key not configured.");
             setIsGenerating(false);
@@ -29,10 +29,6 @@ export const ContactPage: React.FC = () => {
                 baseURL: "https://openrouter.ai/api/v1",
                 apiKey: apiKey,
                 dangerouslyAllowBrowser: true,
-                defaultHeaders: {
-                    "HTTP-Referer": "https://growbrandi.com",
-                    "X-Title": "GrowBrandi AI",
-                },
             });
 
             const response = await openai.chat.completions.create({

@@ -1,0 +1,28 @@
+/* Global styles for GrowBrandi App */
+
+/* This file is referenced in the build but intentionally minimal */
+/* All styles are handled through Tailwind CSS classes in components */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Ensure smooth scrolling and proper mobile handling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset some default browser styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Mobile viewport fixes */
+@media (max-width: 768px) {
+  body {
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+  }
+}
