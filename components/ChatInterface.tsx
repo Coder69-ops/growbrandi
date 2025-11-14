@@ -9,6 +9,8 @@ interface ChatInterfaceProps {
     isOpen: boolean;
     onClose: () => void;
     systemInstruction: string;
+    preloadedChat?: Chat | null;
+    isPreloaded?: boolean;
 }
 
 const INITIAL_SUGGESTIONS = [
@@ -45,13 +47,7 @@ const CONTEXTUAL_SUGGESTIONS = {
     ]
 };
 
-interface ChatInterfaceProps {
-    isOpen: boolean;
-    onClose: () => void;
-    systemInstruction: string;
-    preloadedChat?: Chat | null;
-    isPreloaded?: boolean;
-}
+
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemInstruction, preloadedChat, isPreloaded = false }) => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -74,7 +70,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     
                     // Send welcome message immediately
                     try {
-                        const response = await chatRef.current.sendMessageStream({ message: "Say hi briefly and ask what they need help with. Be urgent and conversion-focused. Max 2 sentences." });
+                        const response = await chatRef.current.sendMessageStream({ message: "Greet them as a GrowBrandi growth expert and ask what business challenge they want to solve. Be confident and conversion-focused. Max 2 sentences." });
                         let fullResponse = "";
                         const aiMessage: ChatMessage = { role: 'model', parts: [{ text: '' }] };
                         setMessages([aiMessage]);
@@ -85,7 +81,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                         }
                     } catch (e) {
                         console.error(e);
-                        setError("Welcome message failed, but I'm ready to help!");
+                        setError("GrowBrandi AI is ready to help grow your business!");
                     }
                     return;
                 }
@@ -112,7 +108,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     }
                 } catch (e) {
                     console.error(e);
-                    setError("An error occurred while communicating with the AI.");
+                    setError("GrowBrandi AI is ready to help grow your business!");
+                    // Add a fallback welcome message
+                    const fallbackMessage: ChatMessage = { 
+                        role: 'model', 
+                        parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
+                    };
+                    setMessages([fallbackMessage]);
                 } finally {
                     setIsLoading(false);
                     setIsInitialized(true);
@@ -147,7 +149,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
             // Add conversion instruction to every message for short responses
             const conversionMessage = `${message}
 
-RESPOND IN MAX 2-3 SENTENCES. End with urgent call-to-action. Be direct and conversion-focused.`;
+RESPOND AS GROWBRANDI EXPERT IN MAX 2 SENTENCES. End with compelling action command. Focus on results and urgency.`;
             
             const responseStream = await chatRef.current.sendMessageStream({ message: conversionMessage });
 
@@ -201,7 +203,7 @@ RESPOND IN MAX 2-3 SENTENCES. End with urgent call-to-action. Be direct and conv
             >
                 <div className="p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0">
                     <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-semibold text-gradient">GrowBrand AI Assistant</h3>
+                        <h3 className="text-lg font-semibold text-gradient">GrowBrandi AI Assistant</h3>
                         {isPreloaded && (
                             <div className="flex items-center gap-1 bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs font-medium">
                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
@@ -269,7 +271,7 @@ RESPOND IN MAX 2-3 SENTENCES. End with urgent call-to-action. Be direct and conv
                             type="text"
                             value={userInput}
                             onChange={(e) => setUserInput(e.target.value)}
-                            placeholder={isLoading ? "AI is thinking..." : "Ask me anything..."}
+                            placeholder={isLoading ? "GrowBrandi AI is analyzing..." : "What business challenge can I solve?"}
                             disabled={isLoading || !!error}
                             className="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
                         />

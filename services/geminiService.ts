@@ -12,16 +12,16 @@ const CONVERSION_SUFFIX = "\n\nCRITICAL INSTRUCTIONS: Keep response under 3 sent
 
 // Base AI initialization
 export const initializeChat = (systemInstruction: string): Chat | null => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.error("API_KEY environment variable not set.");
+    console.error("GEMINI_API_KEY environment variable not set.");
     return null;
   }
 
   try {
     const ai = new GoogleGenAI({ apiKey });
     const chat = ai.chats.create({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-1.5-flash',
       config: {
         systemInstruction: systemInstruction + CONVERSION_SUFFIX,
         ...AI_CONFIG,
@@ -36,15 +36,15 @@ export const initializeChat = (systemInstruction: string): Chat | null => {
 
 // AI Service Helper for structured queries
 const getAIResponse = async (prompt: string, responseSchema: any) => {
-  const apiKey = process.env.API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error("API_KEY environment variable not set.");
+    throw new Error("GEMINI_API_KEY environment variable not set.");
   }
 
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-1.5-flash",
       contents: prompt + CONVERSION_SUFFIX,
       config: {
         responseMimeType: "application/json",
