@@ -1,5 +1,15 @@
 import { GoogleGenAI, Chat, Type } from "@google/genai";
 
+// AI Configuration for short, conversion-focused responses
+const AI_CONFIG = {
+  temperature: 0.8,
+  maxOutputTokens: 150, // Force short responses
+  topP: 0.9,
+  topK: 40
+};
+
+const CONVERSION_SUFFIX = "\n\nCRITICAL INSTRUCTIONS: Keep response under 3 sentences. Be direct, urgent, conversion-focused. Always end with strong call-to-action. NO long explanations or generic advice.";
+
 // Base AI initialization
 export const initializeChat = (systemInstruction: string): Chat | null => {
   const apiKey = process.env.API_KEY;
@@ -13,7 +23,8 @@ export const initializeChat = (systemInstruction: string): Chat | null => {
     const chat = ai.chats.create({
       model: 'gemini-2.5-flash',
       config: {
-        systemInstruction: systemInstruction,
+        systemInstruction: systemInstruction + CONVERSION_SUFFIX,
+        ...AI_CONFIG,
       },
     });
     return chat;
@@ -34,10 +45,12 @@ const getAIResponse = async (prompt: string, responseSchema: any) => {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: prompt,
+      contents: prompt + CONVERSION_SUFFIX,
       config: {
         responseMimeType: "application/json",
-        responseSchema: responseSchema
+        responseSchema: responseSchema,
+        ...AI_CONFIG,
+        maxOutputTokens: 300 // Slightly higher for structured responses
       }
     });
 

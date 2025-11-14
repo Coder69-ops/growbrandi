@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { SERVICES, PROJECTS, TESTIMONIALS, COMPANY_STATS } from '../constants';
 import FAQ from './FAQ';
-import { Project } from '../types';
+import { Project, Service } from '../types';
 import { generateSlogan } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -12,7 +12,7 @@ const TEAM_MEMBERS = [
     name: "Sarah Chen",
     role: "CEO & Creative Director",
     description: "10+ years leading digital transformation projects with expertise in brand strategy and user experience design.",
-    image: "/api/placeholder/300/400",
+    image: "https://static.vecteezy.com/system/resources/thumbnails/038/962/461/small/ai-generated-caucasian-successful-confident-young-businesswoman-ceo-boss-bank-employee-worker-manager-with-arms-crossed-in-formal-wear-isolated-in-white-background-photo.jpg",
     specialties: ["Brand Strategy", "UX Design", "Leadership"],
     social: {
       linkedin: "#",
@@ -24,7 +24,7 @@ const TEAM_MEMBERS = [
     name: "Marcus Johnson",
     role: "Head of Development",
     description: "Full-stack developer with passion for creating scalable, high-performance web applications using modern technologies.",
-    image: "/api/placeholder/300/400",
+    image: "https://heroshotphotography.com/wp-content/uploads/2023/03/male-linkedin-corporate-headshot-on-white-square-1024x1024.jpg",
     specialties: ["React/Next.js", "Node.js", "Cloud Architecture"],
     social: {
       linkedin: "#",
@@ -36,7 +36,7 @@ const TEAM_MEMBERS = [
     name: "Elena Rodriguez",
     role: "AI Solutions Architect",
     description: "AI/ML specialist focused on integrating intelligent solutions that drive business growth and user engagement.",
-    image: "/api/placeholder/300/400",
+    image: "https://images.stockcake.com/public/5/5/a/55aa0081-3d0d-495b-b649-4838f12aedd3_large/professional-young-man-stockcake.jpg",
     specialties: ["Machine Learning", "AI Integration", "Data Analytics"],
     social: {
       linkedin: "#",
@@ -48,7 +48,7 @@ const TEAM_MEMBERS = [
     name: "David Kim",
     role: "Digital Marketing Strategist",
     description: "Performance marketing expert who combines data-driven insights with creative campaigns to maximize ROI.",
-    image: "/api/placeholder/300/400",
+    image: "https://media.istockphoto.com/id/1391718981/photo/portrait-of-a-confident-young-businessman-standing-with-his-arms-crossed-in-an-office.jpg?s=612x612&w=0&k=20&c=eF_0QCtw-Y8Q2c4_xQe6KTkcSPiGCT6qBf6nuavE2Dg=",
     specialties: ["SEO/SEM", "Content Strategy", "Analytics"],
     social: {
       linkedin: "#",
@@ -60,7 +60,7 @@ const TEAM_MEMBERS = [
     name: "Amy Thompson",
     role: "UI/UX Designer",
     description: "Creative designer passionate about crafting intuitive user interfaces that deliver exceptional user experiences.",
-    image: "/api/placeholder/300/400",
+    image: "https://static.vecteezy.com/system/resources/thumbnails/038/962/461/small/ai-generated-caucasian-successful-confident-young-businesswoman-ceo-boss-bank-employee-worker-manager-with-arms-crossed-in-formal-wear-isolated-in-white-background-photo.jpg",
     specialties: ["UI Design", "Prototyping", "User Research"],
     social: {
       linkedin: "#",
@@ -72,7 +72,7 @@ const TEAM_MEMBERS = [
     name: "James Wilson",
     role: "Project Manager",
     description: "Agile project management expert ensuring seamless delivery of complex projects on time and within budget.",
-    image: "/api/placeholder/300/400",
+    image: "https://heroshotphotography.com/wp-content/uploads/2023/03/male-linkedin-corporate-headshot-on-white-square-1024x1024.jpg",
     specialties: ["Agile/Scrum", "Team Leadership", "Client Relations"],
     social: {
       linkedin: "#",
@@ -105,36 +105,66 @@ const itemVariants = {
     }
 };
 
-// --- Streamlined Hero Section ---
+// --- Enhanced Hero Section ---
 const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
   return (
     <section className="relative overflow-hidden">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(https://t3.ftcdn.net/jpg/07/18/32/00/360_F_718320058_X1w2Aj3x10SRiK1Pv27FTisi0ZZb7p8h.jpg)'
+        }}
+      />
+      
+      {/* Enhanced Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/85 via-slate-800/75 to-slate-900/90" />
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-blue-500/10" />
+      
       {/* Main Hero Content */}
-      <div className="relative min-h-screen flex items-center justify-center px-4">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-blue-500/5 to-teal-500/5" />
-        
-        {/* Simplified Animated Background */}
+      <div className="relative min-h-screen flex items-center justify-center px-4">        
+        {/* Enhanced Animated Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full bg-gradient-to-r from-emerald-400/5 to-blue-400/5"
+              className="absolute rounded-full bg-gradient-to-r from-emerald-400/8 to-blue-400/8 backdrop-blur-sm"
               style={{
-                width: 200 + i * 100,
-                height: 200 + i * 100,
-                left: `${20 + i * 30}%`,
-                top: `${20 + i * 20}%`,
+                width: 150 + i * 80,
+                height: 150 + i * 80,
+                left: `${10 + i * 20}%`,
+                top: `${15 + i * 15}%`,
               }}
               animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.2, 0.4, 0.2],
+                scale: [1, 1.3, 1],
+                opacity: [0.1, 0.3, 0.1],
+                rotate: [0, 180, 360],
               }}
               transition={{
-                duration: 8 + i * 2,
+                duration: 12 + i * 3,
                 repeat: Infinity,
                 ease: "easeInOut",
+              }}
+            />
+          ))}
+          
+          {/* Floating particles */}
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`particle-${i}`}
+              className="absolute w-2 h-2 bg-emerald-400/40 rounded-full"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [-20, -100, -20],
+                opacity: [0, 1, 0],
+              }}
+              transition={{
+                duration: 6 + Math.random() * 4,
+                repeat: Infinity,
+                delay: Math.random() * 3,
               }}
             />
           ))}
@@ -147,61 +177,130 @@ const Hero: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
           animate="visible"
           variants={containerVariants}
         >
-          {/* Subtitle Badge */}
+          {/* Enhanced Subtitle Badge */}
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8"
+            className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-4 mb-12 border border-emerald-400/20"
           >
-            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-emerald-400">AI-Powered Digital Agency</span>
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-emerald-400 rounded-full animate-pulse" />
+              <span className="text-sm font-bold text-emerald-400 uppercase tracking-wider">AI-Powered Digital Agency</span>
+            </div>
+            <div className="w-px h-4 bg-slate-600" />
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400">Trusted by 200+ Businesses</span>
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+            </div>
           </motion.div>
 
-          {/* Main Heading - Simplified */}
+          {/* Enhanced Main Heading */}
           <motion.h1 
             variants={itemVariants} 
             className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight mb-8"
           >
-            <span className="block">Transform Your</span>
-            <span className="block text-gradient">Business Growth</span>
+            <span className="block mb-4">Grow Your Business</span>
+            <span className="block text-gradient bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              10x Faster with AI
+            </span>
+            <span className="block text-2xl md:text-4xl lg:text-5xl mt-6 text-slate-400 font-normal">
+              Digital Excellence Delivered
+            </span>
           </motion.h1>
 
-          {/* Simplified Description */}
-          <motion.p 
-            variants={itemVariants} 
-            className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mb-12 leading-relaxed"
-          >
-            Expert digital solutions that combine <span className="text-emerald-400 font-semibold">AI innovation</span> with 
-            proven strategies to <span className="text-blue-400 font-semibold">accelerate your success</span>.
-          </motion.p>
+          {/* Enhanced Description with Stats */}
+          <motion.div variants={itemVariants} className="mb-12">
+            <p className="text-xl md:text-2xl text-slate-300 max-w-5xl mx-auto mb-8 leading-relaxed">
+              We've helped <span className="text-emerald-400 font-bold">200+ businesses</span> achieve 
+              <span className="text-blue-400 font-bold"> 300% revenue growth</span> through cutting-edge 
+              <span className="text-purple-400 font-bold">AI-powered strategies</span> and proven digital solutions.
+            </p>
+            
+            {/* Key Benefits */}
+            <div className="flex flex-wrap justify-center gap-4 md:gap-8 text-sm md:text-base">
+              {[
+                { icon: "⚡", text: "60-Second Project Estimates" },
+                { icon: "🎯", text: "400% ROI Guaranteed" },
+                { icon: "🚀", text: "Launch in 30 Days" },
+                { icon: "🔧", text: "24/7 AI Support" }
+              ].map((benefit, index) => (
+                <motion.div
+                  key={index}
+                  className="flex items-center gap-2 glass-effect px-4 py-2 rounded-full"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 + index * 0.1 }}
+                >
+                  <span className="text-lg">{benefit.icon}</span>
+                  <span className="text-slate-300 font-medium">{benefit.text}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
-          {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          {/* Enhanced CTA Buttons */}
+          <motion.div variants={itemVariants} className="flex flex-col lg:flex-row gap-6 justify-center items-center mb-12">
+            {/* Primary CTA */}
             <motion.button
               onClick={onGetStarted}
-              className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-5 px-12 rounded-2xl text-lg shadow-2xl"
+              className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 text-white font-bold py-6 px-16 rounded-2xl text-xl shadow-2xl border border-white/20"
               whileHover={{ scale: 1.05, y: -3 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="relative z-10 flex items-center gap-2">
-                Explore Our Work
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10 flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
+                Get Instant Estimate
+                <div className="px-2 py-1 bg-yellow-400 text-black text-xs font-bold rounded-full ml-2">FREE</div>
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </motion.button>
             
+            {/* Secondary CTA */}
             <motion.button
-              className="group flex items-center gap-2 text-slate-300 hover:text-white font-semibold py-5 px-10 rounded-2xl border border-slate-600 hover:border-emerald-400 transition-all duration-300"
-              whileHover={{ scale: 1.02 }}
+              className="group flex items-center gap-3 text-white font-bold py-6 px-12 rounded-2xl border-2 border-emerald-400/50 hover:border-emerald-400 bg-emerald-400/5 hover:bg-emerald-400/10 backdrop-blur-sm transition-all duration-300"
+              whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+              <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-              Schedule Consultation
+              <span>
+                Watch Our Process
+                <div className="text-xs text-emerald-400 font-normal">2-min demo</div>
+              </span>
             </motion.button>
+          </motion.div>
+
+          {/* Trust Indicators */}
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row items-center justify-center gap-8 text-slate-400"
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-8 h-8 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full border-2 border-slate-800" />
+                ))}
+              </div>
+              <span className="text-sm font-medium">200+ Happy Clients</span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+              <span className="text-sm font-medium">4.9/5 Rating</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+              <span className="text-sm font-medium">3 Spots Left This Week</span>
+            </div>
           </motion.div>
         </motion.div>
 
@@ -448,10 +547,24 @@ const TeamSection: React.FC = () => {
                                     {/* Profile Image */}
                                     <div className="relative mb-6">
                                         <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
-                                        <div className="relative w-24 h-24 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl mx-auto">
-                                            <span className="text-white font-bold text-3xl">
-                                                {member.name.split(' ').map(n => n[0]).join('')}
-                                            </span>
+                                        <div className="relative w-32 h-32 mx-auto">
+                                            <img 
+                                                src={member.image} 
+                                                alt={member.name}
+                                                className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-slate-700 group-hover:border-emerald-400/50 transition-all duration-300"
+                                                onError={(e) => {
+                                                    // Fallback to initials if image fails to load
+                                                    e.currentTarget.style.display = 'none';
+                                                    const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                                    if (fallback) fallback.style.display = 'flex';
+                                                }}
+                                            />
+                                            {/* Fallback initials (hidden by default) */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl items-center justify-center shadow-xl hidden">
+                                                <span className="text-white font-bold text-2xl">
+                                                    {member.name.split(' ').map(n => n[0]).join('')}
+                                                </span>
+                                            </div>
                                         </div>
                                         
                                         {/* Online Status Indicator */}

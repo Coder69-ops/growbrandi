@@ -138,7 +138,7 @@ export const ContactPage: React.FC = () => {
             const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
             const response = await ai.models.generateContent({
                 model: "gemini-2.5-flash",
-                contents: `A user wants to contact GrowBrand. Ask them 2-3 clarifying questions to generate a project brief. Questions should cover the project goal, target audience, and any key features. Then, based on hypothetical answers, generate a well-structured project brief for the 'message' field of a contact form. The output must be only the JSON object.`,
+                contents: `A user wants to contact GrowBrand. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion. The output must be only the JSON object.`,
                 config: {
                     responseMimeType: "application/json",
                     responseSchema: {

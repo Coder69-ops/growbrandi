@@ -12,36 +12,36 @@ interface ChatInterfaceProps {
 }
 
 const INITIAL_SUGGESTIONS = [
-    "Tell me about GrowBrandi",
-    "Can you help me plan a project?",
-    "What services do you offer?",
-    "Show me your portfolio"
+    "Get instant project estimate",
+    "Book free strategy call",
+    "What's your pricing?",
+    "Show me results you deliver"
 ];
 
 const CONTEXTUAL_SUGGESTIONS = {
     project: [
-        "Estimate my project cost",
-        "What's the timeline?",
-        "Which services do I need?",
-        "Can you create a proposal?"
+        "Get instant cost estimate",
+        "When can we start?",
+        "Book project kickoff call",
+        "What's the guaranteed ROI?"
     ],
     services: [
-        "Compare your services",
-        "What's included in each package?",
-        "Do you offer custom solutions?",
-        "Can I see case studies?"
+        "Which service gets fastest ROI?",
+        "What's included in premium package?",
+        "Book strategy consultation now",
+        "Show me client success stories"
     ],
     pricing: [
-        "What are your rates?",
-        "Do you offer payment plans?",
-        "Can I get a discount?",
-        "What's the ROI?"
+        "What's your starting price?",
+        "Any limited-time offers?",
+        "Book free consultation call",
+        "What ROI can I expect?"
     ],
     consultation: [
-        "Schedule a free consultation",
-        "What should I prepare?",
-        "How long is the consultation?",
-        "Can we meet virtually?"
+        "Book free call this week",
+        "What will we discuss?",
+        "How fast can we start?",
+        "Any spots left this month?"
     ]
 };
 
@@ -74,7 +74,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     
                     // Send welcome message immediately
                     try {
-                        const response = await chatRef.current.sendMessageStream({ message: "Hello! Introduce yourself based on the current context and be ready to help." });
+                        const response = await chatRef.current.sendMessageStream({ message: "Say hi briefly and ask what they need help with. Be urgent and conversion-focused. Max 2 sentences." });
                         let fullResponse = "";
                         const aiMessage: ChatMessage = { role: 'model', parts: [{ text: '' }] };
                         setMessages([aiMessage]);
@@ -101,7 +101,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                 }
                 
                 try {
-                    const response = await chatRef.current.sendMessageStream({ message: "Hello! Introduce yourself based on the current context." });
+                    const response = await chatRef.current.sendMessageStream({ message: "Say hi briefly and ask what they need help with. Be urgent and conversion-focused. Max 2 sentences." });
                     let fullResponse = "";
                     const aiMessage: ChatMessage = { role: 'model', parts: [{ text: '' }] };
                     setMessages([aiMessage]);
@@ -144,7 +144,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
         }
 
         try {
-            const responseStream = await chatRef.current.sendMessageStream({ message });
+            // Add conversion instruction to every message for short responses
+            const conversionMessage = `${message}
+
+RESPOND IN MAX 2-3 SENTENCES. End with urgent call-to-action. Be direct and conversion-focused.`;
+            
+            const responseStream = await chatRef.current.sendMessageStream({ message: conversionMessage });
 
             let fullResponse = "";
             const aiMessageIndex = messages.length + 1;
