@@ -21,7 +21,7 @@ export const initializeChat = (systemInstruction: string): Chat | null => {
   try {
     const ai = new GoogleGenAI({ apiKey });
     const chat = ai.chats.create({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       config: {
         systemInstruction: systemInstruction + CONVERSION_SUFFIX,
         ...AI_CONFIG,
@@ -44,7 +44,7 @@ const getAIResponse = async (prompt: string, responseSchema: any) => {
   try {
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.0-flash",
       contents: prompt + CONVERSION_SUFFIX,
       config: {
         responseMimeType: "application/json",
