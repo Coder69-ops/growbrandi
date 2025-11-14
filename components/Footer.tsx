@@ -1,6 +1,5 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { GoogleGenAI, Type } from "@google/genai";
 import LoadingSpinner from './LoadingSpinner';
 import { useRouter, Route } from './Router';
 

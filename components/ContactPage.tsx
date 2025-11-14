@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { GoogleGenAI, Type } from "@google/genai";
+import OpenAI from 'openai';
 import LoadingSpinner from './LoadingSpinner';
 import Footer from './Footer';
 
@@ -16,26 +16,57 @@ export const ContactPage: React.FC = () => {
     const generateBrief = async () => {
         setIsGenerating(true);
         setAiError('');
+        
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) {
+            setAiError("OpenRouter API key not configured.");
+            setIsGenerating(false);
+            return;
+        }
+
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            const response = await ai.models.generateContent({
-                model: "gemini-2.5-flash",
-                contents: `A user wants to contact GrowBrand. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion. The output must be only the JSON object.`,
-                config: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: Type.OBJECT,
-                        properties: {
-                            brief: {
-                                type: Type.STRING,
-                                description: 'The generated project brief as a string.'
-                            }
-                        }
+            const openai = new OpenAI({
+                baseURL: "https://openrouter.ai/api/v1",
+                apiKey: apiKey,
+                dangerouslyAllowBrowser: true,
+                defaultHeaders: {
+                    "HTTP-Referer": "https://growbrandi.com",
+                    "X-Title": "GrowBrandi AI",
+                },
+            });
+
+            const response = await openai.chat.completions.create({
+                model: "meta-llama/llama-3.3-70b-instruct:free",
+                messages: [
+                    {
+                        role: "user",
+                        content: `A user wants to contact GrowBrandi. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion. 
+                        
+                        IMPORTANT: Respond with ONLY a valid JSON object in this exact format:
+                        {"brief": "your generated brief here"}`
+                    }
+                ]
+            });
+
+            const content = response.choices[0]?.message?.content;
+            if (content) {
+                try {
+                    // Try to parse as JSON first
+                    const result = JSON.parse(content);
+                    setFormData(prev => ({ ...prev, message: result.brief }));
+                } catch (jsonError) {
+                    // If JSON parsing fails, try to extract JSON from the response
+                    const jsonMatch = content.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        const result = JSON.parse(jsonMatch[0]);
+                        setFormData(prev => ({ ...prev, message: result.brief }));
+                    } else {
+                        throw new Error("Invalid JSON response format");
                     }
                 }
-            });
-            const result = JSON.parse(response.text);
-            setFormData(prev => ({ ...prev, message: result.brief }));
+            } else {
+                throw new Error("No response received");
+            }
         } catch (err) {
             console.error(err);
             setAiError("Failed to generate brief. Please write your message manually.");

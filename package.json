@@ -9,12 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.29.1",
+    "framer-motion": "^11.5.1",
+    "openai": "^6.9.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "@google/genai": "^1.29.1",
     "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1",
-    "framer-motion": "^11.5.1"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

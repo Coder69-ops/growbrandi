@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { Chat } from '@google/genai';
-import { initializeChat } from '../services/geminiService';
+import { ChatAdapter, initializeChat } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import ChatMessageBubble from './ChatMessageBubble';
 
@@ -9,7 +8,7 @@ interface ChatInterfaceProps {
     isOpen: boolean;
     onClose: () => void;
     systemInstruction: string;
-    preloadedChat?: Chat | null;
+    preloadedChat?: ChatAdapter | null;
     isPreloaded?: boolean;
 }
 
@@ -56,7 +55,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
     const [error, setError] = useState<string | null>(null);
     const [currentSuggestions, setCurrentSuggestions] = useState<string[]>(INITIAL_SUGGESTIONS);
     const [isInitialized, setIsInitialized] = useState(false);
-    const chatRef = useRef<Chat | null>(preloadedChat || null);
+    const chatRef = useRef<ChatAdapter | null>(preloadedChat || null);
     const chatHistoryRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -79,9 +78,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                             fullResponse += chunk.text;
                             setMessages([{ role: 'model', parts: [{ text: fullResponse }] }]);
                         }
-                    } catch (e) {
+                    } catch (e: any) {
                         console.error(e);
-                        setError("GrowBrandi AI is ready to help grow your business!");
+                        // Handle initialization errors gracefully
+                        if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
+                            const fallbackMessage: ChatMessage = { 
+                                role: 'model', 
+                                parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }] 
+                            };
+                            setMessages([fallbackMessage]);
+                        } else {
+                            const fallbackMessage: ChatMessage = { 
+                                role: 'model', 
+                                parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
+                            };
+                            setMessages([fallbackMessage]);
+                        }
                     }
                     return;
                 }
@@ -106,15 +118,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                         fullResponse += chunk.text;
                         setMessages([{ role: 'model', parts: [{ text: fullResponse }] }]);
                     }
-                } catch (e) {
+                } catch (e: any) {
                     console.error(e);
-                    setError("GrowBrandi AI is ready to help grow your business!");
-                    // Add a fallback welcome message
-                    const fallbackMessage: ChatMessage = { 
-                        role: 'model', 
-                        parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
-                    };
-                    setMessages([fallbackMessage]);
+                    // Handle initialization errors gracefully
+                    if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
+                        const fallbackMessage: ChatMessage = { 
+                            role: 'model', 
+                            parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }] 
+                        };
+                        setMessages([fallbackMessage]);
+                    } else {
+                        const fallbackMessage: ChatMessage = { 
+                            role: 'model', 
+                            parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
+                        };
+                        setMessages([fallbackMessage]);
+                    }
                 } finally {
                     setIsLoading(false);
                     setIsInitialized(true);
@@ -146,28 +165,54 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
         }
 
         try {
-            // Add conversion instruction to every message for short responses
-            const conversionMessage = `${message}
-
-RESPOND AS GROWBRANDI EXPERT IN MAX 2 SENTENCES. End with compelling action command. Focus on results and urgency.`;
-            
-            const responseStream = await chatRef.current.sendMessageStream({ message: conversionMessage });
+            console.log('Sending message:', message);
+            const responseStream = await chatRef.current.sendMessageStream({ message: message });
 
             let fullResponse = "";
             const aiMessageIndex = messages.length + 1;
             setMessages(prev => [...prev, { role: 'model', parts: [{ text: '' }] }]);
 
             for await (const chunk of responseStream) {
-                fullResponse += chunk.text;
+                const chunkText = chunk.text || chunk || '';
+                fullResponse += chunkText;
                 setMessages(prev => {
                     const newMessages = [...prev];
-                    newMessages[aiMessageIndex] = { role: 'model', parts: [{ text: fullResponse }] };
+                    if (newMessages[aiMessageIndex]) {
+                        newMessages[aiMessageIndex] = { role: 'model', parts: [{ text: fullResponse }] };
+                    }
                     return newMessages;
                 });
             }
-        } catch (e) {
-            console.error(e);
-            const errorMessage: ChatMessage = { role: 'model', parts: [{ text: 'Sorry, I encountered an error. Please try again.' }] };
+            
+            console.log('Response received:', fullResponse);
+        } catch (e: any) {
+            console.error('Send message error:', e);
+            
+            let errorMessage: ChatMessage;
+            
+            // Handle specific API errors
+            if (e?.message?.includes('503') || e?.message?.includes('overloaded') || e?.message?.includes('UNAVAILABLE')) {
+                errorMessage = { 
+                    role: 'model', 
+                    parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! This means our growth strategies are working. Please try again in a moment - I'm here to help scale your business!" }] 
+                };
+            } else if (e?.message?.includes('401') || e?.message?.includes('API key')) {
+                errorMessage = { 
+                    role: 'model', 
+                    parts: [{ text: "There's a configuration issue on our end. Let's schedule a direct call to discuss your growth needs: contact@growbrandi.com" }] 
+                };
+            } else if (e?.message?.includes('400') || e?.message?.includes('Invalid')) {
+                errorMessage = { 
+                    role: 'model', 
+                    parts: [{ text: "Let me rephrase that for you. What specific business challenge are you facing? Revenue growth? Lead generation? Brand development?" }] 
+                };
+            } else {
+                errorMessage = { 
+                    role: 'model', 
+                    parts: [{ text: "I'm temporarily offline, but your business growth can't wait! Book a free strategy call: contact@growbrandi.com or try asking me again." }] 
+                };
+            }
+            
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
