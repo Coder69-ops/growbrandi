@@ -47,7 +47,7 @@ const SloganGenerator: React.FC = () => {
 
     return (
         <motion.section
-            className="py-24 px-4 relative overflow-hidden"
+            className="py-24 px-4 relative overflow-hidden bg-luxury-black"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1, margin: "-100px" }}

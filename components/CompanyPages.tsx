@@ -541,8 +541,9 @@ export const TeamPage: React.FC = () => {
       <section className="relative min-h-screen bg-luxury-black flex flex-col items-center justify-center overflow-hidden py-20">
         {/* Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-zinc-800/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-zinc-800/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-500/5 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
@@ -580,12 +581,15 @@ export const TeamPage: React.FC = () => {
                 whileHover={{ y: -12, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden border border-white/5">
+                <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden border border-white/5 group-hover:border-white/20 transition-all duration-500">
                   {/* Background Glow Effect */}
                   <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
-                    ? 'bg-white/5'
+                    ? 'bg-gradient-to-br from-purple-500/10 via-blue-500/10 to-emerald-500/10'
                     : 'bg-transparent'
                     }`} />
+
+                  {/* Decorative Gradient Border Top */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
 
                   <div className="relative z-10">
                     <Link to={`/team/${member.slug}`} className="block">
@@ -625,7 +629,7 @@ export const TeamPage: React.FC = () => {
                         {member.specialties.map((specialty, idx) => (
                           <span
                             key={specialty}
-                            className="px-3 py-1 bg-zinc-900/50 text-zinc-400 text-xs font-medium rounded-full border border-zinc-800 group-hover:border-white/20 group-hover:text-white transition-all duration-300"
+                            className="px-3 py-1 bg-zinc-900/50 text-zinc-400 text-xs font-medium rounded-full border border-zinc-800 group-hover:border-emerald-500/30 group-hover:text-emerald-400 transition-all duration-300"
                           >
                             {specialty}
                           </span>
@@ -650,7 +654,7 @@ export const TeamPage: React.FC = () => {
                           <motion.a
                             key={platform}
                             href={url}
-                            className="p-2 rounded-lg bg-zinc-900/50 text-zinc-400 hover:bg-white/10 hover:text-white transition-all duration-300 group/social"
+                            className="p-2 rounded-lg bg-zinc-900/50 text-zinc-400 hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500 hover:text-white transition-all duration-300 group/social shadow-lg"
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                             aria-label={`${member.name} ${platform}`}
