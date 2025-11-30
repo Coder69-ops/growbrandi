@@ -1,5 +1,5 @@
 import { GoogleGenAI, Chat, Type } from "@google/genai";
-import { SERVICES } from "../constants";
+import { SERVICES, COMPANY_STATS, TESTIMONIALS } from "../constants";
 
 // Chat interface adapter to maintain compatibility  
 export class ChatAdapter {
@@ -117,21 +117,36 @@ export const estimateProject = async (requirements: {
             `- ${s.title}: ${s.price}`
         ).join('\n');
 
+        // Create social proof context
+        const socialProofContext = `
+        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        Key Testimonial: "${TESTIMONIALS[0].quote}" - ${TESTIMONIALS[0].author}
+        `;
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `As a digital agency expert, provide a detailed project estimation for:
+            contents: `As a senior sales engineer at GrowBrandi (a premium digital growth agency), provide a persuasive project estimation for:
             Project Type: ${requirements.projectType}
             Features: ${requirements.features.join(', ')}
             Timeline: ${requirements.timeline}
             Budget: ${requirements.budget}
             Industry: ${requirements.industry}
             
-            IMPORTANT: Base your cost estimates strictly on the following service pricing:
+            CONTEXT:
+            Pricing:
             ${pricingContext}
             
-            Do not suggest costs significantly higher than these base prices unless the scope is clearly enterprise-level.
+            Social Proof:
+            ${socialProofContext}
+
+            INSTRUCTIONS:
+            1. Base cost estimates STRICTLY on the provided service pricing.
+            2. Use a professional, confident, and persuasive tone.
+            3. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
+            4. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
+            5. In "Recommendations", specifically mention GrowBrandi services.
             
-            Provide estimation with cost breakdown, timeline, recommendations, and potential challenges. The output must be only the JSON object.`,
+            The output must be only the JSON object.`,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -199,14 +214,32 @@ export const recommendServices = async (businessInfo: {
             `- ${s.title}: ${s.price}`
         ).join('\n');
 
+        // Create social proof context
+        const socialProofContext = `
+        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        `;
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Recommend digital services for: Industry: ${businessInfo.industry}, Challenges: ${businessInfo.currentChallenges.join(', ')}, Goals: ${businessInfo.goals.join(', ')}, Budget: ${businessInfo.budget}, Timeline: ${businessInfo.timeline}
+            contents: `Act as a strategic growth consultant for GrowBrandi. Recommend digital services for: 
+            Industry: ${businessInfo.industry}, 
+            Challenges: ${businessInfo.currentChallenges.join(', ')}, 
+            Goals: ${businessInfo.goals.join(', ')}, 
+            Budget: ${businessInfo.budget}, 
+            Timeline: ${businessInfo.timeline}
 
-            IMPORTANT: Base your recommendations and estimated costs strictly on the following service pricing:
+            CONTEXT:
+            Pricing:
             ${pricingContext}
             
-            Do not suggest costs significantly higher than these base prices unless the scope is clearly enterprise-level.
+            Social Proof:
+            ${socialProofContext}
+
+            INSTRUCTIONS:
+            1. Recommend specific GrowBrandi services that directly solve the user's challenges.
+            2. Base estimated costs STRICTLY on the provided pricing.
+            3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise).
+            4. Focus on ROI and business outcomes.
 
             The output must be only the JSON object.`,
             config: {
@@ -276,16 +309,40 @@ export const analyzeBusinessGrowth = async (businessData: {
 
     try {
         const ai = new GoogleGenAI({ apiKey });
+
+        // Create pricing context from constants
+        const pricingContext = SERVICES.map(s =>
+            `- ${s.title}: ${s.price}`
+        ).join('\n');
+
+        // Create social proof context
+        const socialProofContext = `
+        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        `;
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Analyze the growth potential for this business:
+            contents: `Act as a senior business analyst at GrowBrandi. Analyze the growth potential for this business:
             Current Revenue: ${businessData.currentRevenue}
             Industry: ${businessData.industry}
             Market Position: ${businessData.marketPosition}
             Digital Presence: ${businessData.digitalPresence}
             Competitors Level: ${businessData.competitorsLevel}
             
-            Provide comprehensive growth analysis with specific insights and recommendations. The output must be only the JSON object.`,
+            CONTEXT:
+            GrowBrandi Services:
+            ${pricingContext}
+
+            GrowBrandi Track Record:
+            ${socialProofContext}
+
+            INSTRUCTIONS:
+            1. Provide a realistic growth analysis.
+            2. In "Recommended Actions", SPECIFICALLY recommend GrowBrandi services as solutions to their gaps.
+            3. Mention how our data-driven approach (proven by 150+ projects) ensures growth.
+            4. Be encouraging but honest about the need for professional digital intervention.
+
+            The output must be only the JSON object.`,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -350,15 +407,39 @@ export const generateConsultationPlan = async (clientInfo: {
 
     try {
         const ai = new GoogleGenAI({ apiKey });
+
+        // Create pricing context from constants
+        const pricingContext = SERVICES.map(s =>
+            `- ${s.title}: ${s.price}`
+        ).join('\n');
+
+        // Create social proof context
+        const socialProofContext = `
+        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        `;
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Create a personalized consultation plan for:
+            contents: `Act as a client success manager at GrowBrandi. Create a personalized consultation plan for:
             Business Type: ${clientInfo.businessType}
             Specific Needs: ${clientInfo.specificNeeds.join(', ')}
             Urgency: ${clientInfo.urgency}
             Experience Level: ${clientInfo.experience}
             
-            Design a consultation structure that maximizes value and addresses their needs. The output must be only the JSON object.`,
+            CONTEXT:
+            GrowBrandi Services:
+            ${pricingContext}
+
+            GrowBrandi Track Record:
+            ${socialProofContext}
+
+            INSTRUCTIONS:
+            1. Design a consultation structure that positions GrowBrandi as the ideal partner.
+            2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs.
+            3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects).
+            4. Emphasize that the consultation is the first step towards measurable growth.
+
+            The output must be only the JSON object.`,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {

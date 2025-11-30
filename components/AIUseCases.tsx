@@ -20,6 +20,7 @@ interface UseCase {
 
 // Project Estimator Component
 const ProjectEstimator = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     projectType: '',
     features: [] as string[],
@@ -124,10 +125,10 @@ const ProjectEstimator = () => {
               required
             >
               <option value="">Select budget</option>
+              <option value="$300-$1K">$300 - $1K</option>
               <option value="$1K-$5K">$1K - $5K</option>
               <option value="$5K-$15K">$5K - $15K</option>
-              <option value="$15K-$50K">$15K - $50K</option>
-              <option value="$50K+">$50K+</option>
+              <option value="$15K+">$15K+</option>
             </select>
           </div>
         </div>
@@ -185,6 +186,13 @@ const ProjectEstimator = () => {
               </ul>
             </div>
           )}
+
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-full mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-emerald-500/20"
+          >
+            Book Free Consultation
+          </button>
         </motion.div>
       )}
     </div>
@@ -193,6 +201,7 @@ const ProjectEstimator = () => {
 
 // Service Recommender Component
 const ServiceRecommender = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     industry: '',
     currentChallenges: [] as string[],
@@ -300,10 +309,10 @@ const ServiceRecommender = () => {
               required
             >
               <option value="">Select budget</option>
+              <option value="$300-$1K">$300 - $1K</option>
               <option value="$1K-$5K">$1K - $5K</option>
               <option value="$5K-$15K">$5K - $15K</option>
-              <option value="$15K-$50K">$15K - $50K</option>
-              <option value="$50K+">$50K+</option>
+              <option value="$15K+">$15K+</option>
             </select>
           </div>
 
@@ -362,6 +371,13 @@ const ServiceRecommender = () => {
               ))}
             </div>
           )}
+
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-blue-500/20"
+          >
+            Get Started with These Services
+          </button>
         </motion.div>
       )}
     </div>
@@ -370,6 +386,7 @@ const ServiceRecommender = () => {
 
 // Business Growth Analyzer Component
 const BusinessGrowthAnalyzer = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     currentRevenue: '',
     industry: '',
@@ -512,9 +529,15 @@ const BusinessGrowthAnalyzer = () => {
               </div>
             </div>
           )}
+
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-purple-500/20"
+          >
+            Discuss Growth Strategy
+          </button>
         </motion.div>
       )}
-
     </div>
   );
 };
@@ -719,97 +742,90 @@ const AIUseCases: React.FC = () => {
     },
     {
       id: 'analyzer',
-      title: 'GrowBrandi Growth Analyzer',
-      description: 'Analyze your business growth potential with GrowBrandi-powered insights',
+      title: 'Business Growth Analyzer',
+      description: 'Analyze your market position and get data-driven growth predictions',
       icon: <FaChartBar className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-purple-500 to-pink-500',
       demo: BusinessGrowthAnalyzer
     },
     {
       id: 'planner',
-      title: 'GrowBrandi Consultation Planner',
-      description: 'Plan your perfect consultation session with personalized GrowBrandi recommendations',
+      title: 'Strategic Consultation Planner',
+      description: 'Create a personalized consultation agenda tailored to your business needs',
       icon: <FaCalendarAlt className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-cyan-500 to-blue-500',
       demo: ConsultationPlanner
     }
   ];
 
-  const ActiveDemo = useCases.find(uc => uc.id === activeUseCase)?.demo || ProjectEstimator;
+  const ActiveDemo = useCases.find(u => u.id === activeUseCase)?.demo || ProjectEstimator;
 
   return (
-    <section className="py-20 bg-luxury-black relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-12 sm:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
-              GrowBrandi's Smart Business{' '}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                Intelligence Suite
-              </span>
-            </h2>
-            <p className="text-lg sm:text-xl text-zinc-300 max-w-3xl mx-auto px-4">
-              Experience the future of business growth with GrowBrandi's interactive intelligence tools that provide
-              instant insights, strategic recommendations, and actionable growth plans tailored to your business.
-            </p>
-          </motion.div>
+    <div className="min-h-screen bg-zinc-950 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            AI-Powered Growth Tools
+          </h1>
+          <p className="text-zinc-400 max-w-2xl mx-auto">
+            Leverage our advanced AI tools to estimate projects, discover services, and analyze your business growth potential.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* Use Case Selector */}
-          <div className="lg:col-span-1 order-2 lg:order-1">
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
-              {useCases.map((useCase) => (
-                <motion.button
-                  key={useCase.id}
-                  onClick={() => setActiveUseCase(useCase.id)}
-                  className={`w-full p-4 sm:p-6 rounded-xl sm:rounded-2xl text-left transition-all duration-300 ${activeUseCase === useCase.id
-                    ? 'bg-gradient-to-r ' + useCase.color + ' text-white shadow-2xl scale-105'
-                    : 'bg-zinc-800/50 backdrop-blur-sm text-zinc-300 hover:bg-zinc-700/50 hover:scale-102'
-                    }`}
-                  whileHover={{ scale: activeUseCase === useCase.id ? 1.05 : 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                >
-                  <div className="flex lg:flex-col lg:items-start items-center lg:space-x-0 space-x-3 lg:space-y-3">
-                    <div className={`flex-shrink-0 ${activeUseCase === useCase.id ? 'text-white' : 'text-zinc-400'
-                      }`}>
-                      {useCase.icon}
-                    </div>
-                    <div className="lg:w-full">
-                      <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1">{useCase.title}</h3>
-                      <p className={`text-xs sm:text-sm hidden lg:block ${activeUseCase === useCase.id ? 'text-white/90' : 'text-zinc-400'
-                        }`}>
-                        {useCase.description}
-                      </p>
-                    </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Sidebar Navigation */}
+          <div className="lg:col-span-4 space-y-4">
+            {useCases.map((useCase) => (
+              <button
+                key={useCase.id}
+                onClick={() => setActiveUseCase(useCase.id)}
+                className={`w-full text-left p-4 rounded-xl transition-all border ${activeUseCase === useCase.id
+                  ? `bg-zinc-900 border-zinc-700 shadow-lg shadow-${useCase.color.split('-')[1]}-500/10`
+                  : 'bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
+                  }`}
+              >
+                <div className="flex items-start space-x-4">
+                  <div className={`p-3 rounded-lg bg-gradient-to-br ${useCase.color} text-white`}>
+                    {useCase.icon}
                   </div>
-                </motion.button>
-              ))}
-            </div>
+                  <div>
+                    <h3 className={`font-semibold ${activeUseCase === useCase.id ? 'text-white' : 'text-zinc-300'
+                      }`}>
+                      {useCase.title}
+                    </h3>
+                    <p className="text-sm text-zinc-500 mt-1 line-clamp-2">
+                      {useCase.description}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
 
-          {/* Active Demo Area */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
+          {/* Main Content Area */}
+          <div className="lg:col-span-8">
             <motion.div
               key={activeUseCase}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-              className="bg-zinc-800/30 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-zinc-700/50 h-full"
+              transition={{ duration: 0.3 }}
+              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-xl"
             >
+              <div className="mb-8">
+                <h2 className="text-2xl font-bold text-white mb-2">
+                  {useCases.find(u => u.id === activeUseCase)?.title}
+                </h2>
+                <p className="text-zinc-400">
+                  {useCases.find(u => u.id === activeUseCase)?.description}
+                </p>
+              </div>
+
               <ActiveDemo />
             </motion.div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
