@@ -49,7 +49,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-[95%] md:w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-5 sm:p-10 border border-white/10 shadow-2xl custom-scrollbar"
+                className="relative w-[95%] md:w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-4 sm:p-10 border border-white/10 shadow-2xl custom-scrollbar"
                 initial={{ scale: 0.9, y: 50, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 50, opacity: 0 }}
@@ -241,7 +241,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
         </div>
 
         {/* Content Container */}
-        <div className="absolute inset-0 p-8 flex flex-col justify-end">
+        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
             <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                 {/* Category */}
                 <div className="flex items-center gap-3 mb-4">
@@ -316,7 +316,7 @@ const ProjectsPreview: React.FC = () => {
     return (
         <>
             <motion.section
-                className="py-32 px-4 relative overflow-hidden bg-luxury-black"
+                className="py-16 md:py-32 px-4 relative overflow-hidden bg-luxury-black"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0 }}

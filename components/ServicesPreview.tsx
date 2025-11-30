@@ -75,7 +75,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-[95%] md:w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-5 md:p-8"
+                className="relative w-[95%] md:w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-4 md:p-8"
                 initial={{ scale: 0.8, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 50 }}
@@ -222,7 +222,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
             </div>
         )}
 
-        <div className={`glass-effect p-8 h-full relative ${featured ? 'bg-gradient-to-br from-emerald-500/5 to-blue-500/5' : ''}`}>
+        <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-emerald-500/5 to-blue-500/5' : ''}`}>
             {/* Background Decorations */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
@@ -308,7 +308,7 @@ const ServicesPreview: React.FC = () => {
     return (
         <>
             <motion.section
-                className="py-24 px-4 relative overflow-hidden"
+                className="py-12 md:py-24 px-4 relative overflow-hidden"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0 }}
