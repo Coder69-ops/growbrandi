@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-slate-900 pt-20 pb-10">
+    <footer className="relative overflow-hidden bg-slate-900 pt-12 md:pt-20 pb-8 md:pb-10">
       {/* Subtle Background Elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -34,9 +34,9 @@ const Footer: React.FC = () => {
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
-          {/* Brand Section - Spans 4 columns */}
-          <div className="lg:col-span-4 space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
+          {/* Brand Section - Spans full width on mobile, 4 cols on desktop */}
+          <div className="sm:col-span-2 lg:col-span-4 space-y-4 md:space-y-6">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,7 +61,6 @@ const Footer: React.FC = () => {
                   aria-label={platform}
                 >
                   <span className="sr-only">{platform}</span>
-                  {/* Simple generic icon for now, or map specific icons if needed */}
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm-1 15h-2v-6h2v6zm-1-7c-.552 0-1-.448-1-1s.448-1 1-1 1 .448 1 1-.448 1-1 1zm5 7h-2v-3c0-.552-.448-1-1-1s-1 .448-1 1v3h-2v-6h2v1.19c.312-.538.997-1.19 2.188-1.19 1.938 0 2.812 1.25 2.812 3.5V17z" />
                   </svg>
@@ -70,10 +69,10 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Services - Spans 3 columns */}
+          {/* Services - Spans 1 col on mobile/tablet, 3 cols on desktop */}
           <div className="lg:col-span-3">
-            <h3 className="font-semibold text-white mb-6">Services</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-white mb-4 md:mb-6">Services</h3>
+            <ul className="space-y-2 md:space-y-3">
               {SERVICES.slice(0, 5).map((service) => (
                 <li key={service.title}>
                   <Link
@@ -87,10 +86,10 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Company - Spans 2 columns */}
+          {/* Company - Spans 1 col on mobile/tablet, 2 cols on desktop */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold text-white mb-6">Company</h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold text-white mb-4 md:mb-6">Company</h3>
+            <ul className="space-y-2 md:space-y-3">
               {[
                 { name: 'About', path: '/about' },
                 { name: 'Process', path: '/process' },
@@ -110,10 +109,10 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact - Spans 3 columns */}
-          <div className="lg:col-span-3">
-            <h3 className="font-semibold text-white mb-6">Contact</h3>
-            <ul className="space-y-4">
+          {/* Contact - Spans full width on mobile, 3 cols on desktop */}
+          <div className="sm:col-span-2 lg:col-span-3">
+            <h3 className="font-semibold text-white mb-4 md:mb-6">Contact</h3>
+            <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3 text-slate-400 text-sm">
                 <svg className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -142,11 +141,11 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <p className="text-slate-500 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
-          <div className="flex gap-6 text-sm text-slate-500">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500">
             <Link to="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy</Link>
             <Link to="/terms-of-service" className="hover:text-slate-300 transition-colors">Terms</Link>
             <Link to="/sitemap" className="hover:text-slate-300 transition-colors">Sitemap</Link>
