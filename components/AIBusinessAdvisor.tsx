@@ -175,7 +175,7 @@ const AIBusinessAdvisor: React.FC = () => {
                     {/* Results Display */}
                     <motion.div
                         variants={itemVariants}
-                        className="glass-effect rounded-3xl p-8 h-full flex flex-col justify-center"
+                        className="glass-effect rounded-3xl p-6 sm:p-8 h-full flex flex-col justify-center"
                     >
                         {!showResults ? (
                             <div className="text-center py-12">

@@ -70,10 +70,10 @@ const TestimonialsSlider: React.FC = () => {
                         <span className="text-sm font-bold text-emerald-400 tracking-wide">CLIENT TESTIMONIALS</span>
                         <FaCommentDots className="w-5 h-5 text-emerald-400" />
                     </div>
-                    <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+                    <h2 className="text-3xl md:text-6xl font-black mb-8 leading-tight">
                         What Our <span className="text-gradient">Amazing Clients</span> Say
                     </h2>
-                    <p className="text-xl md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed">
                         Don't just take our word for it. Hear from the businesses we've helped transform their
                         digital presence and <span className="text-emerald-400 font-semibold">achieve remarkable success</span>.
                     </p>
@@ -88,17 +88,17 @@ const TestimonialsSlider: React.FC = () => {
                     {/* Navigation Buttons */}
                     <button
                         onClick={handlePrev}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
+                        className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Previous testimonial"
                     >
-                        <FaChevronLeft className="w-6 h-6 text-zinc-400 group-hover:text-emerald-400" />
+                        <FaChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-emerald-400" />
                     </button>
                     <button
                         onClick={handleNext}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
+                        className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Next testimonial"
                     >
-                        <FaChevronRight className="w-6 h-6 text-zinc-400 group-hover:text-emerald-400" />
+                        <FaChevronRight className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-emerald-400" />
                     </button>
 
                     {/* Enhanced Testimonial Cards */}
@@ -107,7 +107,7 @@ const TestimonialsSlider: React.FC = () => {
                             {TESTIMONIALS.map((testimonial, index) => (
                                 <div key={index} className="w-full flex-shrink-0 px-2">
                                     <motion.div
-                                        className="glass-effect rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden group min-h-[400px] flex flex-col justify-between"
+                                        className="glass-effect rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden group min-h-[400px] flex flex-col justify-between"
                                         whileHover={{ y: -8, scale: 1.02 }}
                                         transition={{ duration: 0.3 }}
                                     >

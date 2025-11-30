@@ -440,7 +440,7 @@ const ServicesPreview: React.FC = () => {
                             </div>
 
                             {/* Trust Indicators */}
-                            <div className="flex items-center justify-center gap-8 mt-8 pt-8 border-t border-zinc-700">
+                            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-8 pt-8 border-t border-zinc-700">
                                 <div className="flex items-center gap-2">
                                     <FaLock className="w-5 h-5 text-emerald-400" />
                                     <span className="text-zinc-300 text-sm">SSL Secured</span>

@@ -17,7 +17,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
     >
       <button
         onClick={onClick}
-        className="w-full px-8 py-6 text-left flex justify-between items-center hover:bg-white/5 transition-all duration-300 group"
+        className="w-full px-6 md:px-8 py-4 md:py-6 text-left flex justify-between items-center hover:bg-white/5 transition-all duration-300 group"
         aria-expanded={isOpen}
       >
         <h3 className="text-lg md:text-xl font-bold text-white pr-4 group-hover:text-gradient transition-colors duration-300">
@@ -76,7 +76,7 @@ const FAQ: React.FC = () => {
           <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
             <span className="text-sm font-medium text-emerald-400">FAQ</span>
           </div>
-          <h2 className="text-4xl md:text-6xl font-black mb-6">
+          <h2 className="text-3xl md:text-6xl font-black mb-6">
             Frequently Asked <span className="text-gradient">Questions</span>
           </h2>
           <p className="text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
@@ -124,7 +124,7 @@ const FAQ: React.FC = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
-          <div className="glass-effect rounded-2xl p-8">
+          <div className="glass-effect rounded-2xl p-6 md:p-8">
             <h3 className="text-2xl font-bold text-white mb-4">
               Still have questions?
             </h3>
