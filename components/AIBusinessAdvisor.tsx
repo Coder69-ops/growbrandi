@@ -224,7 +224,7 @@ const AIBusinessAdvisor: React.FC = () => {
                                                     href="https://wa.me/8801755154194?text=I%20want%20to%20book%20a%20strategy%20call%20to%20discuss%20my%20Digital%20Health%20Score%20of%20"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center justify-center gap-2 w-full bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition-all"
+                                                    className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-green-700 transition-all"
                                                 >
                                                     <FaWhatsapp className="w-6 h-6" />
                                                     Book Strategy Call to Unlock Report
@@ -254,7 +254,7 @@ const AIBusinessAdvisor: React.FC = () => {
                             href="https://wa.me/8801755154194"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all"
+                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all"
                         >
                             <FaWhatsapp className="w-5 h-5" />
                             Chat on WhatsApp

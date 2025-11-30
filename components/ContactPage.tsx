@@ -306,7 +306,7 @@ export const ContactPage: React.FC = () => {
                                     <motion.button
                                         type="submit"
                                         disabled={formStatus === 'submitting'}
-                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-white text-black hover:bg-zinc-200"
+                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >

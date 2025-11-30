@@ -3,11 +3,16 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaLightbulb, FaUsers, FaCheckCircle, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import { TEAM_MEMBERS } from '../constants';
+import SEO from './SEO';
 
 // About Us Page
 export const AboutUsPage: React.FC = () => {
   return (
     <>
+      <SEO
+        title="About Us"
+        description="We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age."
+      />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
@@ -166,6 +171,10 @@ export const AboutUsPage: React.FC = () => {
 export const ProcessPage: React.FC = () => {
   return (
     <>
+      <SEO
+        title="Our Process"
+        description="A proven methodology that ensures project success from initial concept to final delivery."
+      />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
@@ -322,6 +331,10 @@ export const CaseStudiesPage: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Case Studies"
+        description="Real success stories from businesses that transformed their digital presence with GrowBrandi."
+      />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
@@ -437,6 +450,10 @@ export const CareersPage: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Careers"
+        description="Join our team of digital innovators and creators. We're always looking for talented individuals."
+      />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
@@ -494,7 +511,7 @@ export const CareersPage: React.FC = () => {
                     </div>
                   </div>
                   <motion.button
-                    className="bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-zinc-200 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
+                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -517,6 +534,10 @@ export const TeamPage: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Our Team"
+        description="Meet the diverse team of digital experts behind GrowBrandi's success."
+      />
       <section className="relative min-h-screen bg-luxury-black flex flex-col items-center justify-center overflow-hidden py-20">
         {/* Background Elements */}
         <div className="absolute inset-0">
@@ -663,7 +684,7 @@ export const TeamPage: React.FC = () => {
                 your digital goals. We're here to turn your vision into reality.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-black hover:bg-zinc-200 font-semibold px-8 py-3 rounded-full transition-all duration-200 shadow-lg">
+                <button className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600 font-semibold px-8 py-3 rounded-full transition-all duration-200 shadow-lg">
                   Start Your Project
                 </button>
                 <button className="border border-white/20 text-white hover:bg-white/10 font-semibold px-8 py-3 rounded-full transition-all duration-200">
@@ -709,6 +730,10 @@ export const BlogPage: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Blog"
+        description="Insights, tips, and industry trends from our team of digital experts."
+      />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />

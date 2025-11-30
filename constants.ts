@@ -132,15 +132,15 @@ export const PROJECTS: Project[] = [
     title: "Mauvis",
     category: "Web Development",
     description: "A sleek, modern website for a premium beauty brand. Focused on brand storytelling and seamless booking integration.",
-    imageUrl: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    imageUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     rating: 5,
     completionTime: '4 weeks',
     technologies: ['WordPress', 'Elementor', 'SEO', 'Google Analytics'],
     client: 'Mauvis Beauty',
     results: ['10x ROI', '200% More Bookings', 'Top 3 Search Ranking'],
     growthMetrics: '10x ROI',
-    beforeImage: "https://images.unsplash.com/photo-1481437156560-3205f6a55735?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    afterImage: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max"
+    beforeImage: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    afterImage: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
   },
   {
     title: "Saravia Gems",

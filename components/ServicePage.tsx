@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaRocket, FaEye, FaCheck, FaStar, FaPhone } from 'react-icons/fa';
+import SEO from './SEO';
 
 interface ServicePageProps {
   title: string;
@@ -28,6 +29,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
 }) => {
   return (
     <>
+      <SEO title={title} description={description} />
       <div className="bg-luxury-black min-h-screen">
         {/* Hero Section */}
         <section className="py-20 px-4 relative">
@@ -56,8 +58,8 @@ const ServicePage: React.FC<ServicePageProps> = ({
             >
               <Link to="/contact">
                 <motion.button
-                  className="bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-zinc-200 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                  whileHover={{ scale: 1.02 }}
+                  className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <FaRocket className="w-5 h-5" />
@@ -66,8 +68,8 @@ const ServicePage: React.FC<ServicePageProps> = ({
               </Link>
               <Link to="/portfolio">
                 <motion.button
-                  className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5"
-                  whileHover={{ scale: 1.02, borderColor: 'rgba(255,255,255,0.3)' }}
+                  className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5 border border-white/10 hover:border-white/30"
+                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <FaEye className="w-5 h-5" />
@@ -294,7 +296,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                     <Link to="/contact" className="w-full block">
                       <motion.button
                         className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${planName === 'professional'
-                          ? 'bg-white text-black hover:bg-zinc-200'
+                          ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600 shadow-[0_0_20px_rgba(16,185,129,0.3)]'
                           : 'glass-effect text-white hover:bg-white/5'
                           }`}
                         whileHover={{ scale: 1.02 }}
@@ -329,7 +331,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/contact">
                   <motion.button
-                    className="bg-white text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-zinc-200 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -339,7 +341,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 </Link>
                 <Link to="/contact">
                   <motion.button
-                    className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5"
+                    className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5 border border-white/10 hover:border-white/30"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >
