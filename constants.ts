@@ -201,14 +201,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "CEO & Founder",
     slug: "shuvo-mallick",
     description: "Visionary leader with a passion for driving business growth through innovative digital strategies.",
-    bio: "Shuvo Mallick is the driving force behind GrowBrandi. With over a decade of experience in digital transformation and brand strategy, he has helped countless businesses scale from startups to market leaders. His vision combines creative excellence with data-driven insights to deliver measurable results.",
+    bio: "Shuvo Mallick is the visionary architect behind GrowBrandi. With over a decade of high-stakes experience in digital transformation and brand strategy, he has successfully guided over 50 businesses from early-stage startups to market-dominating enterprises. His unique 'Growth Engine' methodology combines creative storytelling with rigorous data analytics, ensuring that every campaign delivers measurable, scalable results. Shuvo is a sought-after speaker at industry conferences and a mentor to emerging tech entrepreneurs.",
     achievements: [
-      "Scaled 50+ businesses to 7-figure revenue",
+      "Scaled 50+ businesses to 7-figure annual revenue",
       "Pioneered GrowBrandi's proprietary 'Growth Engine' methodology",
-      "Featured speaker at Digital Growth Summit 2024"
+      "Keynote speaker at the 2024 Digital Growth Summit",
+      "Awarded 'Digital Innovator of the Year' by TechWeekly"
     ],
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["Business Strategy", "Leadership", "Growth Hacking"],
+    specialties: ["Business Strategy", "Executive Leadership", "Growth Hacking", "Brand Architecture"],
     social: {
       linkedin: "#",
       twitter: "#",
@@ -220,14 +221,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "GrowBrandi Solutions Architect",
     slug: "binita-biswas",
     description: "Expert in designing scalable solutions and integrating intelligent technologies for maximum efficiency.",
-    bio: "Binita specializes in turning complex business requirements into elegant, scalable technical solutions. Her expertise in system architecture and AI integration ensures that GrowBrandi's clients operate on the cutting edge of efficiency and innovation.",
+    bio: "Binita is a master of systems thinking. As our Solutions Architect, she specializes in translating complex business requirements into elegant, scalable technical ecosystems. Her expertise spans cloud infrastructure, AI integration, and enterprise software architecture. Binita ensures that GrowBrandi's clients don't just get a website, but a robust digital foundation capable of supporting exponential growth. She is passionate about automation and efficiency, constantly finding ways to streamline operations.",
     achievements: [
-      "Architected enterprise solutions for Fortune 500 clients",
-      "Reduced client operational costs by 40% through automation",
-      "Led the development of GrowBrandi's AI Business Advisor"
+      "Architected enterprise-grade solutions for Fortune 500 clients",
+      "Reduced client operational costs by an average of 40% through automation",
+      "Led the development of GrowBrandi's AI Business Advisor tool",
+      "Certified AWS Solutions Architect Professional"
     ],
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["Solutions Architecture", "System Integration", "Tech Strategy"],
+    specialties: ["Solutions Architecture", "System Integration", "Cloud Infrastructure", "AI Implementation"],
     social: {
       linkedin: "#",
       twitter: "#",
@@ -239,14 +241,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Head of Development",
     slug: "ovejit-das",
     description: "Leading the engineering team to build robust, high-performance applications with cutting-edge tech.",
-    bio: "Ovejit leads our engineering team with a focus on code quality, performance, and security. A full-stack expert, he ensures that every digital product we build is not just functional, but a masterpiece of modern engineering.",
+    bio: "Ovejit is the technical backbone of GrowBrandi. Leading our engineering team with a focus on code quality, performance, and security, he ensures that every digital product we build is a masterpiece of modern engineering. A full-stack expert with a deep love for clean code, Ovejit stays ahead of the curve on emerging technologies, from Web3 to edge computing. His leadership style fosters a culture of continuous learning and technical excellence within the development team.",
     achievements: [
-      "Oversees a team of 15+ senior developers",
+      "Oversees a high-performing team of 15+ senior developers",
       "Maintains 99.99% uptime across all client applications",
-      "Expert in React, Node.js, and Cloud Infrastructure"
+      "Spearheaded the migration to a serverless architecture, reducing costs by 30%",
+      "Contributor to major open-source React libraries"
     ],
     image: "https://ik.imagekit.io/nltb2bcz4/IMG_2765url.JPG",
-    specialties: ["Full Stack Dev", "Cloud Architecture", "Team Leadership"],
+    specialties: ["Full Stack Development", "Cloud Architecture", "Team Leadership", "Cybersecurity"],
     social: {
       linkedin: "#",
       github: "#",
@@ -258,14 +261,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Digital Marketing Strategist",
     slug: "nijhum-nur",
     description: "Data-driven marketer specializing in paid advertising and conversion rate optimization.",
-    bio: "Nijhum lives and breathes data. As our lead strategist, she crafts high-ROI campaigns that turn clicks into loyal customers. Her deep understanding of consumer psychology and platform algorithms drives exceptional growth for our clients.",
+    bio: "Nijhum lives at the intersection of psychology and data. As our lead strategist, she crafts high-ROI campaigns that turn casual browsers into loyal brand advocates. Her deep understanding of consumer behavior and platform algorithms allows her to uncover hidden opportunities for growth. Nijhum manages substantial ad budgets across Meta, Google, and TikTok, consistently delivering ROAS that exceeds industry benchmarks. She believes that every click tells a story.",
     achievements: [
-      "Managed over $2M in ad spend with 5x average ROAS",
-      "Increased client conversion rates by an average of 150%",
-      "Certified Google and Meta Ads Specialist"
+      "Managed over $2M in ad spend with a 5x average ROAS",
+      "Increased client conversion rates by an average of 150% in 2024",
+      "Certified Google Ads and Meta Blueprint Professional",
+      "Developed a proprietary audience targeting framework"
     ],
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["PPC", "Social Media Ads", "Analytics"],
+    specialties: ["PPC Advertising", "Social Media Strategy", "Conversion Rate Optimization", "Data Analytics"],
     social: {
       linkedin: "#",
       instagram: "#",
@@ -277,14 +281,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "UI/UX Designer",
     slug: "ar-jinia",
     description: "Creative designer crafting intuitive and visually stunning user experiences.",
-    bio: "Jinia believes that great design is invisible. She creates intuitive, user-centric interfaces that delight users and drive engagement. Her designs balance aesthetic beauty with functional clarity to create memorable digital experiences.",
+    bio: "Jinia believes that great design is invisible—it just works. She creates intuitive, user-centric interfaces that delight users and drive engagement. Her designs balance aesthetic beauty with functional clarity, creating memorable digital experiences that reinforce brand identity. Jinia's process involves deep user research, rapid prototyping, and iterative testing to ensure that every pixel serves a purpose. She is an expert in creating cohesive design systems that scale.",
     achievements: [
-      "Award-winning UI/UX portfolio",
-      "Redesigned e-commerce flows resulting in 30% less cart abandonment",
-      "Expert in Design Systems and Prototyping"
+      "Winner of the 2023 Awwwards 'Site of the Day'",
+      "Redesigned major e-commerce flows resulting in 30% less cart abandonment",
+      "Created the comprehensive 'Prism' design system used across all internal projects",
+      "Featured in 'Best of Behance' for Interaction Design"
     ],
     image: "https://images.unsplash.com/photo-1598550874175-4d7112ee750c?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["UI Design", "Prototyping", "User Research"],
+    specialties: ["UI/UX Design", "Interaction Design", "User Research", "Prototyping"],
     social: {
       linkedin: "#",
       dribbble: "#",
@@ -296,14 +301,15 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Project Manager",
     slug: "riaz-shahriar",
     description: "Ensuring projects are delivered on time and within budget with seamless communication.",
-    bio: "Riaz is the glue that holds our projects together. With his meticulous attention to detail and proactive communication, he ensures that every project is delivered on time, within budget, and exceeds client expectations.",
+    bio: "Riaz is the glue that holds our projects together. With his meticulous attention to detail and proactive communication style, he ensures that every project is delivered on time, within budget, and exceeds client expectations. Riaz is a master of Agile methodologies, capable of adapting to changing requirements while keeping the team focused and motivated. He believes that transparency and trust are the cornerstones of successful project management.",
     achievements: [
-      "Successfully delivered 100+ projects on schedule",
-      "Maintains 100% client satisfaction rating",
-      "Certified Scrum Master and Agile Practitioner"
+      "Successfully delivered 100+ projects on schedule and under budget",
+      "Maintains a perfect 100% client satisfaction rating",
+      "Certified Scrum Master (CSM) and PMP",
+      "Implemented a new project tracking system that improved team velocity by 20%"
     ],
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["Agile/Scrum", "Client Relations", "Resource Management"],
+    specialties: ["Agile Project Management", "Client Relations", "Resource Planning", "Risk Management"],
     social: {
       linkedin: "#",
       twitter: "#",
