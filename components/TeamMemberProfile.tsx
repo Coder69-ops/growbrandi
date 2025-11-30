@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCalendarCheck, FaBriefcase, FaTrophy, FaStar, FaSearchPlus } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaArrowRight, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase } from 'react-icons/fa';
 import { TEAM_MEMBERS } from '../constants';
 
 const TeamMemberProfile: React.FC = () => {
@@ -195,7 +195,7 @@ const TeamMemberProfile: React.FC = () => {
                         {/* Bio Section */}
                         <motion.div variants={itemVariants} className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                                <span className="w-8 h-1 bg-emerald-500 rounded-full" />
+                                <FaUser className="text-emerald-500" />
                                 About {member.name.split(' ')[0]}
                             </h2>
                             <p className="text-slate-300 leading-relaxed text-lg">
@@ -206,14 +206,14 @@ const TeamMemberProfile: React.FC = () => {
                         {/* Achievements Grid */}
                         <motion.div variants={itemVariants}>
                             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <span className="w-8 h-1 bg-blue-500 rounded-full" />
+                                <FaMedal className="text-blue-500" />
                                 Key Achievements
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {member.achievements.map((achievement, index) => (
                                     <div key={index} className="bg-slate-800/30 p-6 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-colors group">
                                         <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
-                                            <FaTrophy className="w-6 h-6 text-emerald-400" />
+                                            <FaMedal className="w-6 h-6 text-emerald-400" />
                                         </div>
                                         <p className="text-slate-200 font-medium">{achievement}</p>
                                     </div>
@@ -224,7 +224,7 @@ const TeamMemberProfile: React.FC = () => {
                         {/* Specialties */}
                         <motion.div variants={itemVariants} className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                                <span className="w-8 h-1 bg-purple-500 rounded-full" />
+                                <FaLightbulb className="text-purple-500" />
                                 Expertise
                             </h2>
                             <div className="flex flex-wrap gap-3">
@@ -233,7 +233,7 @@ const TeamMemberProfile: React.FC = () => {
                                         key={index}
                                         className="px-4 py-2 sm:px-5 sm:py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-slate-300 font-medium hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 cursor-default flex items-center gap-2 text-sm sm:text-base"
                                     >
-                                        <FaStar className="w-4 h-4 text-emerald-500/50" />
+                                        <FaCheckCircle className="w-4 h-4 text-emerald-500/50" />
                                         {specialty}
                                     </span>
                                 ))}
