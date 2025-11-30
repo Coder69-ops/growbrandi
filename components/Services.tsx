@@ -104,7 +104,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="flex items-center gap-4">
-              <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white`}>
+              <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white`} aria-hidden="true">
                 {service.icon}
               </div>
               <div>
@@ -120,7 +120,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               <div className="grid grid-cols-1 gap-4">
                 {service.features?.map((feature, index) => (
                   <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl">
-                    <FaCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                    <FaCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" aria-hidden="true" />
                     <span className="text-zinc-300 font-medium text-lg">{feature}</span>
                   </div>
                 ))}
@@ -139,7 +139,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                   'Industry-leading tools and technologies'
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <FaCircle className="w-3 h-3 text-emerald-400" />
+                    <FaCircle className="w-3 h-3 text-emerald-400" aria-hidden="true" />
                     <span className="text-zinc-300">{benefit}</span>
                   </div>
                 ))}
@@ -270,7 +270,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             <div className="flex items-center gap-4">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
-                <div className={`relative p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`}>
+                <div className={`relative p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`} aria-hidden="true">
                   {service.icon}
                 </div>
               </div>
@@ -288,7 +288,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             <div className="grid grid-cols-1 gap-3">
               {service.features?.slice(0, 4).map((feature, index) => (
                 <div key={index} className="flex items-center text-zinc-400">
-                  <FaCheck className="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0" />
+                  <FaCheck className="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0" aria-hidden="true" />
                   {feature}
                 </div>
               ))}
@@ -311,7 +311,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
 
           <div className="mt-6 pt-4 border-t border-zinc-700 text-center">
             <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
-              <FaShieldAlt className="w-4 h-4 text-emerald-400" />
+              <FaShieldAlt className="w-4 h-4 text-emerald-400" aria-hidden="true" />
               <span>30-day money-back guarantee</span>
             </div>
           </div>

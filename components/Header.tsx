@@ -121,7 +121,7 @@ const NavLink: React.FC<{
                 navigate(route);
                 if (onClick) onClick();
             }}
-            className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${isActive
+            className={`relative px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 min-h-[44px] flex items-center ${isActive
                 ? 'text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                 : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 } ${className}`}

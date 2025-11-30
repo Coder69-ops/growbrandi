@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
+import SEO from './components/SEO';
 import { HomePage } from './components/Hero';
 import { ServicesPage } from './components/Services';
-import { ProjectsPage } from './components/ServiceCard';
+import { PortfolioPage } from './components/Portfolio';
 import { ContactPage } from './components/ContactPage';
 import ChatInterface from './components/ChatInterface';
 import AnimatedBackground from './components/AnimatedBackground';
@@ -49,6 +51,7 @@ function AppContent() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const currentRoute = getRouteFromPath(currentPath);
+  const metadata = getRouteMetadata(currentRoute);
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
@@ -57,32 +60,6 @@ function AppContent() {
   const [chatInstance, setChatInstance] = useState<any>(null);
 
   const breadcrumbs = routeConfig[currentRoute]?.breadcrumb || ['Home'];
-
-  // Update page metadata based on current route
-  useEffect(() => {
-    const metadata = getRouteMetadata(currentRoute);
-
-    // Update document title
-    document.title = `${metadata.title} - GrowBrandi`;
-
-    // Update meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription && metadata.description) {
-      metaDescription.setAttribute('content', metadata.description);
-    }
-
-    // Update meta keywords
-    const metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (metaKeywords && metadata.keywords) {
-      metaKeywords.setAttribute('content', metadata.keywords.join(', '));
-    }
-
-    // Update canonical URL
-    const canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (canonicalLink) {
-      canonicalLink.setAttribute('href', `https://growbrandi.com${metadata.path}`);
-    }
-  }, [currentRoute]);
 
   // Preload chat on app startup
   useEffect(() => {
@@ -218,6 +195,12 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 
   return (
     <div className="text-slate-100 w-full" style={{ minHeight: '100vh' }}>
+      <SEO
+        title={metadata.title}
+        description={metadata.description || ''}
+        keywords={metadata.keywords}
+        canonicalUrl={`https://growbrandi.com${metadata.path}`}
+      />
       <AnimatedBackground />
       <div className="relative z-10 w-full">
         <Header />
@@ -280,7 +263,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 
                 {/* Legacy/Redirects/Other */}
                 <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
-                <Route path="/portfolio" element={<PageWrapper><ProjectsPage /></PageWrapper>} />
+                <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
 
                 {/* 404 */}
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
@@ -393,9 +376,11 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 // --- Main App Component with Enhanced Router ---
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

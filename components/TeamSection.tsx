@@ -35,9 +35,9 @@ const TeamSection: React.FC = () => {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black" />
-            <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
-            <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+            <div className="absolute top-1/4 right-1/3 w-64 md:w-96 h-64 md:h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/3 left-1/4 w-64 md:w-80 h-64 md:h-80 bg-blue-500/5 rounded-full blur-3xl" />
+            <div className="absolute top-2/3 right-1/4 w-48 md:w-64 h-48 md:h-64 bg-purple-500/5 rounded-full blur-3xl" />
 
             <div className="container mx-auto max-w-7xl relative z-10">
                 {/* Section Header */}

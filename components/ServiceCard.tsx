@@ -69,11 +69,11 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             {/* Floating Action Buttons */}
             <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors">
-                    <FaExpand className="w-4 h-4" />
+                <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors" aria-label="Expand project image">
+                    <FaExpand className="w-4 h-4" aria-hidden="true" />
                 </button>
-                <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors">
-                    <FaInfoCircle className="w-4 h-4" />
+                <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors" aria-label="View project info">
+                    <FaInfoCircle className="w-4 h-4" aria-hidden="true" />
                 </button>
             </div>
 
@@ -88,7 +88,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
             {project.completionTime && (
                 <div className="absolute bottom-4 right-4">
                     <span className="bg-zinc-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm flex items-center gap-2">
-                        <FaClock className="w-4 h-4" />
+                        <FaClock className="w-4 h-4" aria-hidden="true" />
                         {project.completionTime}
                     </span>
                 </div>
@@ -103,7 +103,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     </h3>
                     {project.client && (
                         <div className="flex items-center gap-2 mb-3">
-                            <FaUser className="w-4 h-4 text-emerald-400" />
+                            <FaUser className="w-4 h-4 text-emerald-400" aria-hidden="true" />
                             <p className="text-emerald-400 font-medium">{project.client}</p>
                         </div>
                     )}
