@@ -311,7 +311,7 @@ const ServicesPreview: React.FC = () => {
                 className="py-24 px-4 relative overflow-hidden"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.1, margin: "-50px" }}
+                viewport={{ once: true, amount: 0 }}
                 variants={containerVariants}
             >
                 {/* Enhanced Background Elements */}

@@ -319,7 +319,7 @@ const ProjectsPreview: React.FC = () => {
                 className="py-32 px-4 relative overflow-hidden bg-luxury-black"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, amount: 0.1 }}
+                viewport={{ once: true, amount: 0 }}
                 variants={containerVariants}
             >
                 {/* Enhanced Background Elements */}

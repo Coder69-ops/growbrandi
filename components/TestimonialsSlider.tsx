@@ -55,7 +55,7 @@ const TestimonialsSlider: React.FC = () => {
             className="py-24 px-4 relative overflow-hidden"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0 }}
             variants={containerVariants}
         >
             {/* Background Elements */}
