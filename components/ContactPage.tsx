@@ -98,12 +98,12 @@ export const ContactPage: React.FC = () => {
     };
 
     return (
-        <section id="contact" className="min-h-screen py-24 px-4 bg-luxury-black text-white relative overflow-hidden flex items-center">
+        <section id="contact" className="min-h-screen py-24 px-4 bg-luxury-black text-white relative overflow-hidden flex flex-col justify-center">
             {/* Background Elements */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-luxury-black to-luxury-black pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
-            <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
 
                 {/* Left Column: Info & Context */}
                 <motion.div
@@ -163,7 +163,7 @@ export const ContactPage: React.FC = () => {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="relative"
                 >
-                    <div className="glass-effect p-8 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+                    <div className="glass-effect p-6 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
                         {/* Decorative glow */}
                         <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
