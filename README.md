@@ -1,169 +1,119 @@
-# 🚀 GrowBrandi - AI-Powered Digital Agency
+# 🚀 GrowBrandi
 
-A modern, responsive digital agency website built with React, TypeScript, Framer Motion, and Tailwind CSS. Features impressive styling, AI-powered interactions, and comprehensive digital services.
+<div align="center">
 
-## ✨ Features
+![GrowBrandi Banner](https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop&ixlib=rb-4.0.3)
 
-### 🎨 Design & UX
-- **Modern UI**: Glassmorphic design with green/blue gradient palette
-- **Inter Font**: Clean, modern typography throughout
-- **Framer Motion**: Smooth animations and transitions
-- **100% Mobile Responsive**: Pixel-perfect scaling and stacking
-- **Accessibility**: ARIA labels, keyboard navigation, high contrast support
+### The AI-Powered Digital Agency Platform
 
-### 🧩 Components
-- **Modular Services**: Flexible service components with custom SVG icons
-- **Portfolio Grid**: Project cards with ratings, technologies, and results
-- **Testimonial Slider**: Mobile-swipeable testimonial carousel
-- **Company Statistics**: Animated stats counters
-- **FAQ Section**: Expandable question/answer interface
-- **Advanced Contact Form**: Validation with AI assistant integration
+[![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=blue)](https://www.framer.com/motion/)
 
-### 🔧 Technical Features
-- **SEO Optimized**: Meta tags, Open Graph, Twitter Cards
-- **Web App Manifest**: PWA-ready with proper icon setup
-- **Google Analytics**: Integrated analytics tracking
-- **Performance Optimized**: Lazy loading and efficient rendering
-- **Error Handling**: Comprehensive error states and loading indicators
+[Live Demo](https://growbrandi.vercel.app) · [Report Bug](https://github.com/Coder69-ops/growbrandi/issues) · [Request Feature](https://github.com/Coder69-ops/growbrandi/issues)
 
-### 🤖 AI Integration
-- **AI Chat Interface**: Context-aware chatbot (BrandiBot)
-- **Slogan Generator**: AI-powered marketing copy generation
-- **Smart Contact Forms**: AI-assisted message drafting
-
-## 🛠️ Technology Stack
-
-- **Frontend**: React 19 + TypeScript
-- **Styling**: Tailwind CSS with custom CSS variables
-- **Animations**: Framer Motion
-- **Build Tool**: Vite
-- **AI**: Google Gemini API
-- **Icons**: Heroicons (React components)
-
-## 🚀 Quick Start
-
-**Prerequisites:** Node.js 16+
-
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Configure AI (Optional):**
-   Update the `GEMINI_API_KEY` in `.env.local` with your actual API key for AI features:
-   ```
-   GEMINI_API_KEY=your_actual_api_key_here
-   ```
-
-3. **Start development server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Open in browser:**
-   - Local: http://localhost:3000/
-   - Network: http://192.168.0.166:3000/
-
-## 📱 Pages & Sections
-
-### Home Page
-- Hero section with animated CTA
-- Company statistics
-- Services preview
-- AI slogan generator
-- Projects showcase
-- Testimonials slider
-- FAQ section
-
-### Services Page
-- Detailed service cards with features and pricing
-- Modular design for easy addition/editing
-- Custom gradient colors per service
-
-### Projects Page
-- Portfolio grid with project details
-- Client information and results
-- Technology stack display
-- Rating system
-
-### Contact Page
-- Advanced form with validation
-- AI-powered message drafting
-- Comprehensive contact information
-- Newsletter signup
-
-## 🎨 Design System
-
-### Colors
-```css
---primary-green: #10b981   /* emerald-500 */
---primary-blue: #3b82f6    /* blue-500 */
---accent-teal: #14b8a6     /* teal-500 */
---glass-bg: rgba(255, 255, 255, 0.05)
---glass-border: rgba(255, 255, 255, 0.1)
-```
-
-### Typography
-- **Font**: Inter (Google Fonts)
-- **Weights**: 300, 400, 500, 600, 700, 800, 900
-
-### Components
-- **Glass Effects**: Backdrop blur with transparency
-- **Gradients**: Multi-color gradients for accents
-- **Hover States**: Smooth transitions and scale effects
-
-## 🔧 Customization
-
-### Adding New Services
-1. Update `constants.ts` with new service data
-2. Include features, pricing, and color theme
-3. Components automatically render new services
-
-### Modifying Colors
-1. Update CSS variables in `index.html`
-2. Adjust Tailwind classes in components
-3. Update manifest theme colors
-
-### Content Updates
-- **Services**: Edit `SERVICES` array in `constants.ts`
-- **Projects**: Update `PROJECTS` array with new portfolio items
-- **Testimonials**: Modify `TESTIMONIALS` array
-- **FAQ**: Add/edit questions in `FAQ_DATA`
-
-## 📊 Analytics & SEO
-
-- **Google Analytics**: Ready for GA4 integration
-- **Meta Tags**: Comprehensive SEO meta tags
-- **Open Graph**: Social media sharing optimization
-- **Structured Data**: Ready for schema markup
-- **Web App Manifest**: PWA configuration
-
-## ♿ Accessibility Features
-
-- **Skip Navigation**: Jump to main content
-- **ARIA Labels**: Screen reader support
-- **Keyboard Navigation**: Full keyboard accessibility
-- **Focus Indicators**: Visible focus states
-- **High Contrast**: Media query support
-- **Reduced Motion**: Respects user preferences
-
-## 🚀 Deployment
-
-The app is ready for deployment on any static hosting platform:
-
-- **Build**: `npm run build`
-- **Preview**: `npm run preview`
-- **Deploy**: Upload `dist/` folder to your hosting provider
-
-## 📈 Performance
-
-- **Lazy Loading**: Images and components load on demand
-- **Code Splitting**: Automatic route-based splitting
-- **Optimized Assets**: Compressed images and minified code
-- **Fast Loading**: Vite's optimized development and build process
+</div>
 
 ---
 
-Built with ❤️ using modern web technologies. Perfect for digital agencies, startups, and professional service providers.
-# growbrandi
-# Growbrandi-PRD
+## ✨ Overview
+
+**GrowBrandi** is a next-generation digital agency website that blends high-end aesthetics with intelligent AI interactions. Built for speed, SEO, and user engagement, it features a glassmorphic design system, dynamic animations, and integrated AI tools.
+
+## ⚡ Key Features
+
+*   **🎨 Stunning UI/UX**: Modern glassmorphism design with a premium emerald/blue gradient theme.
+*   **🤖 AI-Powered**:
+    *   **BrandiBot**: Context-aware AI chat assistant.
+    *   **Slogan Generator**: Instant creative marketing copy.
+    *   **Smart Forms**: AI-assisted contact message drafting.
+*   **📱 Fully Responsive**: Pixel-perfect experience across all devices.
+*   **⚡ High Performance**: Optimized with Vite and lazy loading for blazing fast speeds.
+*   **🔍 SEO Ready**: Meta tags, Open Graph support, and semantic HTML structure.
+*   **🧩 Modular Components**:
+    *   Dynamic Service Cards
+    *   Interactive Project Portfolio
+    *   Swipeable Testimonials
+    *   Animated Statistics
+
+## 🛠️ Tech Stack
+
+*   **Frontend**: React 18, TypeScript
+*   **Styling**: Tailwind CSS
+*   **Animation**: Framer Motion
+*   **Build Tool**: Vite
+*   **AI Integration**: Google Gemini API
+*   **Routing**: React Router DOM
+
+## 🚀 Quick Start
+
+### 1. Clone the Repo
+```bash
+git clone https://github.com/Coder69-ops/growbrandi.git
+cd growbrandi
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Configure Environment
+Create a `.env.local` file in the root directory:
+```env
+VITE_GEMINI_API_KEY=your_api_key_here
+```
+
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Visit `http://localhost:3000` to see the app in action.
+
+## 📦 Deployment
+
+### Deploy to Vercel
+
+The easiest way to deploy is with Vercel. Click the button below:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCoder69-ops%2Fgrowbrandi)
+
+**Manual Deployment:**
+1.  Push your code to GitHub.
+2.  Import the project into Vercel.
+3.  Vercel will automatically detect Vite and configure the build settings.
+4.  Add your `VITE_GEMINI_API_KEY` in the Vercel Project Settings > Environment Variables.
+
+## 📂 Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/          # Page components (routed)
+├── constants.ts    # App-wide data (Services, Team, Projects)
+├── types.ts        # TypeScript definitions
+├── App.tsx         # Main application entry
+└── main.tsx        # DOM renderer
+```
+
+## 🤝 Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+<div align="center">
+  <p>Built with ❤️ by the GrowBrandi Team</p>
+</div>
