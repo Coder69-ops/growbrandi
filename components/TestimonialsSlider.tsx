@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FaQuoteLeft, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { TESTIMONIALS } from '../constants';
 
 const containerVariants = {
@@ -65,13 +66,9 @@ const TestimonialsSlider: React.FC = () => {
             <div className="container mx-auto max-w-6xl text-center relative z-10">
                 <motion.div variants={itemVariants} className="mb-20">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-8 py-3 mb-8">
-                        <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
+                        <FaQuoteLeft className="w-5 h-5 text-emerald-400" />
                         <span className="text-sm font-bold text-emerald-400 tracking-wide">CLIENT TESTIMONIALS</span>
-                        <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
+                        <FaCommentDots className="w-5 h-5 text-emerald-400" />
                     </div>
                     <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
                         What Our <span className="text-gradient">Amazing Clients</span> Say
@@ -94,18 +91,14 @@ const TestimonialsSlider: React.FC = () => {
                         className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Previous testimonial"
                     >
-                        <svg className="w-6 h-6 text-slate-400 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
+                        <FaChevronLeft className="w-6 h-6 text-slate-400 group-hover:text-emerald-400" />
                     </button>
                     <button
                         onClick={handleNext}
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Next testimonial"
                     >
-                        <svg className="w-6 h-6 text-slate-400 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <FaChevronRight className="w-6 h-6 text-slate-400 group-hover:text-emerald-400" />
                     </button>
 
                     {/* Enhanced Testimonial Cards */}
@@ -127,17 +120,14 @@ const TestimonialsSlider: React.FC = () => {
                                             <div className="text-8xl text-gradient font-black leading-none opacity-20">"</div>
                                             <div className="flex">
                                                 {testimonial.rating && [...Array(5)].map((_, i) => (
-                                                    <motion.svg
+                                                    <motion.div
                                                         key={i}
-                                                        className={`w-6 h-6 ${i < testimonial.rating! ? 'text-yellow-400' : 'text-slate-600'}`}
-                                                        fill="currentColor"
-                                                        viewBox="0 0 20 20"
                                                         initial={{ scale: 0, rotate: -180 }}
                                                         animate={{ scale: 1, rotate: 0 }}
                                                         transition={{ delay: i * 0.1, duration: 0.3 }}
                                                     >
-                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                                    </motion.svg>
+                                                        <FaStar className={`w-6 h-6 ${i < testimonial.rating! ? 'text-yellow-400' : 'text-slate-600'}`} />
+                                                    </motion.div>
                                                 ))}
                                             </div>
                                         </div>
@@ -163,9 +153,7 @@ const TestimonialsSlider: React.FC = () => {
                                                 <div className="text-slate-400 text-sm mt-1">Verified Client</div>
                                             </div>
                                             <div className="hidden md:block">
-                                                <svg className="w-12 h-12 text-emerald-400/20" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                                </svg>
+                                                <FaCheckCircle className="w-12 h-12 text-emerald-400/20" />
                                             </div>
                                         </div>
                                     </motion.div>
@@ -199,8 +187,8 @@ const TestimonialsSlider: React.FC = () => {
                                     key={index}
                                     onClick={() => setActiveIndex(index)}
                                     className={`h-3 rounded-full transition-all duration-300 ${index === activeIndex
-                                            ? 'bg-gradient-to-r from-emerald-400 to-blue-400 w-8 shadow-lg'
-                                            : 'bg-slate-600 hover:bg-slate-500 w-3'
+                                        ? 'bg-gradient-to-r from-emerald-400 to-blue-400 w-8 shadow-lg'
+                                        : 'bg-slate-600 hover:bg-slate-500 w-3'
                                         }`}
                                     whileHover={{ scale: 1.2 }}
                                     whileTap={{ scale: 0.9 }}

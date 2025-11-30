@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  estimateProject, 
-  recommendServices, 
-  analyzeBusinessGrowth, 
-  generateConsultationPlan 
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt } from 'react-icons/fa';
+import {
+  estimateProject,
+  recommendServices,
+  analyzeBusinessGrowth,
+  generateConsultationPlan
 } from '../services/geminiService';
 
 interface UseCase {
@@ -84,11 +85,10 @@ const ProjectEstimator = () => {
                 key={feature}
                 type="button"
                 onClick={() => toggleFeature(feature)}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${
-                  formData.features.includes(feature)
+                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.features.includes(feature)
                     ? 'bg-emerald-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
+                  }`}
               >
                 {feature}
               </button>
@@ -159,7 +159,7 @@ const ProjectEstimator = () => {
           className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-emerald-400">GrowBrandi Project Estimation</h3>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-slate-700/50 rounded-lg p-4">
               <p className="text-sm text-slate-400">Estimated Cost</p>
@@ -259,11 +259,10 @@ const ServiceRecommender = () => {
                 key={challenge}
                 type="button"
                 onClick={() => toggleOption(challenge, 'currentChallenges')}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${
-                  formData.currentChallenges.includes(challenge)
+                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.currentChallenges.includes(challenge)
                     ? 'bg-red-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
+                  }`}
               >
                 {challenge}
               </button>
@@ -279,11 +278,10 @@ const ServiceRecommender = () => {
                 key={goal}
                 type="button"
                 onClick={() => toggleOption(goal, 'goals')}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${
-                  formData.goals.includes(goal)
+                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.goals.includes(goal)
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
+                  }`}
               >
                 {goal}
               </button>
@@ -341,17 +339,16 @@ const ServiceRecommender = () => {
           className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-blue-400">GrowBrandi Service Recommendations</h3>
-          
+
           {recommendations.priorityServices && (
             <div className="space-y-3">
               {recommendations.priorityServices.map((service: any, idx: number) => (
                 <div key={idx} className="bg-slate-700/50 rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-semibold text-white">{service.service}</h4>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      service.priority === 'High' ? 'bg-red-600' :
-                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
-                    } text-white`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
+                        service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                      } text-white`}>
                       {service.priority} Priority
                     </span>
                   </div>
@@ -492,7 +489,7 @@ const BusinessGrowthAnalyzer = () => {
           className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-purple-400">GrowBrandi Growth Analysis</h3>
-          
+
           <div className="bg-slate-700/50 rounded-lg p-4">
             <h4 className="font-semibold text-white mb-2">Growth Potential</h4>
             <p className="text-slate-300">{analysis.growthPotential}</p>
@@ -582,11 +579,10 @@ const ConsultationPlanner = () => {
                 key={need}
                 type="button"
                 onClick={() => toggleNeed(need)}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${
-                  formData.specificNeeds.includes(need)
+                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.specificNeeds.includes(need)
                     ? 'bg-cyan-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
+                  }`}
               >
                 {need}
               </button>
@@ -644,7 +640,7 @@ const ConsultationPlanner = () => {
           className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-cyan-400">Your Personalized GrowBrandi Plan</h3>
-          
+
           <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-lg p-4 border border-cyan-500/30">
             <p className="text-white font-medium mb-2">Recommended Session</p>
             <p className="text-slate-300 text-sm">{plan.consultationType} - {plan.recommendedDuration}</p>
@@ -703,11 +699,7 @@ const AIUseCases: React.FC = () => {
       id: 'estimator',
       title: 'GrowBrandi Project Estimator',
       description: 'Get instant project cost and timeline estimates powered by GrowBrandi intelligence',
-      icon: (
-        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-        </svg>
-      ),
+      icon: <FaCalculator className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-emerald-500 to-teal-500',
       demo: ProjectEstimator
     },
@@ -715,11 +707,7 @@ const AIUseCases: React.FC = () => {
       id: 'recommender',
       title: 'GrowBrandi Service Recommender',
       description: 'Discover the perfect growth services for your business with GrowBrandi guidance',
-      icon: (
-        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
+      icon: <FaLightbulb className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-blue-500 to-indigo-500',
       demo: ServiceRecommender
     },
@@ -727,11 +715,7 @@ const AIUseCases: React.FC = () => {
       id: 'analyzer',
       title: 'GrowBrandi Growth Analyzer',
       description: 'Analyze your business growth potential with GrowBrandi-powered insights',
-      icon: (
-        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 00-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
+      icon: <FaChartBar className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-purple-500 to-pink-500',
       demo: BusinessGrowthAnalyzer
     },
@@ -739,11 +723,7 @@ const AIUseCases: React.FC = () => {
       id: 'planner',
       title: 'GrowBrandi Consultation Planner',
       description: 'Plan your perfect consultation session with personalized GrowBrandi recommendations',
-      icon: (
-        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      ),
+      icon: <FaCalendarAlt className="w-6 h-6 sm:w-8 sm:h-8" />,
       color: 'from-cyan-500 to-blue-500',
       demo: ConsultationPlanner
     }
@@ -768,7 +748,7 @@ const AIUseCases: React.FC = () => {
               </span>
             </h2>
             <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4">
-              Experience the future of business growth with GrowBrandi's interactive intelligence tools that provide 
+              Experience the future of business growth with GrowBrandi's interactive intelligence tools that provide
               instant insights, strategic recommendations, and actionable growth plans tailored to your business.
             </p>
           </motion.div>
@@ -782,26 +762,23 @@ const AIUseCases: React.FC = () => {
                 <motion.button
                   key={useCase.id}
                   onClick={() => setActiveUseCase(useCase.id)}
-                  className={`w-full p-4 sm:p-6 rounded-xl sm:rounded-2xl text-left transition-all duration-300 ${
-                    activeUseCase === useCase.id
+                  className={`w-full p-4 sm:p-6 rounded-xl sm:rounded-2xl text-left transition-all duration-300 ${activeUseCase === useCase.id
                       ? 'bg-gradient-to-r ' + useCase.color + ' text-white shadow-2xl scale-105'
                       : 'bg-slate-800/50 backdrop-blur-sm text-slate-300 hover:bg-slate-700/50 hover:scale-102'
-                  }`}
+                    }`}
                   whileHover={{ scale: activeUseCase === useCase.id ? 1.05 : 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   viewport={{ once: true, amount: 0.1 }}
                 >
                   <div className="flex lg:flex-col lg:items-start items-center lg:space-x-0 space-x-3 lg:space-y-3">
-                    <div className={`flex-shrink-0 ${
-                      activeUseCase === useCase.id ? 'text-white' : 'text-slate-400'
-                    }`}>
+                    <div className={`flex-shrink-0 ${activeUseCase === useCase.id ? 'text-white' : 'text-slate-400'
+                      }`}>
                       {useCase.icon}
                     </div>
                     <div className="lg:w-full">
-                      <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 leading-tight">{useCase.title}</h3>
-                      <p className={`text-xs sm:text-sm hidden lg:block ${
-                        activeUseCase === useCase.id ? 'text-white/90' : 'text-slate-400'
-                      }`}>
+                      <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1">{useCase.title}</h3>
+                      <p className={`text-xs sm:text-sm hidden lg:block ${activeUseCase === useCase.id ? 'text-white/90' : 'text-slate-400'
+                        }`}>
                         {useCase.description}
                       </p>
                     </div>
@@ -811,55 +788,19 @@ const AIUseCases: React.FC = () => {
             </div>
           </div>
 
-          {/* Active Demo */}
+          {/* Active Demo Area */}
           <div className="lg:col-span-2 order-1 lg:order-2">
             <motion.div
               key={activeUseCase}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8"
-              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4 }}
+              className="bg-slate-800/30 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-700/50 h-full"
             >
-              <div className="mb-4 sm:mb-6">
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                  {useCases.find(uc => uc.id === activeUseCase)?.title}
-                </h3>
-                <p className="text-sm sm:text-base text-slate-300">
-                  {useCases.find(uc => uc.id === activeUseCase)?.description}
-                </p>
-              </div>
-              
               <ActiveDemo />
             </motion.div>
           </div>
         </div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-gradient-to-r from-emerald-600/20 to-cyan-600/20 backdrop-blur-sm border border-emerald-500/30 rounded-xl sm:rounded-2xl p-6 sm:p-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 text-center">
-              Ready to Accelerate Your Growth with GrowBrandi?
-            </h3>
-            <p className="text-sm sm:text-base text-slate-300 mb-6 text-center max-w-2xl mx-auto">
-              Get personalized growth strategies and start your transformation journey with GrowBrandi's intelligent business solutions.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all text-sm sm:text-base">
-                Schedule Free GrowBrandi Consultation
-              </button>
-              <button className="bg-slate-700 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-slate-600 transition-all text-sm sm:text-base">
-                Chat with GrowBrandi Expert
-              </button>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

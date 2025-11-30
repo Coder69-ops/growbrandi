@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaStar, FaExpand, FaInfoCircle, FaClock, FaUser, FaCode, FaChartLine, FaArrowRight, FaTimes, FaBriefcase } from 'react-icons/fa';
 import { PROJECTS } from '../constants';
 import { Project } from '../types';
 
 const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { 
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+            delayChildren: 0.2,
+        },
     },
-  },
 };
 
 const itemVariants = {
-  hidden: { y: 30, opacity: 0, scale: 0.95 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    transition: { 
-      duration: 0.6,
-      ease: [0.6, 0.01, 0.05, 0.95]
+    hidden: { y: 30, opacity: 0, scale: 0.95 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.6,
+            ease: [0.6, 0.01, 0.05, 0.95]
+        },
     },
-  },
 };
 
 // --- StarRating Component ---
@@ -32,15 +33,10 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
     return (
         <div className="flex items-center">
             {[...Array(5)].map((_, index) => (
-                <svg
+                <FaStar
                     key={index}
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
                     className={`w-5 h-5 ${index < rating ? 'text-yellow-400' : 'text-slate-600'}`}
-                >
-                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354l-4.596 2.87c-1-.608-2.231.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.007z" clipRule="evenodd" />
-                </svg>
+                />
             ))}
         </div>
     );
@@ -57,56 +53,48 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
         {project.rating >= 4.9 && (
             <div className="absolute top-4 left-4 z-20">
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-400 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
+                    <FaStar className="w-3 h-3" />
                     FEATURED
                 </div>
             </div>
         )}
 
         <div className="relative overflow-hidden">
-            <img 
-                src={project.imageUrl} 
-                alt={project.title} 
-                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700" 
+            <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
+
             {/* Floating Action Buttons */}
             <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
                 <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
+                    <FaExpand className="w-4 h-4" />
                 </button>
                 <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                    </svg>
+                    <FaInfoCircle className="w-4 h-4" />
                 </button>
             </div>
-            
+
             {/* Category Badge */}
             <div className="absolute bottom-4 left-4">
                 <span className="bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
                     {project.category}
                 </span>
             </div>
-            
+
             {/* Completion Time */}
             {project.completionTime && (
                 <div className="absolute bottom-4 right-4">
                     <span className="bg-slate-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <FaClock className="w-4 h-4" />
                         {project.completionTime}
                     </span>
                 </div>
             )}
         </div>
-        
+
         <div className="p-8">
             <div className="flex justify-between items-start mb-6">
                 <div className="flex-1">
@@ -115,9 +103,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     </h3>
                     {project.client && (
                         <div className="flex items-center gap-2 mb-3">
-                            <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
+                            <FaUser className="w-4 h-4 text-emerald-400" />
                             <p className="text-emerald-400 font-medium">{project.client}</p>
                         </div>
                     )}
@@ -127,15 +113,13 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     <span className="text-yellow-400 text-sm font-medium mt-1">{project.rating}</span>
                 </div>
             </div>
-            
+
             <p className="text-slate-300 leading-relaxed mb-6">{project.description}</p>
-            
+
             {project.technologies && (
                 <div className="mb-6">
                     <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wide flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                        </svg>
+                        <FaCode className="w-4 h-4" />
                         Technologies
                     </h4>
                     <div className="flex flex-wrap gap-2">
@@ -147,13 +131,11 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     </div>
                 </div>
             )}
-            
+
             {project.results && (
                 <div className="mb-6">
                     <h4 className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-wide flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
+                        <FaChartLine className="w-4 h-4" />
                         Key Results
                     </h4>
                     <div className="space-y-2">
@@ -166,17 +148,15 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     </div>
                 </div>
             )}
-            
-            <motion.button 
+
+            <motion.button
                 onClick={() => onViewDetails(project)}
                 className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-xl font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2 group/btn"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
             >
                 <span>View Full Case Study</span>
-                <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+                <FaArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
             </motion.button>
         </div>
     </motion.div>
@@ -196,7 +176,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
         >
             {/* Backdrop */}
             <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
-            
+
             {/* Modal Content */}
             <motion.div
                 className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl"
@@ -207,23 +187,21 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
             >
                 {/* Header */}
                 <div className="relative">
-                    <img 
-                        src={project.imageUrl} 
-                        alt={project.title} 
-                        className="w-full h-80 object-cover" 
+                    <img
+                        src={project.imageUrl}
+                        alt={project.title}
+                        className="w-full h-80 object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    
+
                     {/* Close Button */}
                     <button
                         onClick={onClose}
                         className="absolute top-6 right-6 p-3 rounded-full bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 transition-colors z-10"
                     >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <FaTimes className="w-6 h-6" />
                     </button>
-                    
+
                     {/* Project Info Overlay */}
                     <div className="absolute bottom-6 left-6 right-6">
                         <div className="flex items-center gap-3 mb-4">
@@ -274,7 +252,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                                         <span className="text-yellow-400 font-bold text-xl">{project.rating}</span>
                                     </div>
                                 </div>
-                                <motion.button 
+                                <motion.button
                                     className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
@@ -342,7 +320,7 @@ export const ProjectsPage: React.FC = () => {
     const [sortBy, setSortBy] = useState<string>('rating');
 
     const categories = ['All', ...Array.from(new Set(PROJECTS.map(p => p.category)))];
-    
+
     const filteredProjects = PROJECTS
         .filter(project => filter === 'All' || project.category === filter)
         .sort((a, b) => {
@@ -376,17 +354,15 @@ export const ProjectsPage: React.FC = () => {
                             transition={{ duration: 0.8 }}
                         >
                             <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8">
-                                <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
+                                <FaBriefcase className="w-5 h-5 text-emerald-400" />
                                 <span className="text-sm font-bold text-emerald-400 tracking-wide">OUR PORTFOLIO</span>
                             </div>
                             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight">
                                 Projects That <span className="text-gradient">Drive Results</span>
                             </h1>
                             <p className="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
-                                Discover how we've helped businesses achieve extraordinary growth through 
-                                <span className="text-emerald-400 font-semibold"> innovative digital solutions</span> and 
+                                Discover how we've helped businesses achieve extraordinary growth through
+                                <span className="text-emerald-400 font-semibold"> innovative digital solutions</span> and
                                 <span className="text-blue-400 font-semibold">strategic thinking</span>.
                             </p>
                         </motion.div>
@@ -395,7 +371,7 @@ export const ProjectsPage: React.FC = () => {
 
 
                     {/* Filter and Sort Controls */}
-                    <motion.div 
+                    <motion.div
                         className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -407,11 +383,10 @@ export const ProjectsPage: React.FC = () => {
                                 <button
                                     key={category}
                                     onClick={() => setFilter(category)}
-                                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                                        filter === category
+                                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${filter === category
                                             ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white'
                                             : 'glass-effect text-slate-300 hover:text-white hover:bg-slate-700/50'
-                                    }`}
+                                        }`}
                                 >
                                     {category}
                                 </button>
@@ -441,9 +416,9 @@ export const ProjectsPage: React.FC = () => {
                     >
                         <AnimatePresence>
                             {filteredProjects.map((project) => (
-                                <ProjectCard 
-                                    key={project.title} 
-                                    project={project} 
+                                <ProjectCard
+                                    key={project.title}
+                                    project={project}
                                     onViewDetails={handleViewDetails}
                                 />
                             ))}
@@ -451,7 +426,7 @@ export const ProjectsPage: React.FC = () => {
                     </motion.div>
 
                     {/* Call to Action */}
-                    <motion.div 
+                    <motion.div
                         className="text-center"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -462,18 +437,18 @@ export const ProjectsPage: React.FC = () => {
                                 Ready to Start Your <span className="text-gradient">Next Project?</span>
                             </h2>
                             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                                Let's discuss how we can help you achieve similar results with a custom digital solution 
+                                Let's discuss how we can help you achieve similar results with a custom digital solution
                                 tailored to your business needs.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <motion.button 
+                                <motion.button
                                     className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
                                     Start Your Project
                                 </motion.button>
-                                <motion.button 
+                                <motion.button
                                     className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-700/50 transition-all duration-300 border border-slate-600 hover:border-emerald-400"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
@@ -489,7 +464,7 @@ export const ProjectsPage: React.FC = () => {
             {/* Project Modal */}
             <AnimatePresence>
                 {isModalOpen && (
-                    <ProjectModal 
+                    <ProjectModal
                         project={selectedProject}
                         isOpen={isModalOpen}
                         onClose={() => {

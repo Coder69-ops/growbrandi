@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';
 import FAQ from './FAQ';
 import TeamSection from './TeamSection';
 import AIBusinessAdvisor from './AIBusinessAdvisor';
@@ -56,9 +57,7 @@ const Hero: React.FC = () => {
                             >
                                 <span className="relative z-10 flex items-center gap-2">
                                     Book Strategy Call
-                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                    </svg>
+                                    <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </span>
                             </motion.button>
 

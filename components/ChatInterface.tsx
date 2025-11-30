@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import { FaTimes, FaPaperPlane } from 'react-icons/fa';
 import { ChatAdapter, initializeChat } from '../services/geminiService';
 import { ChatMessage } from '../types';
 import ChatMessageBubble from './ChatMessageBubble';
@@ -66,7 +67,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     chatRef.current = preloadedChat;
                     setIsLoading(false);
                     setIsInitialized(true);
-                    
+
                     // Send welcome message immediately
                     try {
                         const response = await chatRef.current.sendMessageStream({ message: "Greet them as a GrowBrandi growth expert and ask what business challenge they want to solve. Be confident and conversion-focused. Max 2 sentences." });
@@ -82,22 +83,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                         console.error(e);
                         // Handle initialization errors gracefully
                         if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
-                            const fallbackMessage: ChatMessage = { 
-                                role: 'model', 
-                                parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }] 
+                            const fallbackMessage: ChatMessage = {
+                                role: 'model',
+                                parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }]
                             };
                             setMessages([fallbackMessage]);
                         } else {
-                            const fallbackMessage: ChatMessage = { 
-                                role: 'model', 
-                                parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
+                            const fallbackMessage: ChatMessage = {
+                                role: 'model',
+                                parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
                             };
                             setMessages([fallbackMessage]);
                         }
                     }
                     return;
                 }
-                
+
                 // Fallback to regular initialization if preload failed
                 setIsLoading(true);
                 setMessages([]);
@@ -107,7 +108,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     setIsLoading(false);
                     return;
                 }
-                
+
                 try {
                     const response = await chatRef.current.sendMessageStream({ message: "Say hi briefly and ask what they need help with. Be urgent and conversion-focused. Max 2 sentences." });
                     let fullResponse = "";
@@ -122,15 +123,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     console.error(e);
                     // Handle initialization errors gracefully
                     if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
-                        const fallbackMessage: ChatMessage = { 
-                            role: 'model', 
-                            parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }] 
+                        const fallbackMessage: ChatMessage = {
+                            role: 'model',
+                            parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }]
                         };
                         setMessages([fallbackMessage]);
                     } else {
-                        const fallbackMessage: ChatMessage = { 
-                            role: 'model', 
-                            parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }] 
+                        const fallbackMessage: ChatMessage = {
+                            role: 'model',
+                            parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
                         };
                         setMessages([fallbackMessage]);
                     }
@@ -183,36 +184,36 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     return newMessages;
                 });
             }
-            
+
             console.log('Response received:', fullResponse);
         } catch (e: any) {
             console.error('Send message error:', e);
-            
+
             let errorMessage: ChatMessage;
-            
+
             // Handle specific API errors
             if (e?.message?.includes('503') || e?.message?.includes('overloaded') || e?.message?.includes('UNAVAILABLE')) {
-                errorMessage = { 
-                    role: 'model', 
-                    parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! This means our growth strategies are working. Please try again in a moment - I'm here to help scale your business!" }] 
+                errorMessage = {
+                    role: 'model',
+                    parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! This means our growth strategies are working. Please try again in a moment - I'm here to help scale your business!" }]
                 };
             } else if (e?.message?.includes('401') || e?.message?.includes('API key')) {
-                errorMessage = { 
-                    role: 'model', 
-                    parts: [{ text: "There's a configuration issue on our end. Let's schedule a direct call to discuss your growth needs: contact@growbrandi.com" }] 
+                errorMessage = {
+                    role: 'model',
+                    parts: [{ text: "There's a configuration issue on our end. Let's schedule a direct call to discuss your growth needs: contact@growbrandi.com" }]
                 };
             } else if (e?.message?.includes('400') || e?.message?.includes('Invalid')) {
-                errorMessage = { 
-                    role: 'model', 
-                    parts: [{ text: "Let me rephrase that for you. What specific business challenge are you facing? Revenue growth? Lead generation? Brand development?" }] 
+                errorMessage = {
+                    role: 'model',
+                    parts: [{ text: "Let me rephrase that for you. What specific business challenge are you facing? Revenue growth? Lead generation? Brand development?" }]
                 };
             } else {
-                errorMessage = { 
-                    role: 'model', 
-                    parts: [{ text: "I'm temporarily offline, but your business growth can't wait! Book a free strategy call: contact@growbrandi.com or try asking me again." }] 
+                errorMessage = {
+                    role: 'model',
+                    parts: [{ text: "I'm temporarily offline, but your business growth can't wait! Book a free strategy call: contact@growbrandi.com or try asking me again." }]
                 };
             }
-            
+
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
@@ -236,15 +237,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
         e.preventDefault();
         handleSendMessage(userInput);
     };
-    
+
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <motion.div 
-              className="bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700 flex flex-col w-full max-w-lg h-[85vh] max-h-[700px]"
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.3, ease: 'easeOut' }}
+            <motion.div
+                className="bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700 flex flex-col w-full max-w-lg h-[85vh] max-h-[700px]"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
             >
                 <div className="p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0">
                     <div className="flex items-center gap-2">
@@ -257,9 +258,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                         )}
                     </div>
                     <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <FaTimes className="h-6 w-6" />
                     </button>
                 </div>
 
@@ -267,8 +266,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     {messages.map((msg, index) => (
                         <ChatMessageBubble key={index} message={msg} />
                     ))}
-                    {isLoading && messages[messages.length-1]?.role === 'user' && (
-                        <ChatMessageBubble message={{role: 'model', parts: [{ text: ''}]}} />
+                    {isLoading && messages[messages.length - 1]?.role === 'user' && (
+                        <ChatMessageBubble message={{ role: 'model', parts: [{ text: '' }] }} />
                     )}
                     {error && <div className="text-red-400 text-center p-2 rounded-md bg-red-900/30">{error}</div>}
                 </div>
@@ -325,7 +324,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                             disabled={isLoading || !userInput.trim() || !!error}
                             className="bg-cyan-600 text-white p-2.5 rounded-lg hover:bg-cyan-500 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
                         >
-                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" /></svg>
+                            <FaPaperPlane className="w-6 h-6" />
                         </button>
                     </form>
                 </div>

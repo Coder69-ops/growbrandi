@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaChartLine, FaVideo, FaPalette, FaCode, FaHeadset, FaComments } from 'react-icons/fa';
 import { Service, Project, Testimonial, CompanyStat, FAQItem, TeamMember } from './types';
 
 // App Constants
@@ -16,7 +17,7 @@ export const COMPANY_STATS: CompanyStat[] = [
 
 // Contact Information
 export const CONTACT_INFO = {
-  email: 'growbrandi.co@gmail.com',
+  email: 'hello@growbrandi.com',
   phone: '+880 1755 154 194',
   address: 'San Francisco, CA',
   social: {
@@ -51,21 +52,14 @@ export const FAQ_DATA: FAQItem[] = [
   }
 ];
 
-// Using Heroicons for a consistent, modern look
+// Using React Icons for a consistent, modern look
 const ICONS = {
-  'Brand Growth': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" })),
-  'Social Media Content': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" })),
-  'UI/UX Design': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19 14.5M14.25 3.104c.251.023.501.05.75.082M19 14.5v-5.714c0-.597-.237-1.17-.659-1.591L14.25 3.104" }),
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M5 14.5L3 21m18-6.5l-2 6.5m-3.75-11.25a24.301 24.301 0 00-4.5 0" })),
-  'Web Development': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" })),
-  'Virtual Assistance': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" })),
-  'Customer Support': React.createElement('svg', { xmlns: "http://www.w3.org/2000/svg", fill: "none", viewBox: "0 0 24 24", strokeWidth: 1.5, stroke: "currentColor", className: "w-8 h-8" },
-    React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", d: "M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" })),
+  'Brand Growth': React.createElement(FaChartLine, { className: "w-8 h-8" }),
+  'Social Media Content': React.createElement(FaVideo, { className: "w-8 h-8" }),
+  'UI/UX Design': React.createElement(FaPalette, { className: "w-8 h-8" }),
+  'Web Development': React.createElement(FaCode, { className: "w-8 h-8" }),
+  'Virtual Assistance': React.createElement(FaHeadset, { className: "w-8 h-8" }),
+  'Customer Support': React.createElement(FaComments, { className: "w-8 h-8" }),
 };
 
 export const SERVICES: Service[] = [
@@ -243,7 +237,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     description: "Leading the engineering team to build robust, high-performance applications with cutting-edge tech.",
     bio: "Ovejit is the technical backbone of GrowBrandi. Leading our engineering team with a focus on code quality, performance, and security, he ensures that every digital product we build is a masterpiece of modern engineering. A full-stack expert with a deep love for clean code, Ovejit stays ahead of the curve on emerging technologies, from Web3 to edge computing. His leadership style fosters a culture of continuous learning and technical excellence within the development team.",
     achievements: [
-      "Oversees a high-performing team of 15+ senior developers",
+      "Oversees a high-performing team of 15+ developers",
       "Maintains 99.99% uptime across all client applications",
       "Spearheaded the migration to a serverless architecture, reducing costs by 30%",
       "Contributor to major open-source React libraries"
@@ -252,8 +246,8 @@ export const TEAM_MEMBERS: TeamMember[] = [
     specialties: ["Full Stack Development", "Cloud Architecture", "Team Leadership", "Cybersecurity"],
     social: {
       linkedin: "#",
-      github: "#",
-      email: "ovejit@growbrandi.com"
+      github: "https://github.com/Coder69-ops",
+      email: "oveisawesome@gmail.com"
     }
   },
   {
@@ -288,7 +282,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Created the comprehensive 'Prism' design system used across all internal projects",
       "Featured in 'Best of Behance' for Interaction Design"
     ],
-    image: "https://images.unsplash.com/photo-1598550874175-4d7112ee750c?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
     specialties: ["UI/UX Design", "Interaction Design", "User Research", "Prototyping"],
     social: {
       linkedin: "#",

@@ -1,5 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
+import { FaMagic } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -85,7 +86,7 @@ export const ContactPage: React.FC = () => {
                                     <label htmlFor="message" className="block text-sm font-medium text-slate-300">Message</label>
                                     <button type="button" onClick={generateBrief} disabled={isGenerating} className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
                                         {isGenerating ? <LoadingSpinner /> : 'Auto-draft with AI'}
-                                        {!isGenerating && <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.636-6.364l.707-.707M12 21v-1m-6.364-1.636l.707-.707" /></svg>}
+                                        {!isGenerating && <FaMagic className="h-4 w-4" />}
                                     </button>
                                 </div>
                                 <textarea id="message" rows={6} value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} required className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FaRocket, FaEye, FaCheck, FaStar, FaPhone } from 'react-icons/fa';
 
 interface ServicePageProps {
   title: string;
@@ -15,14 +16,14 @@ interface ServicePageProps {
   };
 }
 
-const ServicePage: React.FC<ServicePageProps> = ({ 
-  title, 
-  description, 
-  features, 
-  benefits, 
-  technologies = [], 
+const ServicePage: React.FC<ServicePageProps> = ({
+  title,
+  description,
+  features,
+  benefits,
+  technologies = [],
   process = [],
-  pricing 
+  pricing
 }) => {
   return (
     <>
@@ -44,30 +45,26 @@ const ServicePage: React.FC<ServicePageProps> = ({
           </motion.div>
 
           {/* CTA Buttons */}
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row gap-4 justify-center mb-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <motion.button 
+            <motion.button
               className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
+              <FaRocket className="w-5 h-5" />
               Get Started Today
             </motion.button>
-            <motion.button 
+            <motion.button
               className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-700/50 transition-all duration-300 border border-slate-600 hover:border-emerald-400 flex items-center justify-center gap-2"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
+              <FaEye className="w-5 h-5" />
               View Case Studies
             </motion.button>
           </motion.div>
@@ -104,9 +101,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 whileHover={{ y: -5 }}
               >
                 <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <FaCheck className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3">{feature}</h3>
                 <p className="text-slate-400">Professional implementation with attention to detail and best practices.</p>
@@ -145,9 +140,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center mt-1 shrink-0">
-                  <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                  <FaStar className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">{benefit}</h3>
@@ -263,11 +256,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
               {Object.entries(pricing).map(([planName, plan], index) => (
                 <motion.div
                   key={planName}
-                  className={`glass-effect rounded-2xl p-8 border transition-all duration-300 ${
-                    planName === 'professional' 
-                      ? 'border-emerald-400/50 ring-2 ring-emerald-400/20 scale-105' 
+                  className={`glass-effect rounded-2xl p-8 border transition-all duration-300 ${planName === 'professional'
+                      ? 'border-emerald-400/50 ring-2 ring-emerald-400/20 scale-105'
                       : 'border-white/10 hover:border-emerald-400/30'
-                  }`}
+                    }`}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -287,19 +279,16 @@ const ServicePage: React.FC<ServicePageProps> = ({
                   <ul className="space-y-3 mb-8">
                     {plan.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center gap-3 text-slate-300">
-                        <svg className="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+                        <FaCheck className="w-5 h-5 text-emerald-400 shrink-0" />
                         {feature}
                       </li>
                     ))}
                   </ul>
                   <motion.button
-                    className={`w-full py-3 rounded-xl font-bold text-lg transition-all duration-300 ${
-                      planName === 'professional'
+                    className={`w-full py-3 rounded-xl font-bold text-lg transition-all duration-300 ${planName === 'professional'
                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600'
                         : 'glass-effect text-white border border-slate-600 hover:border-emerald-400'
-                    }`}
+                      }`}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -329,24 +318,20 @@ const ServicePage: React.FC<ServicePageProps> = ({
               Let's discuss your project and create something amazing together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button 
+              <motion.button
                 className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
+                <FaRocket className="w-5 h-5" />
                 Start Your Project
               </motion.button>
-              <motion.button 
+              <motion.button
                 className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-700/50 transition-all duration-300 border border-slate-600 hover:border-emerald-400 flex items-center justify-center gap-2"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
+                <FaPhone className="w-5 h-5" />
                 Call Us Now
               </motion.button>
             </div>

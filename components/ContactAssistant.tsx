@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  recommendServices, 
+import { FaTimes, FaCheck } from 'react-icons/fa';
+import {
+  recommendServices,
   generateConsultationPlan,
-  estimateProject 
+  estimateProject
 } from '../services/geminiService';
 
 interface ContactAssistantProps {
@@ -79,8 +80,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
       const consultationPlan = await generateConsultationPlan({
         businessType: formData.industry,
         specificNeeds: formData.goals,
-        urgency: formData.timeline.includes('Immediate') ? 'Immediate' : 
-                 formData.timeline.includes('1-2') ? 'High' : 'Medium',
+        urgency: formData.timeline.includes('Immediate') ? 'Immediate' :
+          formData.timeline.includes('1-2') ? 'High' : 'Medium',
         experience: 'Intermediate' // Default value
       });
 
@@ -108,7 +109,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     // Here you would normally send the form data to your backend
     console.log('Submitting form:', formData);
     setShowThankYou(true);
-    
+
     // Auto close after 3 seconds
     setTimeout(() => {
       onClose();
@@ -137,7 +138,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <motion.div 
+      <motion.div
         className="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-hidden"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -150,20 +151,18 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
             <h3 className="text-xl font-semibold text-white">AI-Powered Contact Assistant</h3>
             <p className="text-slate-400 text-sm">Get personalized recommendations as you go</p>
           </div>
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-slate-400 hover:text-white transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <FaTimes className="h-6 w-6" />
           </button>
         </div>
 
         {/* Progress Bar */}
         <div className="px-6 pt-4">
           <div className="w-full bg-slate-700 rounded-full h-2">
-            <motion.div 
+            <motion.div
               className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${getProgressPercentage()}%` }}
@@ -185,9 +184,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 className="text-center py-12"
               >
                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
+                  <FaCheck className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
                 <p className="text-slate-300">We've received your information and will contact you soon.</p>
@@ -204,7 +201,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     className="space-y-4"
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">Let's get to know you</h4>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-300 mb-2">Name *</label>
@@ -266,7 +263,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     className="space-y-4"
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">Tell us about your project</h4>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">Project Type *</label>
                       <select
@@ -334,18 +331,17 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">What are your goals?</h4>
                     <p className="text-slate-400 text-sm mb-4">Select all that apply</p>
-                    
+
                     <div className="grid grid-cols-2 gap-3">
                       {goalOptions.map(goal => (
                         <button
                           key={goal}
                           type="button"
                           onClick={() => toggleMultiSelect(goal, 'goals')}
-                          className={`p-3 rounded-lg text-sm transition-all ${
-                            formData.goals.includes(goal)
+                          className={`p-3 rounded-lg text-sm transition-all ${formData.goals.includes(goal)
                               ? 'bg-emerald-600 text-white'
                               : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                          }`}
+                            }`}
                         >
                           {goal}
                         </button>
@@ -365,18 +361,17 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">What challenges are you facing?</h4>
                     <p className="text-slate-400 text-sm mb-4">Select all that apply</p>
-                    
+
                     <div className="grid grid-cols-2 gap-3">
                       {challengeOptions.map(challenge => (
                         <button
                           key={challenge}
                           type="button"
                           onClick={() => toggleMultiSelect(challenge, 'challenges')}
-                          className={`p-3 rounded-lg text-sm transition-all ${
-                            formData.challenges.includes(challenge)
+                          className={`p-3 rounded-lg text-sm transition-all ${formData.challenges.includes(challenge)
                               ? 'bg-red-600 text-white'
                               : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                          }`}
+                            }`}
                         >
                           {challenge}
                         </button>
@@ -405,7 +400,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     className="space-y-6"
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">AI-Powered Recommendations</h4>
-                    
+
                     {isAnalyzing ? (
                       <div className="text-center py-8">
                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mb-4"></div>
@@ -424,10 +419,9 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                                     <p className="text-white font-medium">{service.service}</p>
                                     <p className="text-slate-400 text-sm">{service.reason}</p>
                                   </div>
-                                  <span className={`text-xs px-2 py-1 rounded-full ${
-                                    service.priority === 'High' ? 'bg-red-600' :
-                                    service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
-                                  } text-white`}>
+                                  <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
+                                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                                    } text-white`}>
                                     {service.priority}
                                   </span>
                                 </div>
@@ -473,7 +467,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
             >
               Back
             </button>
-            
+
             {step < 5 ? (
               <button
                 onClick={handleNext}

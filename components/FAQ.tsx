@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaChevronDown } from 'react-icons/fa';
 import { FAQ_DATA } from '../constants';
 
 const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
@@ -9,7 +10,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
   onClick
 }) => {
   return (
-    <motion.div 
+    <motion.div
       className="glass-effect rounded-2xl overflow-hidden"
       whileHover={{ scale: 1.01, y: -2 }}
       transition={{ duration: 0.2 }}
@@ -27,14 +28,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <svg
-            className="w-5 h-5 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          <FaChevronDown className="w-5 h-5 text-white" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -86,7 +80,7 @@ const FAQ: React.FC = () => {
             Frequently Asked <span className="text-gradient">Questions</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Get answers to common questions about our services, process, and how we can help 
+            Get answers to common questions about our services, process, and how we can help
             transform your business with our AI-powered digital solutions.
           </p>
         </motion.div>
@@ -123,7 +117,7 @@ const FAQ: React.FC = () => {
         </motion.div>
 
         {/* Call to Action */}
-        <motion.div 
+        <motion.div
           className="text-center mt-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

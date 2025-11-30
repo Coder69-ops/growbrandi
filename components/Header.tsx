@@ -1,6 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {
+    FaCode, FaPalette, FaChess, FaChartLine, FaBullhorn, FaRobot,
+    FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
+    FaChevronDown, FaBars, FaTimes, FaPaperPlane
+} from 'react-icons/fa';
 
 interface HeaderProps {
     // No props needed - using router directly
@@ -11,13 +16,13 @@ interface MegaMenuData {
         route: string;
         title: string;
         description: string;
-        icon: string;
+        icon: React.ElementType;
     }>;
     company: Array<{
         route: string;
         title: string;
         description: string;
-        icon: string;
+        icon: React.ElementType;
     }>;
 }
 
@@ -27,37 +32,37 @@ const megaMenuData: MegaMenuData = {
             route: '/services/web-development',
             title: 'Web Development',
             description: 'Custom web solutions using cutting-edge technologies',
-            icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4'
+            icon: FaCode
         },
         {
             route: '/services/ui-ux-design',
             title: 'UI/UX Design',
             description: 'User-centered design that drives engagement',
-            icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM7 5H5v12a2 2 0 002 2h0a2 2 0 002-2V5H7z'
+            icon: FaPalette
         },
         {
             route: '/services/brand-strategy',
             title: 'Brand Strategy',
             description: 'Strategic brand development and positioning',
-            icon: 'M13 10V3L4 14h7v7l9-11h-7z'
+            icon: FaChess
         },
         {
             route: '/services/seo-optimization',
             title: 'SEO Optimization',
             description: 'Advanced SEO strategies for better rankings',
-            icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+            icon: FaChartLine
         },
         {
             route: '/services/digital-marketing',
             title: 'Digital Marketing',
             description: 'Comprehensive marketing strategies for growth',
-            icon: 'M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z'
+            icon: FaBullhorn
         },
         {
             route: '/services/ai-solutions',
             title: 'AI Solutions',
             description: 'Cutting-edge AI integration and automation',
-            icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'
+            icon: FaRobot
         }
     ],
     company: [
@@ -65,37 +70,37 @@ const megaMenuData: MegaMenuData = {
             route: '/about',
             title: 'About Us',
             description: 'Learn about our mission and team',
-            icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+            icon: FaBuilding
         },
         {
             route: '/process',
             title: 'Our Process',
             description: 'Discover our proven methodology',
-            icon: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4'
+            icon: FaCogs
         },
         {
             route: '/case-studies',
             title: 'Case Studies',
             description: 'Real client success stories',
-            icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+            icon: FaBriefcase
         },
         {
             route: '/team',
             title: 'Our Team',
             description: 'Meet the experts behind our success',
-            icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
+            icon: FaUsers
         },
         {
             route: '/careers',
             title: 'Careers',
             description: 'Join our innovative team',
-            icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0v6a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8'
+            icon: FaRocket
         },
         {
             route: '/blog',
             title: 'Blog',
             description: 'Insights and industry expertise',
-            icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'
+            icon: FaNewspaper
         }
     ]
 };
@@ -136,7 +141,7 @@ const MegaMenuSection: React.FC<{
         route: string;
         title: string;
         description: string;
-        icon: string;
+        icon: React.ElementType;
     }>;
     currentRoute: string;
     navigate: (route: string) => void;
@@ -163,9 +168,7 @@ const MegaMenuSection: React.FC<{
                                 ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                                 : 'bg-white/10 group-hover:bg-emerald-500/20'
                                 }`}>
-                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                                </svg>
+                                <item.icon className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <h4 className={`font-semibold text-sm mb-1 ${currentRoute === item.route ? 'text-white' : 'text-slate-200 group-hover:text-white'
@@ -238,9 +241,7 @@ const Header: React.FC<HeaderProps> = () => {
                             <div className="relative">
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-lg blur-sm opacity-50 group-hover:opacity-70 transition-opacity" />
                                 <div className="relative w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                                    <svg className="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
+                                    <FaRocket className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                                 </div>
                             </div>
                             <div>
@@ -267,9 +268,7 @@ const Header: React.FC<HeaderProps> = () => {
                             >
                                 <button className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all duration-200">
                                     Services
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
+                                    <FaChevronDown className="w-3 h-3" />
                                 </button>
                             </div>
 
@@ -281,9 +280,7 @@ const Header: React.FC<HeaderProps> = () => {
                             >
                                 <button className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all duration-200">
                                     Company
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
+                                    <FaChevronDown className="w-3 h-3" />
                                 </button>
                             </div>
 
@@ -302,9 +299,7 @@ const Header: React.FC<HeaderProps> = () => {
                                 onClick={() => navigate('/contact')}
                                 className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-emerald-500/25"
                             >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
+                                <FaPaperPlane className="w-4 h-4" />
                                 Get Started
                             </button>
 
@@ -316,13 +311,9 @@ const Header: React.FC<HeaderProps> = () => {
                             >
                                 <span className="sr-only">Toggle menu</span>
                                 {isMobileMenuOpen ? (
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
+                                    <FaTimes className="w-6 h-6" />
                                 ) : (
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                    </svg>
+                                    <FaBars className="w-6 h-6" />
                                 )}
                             </button>
                         </div>
@@ -361,9 +352,7 @@ const Header: React.FC<HeaderProps> = () => {
                                                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                                                         : 'bg-white/10 group-hover:bg-emerald-500/20'
                                                         }`}>
-                                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={service.icon} />
-                                                        </svg>
+                                                        <service.icon className="w-6 h-6 text-white" />
                                                     </div>
                                                     <div className="flex-1">
                                                         <h4 className={`font-bold text-base mb-2 ${currentRoute === service.route ? 'text-white' : 'text-slate-200 group-hover:text-white'
@@ -399,9 +388,7 @@ const Header: React.FC<HeaderProps> = () => {
                                                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
                                                         : 'bg-white/10 group-hover:bg-emerald-500/20'
                                                         }`}>
-                                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
-                                                        </svg>
+                                                        <item.icon className="w-6 h-6 text-white" />
                                                     </div>
                                                     <div className="flex-1">
                                                         <h4 className={`font-bold text-base mb-2 ${currentRoute === item.route ? 'text-white' : 'text-slate-200 group-hover:text-white'
@@ -503,9 +490,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     }}
                                     className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg"
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                    </svg>
+                                    <FaPaperPlane className="w-5 h-5" />
                                     Get Started
                                 </button>
                             </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaCommentDots, FaLock, FaCheckCircle, FaHeadset, FaLayerGroup, FaStar, FaClipboardList } from 'react-icons/fa';
 import { SERVICES } from '../constants';
 import { Service } from '../types';
 
@@ -85,9 +86,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                     onClick={onClose}
                     className="absolute top-6 right-6 p-2 rounded-full bg-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-600/50 transition-all z-10"
                 >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <FaTimes className="w-6 h-6" />
                 </button>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -113,9 +112,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <div className="grid grid-cols-1 gap-3">
                                 {service.features?.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 glass-effect p-3 rounded-xl">
-                                        <svg className="w-5 h-5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                        </svg>
+                                        <FaCheck className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                                         <span className="text-slate-300 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -187,9 +184,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <div className="flex items-center justify-center gap-4 mb-2">
                                 <div className="flex items-center gap-1">
                                     {[...Array(5)].map((_, i) => (
-                                        <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
+                                        <FaStar key={i} className="w-4 h-4 text-yellow-400" />
                                     ))}
                                 </div>
                                 <span className="text-white font-semibold">4.9/5</span>
@@ -290,9 +285,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 {/* Trust Badge */}
                 <div className="mt-6 pt-4 border-t border-slate-700">
                     <div className="flex items-center justify-center gap-2 text-xs text-slate-400">
-                        <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
+                        <FaCheckCircle className="w-4 h-4 text-emerald-400" />
                         <span>Money-back guarantee</span>
                     </div>
                 </div>
@@ -331,13 +324,9 @@ const ServicesPreview: React.FC = () => {
                     {/* Enhanced Section Header */}
                     <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
                         <div className="inline-flex items-center gap-3 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
-                            <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <FaLayerGroup className="w-5 h-5 text-emerald-400" />
                             <span className="text-sm font-bold text-emerald-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
-                            <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                            </svg>
+                            <FaStar className="w-5 h-5 text-blue-400" />
                         </div>
                         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                             Comprehensive <span className="text-gradient">Digital Solutions</span>
@@ -382,22 +371,22 @@ const ServicesPreview: React.FC = () => {
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
                             {[
                                 {
-                                    icon: '🔍',
+                                    icon: <FaSearch className="w-8 h-8" />,
                                     title: 'Discovery',
                                     description: 'Understanding your goals and requirements'
                                 },
                                 {
-                                    icon: '💡',
+                                    icon: <FaLightbulb className="w-8 h-8" />,
                                     title: 'Strategy',
                                     description: 'Crafting the perfect solution approach'
                                 },
                                 {
-                                    icon: '🚀',
+                                    icon: <FaRocket className="w-8 h-8" />,
                                     title: 'Execution',
                                     description: 'Bringing your vision to life with precision'
                                 },
                                 {
-                                    icon: '📈',
+                                    icon: <FaChartLine className="w-8 h-8" />,
                                     title: 'Optimization',
                                     description: 'Continuous improvement and growth'
                                 }
@@ -407,7 +396,7 @@ const ServicesPreview: React.FC = () => {
                                     className="glass-effect p-6 rounded-2xl text-center group hover:bg-gradient-to-br hover:from-emerald-500/5 hover:to-blue-500/5 transition-all duration-300"
                                     whileHover={{ y: -5, scale: 1.02 }}
                                 >
-                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">
+                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-emerald-400">
                                         {step.icon}
                                     </div>
                                     <h4 className="text-white font-bold text-lg mb-2">{step.title}</h4>
@@ -436,22 +425,16 @@ const ServicesPreview: React.FC = () => {
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                    </svg>
+                                    <FaClipboardList className="w-5 h-5" />
                                     Explore All Services
-                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
+                                    <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </motion.button>
                                 <motion.button
                                     className="group inline-flex items-center justify-center gap-3 bg-slate-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-slate-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                    </svg>
+                                    <FaCommentDots className="w-5 h-5" />
                                     Get Free Consultation
                                 </motion.button>
                             </div>
@@ -459,21 +442,15 @@ const ServicesPreview: React.FC = () => {
                             {/* Trust Indicators */}
                             <div className="flex items-center justify-center gap-8 mt-8 pt-8 border-t border-slate-700">
                                 <div className="flex items-center gap-2">
-                                    <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                    </svg>
+                                    <FaLock className="w-5 h-5 text-emerald-400" />
                                     <span className="text-slate-300 text-sm">SSL Secured</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                    <FaCheckCircle className="w-5 h-5 text-blue-400" />
                                     <span className="text-slate-300 text-sm">Money Back Guarantee</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <svg className="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                                    </svg>
+                                    <FaHeadset className="w-5 h-5 text-purple-400" />
                                     <span className="text-slate-300 text-sm">24/7 Support</span>
                                 </div>
                             </div>
