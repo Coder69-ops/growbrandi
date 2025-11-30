@@ -68,7 +68,7 @@ export const SERVICES: Service[] = [
     description: 'Scale your business with high-performance ad campaigns on TikTok, Meta, and Google. We focus on measurable ROI and rapid growth.',
     icon: ICONS['Brand Growth'],
     features: ['TikTok Ads', 'Meta Ads (Facebook/Instagram)', 'Google Ads', 'Performance Analytics'],
-    price: 'Custom Strategy',
+    price: 'From $399 | Pro $1,199',
     color: 'from-emerald-500 to-teal-500'
   },
   {
@@ -76,7 +76,7 @@ export const SERVICES: Service[] = [
     description: 'Engage your audience with professional video editing and post creation. We create content that stops the scroll and drives action.',
     icon: ICONS['Social Media Content'],
     features: ['Video Editing (Reels/TikToks)', 'Post Design', 'Content Strategy', 'Trend Analysis'],
-    price: 'Starting at $1,500/mo',
+    price: 'From $599/mo | Pro $2,999/mo',
     color: 'from-purple-500 to-pink-500'
   },
   {
@@ -84,7 +84,7 @@ export const SERVICES: Service[] = [
     description: 'Create stunning, user-friendly interfaces that enhance user experience and boost conversion rates with modern design principles.',
     icon: ICONS['UI/UX Design'],
     features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
-    price: 'Starting at $1,999',
+    price: 'From $799 | Pro $1,999',
     color: 'from-blue-500 to-indigo-500'
   },
   {
@@ -92,7 +92,7 @@ export const SERVICES: Service[] = [
     description: 'Develop fast, secure, and scalable websites using Shopify and WordPress. We build platforms that sell.',
     icon: ICONS['Web Development'],
     features: ['Shopify Development', 'WordPress Solutions', 'Custom Web Apps', 'E-commerce Optimization'],
-    price: 'Starting at $2,500',
+    price: 'From $999 | Pro $2,999',
     color: 'from-orange-500 to-red-500'
   },
   {
@@ -100,7 +100,7 @@ export const SERVICES: Service[] = [
     description: 'Delegate time-consuming tasks to our professional virtual assistants. Focus on growing your business while we handle the rest.',
     icon: ICONS['Virtual Assistance'],
     features: ['Admin Support', 'Data Entry', 'Research', 'Calendar Management'],
-    price: 'Hourly Rates Available',
+    price: 'From $299/mo | Pro $999/mo',
     color: 'from-cyan-500 to-blue-500'
   },
   {
@@ -108,7 +108,7 @@ export const SERVICES: Service[] = [
     description: 'Provide exceptional 24/7 support to your customers. Our trained team ensures high satisfaction and retention.',
     icon: ICONS['Customer Support'],
     features: ['Live Chat Support', 'Email Support', 'Ticket Management', 'Weekly/Monthly Packages'],
-    price: 'Weekly & Monthly Packages',
+    price: 'From $299/mo | Pro $1,199',
     color: 'from-green-500 to-emerald-500'
   },
 ];

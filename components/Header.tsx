@@ -246,7 +246,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     GrowBrandi
                                 </span>
                                 <span className="text-xs text-zinc-500 font-medium tracking-widest uppercase hidden lg:block">
-                                    AI-Powered Agency
+                                    Creative Growth Partners
                                 </span>
                             </div>
                         </button>

@@ -187,7 +187,10 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
                         {/* CTA Buttons */}
                         <div className="flex gap-4 pt-4">
-                            <button className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-xl font-bold hover:from-emerald-600 hover:to-blue-600 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group">
+                            <button
+                                onClick={() => window.location.href = '/contact'}
+                                className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-xl font-bold hover:from-emerald-600 hover:to-blue-600 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group"
+                            >
                                 <FaRocket className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
                                 Start Similar Project
                             </button>
@@ -277,7 +280,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
                         )}
                     </div>
 
-                    <button className="flex items-center gap-2 text-white font-bold text-sm group/btn">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            window.location.href = '/case-studies';
+                        }}
+                        className="flex items-center gap-2 text-white font-bold text-sm group/btn"
+                    >
                         View Case Study
                         <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-emerald-500 transition-colors duration-300">
                             <FaArrowRight className="w-3 h-3 group-hover/btn:-rotate-45 transition-transform duration-300" />
@@ -452,7 +461,7 @@ const ProjectsPreview: React.FC = () => {
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                     <motion.button
-                                        onClick={(e) => { e.preventDefault(); navigate('case-studies'); }}
+                                        onClick={(e) => { e.preventDefault(); navigate('/portfolio'); }}
                                         className="group inline-flex items-center justify-center gap-3 bg-white text-black font-bold py-4 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:bg-zinc-100 transition-all duration-300"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}

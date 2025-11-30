@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt } from 'react-icons/fa';
 import {
@@ -513,12 +514,14 @@ const BusinessGrowthAnalyzer = () => {
           )}
         </motion.div>
       )}
+
     </div>
   );
 };
 
 // Consultation Planner Component
 const ConsultationPlanner = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     businessType: '',
     specificNeeds: [] as string[],
@@ -682,7 +685,10 @@ const ConsultationPlanner = () => {
             )}
           </div>
 
-          <button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all">
+          <button
+            onClick={() => navigate('/contact')}
+            className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all"
+          >
             Book This Consultation
           </button>
         </motion.div>

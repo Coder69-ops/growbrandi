@@ -1,4 +1,5 @@
 import { GoogleGenAI, Chat, Type } from "@google/genai";
+import { SERVICES } from "../constants";
 
 // Chat interface adapter to maintain compatibility  
 export class ChatAdapter {
@@ -110,6 +111,12 @@ export const estimateProject = async (requirements: {
 
     try {
         const ai = new GoogleGenAI({ apiKey });
+
+        // Create pricing context from constants
+        const pricingContext = SERVICES.map(s =>
+            `- ${s.title}: ${s.price}`
+        ).join('\n');
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: `As a digital agency expert, provide a detailed project estimation for:
@@ -118,6 +125,11 @@ export const estimateProject = async (requirements: {
             Timeline: ${requirements.timeline}
             Budget: ${requirements.budget}
             Industry: ${requirements.industry}
+            
+            IMPORTANT: Base your cost estimates strictly on the following service pricing:
+            ${pricingContext}
+            
+            Do not suggest costs significantly higher than these base prices unless the scope is clearly enterprise-level.
             
             Provide estimation with cost breakdown, timeline, recommendations, and potential challenges. The output must be only the JSON object.`,
             config: {
@@ -181,9 +193,20 @@ export const recommendServices = async (businessInfo: {
 
     try {
         const ai = new GoogleGenAI({ apiKey });
+
+        // Create pricing context from constants
+        const pricingContext = SERVICES.map(s =>
+            `- ${s.title}: ${s.price}`
+        ).join('\n');
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: `Recommend digital services for: Industry: ${businessInfo.industry}, Challenges: ${businessInfo.currentChallenges.join(', ')}, Goals: ${businessInfo.goals.join(', ')}, Budget: ${businessInfo.budget}, Timeline: ${businessInfo.timeline}
+
+            IMPORTANT: Base your recommendations and estimated costs strictly on the following service pricing:
+            ${pricingContext}
+            
+            Do not suggest costs significantly higher than these base prices unless the scope is clearly enterprise-level.
 
             The output must be only the JSON object.`,
             config: {

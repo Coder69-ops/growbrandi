@@ -171,11 +171,24 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                         {/* CTA Buttons */}
                         <div className="pt-6 space-y-4">
-                            <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300">
-                                Get Started Now
+                            <button
+                                onClick={() => {
+                                    onClose();
+                                    // Use window.location as we are inside a modal and might need global navigation access or pass navigate prop
+                                    // But better to use a link or callback. Since this is inside ServiceModal, let's assume we can't easily use navigate hook if not passed.
+                                    // However, ServiceModal is used in ServicesPreview which has navigate.
+                                    // Let's check if we can pass navigate or use window.location.href for simplicity in this specific context if hook isn't available, 
+                                    // BUT ServiceModal is a component defined in the same file, so we can't use the hook from the parent directly without passing it.
+                                    // Actually, ServiceModal is defined outside. Let's pass navigate to it or use window.location.
+                                    // Wait, I can just change the button to use an anchor tag or pass navigate.
+                                    // Let's modify ServiceModal props to accept navigate.
+                                }}
+                                className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+                            >
+                                <a href="/contact" className="block w-full h-full flex items-center justify-center">Get Started Now</a>
                             </button>
                             <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
-                                Schedule Consultation
+                                <a href="/contact" className="block w-full h-full flex items-center justify-center">Schedule Consultation</a>
                             </button>
                         </div>
 
@@ -277,7 +290,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     >
                         Learn More
                     </motion.button>
-                    <button className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-emerald-400 hover:text-emerald-400 transition-all">
+                    <button
+                        onClick={() => window.location.href = '/contact'}
+                        className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-emerald-400 hover:text-emerald-400 transition-all"
+                    >
                         Get Quote
                     </button>
                 </div>
@@ -420,7 +436,7 @@ const ServicesPreview: React.FC = () => {
                             </p>
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                 <motion.button
-                                    onClick={(e) => { e.preventDefault(); /* Services section is on home page, could scroll to it */ }}
+                                    onClick={() => navigate('/services')}
                                     className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
@@ -430,6 +446,7 @@ const ServicesPreview: React.FC = () => {
                                     <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </motion.button>
                                 <motion.button
+                                    onClick={() => navigate('/contact')}
                                     className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-zinc-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}

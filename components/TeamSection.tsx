@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaUsers, FaCode, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaCommentDots, FaBriefcase } from 'react-icons/fa';
 
 import { TEAM_MEMBERS } from '../constants';
@@ -23,6 +23,7 @@ const itemVariants = {
 };
 
 const TeamSection: React.FC = () => {
+    const navigate = useNavigate();
     const [hoveredMember, setHoveredMember] = useState<number | null>(null);
 
     return (
@@ -194,6 +195,7 @@ const TeamSection: React.FC = () => {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <motion.button
+                                onClick={() => navigate('/contact')}
                                 className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
@@ -202,6 +204,7 @@ const TeamSection: React.FC = () => {
                                 Start a Conversation
                             </motion.button>
                             <motion.button
+                                onClick={() => navigate('/portfolio')}
                                 className="bg-zinc-700 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-zinc-600 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}

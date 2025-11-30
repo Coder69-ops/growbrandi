@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
                     >
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
                             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span className="text-sm font-medium text-emerald-400">AI-Powered Growth Engine</span>
+                            <span className="text-sm font-medium text-emerald-400">Powerful Growth Engine</span>
                         </div>
 
                         <h1 className="text-3xl sm:text-4xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-heading">
@@ -44,8 +44,7 @@ const Hero: React.FC = () => {
                         </h1>
 
                         <p className="text-base sm:text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-                            GrowBrandi combines advanced AI analytics with award-winning creative strategies
-                            to transform your digital presence and drive measurable business growth.
+                            GrowBrandi combines Advanced AI analytics with High-Impact creative strategy to transform your Digital Presence and drive Measurable Business Growth.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
