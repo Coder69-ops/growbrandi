@@ -1,17 +1,29 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from './Router';
+import { useNavigate } from 'react-router-dom';
 
-const NotFoundPage: React.FC = () => {
-  const { navigate } = useRouter();
+const NotFoundPage = () => {
+  const navigate = useNavigate();
+
+  const helpfulLinks = [
+    { label: 'Home', route: '/' },
+    { label: 'Services', route: '/services' },
+    { label: 'Contact', route: '/contact' },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-slate-900">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 opacity-80" />
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center max-w-lg mx-auto"
+        className="text-center max-w-lg mx-auto relative z-10"
       >
         {/* 404 Animation */}
         <motion.div
@@ -44,17 +56,17 @@ const NotFoundPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
         >
           <motion.button
-            onClick={() => navigate('home')}
-            className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+            onClick={() => navigate('/')}
+            className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-emerald-500/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Go Home
           </motion.button>
-          
+
           <motion.button
             onClick={() => window.history.back()}
             className="border border-slate-600 text-slate-300 px-8 py-3 rounded-lg font-semibold hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
@@ -70,20 +82,15 @@ const NotFoundPage: React.FC = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="mt-12 pt-8 border-t border-slate-700"
+          className="pt-8 border-t border-white/10"
         >
-          <p className="text-slate-400 text-sm mb-4">Popular pages:</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {[
-              { label: 'Services', route: 'services' as const },
-              { label: 'About Us', route: 'about' as const },
-              { label: 'Case Studies', route: 'case-studies' as const },
-              { label: 'Contact', route: 'contact' as const },
-            ].map((link) => (
+          <p className="text-slate-400 mb-4 text-sm">Helpful Links</p>
+          <div className="flex justify-center gap-6">
+            {helpfulLinks.map((link) => (
               <button
-                key={link.route}
+                key={link.label}
                 onClick={() => navigate(link.route)}
-                className="text-slate-400 hover:text-emerald-400 text-sm underline transition-colors"
+                className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
               >
                 {link.label}
               </button>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import { HomePage } from './components/Hero';
 import { ServicesPage } from './components/Services';
@@ -9,11 +10,13 @@ import ChatInterface from './components/ChatInterface';
 import AnimatedBackground from './components/AnimatedBackground';
 import AIUseCases from './components/AIUseCases';
 import ContactAssistant from './components/ContactAssistant';
-import { RouterProvider, useRouter, Route, RouterErrorBoundary, getRouteMetadata, useRouteParams, useBreadcrumbs } from './components/Router';
 import { WebDevelopmentPage, UIUXDesignPage, BrandStrategyPage, SEOOptimizationPage, DigitalMarketingPage, AISolutionsPage } from './components/ServicePages';
 import { AboutUsPage, ProcessPage, CaseStudiesPage, TeamPage, CareersPage, BlogPage } from './components/CompanyPages';
+import TeamMemberProfile from './components/TeamMemberProfile';
 import { PrivacyPolicyPage, TermsOfServicePage, CookiePolicyPage } from './components/LegalPages';
 import Footer from './components/Footer';
+import NotFoundPage from './components/NotFoundPage';
+import { routeConfig, getRouteMetadata, getRouteFromPath, Route as AppRoute } from './utils/routeConfig';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -27,36 +30,53 @@ const pageTransition = {
   duration: 0.3,
 };
 
+const PageWrapper = ({ children }: { children: React.ReactNode }) => (
+  <motion.div
+    initial="initial"
+    animate="in"
+    exit="out"
+    variants={pageVariants}
+    transition={pageTransition}
+    className="w-full"
+  >
+    {children}
+  </motion.div>
+);
+
 // --- Main App Content Component ---
 function AppContent() {
-  const { currentRoute, navigate, isLoading, previousRoute } = useRouter();
-  const routeParams = useRouteParams();
-  const breadcrumbs = useBreadcrumbs();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const currentPath = location.pathname;
+  const currentRoute = getRouteFromPath(currentPath);
+
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
   const [showAIUseCases, setShowAIUseCases] = useState(false);
   const [isChatPreloaded, setIsChatPreloaded] = useState(false);
   const [chatInstance, setChatInstance] = useState<any>(null);
 
+  const breadcrumbs = routeConfig[currentRoute]?.breadcrumb || ['Home'];
+
   // Update page metadata based on current route
   useEffect(() => {
     const metadata = getRouteMetadata(currentRoute);
-    
+
     // Update document title
     document.title = `${metadata.title} - GrowBrandi`;
-    
+
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription && metadata.description) {
       metaDescription.setAttribute('content', metadata.description);
     }
-    
+
     // Update meta keywords
     const metaKeywords = document.querySelector('meta[name="keywords"]');
     if (metaKeywords && metadata.keywords) {
       metaKeywords.setAttribute('content', metadata.keywords.join(', '));
     }
-    
+
     // Update canonical URL
     const canonicalLink = document.querySelector('link[rel="canonical"]');
     if (canonicalLink) {
@@ -95,7 +115,7 @@ function AppContent() {
 **TONE**: Confident, urgent, results-obsessed. NO generic advice. Every word = conversion opportunity.
 
 **FORBIDDEN**: Long explanations, maybe/might language, generic tips. Be SALES-FOCUSED!`;
-        
+
         const chat = initializeChat(baseInstruction);
         if (chat) {
           setChatInstance(chat);
@@ -114,46 +134,8 @@ function AppContent() {
   // Scroll to top when page changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [currentRoute]);
+  }, [currentPath]);
 
-  const renderPage = () => {
-    // Show AI Use Cases as overlay
-    if (showAIUseCases) {
-      return <AIUseCases />;
-    }
-    
-    switch (currentRoute) {
-      // Service Pages
-      case 'web-development': return <WebDevelopmentPage />;
-      case 'ui-ux-design': return <UIUXDesignPage />;
-      case 'brand-strategy': return <BrandStrategyPage />;
-      case 'seo-optimization': return <SEOOptimizationPage />;
-      case 'digital-marketing': return <DigitalMarketingPage />;
-      case 'ai-solutions': return <AISolutionsPage />;
-      
-      // Company Pages
-      case 'about': return <AboutUsPage />;
-      case 'process': return <ProcessPage />;
-      case 'case-studies': return <CaseStudiesPage />;
-      case 'team': return <TeamPage />;
-      case 'careers': return <CareersPage />;
-      case 'blog': return <BlogPage />;
-      
-      // Legal Pages
-      case 'privacy-policy': return <PrivacyPolicyPage />;
-      case 'terms-of-service': return <TermsOfServicePage />;
-      case 'cookie-policy': return <CookiePolicyPage />;
-      
-      // Original Pages
-      case 'contact': return <ContactPage />;
-      
-      // Home and Default
-      case 'home':
-      default:
-        return <HomePage />;
-    }
-  };
-  
   const getSystemInstruction = useCallback(() => {
     const baseInstruction = `You are 'GrowBrandi AI', the elite business growth assistant that turns conversations into high-value clients.
 
@@ -201,8 +183,8 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 • Price anchor: "Investment starts at $5K - but ROI is 10x that"`;
     }
 
-    switch(currentRoute) {
-        case 'home': return `${baseInstruction} 
+    switch (currentRoute) {
+      case 'home': return `${baseInstruction} 
 
 **HOMEPAGE CONVERSION STRATEGY**: 
 • Immediately qualify their business needs
@@ -211,7 +193,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 • Direct to consultation booking: "Book your strategy call - 3 spots left this week!"
 • Mention: "We're helping 50+ businesses grow 300% faster with AI"`;
 
-        case 'case-studies': return `${baseInstruction}
+      case 'case-studies': return `${baseInstruction}
 
 **CASE STUDIES CONVERSION STRATEGY**:
 • Reference specific results: "Like this client who got 300% more leads"
@@ -220,7 +202,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 • Immediate CTA: "Book your project kickoff call this week!"
 • Risk reversal: "30-day guarantee or full refund"`;
 
-        case 'contact': return `${baseInstruction}
+      case 'contact': return `${baseInstruction}
 
 **CONTACT PAGE CONVERSION STRATEGY**:
 • Maximum urgency: "Don't wait - competitors are booking strategy calls NOW"
@@ -229,7 +211,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 • Risk-free: "No commitment consultation - just results"
 • Direct booking pressure: "Schedule now or lose your spot"`;
 
-        default: return baseInstruction;
+      default: return baseInstruction;
     }
   }, [currentRoute]);
 
@@ -239,7 +221,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
       <AnimatedBackground />
       <div className="relative z-10 w-full">
         <Header />
-        
+
         {/* Breadcrumb Navigation */}
         {breadcrumbs.length > 1 && currentRoute !== 'home' && (
           <nav className="bg-slate-800/50 backdrop-blur-sm border-b border-white/10 py-3 px-4 sm:px-6 lg:px-8">
@@ -261,22 +243,52 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
             </div>
           </nav>
         )}
+
         <main id="main-content" role="main" className="w-full">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentRoute}
-              initial="initial"
-              animate="in"
-              exit="out"
-              variants={pageVariants}
-              transition={pageTransition}
-              className="w-full"
-            >
-              {renderPage()}
-            </motion.div>
-          </AnimatePresence>
+          {showAIUseCases ? (
+            <AIUseCases />
+          ) : (
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                {/* Home */}
+                <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
+
+                {/* Services */}
+                <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
+                <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
+                <Route path="/services/brand-strategy" element={<PageWrapper><BrandStrategyPage /></PageWrapper>} />
+                <Route path="/services/seo-optimization" element={<PageWrapper><SEOOptimizationPage /></PageWrapper>} />
+                <Route path="/services/digital-marketing" element={<PageWrapper><DigitalMarketingPage /></PageWrapper>} />
+                <Route path="/services/ai-solutions" element={<PageWrapper><AISolutionsPage /></PageWrapper>} />
+
+                {/* Company */}
+                <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
+                <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
+                <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
+                <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
+                <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
+                <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
+                <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
+
+                {/* Legal */}
+                <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
+                <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
+                <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
+
+                {/* Contact */}
+                <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+
+                {/* Legacy/Redirects/Other */}
+                <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
+                <Route path="/portfolio" element={<PageWrapper><ProjectsPage /></PageWrapper>} />
+
+                {/* 404 */}
+                <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+              </Routes>
+            </AnimatePresence>
+          )}
         </main>
-        
+
         {/* Global Footer */}
         <Footer />
       </div>
@@ -286,11 +298,10 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
         {/* Main Chat Button */}
         <motion.button
           onClick={() => setIsChatOpen(true)}
-          className={`text-white p-4 rounded-full shadow-lg transition-all duration-300 ${
-            isChatPreloaded 
-              ? 'bg-gradient-to-r from-cyan-500 to-teal-500 animate-pulse-glow' 
-              : 'bg-gradient-to-r from-slate-600 to-slate-500 animate-pulse'
-          }`}
+          className={`text-white p-4 rounded-full shadow-lg transition-all duration-300 ${isChatPreloaded
+            ? 'bg-gradient-to-r from-cyan-500 to-teal-500 animate-pulse-glow'
+            : 'bg-gradient-to-r from-slate-600 to-slate-500 animate-pulse'
+            }`}
           aria-label={isChatPreloaded ? "Open AI Assistant (Ready!)" : "Open AI Assistant (Loading...)"}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -305,7 +316,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
             <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
           )}
         </motion.button>
-        
+
         {/* Ready Indicator */}
         {isChatPreloaded && (
           <motion.div
@@ -319,11 +330,10 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
         {/* AI Tools Button */}
         <motion.button
           onClick={() => setShowAIUseCases(!showAIUseCases)}
-          className={`p-4 rounded-full shadow-lg transition-all duration-300 ${
-            showAIUseCases 
-              ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
-              : 'bg-gradient-to-r from-emerald-500 to-blue-500'
-          } text-white`}
+          className={`p-4 rounded-full shadow-lg transition-all duration-300 ${showAIUseCases
+            ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+            : 'bg-gradient-to-r from-emerald-500 to-blue-500'
+            } text-white`}
           aria-label="Toggle AI Tools"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -383,11 +393,9 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 // --- Main App Component with Enhanced Router ---
 function App() {
   return (
-    <RouterErrorBoundary>
-      <RouterProvider>
-        <AppContent />
-      </RouterProvider>
-    </RouterErrorBoundary>
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

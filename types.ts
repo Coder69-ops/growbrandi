@@ -25,6 +25,9 @@ export interface Project {
   technologies: string[];
   client: string;
   results: string[];
+  growthMetrics?: string;
+  beforeImage?: string;
+  afterImage?: string;
 }
 
 export interface Testimonial {
@@ -44,4 +47,25 @@ export interface CompanyStat {
 export interface FAQItem {
   question: string;
   answer: string;
+}
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  description: string;
+  image: string;
+  specialties: string[];
+  slug: string;
+  bio: string;
+  achievements: string[];
+  bookingUrl?: string;
+  social: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+    dribbble?: string;
+    instagram?: string;
+    email?: string;
+    [key: string]: string | undefined;
+  };
 }

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { TEAM_MEMBERS } from '../constants';
 
 // About Us Page
 export const AboutUsPage: React.FC = () => {
@@ -198,21 +200,21 @@ export const ProcessPage: React.FC = () => {
                 description: "We start by understanding your business, goals, and challenges through comprehensive research and stakeholder interviews.",
                 details: [
                   "Business Analysis & Requirements Gathering",
-                  "Market Research & Competitive Analysis", 
+                  "Market Research & Competitive Analysis",
                   "User Research & Persona Development",
                   "Technical Architecture Planning",
                   "Project Roadmap Creation"
                 ]
               },
               {
-                step: "02", 
+                step: "02",
                 title: "Design & Prototyping",
                 description: "Creating user-centric designs and interactive prototypes that visualize the final product before development begins.",
                 details: [
                   "Information Architecture Design",
                   "Wireframing & User Flow Mapping",
                   "Visual Design & Brand Integration",
-                  "Interactive Prototype Development", 
+                  "Interactive Prototype Development",
                   "Usability Testing & Validation"
                 ]
               },
@@ -368,7 +370,7 @@ export const CaseStudiesPage: React.FC = () => {
                     {selectedCase === index ? 'Hide Details' : 'View Details'} →
                   </button>
                 </div>
-                
+
                 {selectedCase === index && (
                   <motion.div
                     className="border-t border-white/10 p-6 bg-slate-800/50"
@@ -422,7 +424,7 @@ export const CareersPage: React.FC = () => {
     {
       title: "UI/UX Designer",
       department: "Design",
-      location: "San Francisco, CA / Remote", 
+      location: "San Francisco, CA / Remote",
       type: "Full-time",
       description: "Join our creative team to design beautiful, intuitive user experiences that delight our clients and their customers."
     },
@@ -512,94 +514,20 @@ export const CareersPage: React.FC = () => {
 
 // Team Page
 export const TeamPage: React.FC = () => {
-  // Using the same team data from the homepage Hero component
-  const teamMembers = [
-    {
-      name: "Sarah Chen",
-      role: "CEO & Creative Director",
-      description: "10+ years leading digital transformation projects with expertise in brand strategy and user experience design.",
-      image: "https://static.vecteezy.com/system/resources/thumbnails/038/962/461/small/ai-generated-caucasian-successful-confident-young-businesswoman-ceo-boss-bank-employee-worker-manager-with-arms-crossed-in-formal-wear-isolated-in-white-background-photo.jpg",
-      specialties: ["Brand Strategy", "UX Design", "Leadership"],
-      social: {
-        linkedin: "#",
-        twitter: "#",
-        email: "sarah@growbrandi.com"
-      }
-    },
-    {
-      name: "Marcus Johnson",
-      role: "Head of Development",
-      description: "Full-stack developer with passion for creating scalable, high-performance web applications using modern technologies.",
-      image: "https://heroshotphotography.com/wp-content/uploads/2023/03/male-linkedin-corporate-headshot-on-white-square-1024x1024.jpg",
-      specialties: ["React/Next.js", "Node.js", "Cloud Architecture"],
-      social: {
-        linkedin: "#",
-        github: "#",
-        email: "marcus@growbrandi.com"
-      }
-    },
-    {
-      name: "Elena Rodriguez",
-      role: "AI Solutions Architect",
-      description: "AI/ML specialist focused on integrating intelligent solutions that drive business growth and user engagement.",
-      image: "https://images.stockcake.com/public/5/5/a/55aa0081-3d0d-495b-b649-4838f12aedd3_large/professional-young-man-stockcake.jpg",
-      specialties: ["Machine Learning", "AI Integration", "Data Analytics"],
-      social: {
-        linkedin: "#",
-        twitter: "#",
-        email: "elena@growbrandi.com"
-      }
-    },
-    {
-      name: "David Kim",
-      role: "Digital Marketing Strategist",
-      description: "Performance marketing expert who combines data-driven insights with creative campaigns to maximize ROI.",
-      image: "https://media.istockphoto.com/id/1391718981/photo/portrait-of-a-confident-young-businessman-standing-with-his-arms-crossed-in-an-office.jpg?s=612x612&w=0&k=20&c=eF_0QCtw-Y8Q2c4_xQe6KTkcSPiGCT6qBf6nuavE2Dg=",
-      specialties: ["SEO/SEM", "Content Strategy", "Analytics"],
-      social: {
-        linkedin: "#",
-        instagram: "#",
-        email: "david@growbrandi.com"
-      }
-    },
-    {
-      name: "Amy Thompson",
-      role: "UI/UX Designer",
-      description: "Creative designer passionate about crafting intuitive user interfaces that deliver exceptional user experiences.",
-      image: "https://static.vecteezy.com/system/resources/thumbnails/038/962/461/small/ai-generated-caucasian-successful-confident-young-businesswoman-ceo-boss-bank-employee-worker-manager-with-arms-crossed-in-formal-wear-isolated-in-white-background-photo.jpg",
-      specialties: ["UI Design", "Prototyping", "User Research"],
-      social: {
-        linkedin: "#",
-        dribbble: "#",
-        email: "amy@growbrandi.com"
-      }
-    },
-    {
-      name: "James Wilson",
-      role: "Project Manager",
-      description: "Agile project management expert ensuring seamless delivery of complex projects on time and within budget.",
-      image: "https://heroshotphotography.com/wp-content/uploads/2023/03/male-linkedin-corporate-headshot-on-white-square-1024x1024.jpg",
-      specialties: ["Agile/Scrum", "Team Leadership", "Client Relations"],
-      social: {
-        linkedin: "#",
-        twitter: "#",
-        email: "james@growbrandi.com"
-      }
-    }
-  ];
+  const [hoveredMember, setHoveredMember] = useState<number | null>(null);
 
   return (
     <>
-      <section className="relative min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center overflow-hidden py-20">
         {/* Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
-        
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-20">
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
           {/* Header */}
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -612,119 +540,143 @@ export const TeamPage: React.FC = () => {
               The Experts Behind <span className="text-gradient">Your Success</span>
             </h1>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Our diverse team of digital experts brings together decades of experience in 
+              Our diverse team of digital experts brings together decades of experience in
               development, design, marketing, and AI to deliver exceptional results for our clients.
             </p>
           </motion.div>
 
           {/* Team Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
+            {TEAM_MEMBERS.map((member, index) => (
               <motion.div
                 key={member.name}
-                className="glass-effect rounded-2xl p-6 border border-white/10 hover:border-emerald-500/30 transition-all duration-300 group"
+                className="group relative"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
+                onMouseEnter={() => setHoveredMember(index)}
+                onMouseLeave={() => setHoveredMember(null)}
+                whileHover={{ y: -12, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <div className="text-center">
-                  {/* Profile Image */}
-                  <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full blur-sm opacity-50 group-hover:opacity-70 transition-opacity" />
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="relative w-24 h-24 rounded-full mx-auto object-cover border-2 border-white/20"
-                    />
-                  </div>
+                <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden border border-white/10">
+                  {/* Background Glow Effect */}
+                  <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
+                    ? 'bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10'
+                    : 'bg-transparent'
+                    }`} />
 
-                  {/* Name and Role */}
-                  <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                  <p className="text-emerald-400 font-semibold text-sm mb-4">{member.role}</p>
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-10 translate-x-10" />
+                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-8 -translate-x-8" />
 
-                  {/* Description */}
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                    {member.description}
-                  </p>
+                  <div className="relative z-10">
+                    <Link to={`/team/${member.slug}`} className="block">
+                      {/* Profile Image */}
+                      <div className="relative mb-6">
+                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
+                        <div className="relative w-32 h-32 mx-auto">
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-slate-700 group-hover:border-emerald-400/50 transition-all duration-300"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          {/* Fallback initials */}
+                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl items-center justify-center shadow-xl hidden">
+                            <span className="text-white font-bold text-2xl">
+                              {member.name.split(' ').map(n => n[0]).join('')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
 
-                  {/* Specialties */}
-                  <div className="mb-6">
-                    <h4 className="text-white font-semibold text-xs uppercase tracking-wide mb-3">
-                      Specialties
-                    </h4>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {member.specialties.map((specialty) => (
-                        <span
-                          key={specialty}
-                          className="px-3 py-1 bg-white/10 text-slate-300 text-xs rounded-full border border-white/20"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
+                      {/* Member Info */}
+                      <div className="text-center mb-6">
+                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gradient transition-colors duration-300">
+                          {member.name}
+                        </h3>
+                        <div className="text-emerald-400 font-semibold text-lg mb-4">
+                          {member.role}
+                        </div>
+                        <p className="text-slate-300 text-sm leading-relaxed">
+                          {member.description}
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* Specialties */}
+                    <div className="mb-6">
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {member.specialties.map((specialty, idx) => (
+                          <span
+                            key={specialty}
+                            className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full border border-slate-600 group-hover:border-emerald-400/50 group-hover:text-emerald-400 transition-all duration-300"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Social Links */}
-                  <div className="flex justify-center gap-3">
-                    {member.social.linkedin && (
-                      <a
-                        href={member.social.linkedin}
-                        className="w-10 h-10 bg-white/10 hover:bg-blue-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                      </a>
-                    )}
-                    {member.social.twitter && (
-                      <a
-                        href={member.social.twitter}
-                        className="w-10 h-10 bg-white/10 hover:bg-emerald-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                        </svg>
-                      </a>
-                    )}
-                    {member.social.github && (
-                      <a
-                        href={member.social.github}
-                        className="w-10 h-10 bg-white/10 hover:bg-slate-600 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 0C5.374 0 0 5.373 0 12 0 17.302 3.438 21.8 8.207 23.387c.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                      </a>
-                    )}
-                    {member.social.instagram && (
-                      <a
-                        href={member.social.instagram}
-                        className="w-10 h-10 bg-white/10 hover:bg-pink-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                      </a>
-                    )}
-                    {member.social.dribbble && (
-                      <a
-                        href={member.social.dribbble}
-                        className="w-10 h-10 bg-white/10 hover:bg-pink-400 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                      >
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 0C5.374 0 0 5.374 0 12s5.374 12 12 12 12-5.374 12-12S18.626 0 12 0zm7.568 5.302c1.4 1.5 2.252 3.5 2.273 5.698-.653-.126-7.512-1.563-7.512-1.563s-.04-.472-.088-1.127c7.583-3.15 7.327-2.998 7.327-2.998zm-7.568-1.704s-.678 1.679-4.357 5.062C5.418 6.816 4.04 5.415 4.04 5.415A10.728 10.728 0 0112 1.596zM2.258 7.882s1.27 1.04 5.522 2.44c.992-1.772 2.1-4.145 2.1-4.145A10.7 10.7 0 002.258 7.882zm16.227 7.75c-.456 2.023-1.952 3.977-1.952 3.977s-2.31-6.84-2.4-7.047c5.775-.987 6.352.93 6.352.93zm-8.485 5.36s-.04-.678-.04-1.61c6.418-2.676 6.153-2.558 6.153-2.558-.456 1.862-2.023 3.574-2.023 3.574s-2.31-.406-4.09-.406z"/>
-                        </svg>
-                      </a>
-                    )}
-                    <a
-                      href={`mailto:${member.social.email}`}
-                      className="w-10 h-10 bg-white/10 hover:bg-emerald-500 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 border border-white/20"
-                    >
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </a>
+                    {/* Social Links */}
+                    <div className="flex justify-center gap-4">
+                      {Object.entries(member.social).map(([platform, url]) => {
+                        if (!url) return null;
+                        const icons = {
+                          linkedin: (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
+                            </svg>
+                          ),
+                          twitter: (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                            </svg>
+                          ),
+                          github: (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd" />
+                            </svg>
+                          ),
+                          dribbble: (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 5.523 4.477 10 10 10 5.523 0 10-4.477 10-10C20 4.477 15.523 0 10 0zM7.394 17.064c-.297-.149-.568-.351-.801-.595a8.958 8.958 0 01-.662-4.975A20.719 20.719 0 007.394 17.064zM1.851 8.967c.214 2.047.995 3.9 2.199 5.35-.35-1.493-.35-3.061 0-4.554C3.248 10.1 2.478 9.567 1.851 8.967z" clipRule="evenodd" />
+                            </svg>
+                          ),
+                          instagram: (
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 0C7.284 0 6.944.012 5.877.06 2.246.227.227 2.242.06 5.877.012 6.944 0 7.284 0 10s.012 3.056.06 4.123c.167 3.632 2.182 5.65 5.817 5.817C6.944 19.988 7.284 20 10 20s3.056-.012 4.123-.06c3.629-.167 5.652-2.182 5.817-5.817C19.988 13.056 20 12.716 20 10s-.012-3.056-.06-4.123C19.833 2.245 17.821.230 14.189.06 13.124.012 12.784 0 10 0zm0 1.802c2.67 0 2.987.01 4.042.059 2.71.123 3.975 1.409 4.099 4.099.048 1.054.057 1.37.057 4.04 0 2.672-.009 2.988-.057 4.042-.124 2.687-1.387 3.977-4.1 4.099-1.054.048-1.37.058-4.041.058-2.67 0-2.987-.01-4.04-.058-2.717-.124-3.977-1.416-4.1-4.1-.048-1.054-.058-1.37-.058-4.041 0-2.67.01-2.986.058-4.04.124-2.69 1.387-3.977 4.1-4.1 1.054-.048 1.37-.058 4.04-.058zM10 4.865a5.135 5.135 0 100 10.27 5.135 5.135 0 000-10.27zm0 8.468a3.333 3.333 0 110-6.666 3.333 3.333 0 010 6.666zm5.338-9.87a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z" clipRule="evenodd" />
+                            </svg>
+                          ),
+                          email: (
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                          )
+                        };
+
+                        return (
+                          <motion.a
+                            key={platform}
+                            href={url}
+                            className="p-2 rounded-lg bg-slate-700/50 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group/social"
+                            whileHover={{ scale: 1.1, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                            aria-label={`${member.name} ${platform}`}
+                          >
+                            <div className="group-hover/social:animate-pulse">
+                              {icons[platform as keyof typeof icons]}
+                            </div>
+                          </motion.a>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -732,7 +684,7 @@ export const TeamPage: React.FC = () => {
           </div>
 
           {/* CTA Section */}
-          <motion.div 
+          <motion.div
             className="text-center mt-20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -743,7 +695,7 @@ export const TeamPage: React.FC = () => {
                 Ready to Work with <span className="text-gradient">Our Amazing Team?</span>
               </h2>
               <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-                Let's discuss your project and see how our expert team can help you achieve 
+                Let's discuss your project and see how our expert team can help you achieve
                 your digital goals. We're here to turn your vision into reality.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -776,7 +728,7 @@ export const BlogPage: React.FC = () => {
     {
       title: "Design Systems That Scale",
       excerpt: "Best practices for creating design systems that grow with your business and maintain consistency.",
-      date: "November 5, 2024", 
+      date: "November 5, 2024",
       category: "Design",
       image: "https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=600&h=400&fit=crop",
       readTime: "7 min read"

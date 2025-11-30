@@ -1,6 +1,8 @@
-/* Global styles for GrowBrandi App */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* This file is referenced in the build but intentionally minimal */
+/* Global styles for GrowBrandi App */
 /* All styles are handled through Tailwind CSS classes in components */
 
 body {
