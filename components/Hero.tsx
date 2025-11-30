@@ -36,14 +36,14 @@ const Hero: React.FC = () => {
                             <span className="text-sm font-medium text-emerald-400">AI-Powered Growth Engine</span>
                         </div>
 
-                        <h1 className="text-4xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-heading">
+                        <h1 className="text-3xl sm:text-4xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-heading">
                             Scale Your Brand with <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 animate-gradient-x">
                                 Intelligent Design
                             </span>
                         </h1>
 
-                        <p className="text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-base sm:text-lg md:text-2xl text-slate-300 mb-12 max-w-3xl mx-auto leading-relaxed">
                             GrowBrandi combines advanced AI analytics with award-winning creative strategies
                             to transform your digital presence and drive measurable business growth.
                         </p>

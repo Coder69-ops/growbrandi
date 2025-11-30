@@ -112,7 +112,7 @@ const AIBusinessAdvisor: React.FC = () => {
                     {/* Input Form */}
                     <motion.div
                         variants={itemVariants}
-                        className="glass-effect rounded-3xl p-8 space-y-6"
+                        className="glass-effect rounded-3xl p-6 md:p-8 space-y-6"
                     >
                         <h3 className="text-2xl font-bold text-white mb-6">Business Details</h3>
 

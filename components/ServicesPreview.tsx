@@ -75,7 +75,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-8"
+                className="relative w-[95%] md:w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-5 md:p-8"
                 initial={{ scale: 0.8, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 50 }}
@@ -98,7 +98,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 {service.icon}
                             </div>
                             <div>
-                                <h2 className="text-3xl font-bold text-white mb-2">{service.title}</h2>
+                                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{service.title}</h2>
                                 <p className="text-emerald-400 font-semibold text-lg">{service.price}</p>
                             </div>
                         </div>

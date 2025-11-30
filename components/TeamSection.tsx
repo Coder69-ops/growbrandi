@@ -73,7 +73,7 @@ const TeamSection: React.FC = () => {
                             whileTap={{ scale: 0.98 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden">
+                            <div className="glass-effect rounded-3xl p-6 md:p-8 h-full relative overflow-hidden">
                                 {/* Background Glow Effect */}
                                 <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
                                     ? 'bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10'

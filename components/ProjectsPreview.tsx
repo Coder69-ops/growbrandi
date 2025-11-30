@@ -49,7 +49,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl custom-scrollbar"
+                className="relative w-[95%] md:w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-5 sm:p-10 border border-white/10 shadow-2xl custom-scrollbar"
                 initial={{ scale: 0.9, y: 50, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 50, opacity: 0 }}
@@ -71,7 +71,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <img
                                 src={project.imageUrl}
                                 alt={project.title}
-                                className="w-full h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
+                                className="w-full h-48 sm:h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -124,7 +124,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                     {/* Project Details (Right Column) */}
                     <div className="lg:col-span-5 space-y-8">
                         <div>
-                            <h2 className="text-4xl font-black text-white mb-4 leading-tight font-heading">{project.title}</h2>
+                            <h2 className="text-2xl md:text-4xl font-black text-white mb-4 leading-tight font-heading">{project.title}</h2>
                             <div className="flex flex-wrap items-center gap-4 mb-6">
                                 <div className="flex items-center gap-1 bg-zinc-800/50 px-3 py-1.5 rounded-lg border border-white/5">
                                     {[...Array(5)].map((_, i) => (

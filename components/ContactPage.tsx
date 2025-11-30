@@ -112,7 +112,7 @@ export const ContactPage: React.FC = () => {
                     transition={{ duration: 0.6 }}
                     className="flex flex-col justify-center"
                 >
-                    <h1 className="text-5xl md:text-6xl font-black mb-6 font-heading tracking-tight leading-tight">
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 font-heading tracking-tight leading-tight">
                         Let's Build <br />
                         <span className="text-gradient">Something Epic</span>
                     </h1>
