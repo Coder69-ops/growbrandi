@@ -166,3 +166,4 @@ The app is ready for deployment on any static hosting platform:
 
 Built with ❤️ using modern web technologies. Perfect for digital agencies, startups, and professional service providers.
 # growbrandi
+# Growbrandi-PRD
