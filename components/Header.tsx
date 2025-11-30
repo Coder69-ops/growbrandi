@@ -121,16 +121,13 @@ const NavLink: React.FC<{
                 navigate(route);
                 if (onClick) onClick();
             }}
-            className={`relative px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${isActive
-                ? 'text-white bg-gradient-to-r from-emerald-500/30 to-blue-500/30 shadow-lg'
-                : 'text-slate-300 hover:text-white hover:bg-white/10'
+            className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${isActive
+                ? 'text-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 } ${className}`}
             aria-current={isActive ? 'page' : undefined}
         >
             {children}
-            {isActive && (
-                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-emerald-400 rounded-full" />
-            )}
         </button>
     );
 };
@@ -229,7 +226,7 @@ const Header: React.FC<HeaderProps> = () => {
             >
                 Skip to main content
             </a>
-            <header className="glass-effect sticky top-0 z-50 border-b border-white/10">
+            <header className="glass-effect sticky top-0 z-[100] border-b border-white/10">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-14 sm:h-16 lg:h-20">
                         {/* Enhanced Logo */}
@@ -245,10 +242,10 @@ const Header: React.FC<HeaderProps> = () => {
                                 </div>
                             </div>
                             <div>
-                                <span className="text-xl lg:text-2xl font-bold text-gradient block">
+                                <span className="text-xl lg:text-2xl font-bold text-white tracking-tight block">
                                     GrowBrandi
                                 </span>
-                                <span className="text-xs text-emerald-400 font-medium opacity-80 hidden lg:block">
+                                <span className="text-xs text-zinc-500 font-medium tracking-widest uppercase hidden lg:block">
                                     AI-Powered Agency
                                 </span>
                             </div>
@@ -297,7 +294,7 @@ const Header: React.FC<HeaderProps> = () => {
                             {/* Desktop CTA Button */}
                             <button
                                 onClick={() => navigate('/contact')}
-                                className="hidden lg:flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-emerald-500/25"
+                                className="hidden lg:flex items-center gap-2 bg-white text-black hover:bg-zinc-200 font-bold px-5 py-2.5 rounded-full transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
                             >
                                 <FaPaperPlane className="w-4 h-4" />
                                 Get Started
@@ -324,7 +321,7 @@ const Header: React.FC<HeaderProps> = () => {
                 <AnimatePresence>
                     {activeDropdown && (
                         <motion.div
-                            className="absolute top-full left-0 right-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10 shadow-2xl"
+                            className="absolute top-full left-0 right-0 bg-luxury-black/95 backdrop-blur-xl border-b border-white/10 shadow-2xl z-[100]"
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
@@ -413,7 +410,7 @@ const Header: React.FC<HeaderProps> = () => {
                 <AnimatePresence>
                     {isMobileMenuOpen && (
                         <motion.div
-                            className="lg:hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-xl"
+                            className="lg:hidden border-t border-white/10 bg-luxury-black/95 backdrop-blur-xl"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}

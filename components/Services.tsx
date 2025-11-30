@@ -96,7 +96,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
       >
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-600/50 transition-all z-10"
+          className="absolute top-6 right-6 p-2 rounded-full bg-zinc-700/50 text-zinc-400 hover:text-white hover:bg-zinc-600/50 transition-all z-10"
         >
           <FaTimes className="w-6 h-6" />
         </button>
@@ -113,7 +113,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               </div>
             </div>
 
-            <p className="text-slate-300 leading-relaxed text-lg">{service.description}</p>
+            <p className="text-zinc-300 leading-relaxed text-lg">{service.description}</p>
 
             <div>
               <h3 className="text-white font-semibold mb-6 text-2xl">Complete Package Includes</h3>
@@ -121,7 +121,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 {service.features?.map((feature, index) => (
                   <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl">
                     <FaCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-                    <span className="text-slate-300 font-medium text-lg">{feature}</span>
+                    <span className="text-zinc-300 font-medium text-lg">{feature}</span>
                   </div>
                 ))}
               </div>
@@ -140,7 +140,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <FaCircle className="w-3 h-3 text-emerald-400" />
-                    <span className="text-slate-300">{benefit}</span>
+                    <span className="text-zinc-300">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -169,7 +169,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             {step.duration}
                           </span>
                         </div>
-                        <p className="text-slate-300">{step.description}</p>
+                        <p className="text-zinc-300">{step.description}</p>
                       </div>
                     </div>
                   </div>
@@ -181,7 +181,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 shadow-xl">
                 Start Your Project Now
               </button>
-              <button className="w-full border border-slate-600 text-slate-300 py-3 px-8 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
+              <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-8 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
                 Schedule Free Consultation
               </button>
             </div>
@@ -195,7 +195,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 </div>
                 <span className="text-white font-bold text-lg">4.9/5</span>
               </div>
-              <p className="text-slate-400">Average rating from 200+ clients</p>
+              <p className="text-zinc-400">Average rating from 200+ clients</p>
               <p className="text-emerald-400 text-sm mt-2">✓ 98% project success rate</p>
             </div>
           </div>
@@ -281,13 +281,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             </div>
           </div>
 
-          <p className="text-slate-300 mb-8 flex-grow leading-relaxed text-lg">{service.description}</p>
+          <p className="text-zinc-300 mb-8 flex-grow leading-relaxed text-lg">{service.description}</p>
 
           <div className="mb-8">
             <h4 className="text-white font-semibold mb-4 text-lg">Key Features:</h4>
             <div className="grid grid-cols-1 gap-3">
               {service.features?.slice(0, 4).map((feature, index) => (
-                <div key={index} className="flex items-center text-slate-400">
+                <div key={index} className="flex items-center text-zinc-400">
                   <FaCheck className="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0" />
                   {feature}
                 </div>
@@ -304,13 +304,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             >
               Learn More & Get Started
             </motion.button>
-            <button className="w-full border border-slate-600 text-slate-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
+            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
               Get Free Quote
             </button>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-700 text-center">
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+          <div className="mt-6 pt-4 border-t border-zinc-700 text-center">
+            <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
               <FaShieldAlt className="w-4 h-4 text-emerald-400" />
               <span>30-day money-back guarantee</span>
             </div>
@@ -354,11 +354,10 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <>
-      <section className="py-24 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/80" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl" />
-        <div className="absolute top-2/3 right-1/3 w-64 h-64 bg-purple-500/6 rounded-full blur-3xl" />
+      <section className="py-24 px-4 relative overflow-hidden bg-luxury-black">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-zinc-800/10 rounded-full blur-3xl" />
 
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-20 max-w-5xl mx-auto">
@@ -372,14 +371,14 @@ export const ServicesPage: React.FC = () => {
                 <span className="text-sm font-bold text-emerald-400 tracking-wide">COMPREHENSIVE SERVICES</span>
                 <FaGem className="w-5 h-5 text-blue-400" />
               </div>
-              <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
+              <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight font-heading tracking-tight text-white">
                 Premium <span className="text-gradient">Digital Solutions</span>
                 <span className="block">For Every Business Need</span>
               </h1>
-              <p className="text-xl md:text-2xl text-slate-300 leading-relaxed mb-8">
+              <p className="text-xl md:text-2xl text-zinc-400 leading-relaxed mb-8 font-light">
                 Transform your business with our comprehensive suite of services. From
-                <span className="text-emerald-400 font-semibold"> cutting-edge design and development</span> to
-                <span className="text-blue-400 font-semibold"> data-driven marketing strategies</span>,
+                <span className="text-white font-semibold"> cutting-edge design and development</span> to
+                <span className="text-white font-semibold"> data-driven marketing strategies</span>,
                 we deliver exceptional results that drive growth.
               </p>
             </motion.div>
@@ -392,8 +391,8 @@ export const ServicesPage: React.FC = () => {
                   key={category}
                   onClick={() => handleFilterChange(category)}
                   className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${activeFilter === category
-                      ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-lg'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                    ? 'bg-white text-black shadow-lg'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
                     }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -455,7 +454,7 @@ export const ServicesPage: React.FC = () => {
                 <div className="text-3xl font-black text-gradient mb-2">
                   {stat.number}
                 </div>
-                <div className="text-slate-400 text-sm font-medium">
+                <div className="text-zinc-400 text-sm font-medium">
                   {stat.label}
                 </div>
               </motion.div>
@@ -467,13 +466,13 @@ export const ServicesPage: React.FC = () => {
               <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
                 Ready to <span className="text-gradient">Elevate Your Business?</span>
               </h3>
-              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                 Get started with a free consultation. Our experts will analyze your needs
                 and recommend the perfect service package for your business goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
                 <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-3 bg-white text-black font-bold py-4 px-8 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -481,7 +480,7 @@ export const ServicesPage: React.FC = () => {
                   Get Free Consultation
                 </motion.button>
                 <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-slate-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-slate-600 transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-zinc-600 transition-all duration-300"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -490,18 +489,18 @@ export const ServicesPage: React.FC = () => {
                 </motion.button>
               </div>
 
-              <div className="flex items-center justify-center gap-8 pt-8 border-t border-slate-700">
+              <div className="flex items-center justify-center gap-8 pt-8 border-t border-zinc-700">
                 <div className="flex items-center gap-2">
                   <FaLock className="w-5 h-5 text-emerald-400" />
-                  <span className="text-slate-300 text-sm">SSL Secured</span>
+                  <span className="text-zinc-300 text-sm">SSL Secured</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaCheckCircle className="w-5 h-5 text-blue-400" />
-                  <span className="text-slate-300 text-sm">Money Back Guarantee</span>
+                  <span className="text-zinc-300 text-sm">Money Back Guarantee</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FaHeadset className="w-5 h-5 text-purple-400" />
-                  <span className="text-slate-300 text-sm">24/7 Support</span>
+                  <span className="text-zinc-300 text-sm">24/7 Support</span>
                 </div>
               </div>
             </div>

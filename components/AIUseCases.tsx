@@ -61,11 +61,11 @@ const ProjectEstimator = () => {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Project Type</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Project Type</label>
           <select
             value={formData.projectType}
             onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
             required
           >
             <option value="">Select project type</option>
@@ -78,7 +78,7 @@ const ProjectEstimator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Required Features</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Required Features</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {featuresOptions.map(feature => (
               <button
@@ -86,8 +86,8 @@ const ProjectEstimator = () => {
                 type="button"
                 onClick={() => toggleFeature(feature)}
                 className={`text-xs px-3 py-2 rounded-full transition-all ${formData.features.includes(feature)
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                   }`}
               >
                 {feature}
@@ -98,11 +98,11 @@ const ProjectEstimator = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Timeline</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
             <select
               value={formData.timeline}
               onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
               required
             >
               <option value="">Select timeline</option>
@@ -115,11 +115,11 @@ const ProjectEstimator = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Budget Range</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Budget Range</label>
             <select
               value={formData.budget}
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
               required
             >
               <option value="">Select budget</option>
@@ -132,13 +132,13 @@ const ProjectEstimator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
           <input
             type="text"
             value={formData.industry}
             onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
             placeholder="e.g., Healthcare, E-commerce, Education"
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
             required
           />
         </div>
@@ -156,17 +156,17 @@ const ProjectEstimator = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
+          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-emerald-400">GrowBrandi Project Estimation</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-slate-700/50 rounded-lg p-4">
-              <p className="text-sm text-slate-400">Estimated Cost</p>
+            <div className="bg-zinc-700/50 rounded-lg p-4">
+              <p className="text-sm text-zinc-400">Estimated Cost</p>
               <p className="text-lg sm:text-xl font-bold text-white">{estimation.estimatedCost}</p>
             </div>
-            <div className="bg-slate-700/50 rounded-lg p-4">
-              <p className="text-sm text-slate-400">Timeline</p>
+            <div className="bg-zinc-700/50 rounded-lg p-4">
+              <p className="text-sm text-zinc-400">Timeline</p>
               <p className="text-lg sm:text-xl font-bold text-white">{estimation.estimatedTimeline}</p>
             </div>
           </div>
@@ -174,7 +174,7 @@ const ProjectEstimator = () => {
           {estimation.recommendations && (
             <div>
               <h4 className="font-semibold text-white mb-2">GrowBrandi Recommendations</h4>
-              <ul className="space-y-1 text-sm text-slate-300">
+              <ul className="space-y-1 text-sm text-zinc-300">
                 {estimation.recommendations.map((rec: string, idx: number) => (
                   <li key={idx} className="flex items-start space-x-2">
                     <span className="text-emerald-400">•</span>
@@ -240,19 +240,19 @@ const ServiceRecommender = () => {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
           <input
             type="text"
             value={formData.industry}
             onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
             placeholder="e.g., Healthcare, E-commerce, SaaS"
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Current Challenges</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Current Challenges</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {challengesOptions.map(challenge => (
               <button
@@ -260,8 +260,8 @@ const ServiceRecommender = () => {
                 type="button"
                 onClick={() => toggleOption(challenge, 'currentChallenges')}
                 className={`text-xs px-3 py-2 rounded-full transition-all ${formData.currentChallenges.includes(challenge)
-                    ? 'bg-red-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-red-600 text-white'
+                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                   }`}
               >
                 {challenge}
@@ -271,7 +271,7 @@ const ServiceRecommender = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Business Goals</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Business Goals</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {goalsOptions.map(goal => (
               <button
@@ -279,8 +279,8 @@ const ServiceRecommender = () => {
                 type="button"
                 onClick={() => toggleOption(goal, 'goals')}
                 className={`text-xs px-3 py-2 rounded-full transition-all ${formData.goals.includes(goal)
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                   }`}
               >
                 {goal}
@@ -291,11 +291,11 @@ const ServiceRecommender = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Budget</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Budget</label>
             <select
               value={formData.budget}
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select budget</option>
@@ -307,11 +307,11 @@ const ServiceRecommender = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Timeline</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
             <select
               value={formData.timeline}
               onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select timeline</option>
@@ -336,24 +336,24 @@ const ServiceRecommender = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
+          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-blue-400">GrowBrandi Service Recommendations</h3>
 
           {recommendations.priorityServices && (
             <div className="space-y-3">
               {recommendations.priorityServices.map((service: any, idx: number) => (
-                <div key={idx} className="bg-slate-700/50 rounded-lg p-4">
+                <div key={idx} className="bg-zinc-700/50 rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-semibold text-white">{service.service}</h4>
                     <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                        service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
                       } text-white`}>
                       {service.priority} Priority
                     </span>
                   </div>
-                  <p className="text-sm text-slate-300 mb-2">{service.reason}</p>
-                  <div className="flex justify-between text-xs text-slate-400">
+                  <p className="text-sm text-zinc-300 mb-2">{service.reason}</p>
+                  <div className="flex justify-between text-xs text-zinc-400">
                     <span>Expected: {service.expectedOutcome}</span>
                     <span>{service.estimatedCost}</span>
                   </div>
@@ -397,11 +397,11 @@ const BusinessGrowthAnalyzer = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Current Revenue</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Current Revenue</label>
             <select
               value={formData.currentRevenue}
               onChange={(e) => setFormData(prev => ({ ...prev, currentRevenue: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
               required
             >
               <option value="">Select revenue range</option>
@@ -413,24 +413,24 @@ const BusinessGrowthAnalyzer = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
             <input
               type="text"
               value={formData.industry}
               onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
               placeholder="e.g., SaaS, E-commerce"
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-purple-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-purple-500"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Market Position</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Market Position</label>
           <select
             value={formData.marketPosition}
             onChange={(e) => setFormData(prev => ({ ...prev, marketPosition: e.target.value }))}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
             required
           >
             <option value="">Select position</option>
@@ -442,11 +442,11 @@ const BusinessGrowthAnalyzer = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Digital Presence</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Digital Presence</label>
           <select
             value={formData.digitalPresence}
             onChange={(e) => setFormData(prev => ({ ...prev, digitalPresence: e.target.value }))}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
             required
           >
             <option value="">Select digital presence</option>
@@ -458,11 +458,11 @@ const BusinessGrowthAnalyzer = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Competitors Level</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Competitors Level</label>
           <select
             value={formData.competitorsLevel}
             onChange={(e) => setFormData(prev => ({ ...prev, competitorsLevel: e.target.value }))}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
             required
           >
             <option value="">Select competition level</option>
@@ -486,27 +486,27 @@ const BusinessGrowthAnalyzer = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
+          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-purple-400">GrowBrandi Growth Analysis</h3>
 
-          <div className="bg-slate-700/50 rounded-lg p-4">
+          <div className="bg-zinc-700/50 rounded-lg p-4">
             <h4 className="font-semibold text-white mb-2">Growth Potential</h4>
-            <p className="text-slate-300">{analysis.growthPotential}</p>
+            <p className="text-zinc-300">{analysis.growthPotential}</p>
           </div>
 
           {analysis.predictions && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-slate-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-slate-400">6 Months</p>
+              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
+                <p className="text-xs text-zinc-400">6 Months</p>
                 <p className="text-sm font-semibold text-white">{analysis.predictions.sixMonths}</p>
               </div>
-              <div className="bg-slate-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-slate-400">1 Year</p>
+              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
+                <p className="text-xs text-zinc-400">1 Year</p>
                 <p className="text-sm font-semibold text-white">{analysis.predictions.oneYear}</p>
               </div>
-              <div className="bg-slate-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-slate-400">3 Years</p>
+              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
+                <p className="text-xs text-zinc-400">3 Years</p>
                 <p className="text-sm font-semibold text-white">{analysis.predictions.threeYears}</p>
               </div>
             </div>
@@ -560,19 +560,19 @@ const ConsultationPlanner = () => {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Business Type</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Business Type</label>
           <input
             type="text"
             value={formData.businessType}
             onChange={(e) => setFormData(prev => ({ ...prev, businessType: e.target.value }))}
             placeholder="e.g., Tech Startup, Restaurant, Consulting"
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-cyan-500"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Specific Needs</label>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Specific Needs</label>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {needsOptions.map(need => (
               <button
@@ -580,8 +580,8 @@ const ConsultationPlanner = () => {
                 type="button"
                 onClick={() => toggleNeed(need)}
                 className={`text-xs px-3 py-2 rounded-full transition-all ${formData.specificNeeds.includes(need)
-                    ? 'bg-cyan-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-cyan-600 text-white'
+                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                   }`}
               >
                 {need}
@@ -592,11 +592,11 @@ const ConsultationPlanner = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Urgency</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Urgency</label>
             <select
               value={formData.urgency}
               onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
               required
             >
               <option value="">Select urgency</option>
@@ -608,11 +608,11 @@ const ConsultationPlanner = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Experience Level</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Experience Level</label>
             <select
               value={formData.experience}
               onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
-              className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
               required
             >
               <option value="">Select experience</option>
@@ -637,18 +637,18 @@ const ConsultationPlanner = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
+          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
           <h3 className="text-lg font-semibold text-cyan-400">Your Personalized GrowBrandi Plan</h3>
 
           <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-lg p-4 border border-cyan-500/30">
             <p className="text-white font-medium mb-2">Recommended Session</p>
-            <p className="text-slate-300 text-sm">{plan.consultationType} - {plan.recommendedDuration}</p>
+            <p className="text-zinc-300 text-sm">{plan.consultationType} - {plan.recommendedDuration}</p>
           </div>
 
           {plan.personalizedMessage && (
-            <div className="bg-slate-700/50 rounded-lg p-4">
-              <p className="text-slate-300 italic">"{plan.personalizedMessage}"</p>
+            <div className="bg-zinc-700/50 rounded-lg p-4">
+              <p className="text-zinc-300 italic">"{plan.personalizedMessage}"</p>
             </div>
           )}
 
@@ -656,7 +656,7 @@ const ConsultationPlanner = () => {
             {plan.keyTopics && (
               <div>
                 <h4 className="font-semibold text-white mb-2">Discussion Topics</h4>
-                <ul className="space-y-1 text-sm text-slate-300">
+                <ul className="space-y-1 text-sm text-zinc-300">
                   {plan.keyTopics.map((topic: string, idx: number) => (
                     <li key={idx} className="flex items-start space-x-2">
                       <span className="text-cyan-400">•</span>
@@ -670,7 +670,7 @@ const ConsultationPlanner = () => {
             {plan.expectedOutcomes && (
               <div>
                 <h4 className="font-semibold text-white mb-2">Expected Outcomes</h4>
-                <ul className="space-y-1 text-sm text-slate-300">
+                <ul className="space-y-1 text-sm text-zinc-300">
                   {plan.expectedOutcomes.map((outcome: string, idx: number) => (
                     <li key={idx} className="flex items-start space-x-2">
                       <span className="text-green-400">✓</span>
@@ -732,8 +732,9 @@ const AIUseCases: React.FC = () => {
   const ActiveDemo = useCases.find(uc => uc.id === activeUseCase)?.demo || ProjectEstimator;
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-luxury-black relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12 sm:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -747,7 +748,7 @@ const AIUseCases: React.FC = () => {
                 Intelligence Suite
               </span>
             </h2>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4">
+            <p className="text-lg sm:text-xl text-zinc-300 max-w-3xl mx-auto px-4">
               Experience the future of business growth with GrowBrandi's interactive intelligence tools that provide
               instant insights, strategic recommendations, and actionable growth plans tailored to your business.
             </p>
@@ -763,21 +764,21 @@ const AIUseCases: React.FC = () => {
                   key={useCase.id}
                   onClick={() => setActiveUseCase(useCase.id)}
                   className={`w-full p-4 sm:p-6 rounded-xl sm:rounded-2xl text-left transition-all duration-300 ${activeUseCase === useCase.id
-                      ? 'bg-gradient-to-r ' + useCase.color + ' text-white shadow-2xl scale-105'
-                      : 'bg-slate-800/50 backdrop-blur-sm text-slate-300 hover:bg-slate-700/50 hover:scale-102'
+                    ? 'bg-gradient-to-r ' + useCase.color + ' text-white shadow-2xl scale-105'
+                    : 'bg-zinc-800/50 backdrop-blur-sm text-zinc-300 hover:bg-zinc-700/50 hover:scale-102'
                     }`}
                   whileHover={{ scale: activeUseCase === useCase.id ? 1.05 : 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   viewport={{ once: true, amount: 0.1 }}
                 >
                   <div className="flex lg:flex-col lg:items-start items-center lg:space-x-0 space-x-3 lg:space-y-3">
-                    <div className={`flex-shrink-0 ${activeUseCase === useCase.id ? 'text-white' : 'text-slate-400'
+                    <div className={`flex-shrink-0 ${activeUseCase === useCase.id ? 'text-white' : 'text-zinc-400'
                       }`}>
                       {useCase.icon}
                     </div>
                     <div className="lg:w-full">
                       <h3 className="font-bold text-sm sm:text-base lg:text-lg mb-1">{useCase.title}</h3>
-                      <p className={`text-xs sm:text-sm hidden lg:block ${activeUseCase === useCase.id ? 'text-white/90' : 'text-slate-400'
+                      <p className={`text-xs sm:text-sm hidden lg:block ${activeUseCase === useCase.id ? 'text-white/90' : 'text-zinc-400'
                         }`}>
                         {useCase.description}
                       </p>
@@ -795,7 +796,7 @@ const AIUseCases: React.FC = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4 }}
-              className="bg-slate-800/30 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-700/50 h-full"
+              className="bg-zinc-800/30 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-zinc-700/50 h-full"
             >
               <ActiveDemo />
             </motion.div>

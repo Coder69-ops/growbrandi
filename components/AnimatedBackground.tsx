@@ -11,7 +11,7 @@ const AnimatedBackground: React.FC = () => {
         height: '100%',
         zIndex: -1,
         overflow: 'hidden',
-        backgroundColor: '#020617' // slate-950
+        backgroundColor: '#09090b' // zinc-950 / luxury-black
       }}
     >
       <style>

@@ -14,8 +14,8 @@ const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-slate-900">
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 opacity-80" />
+      <div className="absolute inset-0 bg-luxury-black">
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-zinc-800 to-zinc-900 opacity-80" />
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       </div>
 
@@ -46,7 +46,7 @@ const NotFoundPage = () => {
           <h1 className="text-3xl font-bold text-white mb-4">
             Page Not Found
           </h1>
-          <p className="text-slate-300 mb-8 leading-relaxed">
+          <p className="text-zinc-300 mb-8 leading-relaxed">
             Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
           </p>
         </motion.div>
@@ -69,7 +69,7 @@ const NotFoundPage = () => {
 
           <motion.button
             onClick={() => window.history.back()}
-            className="border border-slate-600 text-slate-300 px-8 py-3 rounded-lg font-semibold hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
+            className="border border-zinc-600 text-zinc-300 px-8 py-3 rounded-lg font-semibold hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -84,7 +84,7 @@ const NotFoundPage = () => {
           transition={{ delay: 0.8 }}
           className="pt-8 border-t border-white/10"
         >
-          <p className="text-slate-400 mb-4 text-sm">Helpful Links</p>
+          <p className="text-zinc-400 mb-4 text-sm">Helpful Links</p>
           <div className="flex justify-center gap-6">
             {helpfulLinks.map((link) => (
               <button

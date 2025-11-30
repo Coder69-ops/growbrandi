@@ -373,7 +373,7 @@ export const generateConsultationPlan = async (clientInfo: {
 };
 
 // Project Brief Generation Service
-export const generateProjectBrief = async (): Promise<{ brief: string }> => {
+export const generateProjectBrief = async (details?: { service: string; subject: string }): Promise<{ brief: string }> => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
     if (!apiKey) {
         throw new Error("API_KEY environment variable not set.");
@@ -381,9 +381,16 @@ export const generateProjectBrief = async (): Promise<{ brief: string }> => {
 
     try {
         const ai = new GoogleGenAI({ apiKey });
+
+        let prompt = `A user wants to contact GrowBrandi. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion.`;
+
+        if (details?.service && details?.subject) {
+            prompt = `A user wants to contact GrowBrandi regarding "${details.service}". The subject is "${details.subject}". Generate a professional, concise project brief (max 100 words) tailored to this service and subject. Focus on clear goals, target audience, and desired outcomes.`;
+        }
+
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `A user wants to contact GrowBrandi. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion.`,
+            contents: prompt,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {

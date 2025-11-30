@@ -34,7 +34,7 @@ const TeamSection: React.FC = () => {
             variants={containerVariants}
         >
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/70" />
+            <div className="absolute inset-0 bg-luxury-black" />
             <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
@@ -50,7 +50,7 @@ const TeamSection: React.FC = () => {
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                         Meet the <span className="text-gradient">Creative Minds</span> Behind Your Success
                     </h2>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
                         Our diverse team of experts brings together decades of experience in
                         <span className="text-emerald-400 font-semibold"> design, development, AI, and marketing</span> to
                         deliver exceptional results that exceed expectations.
@@ -93,7 +93,7 @@ const TeamSection: React.FC = () => {
                                                 <img
                                                     src={member.image}
                                                     alt={member.name}
-                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-slate-700 group-hover:border-emerald-400/50 transition-all duration-300"
+                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-700 group-hover:border-emerald-400/50 transition-all duration-300"
                                                     onError={(e) => {
                                                         // Fallback to initials if image fails to load
                                                         e.currentTarget.style.display = 'none';
@@ -110,7 +110,7 @@ const TeamSection: React.FC = () => {
                                             </div>
 
                                             {/* Online Status Indicator */}
-                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 rounded-full border-4 border-slate-800 flex items-center justify-center">
+                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 rounded-full border-4 border-zinc-800 flex items-center justify-center">
                                                 <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
                                             </div>
                                         </div>
@@ -123,7 +123,7 @@ const TeamSection: React.FC = () => {
                                             <div className="text-emerald-400 font-semibold text-lg mb-4">
                                                 {member.role}
                                             </div>
-                                            <p className="text-slate-300 text-sm leading-relaxed">
+                                            <p className="text-zinc-300 text-sm leading-relaxed">
                                                 {member.description}
                                             </p>
                                         </div>
@@ -135,7 +135,7 @@ const TeamSection: React.FC = () => {
                                             {member.specialties.map((specialty, idx) => (
                                                 <motion.span
                                                     key={specialty}
-                                                    className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full border border-slate-600 group-hover:border-emerald-400/50 group-hover:text-emerald-400 transition-all duration-300"
+                                                    className="px-3 py-1 bg-zinc-700/50 text-zinc-300 text-xs font-medium rounded-full border border-zinc-600 group-hover:border-emerald-400/50 group-hover:text-emerald-400 transition-all duration-300"
                                                     initial={{ opacity: 0, scale: 0.8 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ delay: idx * 0.1 }}
@@ -162,7 +162,7 @@ const TeamSection: React.FC = () => {
                                                 <motion.a
                                                     key={platform}
                                                     href={url}
-                                                    className="p-2 rounded-lg bg-slate-700/50 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group/social"
+                                                    className="p-2 rounded-lg bg-zinc-700/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group/social"
                                                     whileHover={{ scale: 1.1, y: -2 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     aria-label={`${member.name} ${platform}`}
@@ -188,7 +188,7 @@ const TeamSection: React.FC = () => {
                         <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
                             Ready to Work with <span className="text-gradient">Our Amazing Team?</span>
                         </h3>
-                        <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                             Let's discuss your project and see how our expert team can help you achieve
                             your digital transformation goals.
                         </p>
@@ -202,7 +202,7 @@ const TeamSection: React.FC = () => {
                                 Start a Conversation
                             </motion.button>
                             <motion.button
-                                className="bg-slate-700 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-600 transition-all duration-300 flex items-center justify-center gap-2"
+                                className="bg-zinc-700 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-zinc-600 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >

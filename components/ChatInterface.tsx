@@ -241,13 +241,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <motion.div
-                className="bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700 flex flex-col w-full max-w-lg h-[85vh] max-h-[700px]"
+                className="bg-luxury-black/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 flex flex-col w-full max-w-lg h-[85vh] max-h-[700px]"
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-                <div className="p-4 border-b border-slate-700 flex justify-between items-center flex-shrink-0">
+                <div className="p-4 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-gradient">GrowBrandi AI Assistant</h3>
                         {isPreloaded && (
@@ -257,7 +257,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                             </div>
                         )}
                     </div>
-                    <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+                    <button onClick={onClose} className="text-zinc-400 hover:text-white transition-colors">
                         <FaTimes className="h-6 w-6" />
                     </button>
                 </div>
@@ -276,13 +276,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                 {messages.length <= 1 && !isLoading && (
                     <div className="p-4 pt-0">
                         <div className="text-center">
-                            <p className="text-sm text-slate-400 mb-3">Try these suggestions</p>
+                            <p className="text-sm text-zinc-400 mb-3">Try these suggestions</p>
                             <div className="flex flex-wrap gap-2 justify-center">
                                 {INITIAL_SUGGESTIONS.map(suggestion => (
                                     <button
                                         key={suggestion}
                                         onClick={() => handleSendMessage(suggestion)}
-                                        className="bg-slate-700/80 text-slate-200 text-xs px-3 py-1.5 rounded-full hover:bg-slate-700 transition-colors"
+                                        className="bg-zinc-700/80 text-zinc-200 text-xs px-3 py-1.5 rounded-full hover:bg-zinc-700 transition-colors"
                                     >
                                         {suggestion}
                                     </button>
@@ -309,7 +309,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     </div>
                 )}
 
-                <div className="p-4 border-t border-slate-700 flex-shrink-0">
+                <div className="p-4 border-t border-zinc-700 flex-shrink-0">
                     <form onSubmit={handleFormSubmit} className="flex items-center space-x-2 sm:space-x-4">
                         <input
                             type="text"
@@ -317,12 +317,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                             onChange={(e) => setUserInput(e.target.value)}
                             placeholder={isLoading ? "GrowBrandi AI is analyzing..." : "What business challenge can I solve?"}
                             disabled={isLoading || !!error}
-                            className="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-4 py-2.5 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
+                            className="flex-1 bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2.5 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50"
                         />
                         <button
                             type="submit"
                             disabled={isLoading || !userInput.trim() || !!error}
-                            className="bg-cyan-600 text-white p-2.5 rounded-lg hover:bg-cyan-500 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
+                            className="bg-cyan-600 text-white p-2.5 rounded-lg hover:bg-cyan-500 disabled:bg-zinc-600 disabled:cursor-not-allowed transition-colors"
                         >
                             <FaPaperPlane className="w-6 h-6" />
                         </button>

@@ -42,7 +42,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
           >
             <div className="px-8 pb-6 pt-2">
               <div className="w-full h-px bg-gradient-to-r from-emerald-500/20 to-blue-500/20 mb-4" />
-              <p className="text-slate-300 leading-relaxed text-lg">{answer}</p>
+              <p className="text-zinc-300 leading-relaxed text-lg">{answer}</p>
             </div>
           </motion.div>
         )}
@@ -61,7 +61,7 @@ const FAQ: React.FC = () => {
   return (
     <section className="py-24 px-4 relative overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/70" />
+      <div className="absolute inset-0 bg-luxury-black" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
@@ -79,7 +79,7 @@ const FAQ: React.FC = () => {
           <h2 className="text-4xl md:text-6xl font-black mb-6">
             Frequently Asked <span className="text-gradient">Questions</span>
           </h2>
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed">
             Get answers to common questions about our services, process, and how we can help
             transform your business with our AI-powered digital solutions.
           </p>
@@ -128,7 +128,7 @@ const FAQ: React.FC = () => {
             <h3 className="text-2xl font-bold text-white mb-4">
               Still have questions?
             </h3>
-            <p className="text-slate-300 mb-6">
+            <p className="text-zinc-300 mb-6">
               Can't find the answer you're looking for? Our team is here to help you.
             </p>
             <motion.button

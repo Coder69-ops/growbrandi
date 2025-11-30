@@ -5,111 +5,88 @@ import { motion } from 'framer-motion';
 export const PrivacyPolicyPage: React.FC = () => {
   return (
     <>
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+      {/* Hero Section */}
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-4xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Privacy <span className="text-gradient">Policy</span>
             </h1>
-            <p className="text-lg text-slate-300">
-              Last updated: November 14, 2024
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              Last updated: November 15, 2024
             </p>
           </motion.div>
 
           <motion.div
-            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/10 prose prose-invert max-w-none"
+            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="space-y-8 text-slate-300 leading-relaxed">
+            <div className="space-y-8 text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">1. Information We Collect</h2>
-                <p className="mb-4">
-                  We collect information you provide directly to us, such as when you create an account, subscribe to our newsletter, 
-                  or contact us for support. This may include:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Name and contact information (email address, phone number)</li>
-                  <li>Company information and job title</li>
-                  <li>Messages and communications you send to us</li>
-                  <li>Payment information for our services</li>
-                  <li>Any other information you choose to provide</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">2. How We Use Your Information</h2>
-                <p className="mb-4">We use the information we collect to:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Provide, maintain, and improve our services</li>
-                  <li>Process transactions and send related information</li>
-                  <li>Send you technical notices, updates, and support messages</li>
-                  <li>Respond to your comments, questions, and requests</li>
-                  <li>Communicate with you about products, services, and events</li>
-                  <li>Monitor and analyze trends and usage</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">3. Information Sharing</h2>
-                <p className="mb-4">
-                  We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, 
-                  except in the following circumstances:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>With your explicit consent</li>
-                  <li>To comply with legal obligations</li>
-                  <li>To protect our rights and prevent fraud</li>
-                  <li>With service providers who assist in our operations</li>
-                  <li>In connection with a merger or acquisition</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">4. Data Security</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">1. Introduction</h2>
                 <p>
-                  We implement appropriate security measures to protect your personal information against unauthorized access, 
-                  alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure, 
-                  and we cannot guarantee absolute security.
+                  Welcome to GrowBrandi ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.
+                  If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">5. Your Rights</h2>
-                <p className="mb-4">You have the right to:</p>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">2. Information We Collect</h2>
+                <p className="mb-4">We collect personal information that you voluntarily provide to us when you:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Access your personal information</li>
-                  <li>Correct inaccurate information</li>
-                  <li>Delete your personal information</li>
-                  <li>Object to processing of your information</li>
-                  <li>Request data portability</li>
-                  <li>Withdraw consent at any time</li>
+                  <li>Register on the website</li>
+                  <li>Express an interest in obtaining information about us or our products and services</li>
+                  <li>Participate in activities on the website</li>
+                  <li>Contact us</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">6. Cookies and Tracking</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. How We Use Your Information</h2>
+                <p className="mb-4">We use personal information collected via our website for a variety of business purposes described below:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>To facilitate account creation and logon process</li>
+                  <li>To send you marketing and promotional communications</li>
+                  <li>To send administrative information to you</li>
+                  <li>To fulfill and manage your orders</li>
+                  <li>To post testimonials</li>
+                  <li>To request feedback</li>
+                  <li>To protect our Services</li>
+                </ul>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">4. Sharing Your Information</h2>
                 <p>
-                  We use cookies and similar tracking technologies to collect and use personal information about you. 
-                  You can control cookies through your browser settings and other tools.
+                  We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">7. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Security of Your Information</h2>
                 <p>
-                  If you have any questions about this Privacy Policy, please contact us at:
+                  We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.
                 </p>
-                <div className="mt-4 p-4 bg-slate-800/50 rounded-lg">
-                  <p><strong>Email:</strong> privacy@growbrandi.com</p>
-                  <p><strong>Address:</strong> GrowBrandi, San Francisco, CA</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Contact Us</h2>
+                <p>
+                  If you have questions or comments about this policy, you may email us at privacy@growbrandi.com or by post to:
+                </p>
+                <div className="mt-4 p-4 bg-zinc-900/50 rounded-lg border border-white/5">
+                  <p>GrowBrandi Inc.</p>
+                  <p>123 Tech Street</p>
+                  <p>San Francisco, CA 94105</p>
+                  <p>United States</p>
                 </div>
               </section>
             </div>
@@ -124,110 +101,77 @@ export const PrivacyPolicyPage: React.FC = () => {
 export const TermsOfServicePage: React.FC = () => {
   return (
     <>
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+      {/* Hero Section */}
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-4xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Terms of <span className="text-gradient">Service</span>
             </h1>
-            <p className="text-lg text-slate-300">
-              Last updated: November 14, 2024
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              Last updated: November 15, 2024
             </p>
           </motion.div>
 
           <motion.div
-            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/10 prose prose-invert max-w-none"
+            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="space-y-8 text-slate-300 leading-relaxed">
+            <div className="space-y-8 text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">1. Acceptance of Terms</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">1. Agreement to Terms</h2>
                 <p>
-                  By accessing and using GrowBrandi's services, you accept and agree to be bound by the terms and provision 
-                  of these Terms of Service. If you do not agree to abide by the above, please do not use this service.
+                  These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and GrowBrandi ("we," "us" or "our"), concerning your access to and use of the GrowBrandi website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">2. Service Description</h2>
-                <p className="mb-4">
-                  GrowBrandi provides digital services including but not limited to:
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">2. Intellectual Property Rights</h2>
+                <p>
+                  Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site (collectively, the "Content") and the trademarks, service marks, and logos contained therein (the "Marks") are owned or controlled by us or licensed to us, and are protected by copyright and trademark laws and various other intellectual property rights.
                 </p>
+              </section>
+
+              <section>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. User Representations</h2>
+                <p className="mb-4">By using the Site, you represent and warrant that:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Web development and design</li>
-                  <li>Digital marketing services</li>
-                  <li>Brand strategy and consulting</li>
-                  <li>AI solutions and automation</li>
-                  <li>SEO optimization services</li>
+                  <li>All registration information you submit will be true, accurate, current, and complete.</li>
+                  <li>You will maintain the accuracy of such information and promptly update such registration information as necessary.</li>
+                  <li>You have the legal capacity and you agree to comply with these Terms of Service.</li>
+                  <li>You are not a minor in the jurisdiction in which you reside.</li>
+                  <li>You will not access the Site through automated or non-human means, whether through a bot, script or otherwise.</li>
+                  <li>You will not use the Site for any illegal or unauthorized purpose.</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">3. User Responsibilities</h2>
-                <p className="mb-4">You agree to:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Provide accurate and complete information</li>
-                  <li>Maintain the security of your account credentials</li>
-                  <li>Use our services in compliance with applicable laws</li>
-                  <li>Not engage in any fraudulent or harmful activities</li>
-                  <li>Respect intellectual property rights</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">4. Payment Terms</h2>
-                <p className="mb-4">
-                  Payment terms for our services are as follows:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>All fees are due upon invoice unless otherwise agreed</li>
-                  <li>Late payments may incur additional charges</li>
-                  <li>Refunds are subject to our refund policy</li>
-                  <li>Prices are subject to change with notice</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">5. Intellectual Property</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">4. Prohibited Activities</h2>
                 <p>
-                  All content, features, and functionality of our services are owned by GrowBrandi and are protected by 
-                  international copyright, trademark, and other intellectual property laws.
+                  You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">6. Limitation of Liability</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Limitation of Liability</h2>
                 <p>
-                  GrowBrandi shall not be liable for any indirect, incidental, special, consequential, or punitive damages, 
-                  including without limitation, loss of profits, data, use, goodwill, or other intangible losses.
+                  In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site, even if we have been advised of the possibility of such damages.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">7. Termination</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Governing Law</h2>
                 <p>
-                  We may terminate or suspend your access to our services immediately, without prior notice or liability, 
-                  for any reason whatsoever, including without limitation if you breach the Terms.
+                  These Terms shall be governed by and defined following the laws of the State of California. GrowBrandi and yourself irrevocably consent that the courts of California shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
                 </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4">8. Contact Information</h2>
-                <p>
-                  For questions about these Terms of Service, please contact us at:
-                </p>
-                <div className="mt-4 p-4 bg-slate-800/50 rounded-lg">
-                  <p><strong>Email:</strong> legal@growbrandi.com</p>
-                  <p><strong>Address:</strong> GrowBrandi, San Francisco, CA</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-                </div>
               </section>
             </div>
           </motion.div>
@@ -241,39 +185,41 @@ export const TermsOfServicePage: React.FC = () => {
 export const CookiePolicyPage: React.FC = () => {
   return (
     <>
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
+      {/* Hero Section */}
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-4xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Cookie <span className="text-gradient">Policy</span>
             </h1>
-            <p className="text-lg text-slate-300">
-              Last updated: November 14, 2024
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              Last updated: November 15, 2024
             </p>
           </motion.div>
 
           <motion.div
-            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/10 prose prose-invert max-w-none"
+            className="glass-effect rounded-2xl p-8 md:p-12 border border-white/5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="space-y-8 text-slate-300 leading-relaxed">
+            <div className="space-y-8 text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">1. What Are Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">1. What Are Cookies</h2>
                 <p>
-                  Cookies are small text files that are stored on your computer or mobile device when you visit a website. 
+                  Cookies are small text files that are stored on your computer or mobile device when you visit a website.
                   They are widely used to make websites work more efficiently and to provide information to website owners.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">2. How We Use Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">2. How We Use Cookies</h2>
                 <p className="mb-4">We use cookies for several purposes:</p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
@@ -284,33 +230,33 @@ export const CookiePolicyPage: React.FC = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">3. Types of Cookies We Use</h2>
-                
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. Types of Cookies We Use</h2>
+
                 <div className="space-y-6">
-                  <div className="p-4 bg-slate-800/50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-white mb-2">Strictly Necessary Cookies</h3>
+                  <div className="p-4 bg-zinc-900/50 rounded-lg border border-white/5">
+                    <h3 className="text-lg font-semibold text-white mb-2 font-heading">Strictly Necessary Cookies</h3>
                     <p>These cookies are essential for the website to function and cannot be switched off. They are usually set in response to actions you take such as setting privacy preferences or filling in forms.</p>
                   </div>
 
-                  <div className="p-4 bg-slate-800/50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-white mb-2">Performance Cookies</h3>
+                  <div className="p-4 bg-zinc-900/50 rounded-lg border border-white/5">
+                    <h3 className="text-lg font-semibold text-white mb-2 font-heading">Performance Cookies</h3>
                     <p>These cookies collect information about how visitors use our website, such as which pages are visited most often. This data helps us improve how our website works.</p>
                   </div>
 
-                  <div className="p-4 bg-slate-800/50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-white mb-2">Functionality Cookies</h3>
+                  <div className="p-4 bg-zinc-900/50 rounded-lg border border-white/5">
+                    <h3 className="text-lg font-semibold text-white mb-2 font-heading">Functionality Cookies</h3>
                     <p>These cookies allow our website to remember choices you make and provide enhanced features and personal content.</p>
                   </div>
 
-                  <div className="p-4 bg-slate-800/50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-white mb-2">Targeting Cookies</h3>
+                  <div className="p-4 bg-zinc-900/50 rounded-lg border border-white/5">
+                    <h3 className="text-lg font-semibold text-white mb-2 font-heading">Targeting Cookies</h3>
                     <p>These cookies are used to deliver advertisements that are relevant to you and your interests. They may be used to limit the number of times you see an advertisement.</p>
                   </div>
                 </div>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">4. Managing Your Cookie Preferences</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">4. Managing Your Cookie Preferences</h2>
                 <p className="mb-4">You can control and manage cookies in several ways:</p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Use your browser settings to accept or reject cookies</li>
@@ -324,7 +270,7 @@ export const CookiePolicyPage: React.FC = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">5. Third-Party Cookies</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Third-Party Cookies</h2>
                 <p className="mb-4">
                   We may use third-party services that set cookies on our website, including:
                 </p>
@@ -337,19 +283,19 @@ export const CookiePolicyPage: React.FC = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">6. Updates to This Policy</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Updates to This Policy</h2>
                 <p>
-                  We may update this Cookie Policy from time to time. When we do, we will post the updated policy on this page 
+                  We may update this Cookie Policy from time to time. When we do, we will post the updated policy on this page
                   and update the "Last updated" date at the top of this policy.
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4">7. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">7. Contact Us</h2>
                 <p>
                   If you have any questions about our use of cookies, please contact us at:
                 </p>
-                <div className="mt-4 p-4 bg-slate-800/50 rounded-lg">
+                <div className="mt-4 p-4 bg-zinc-900/50 rounded-lg border border-white/5">
                   <p><strong>Email:</strong> privacy@growbrandi.com</p>
                   <p><strong>Address:</strong> GrowBrandi, San Francisco, CA</p>
                   <p><strong>Phone:</strong> +1 (555) 123-4567</p>

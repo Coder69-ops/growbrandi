@@ -16,11 +16,11 @@ const Hero: React.FC = () => {
     return (
         <section className="relative overflow-hidden">
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-slate-900">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-slate-900 to-slate-900" />
+            <div className="absolute inset-0 bg-luxury-black">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[100px] animate-pulse" />
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-500/10 rounded-full blur-[100px] animate-pulse delay-1000" />
+                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[100px] animate-pulse" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-zinc-800/10 rounded-full blur-[100px] animate-pulse delay-1000" />
                 </div>
             </div>
 
@@ -36,9 +36,9 @@ const Hero: React.FC = () => {
                             <span className="text-sm font-medium text-emerald-400">AI-Powered Growth Engine</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight">
+                        <h1 className="text-5xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-heading">
                             Scale Your Brand with <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400 animate-gradient-x">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-zinc-400 animate-gradient-x">
                                 Intelligent Design
                             </span>
                         </h1>
@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <motion.button
                                 onClick={() => navigate('/contact')}
-                                className="group relative px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-lg transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40"
+                                className="group relative px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -62,9 +62,9 @@ const Hero: React.FC = () => {
                             </motion.button>
 
                             <motion.button
-                                onClick={() => navigate('/case-studies')}
-                                className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white border border-white/10 hover:border-white/20 rounded-xl font-bold text-lg transition-all duration-300 backdrop-blur-sm"
-                                whileHover={{ scale: 1.02 }}
+                                onClick={() => navigate('/portfolio')}
+                                className="px-8 py-4 glass-effect text-white hover:bg-white/5 rounded-full font-bold text-lg transition-all duration-300"
+                                whileHover={{ scale: 1.02, borderColor: 'rgba(255,255,255,0.3)' }}
                                 whileTap={{ scale: 0.98 }}
                             >
                                 View Case Studies

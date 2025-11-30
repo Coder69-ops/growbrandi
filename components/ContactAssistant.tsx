@@ -139,21 +139,21 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <motion.div
-        className="bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-hidden"
+        className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-700 w-full max-w-2xl max-h-[90vh] overflow-hidden"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         {/* Header */}
-        <div className="p-6 border-b border-slate-700 flex justify-between items-center">
+        <div className="p-6 border-b border-zinc-700 flex justify-between items-center">
           <div>
             <h3 className="text-xl font-semibold text-white">AI-Powered Contact Assistant</h3>
-            <p className="text-slate-400 text-sm">Get personalized recommendations as you go</p>
+            <p className="text-zinc-400 text-sm">Get personalized recommendations as you go</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="text-zinc-400 hover:text-white transition-colors"
           >
             <FaTimes className="h-6 w-6" />
           </button>
@@ -161,7 +161,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
         {/* Progress Bar */}
         <div className="px-6 pt-4">
-          <div className="w-full bg-slate-700 rounded-full h-2">
+          <div className="w-full bg-zinc-700 rounded-full h-2">
             <motion.div
               className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2 rounded-full"
               initial={{ width: 0 }}
@@ -169,7 +169,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
               transition={{ duration: 0.5 }}
             />
           </div>
-          <p className="text-xs text-slate-400 mt-2">Step {Math.min(step, 5)} of 5</p>
+          <p className="text-xs text-zinc-400 mt-2">Step {Math.min(step, 5)} of 5</p>
         </div>
 
         {/* Content */}
@@ -187,7 +187,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                   <FaCheck className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
-                <p className="text-slate-300">We've received your information and will contact you soon.</p>
+                <p className="text-zinc-300">We've received your information and will contact you soon.</p>
               </motion.div>
             ) : (
               <>
@@ -204,24 +204,24 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-300 mb-2">Name *</label>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
                         <input
                           type="text"
                           value={formData.name}
                           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
                           placeholder="Your full name"
                           required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-slate-300 mb-2">Email *</label>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
                         <input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
                           placeholder="your@email.com"
                           required
                         />
@@ -229,23 +229,23 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">Company</label>
+                      <label className="block text-sm font-medium text-zinc-300 mb-2">Company</label>
                       <input
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
                         placeholder="Your company name"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">Industry *</label>
+                      <label className="block text-sm font-medium text-zinc-300 mb-2">Industry *</label>
                       <input
                         type="text"
                         value={formData.industry}
                         onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
                         placeholder="e.g., Healthcare, E-commerce, SaaS"
                         required
                       />
@@ -265,11 +265,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     <h4 className="text-lg font-semibold text-white mb-4">Tell us about your project</h4>
 
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-2">Project Type *</label>
+                      <label className="block text-sm font-medium text-zinc-300 mb-2">Project Type *</label>
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
                         required
                       >
                         <option value="">Select project type</option>
@@ -286,11 +286,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-300 mb-2">Budget Range *</label>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">Budget Range *</label>
                         <select
                           value={formData.budget}
                           onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
                           required
                         >
                           <option value="">Select budget</option>
@@ -302,11 +302,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-slate-300 mb-2">Timeline *</label>
+                        <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline *</label>
                         <select
                           value={formData.timeline}
                           onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-                          className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
                           required
                         >
                           <option value="">Select timeline</option>
@@ -330,7 +330,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     className="space-y-4"
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">What are your goals?</h4>
-                    <p className="text-slate-400 text-sm mb-4">Select all that apply</p>
+                    <p className="text-zinc-400 text-sm mb-4">Select all that apply</p>
 
                     <div className="grid grid-cols-2 gap-3">
                       {goalOptions.map(goal => (
@@ -339,8 +339,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           type="button"
                           onClick={() => toggleMultiSelect(goal, 'goals')}
                           className={`p-3 rounded-lg text-sm transition-all ${formData.goals.includes(goal)
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                             }`}
                         >
                           {goal}
@@ -360,7 +360,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     className="space-y-4"
                   >
                     <h4 className="text-lg font-semibold text-white mb-4">What challenges are you facing?</h4>
-                    <p className="text-slate-400 text-sm mb-4">Select all that apply</p>
+                    <p className="text-zinc-400 text-sm mb-4">Select all that apply</p>
 
                     <div className="grid grid-cols-2 gap-3">
                       {challengeOptions.map(challenge => (
@@ -369,8 +369,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           type="button"
                           onClick={() => toggleMultiSelect(challenge, 'challenges')}
                           className={`p-3 rounded-lg text-sm transition-all ${formData.challenges.includes(challenge)
-                              ? 'bg-red-600 text-white'
-                              : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                            ? 'bg-red-600 text-white'
+                            : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                             }`}
                         >
                           {challenge}
@@ -379,11 +379,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     </div>
 
                     <div className="mt-6">
-                      <label className="block text-sm font-medium text-slate-300 mb-2">Additional Message</label>
+                      <label className="block text-sm font-medium text-zinc-300 mb-2">Additional Message</label>
                       <textarea
                         value={formData.message}
                         onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                        className="w-full bg-slate-800 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 h-24 resize-none"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-3 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500 h-24 resize-none"
                         placeholder="Tell us more about your project..."
                       />
                     </div>
@@ -404,23 +404,23 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                     {isAnalyzing ? (
                       <div className="text-center py-8">
                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mb-4"></div>
-                        <p className="text-slate-300">Analyzing your requirements...</p>
+                        <p className="text-zinc-300">Analyzing your requirements...</p>
                       </div>
                     ) : aiInsights ? (
                       <div className="space-y-6">
                         {/* Service Recommendations */}
                         {aiInsights.services?.priorityServices && (
-                          <div className="bg-slate-800/50 rounded-xl p-6">
+                          <div className="bg-zinc-800/50 rounded-xl p-6">
                             <h5 className="text-white font-semibold mb-4">Recommended Services</h5>
                             <div className="space-y-3">
                               {aiInsights.services.priorityServices.slice(0, 3).map((service: any, idx: number) => (
-                                <div key={idx} className="flex justify-between items-center p-3 bg-slate-700/50 rounded-lg">
+                                <div key={idx} className="flex justify-between items-center p-3 bg-zinc-700/50 rounded-lg">
                                   <div>
                                     <p className="text-white font-medium">{service.service}</p>
-                                    <p className="text-slate-400 text-sm">{service.reason}</p>
+                                    <p className="text-zinc-400 text-sm">{service.reason}</p>
                                   </div>
                                   <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                                    service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
                                     } text-white`}>
                                     {service.priority}
                                   </span>
@@ -432,7 +432,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
                         {/* Consultation Plan */}
                         {aiInsights.consultation && (
-                          <div className="bg-slate-800/50 rounded-xl p-6">
+                          <div className="bg-zinc-800/50 rounded-xl p-6">
                             <h5 className="text-white font-semibold mb-4">Your Consultation Plan</h5>
                             <div className="space-y-3">
                               <div className="p-3 bg-emerald-600/20 border border-emerald-500/30 rounded-lg">
@@ -441,7 +441,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                                 </p>
                               </div>
                               {aiInsights.consultation.personalizedMessage && (
-                                <p className="text-slate-300 italic">
+                                <p className="text-zinc-300 italic">
                                   "{aiInsights.consultation.personalizedMessage}"
                                 </p>
                               )}
@@ -459,11 +459,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
         {/* Footer */}
         {!showThankYou && (
-          <div className="p-6 border-t border-slate-700 flex justify-between">
+          <div className="p-6 border-t border-zinc-700 flex justify-between">
             <button
               onClick={() => setStep(Math.max(1, step - 1))}
               disabled={step === 1}
-              className="px-6 py-2 text-slate-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 text-zinc-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Back
             </button>

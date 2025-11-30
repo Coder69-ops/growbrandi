@@ -9,7 +9,16 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                sans: ['Inter', 'sans-serif'],
+                heading: ['Outfit', 'sans-serif'],
+            },
             colors: {
+                luxury: {
+                    black: '#09090b', // zinc-950
+                    zinc: '#18181b',  // zinc-900
+                    plate: '#27272a', // zinc-800
+                },
                 slate: {
                     800: '#1e293b',
                     900: '#0f172a',
@@ -34,6 +43,8 @@ export default {
                 'pulse-glow': 'pulse-glow 4s infinite ease-in-out',
                 'float': 'float 6s ease-in-out infinite',
                 'slide-in-up': 'slide-in-up 0.6s ease-out',
+                'fade-in': 'fade-in 0.8s ease-out forwards',
+                'slide-up-fade': 'slide-up-fade 0.8s ease-out forwards',
             },
             keyframes: {
                 'pulse-glow': {
@@ -46,6 +57,14 @@ export default {
                 },
                 'slide-in-up': {
                     from: { opacity: '0', transform: 'translateY(30px)' },
+                    to: { opacity: '1', transform: 'translateY(0)' },
+                },
+                'fade-in': {
+                    from: { opacity: '0' },
+                    to: { opacity: '1' },
+                },
+                'slide-up-fade': {
+                    from: { opacity: '0', transform: 'translateY(20px)' },
                     to: { opacity: '1', transform: 'translateY(0)' },
                 },
             },

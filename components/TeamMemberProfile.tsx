@@ -45,7 +45,7 @@ const TeamMemberProfile: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-900 pb-20">
+        <div className="min-h-screen bg-luxury-black pb-20">
             {/* Image Modal */}
             <AnimatePresence>
                 {isImageExpanded && (
@@ -77,7 +77,7 @@ const TeamMemberProfile: React.FC = () => {
                         alt="Background"
                         className="w-full h-full object-cover opacity-50 blur-sm scale-110"
                     />
-                    <div className="absolute inset-0 bg-slate-900/60" />
+                    <div className="absolute inset-0 bg-luxury-black/60" />
                 </div>
 
                 {/* Classy Grid Pattern */}
@@ -89,7 +89,7 @@ const TeamMemberProfile: React.FC = () => {
                 />
 
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-slate-900/80 to-blue-900/80 mix-blend-overlay" />
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/80 via-zinc-900/80 to-blue-900/80 mix-blend-overlay" />
 
                 {/* Animated Glow Orbs */}
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-[100px] animate-pulse" />
@@ -111,7 +111,7 @@ const TeamMemberProfile: React.FC = () => {
                 </div>
 
                 <div className="absolute top-24 left-4 lg:top-28 lg:left-8 z-20">
-                    <Link to="/team" className="flex items-center gap-2 text-slate-200 hover:text-white transition-colors group">
+                    <Link to="/team" className="flex items-center gap-2 text-zinc-200 hover:text-white transition-colors group">
                         <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-emerald-500 group-hover:border-emerald-500 transition-all duration-300 backdrop-blur-md">
                             <FaArrowLeft className="w-5 h-5" />
                         </div>
@@ -129,7 +129,7 @@ const TeamMemberProfile: React.FC = () => {
                 >
                     {/* Left Column: Profile Card */}
                     <div className="lg:col-span-4">
-                        <motion.div variants={itemVariants} className="bg-slate-800/80 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl lg:sticky lg:top-24">
+                        <motion.div variants={itemVariants} className="bg-zinc-800/80 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl lg:sticky lg:top-24">
                             <div className="p-6 sm:p-8 flex flex-col items-center text-center">
                                 <div
                                     className="relative w-64 h-64 sm:w-80 sm:h-80 mb-8 group cursor-zoom-in"
@@ -139,9 +139,9 @@ const TeamMemberProfile: React.FC = () => {
                                     <img
                                         src={member.image}
                                         alt={member.name}
-                                        className="relative w-full h-full object-cover rounded-full border-4 border-slate-800 shadow-xl transition-transform duration-500 group-hover:scale-[1.02]"
+                                        className="relative w-full h-full object-cover rounded-full border-4 border-zinc-800 shadow-xl transition-transform duration-500 group-hover:scale-[1.02]"
                                     />
-                                    <div className="absolute bottom-4 right-4 w-8 h-8 bg-emerald-500 border-4 border-slate-800 rounded-full z-10" title="Available for work" />
+                                    <div className="absolute bottom-4 right-4 w-8 h-8 bg-emerald-500 border-4 border-zinc-800 rounded-full z-10" title="Available for work" />
 
                                     {/* Overlay hint */}
                                     <div className="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
@@ -154,25 +154,25 @@ const TeamMemberProfile: React.FC = () => {
 
                                 <div className="flex flex-wrap justify-center gap-3 mb-8">
                                     {member.social.linkedin && (
-                                        <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-700/50 hover:bg-[#0077b5] text-slate-300 hover:text-white rounded-xl transition-all duration-300">
+                                        <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-700/50 hover:bg-[#0077b5] text-zinc-300 hover:text-white rounded-xl transition-all duration-300">
                                             <span className="sr-only">LinkedIn</span>
                                             <FaLinkedin className="w-5 h-5" />
                                         </a>
                                     )}
                                     {member.social.twitter && (
-                                        <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-700/50 hover:bg-[#1DA1F2] text-slate-300 hover:text-white rounded-xl transition-all duration-300">
+                                        <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-700/50 hover:bg-[#1DA1F2] text-zinc-300 hover:text-white rounded-xl transition-all duration-300">
                                             <span className="sr-only">Twitter</span>
                                             <FaTwitter className="w-5 h-5" />
                                         </a>
                                     )}
                                     {member.social.github && (
-                                        <a href={member.social.github} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-700/50 hover:bg-[#333] text-slate-300 hover:text-white rounded-xl transition-all duration-300">
+                                        <a href={member.social.github} target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-700/50 hover:bg-[#333] text-zinc-300 hover:text-white rounded-xl transition-all duration-300">
                                             <span className="sr-only">GitHub</span>
                                             <FaGithub className="w-5 h-5" />
                                         </a>
                                     )}
                                     {member.social.dribbble && (
-                                        <a href={member.social.dribbble} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-700/50 hover:bg-[#ea4c89] text-slate-300 hover:text-white rounded-xl transition-all duration-300">
+                                        <a href={member.social.dribbble} target="_blank" rel="noopener noreferrer" className="p-3 bg-zinc-700/50 hover:bg-[#ea4c89] text-zinc-300 hover:text-white rounded-xl transition-all duration-300">
                                             <span className="sr-only">Dribbble</span>
                                             <FaDribbble className="w-5 h-5" />
                                         </a>
@@ -193,12 +193,12 @@ const TeamMemberProfile: React.FC = () => {
                     {/* Right Column: Details */}
                     <div className="lg:col-span-8 space-y-6 lg:space-y-8">
                         {/* Bio Section */}
-                        <motion.div variants={itemVariants} className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
+                        <motion.div variants={itemVariants} className="bg-zinc-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
                                 <FaUser className="text-emerald-500" />
                                 About {member.name.split(' ')[0]}
                             </h2>
-                            <p className="text-slate-300 leading-relaxed text-lg">
+                            <p className="text-zinc-300 leading-relaxed text-lg">
                                 {member.bio}
                             </p>
                         </motion.div>
@@ -211,18 +211,18 @@ const TeamMemberProfile: React.FC = () => {
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {member.achievements.map((achievement, index) => (
-                                    <div key={index} className="bg-slate-800/30 p-6 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-colors group">
+                                    <div key={index} className="bg-zinc-800/30 p-6 rounded-2xl border border-white/5 hover:border-emerald-500/30 transition-colors group">
                                         <div className="w-10 h-10 bg-emerald-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-emerald-500/20 transition-colors">
                                             <FaMedal className="w-6 h-6 text-emerald-400" />
                                         </div>
-                                        <p className="text-slate-200 font-medium">{achievement}</p>
+                                        <p className="text-zinc-200 font-medium">{achievement}</p>
                                     </div>
                                 ))}
                             </div>
                         </motion.div>
 
                         {/* Specialties */}
-                        <motion.div variants={itemVariants} className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
+                        <motion.div variants={itemVariants} className="bg-zinc-800/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/5">
                             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                                 <FaLightbulb className="text-purple-500" />
                                 Expertise
@@ -231,7 +231,7 @@ const TeamMemberProfile: React.FC = () => {
                                 {member.specialties.map((specialty, index) => (
                                     <span
                                         key={index}
-                                        className="px-4 py-2 sm:px-5 sm:py-2.5 bg-slate-900/50 border border-slate-700 rounded-xl text-slate-300 font-medium hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 cursor-default flex items-center gap-2 text-sm sm:text-base"
+                                        className="px-4 py-2 sm:px-5 sm:py-2.5 bg-zinc-900/50 border border-zinc-700 rounded-xl text-zinc-300 font-medium hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 cursor-default flex items-center gap-2 text-sm sm:text-base"
                                     >
                                         <FaCheckCircle className="w-4 h-4 text-emerald-500/50" />
                                         {specialty}

@@ -54,6 +54,7 @@ const SloganGenerator: React.FC = () => {
             variants={containerVariants}
         >
             {/* Background Elements */}
+            <div className="absolute inset-0 bg-luxury-black" />
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-blue-500/5 to-purple-500/5" />
             <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
@@ -67,7 +68,7 @@ const SloganGenerator: React.FC = () => {
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
                         Try Our <span className="text-gradient">AI Slogan Generator</span>
                     </h2>
-                    <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+                    <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
                         Experience the power of AI in action! Enter a few keywords about your business
                         and watch our intelligent system craft compelling slogans tailored to your brand.
                     </p>
@@ -79,7 +80,7 @@ const SloganGenerator: React.FC = () => {
                 >
                     <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
                         <div className="flex-1">
-                            <label className="block text-sm font-semibold text-slate-300 mb-3">
+                            <label className="block text-sm font-semibold text-zinc-300 mb-3">
                                 Enter Keywords
                             </label>
                             <input
@@ -87,7 +88,7 @@ const SloganGenerator: React.FC = () => {
                                 value={keywords}
                                 onChange={(e) => setKeywords(e.target.value)}
                                 placeholder="e.g., sustainable, innovative, coffee, community, growth"
-                                className="w-full bg-slate-800/50 border border-slate-600 rounded-2xl px-6 py-4 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300"
+                                className="w-full bg-zinc-800/50 border border-zinc-600 rounded-2xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300"
                                 onKeyPress={(e) => e.key === 'Enter' && handleGenerate()}
                             />
                         </div>

@@ -89,6 +89,7 @@ const AIBusinessAdvisor: React.FC = () => {
             variants={containerVariants}
         >
             {/* Background Elements */}
+            <div className="absolute inset-0 bg-luxury-black" />
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-cyan-500/5" />
             <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
             <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -102,7 +103,7 @@ const AIBusinessAdvisor: React.FC = () => {
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
                         Get Your Free <span className="text-gradient">Digital Health Audit</span>
                     </h2>
-                    <p className="text-base sm:text-lg md:text-xl text-slate-300 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
+                    <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0">
                         Unlock actionable insights to scale your business. Enter your details below to get a personalized growth score and expert recommendation.
                     </p>
                 </motion.div>
@@ -116,20 +117,20 @@ const AIBusinessAdvisor: React.FC = () => {
                         <h3 className="text-2xl font-bold text-white mb-6">Business Details</h3>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">Website URL</label>
+                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Website URL</label>
                             <input
                                 type="text"
                                 placeholder="e.g., www.yourbusiness.com"
-                                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={websiteUrl}
                                 onChange={(e) => setWebsiteUrl(e.target.value)}
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">Industry</label>
+                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Industry</label>
                             <select
-                                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={selectedIndustry}
                                 onChange={(e) => setSelectedIndustry(e.target.value)}
                             >
@@ -139,9 +140,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">Monthly Ad Spend</label>
+                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Monthly Ad Spend</label>
                             <select
-                                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={adSpend}
                                 onChange={(e) => setAdSpend(e.target.value)}
                             >
@@ -151,9 +152,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-slate-300 mb-2">Primary Goal</label>
+                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Primary Goal</label>
                             <select
-                                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={selectedGoal}
                                 onChange={(e) => setSelectedGoal(e.target.value)}
                             >
@@ -179,10 +180,10 @@ const AIBusinessAdvisor: React.FC = () => {
                         {!showResults ? (
                             <div className="text-center py-12">
                                 <div className="w-20 h-20 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                                    <FaHourglassHalf className="w-10 h-10 text-slate-400" />
+                                    <FaHourglassHalf className="w-10 h-10 text-zinc-400" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-white mb-2">Waiting for Input...</h3>
-                                <p className="text-slate-400">Fill in your business details to generate your Digital Health Score.</p>
+                                <p className="text-zinc-400">Fill in your business details to generate your Digital Health Score.</p>
                             </div>
                         ) : (
                             <motion.div
@@ -198,12 +199,12 @@ const AIBusinessAdvisor: React.FC = () => {
                                             <div className="text-center">
                                                 <div className="inline-block relative">
                                                     <svg className="w-40 h-40 transform -rotate-90">
-                                                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" className="text-slate-700" />
+                                                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" className="text-zinc-700" />
                                                         <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" strokeDasharray={440} strokeDashoffset={440 - (440 * insight.score) / 100} className="text-emerald-400 transition-all duration-1000 ease-out" />
                                                     </svg>
                                                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                                                         <span className="text-4xl font-black text-white">{insight.score}</span>
-                                                        <span className="block text-xs text-slate-400 uppercase tracking-wider">Score</span>
+                                                        <span className="block text-xs text-zinc-400 uppercase tracking-wider">Score</span>
                                                     </div>
                                                 </div>
                                                 <h3 className="text-2xl font-bold text-white mt-4">Digital Health Score</h3>
@@ -214,11 +215,11 @@ const AIBusinessAdvisor: React.FC = () => {
                                                     <FaLightbulb className="w-5 h-5" />
                                                     Quick Win
                                                 </h4>
-                                                <p className="text-slate-200">{insight.tip}</p>
+                                                <p className="text-zinc-200">{insight.tip}</p>
                                             </div>
 
                                             <div className="text-center">
-                                                <p className="text-slate-400 text-sm mb-4">Unlock your full 15-page audit report & strategy plan.</p>
+                                                <p className="text-zinc-400 text-sm mb-4">Unlock your full 15-page audit report & strategy plan.</p>
                                                 <a
                                                     href="https://wa.me/8801755154194?text=I%20want%20to%20book%20a%20strategy%20call%20to%20discuss%20my%20Digital%20Health%20Score%20of%20"
                                                     target="_blank"
@@ -246,7 +247,7 @@ const AIBusinessAdvisor: React.FC = () => {
                         <h3 className="text-2xl font-bold text-white mb-4">
                             Need Immediate Assistance?
                         </h3>
-                        <p className="text-slate-300 mb-6">
+                        <p className="text-zinc-300 mb-6">
                             Connect with our team directly on WhatsApp for a quick consultation.
                         </p>
                         <a

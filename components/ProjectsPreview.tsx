@@ -58,7 +58,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-slate-700/50 text-slate-400 hover:text-white hover:bg-slate-600/50 transition-all z-20"
+                    className="absolute top-6 right-6 p-2 rounded-full bg-zinc-700/50 text-zinc-400 hover:text-white hover:bg-zinc-600/50 transition-all z-20"
                 >
                     <FaTimes className="w-6 h-6" />
                 </button>
@@ -92,7 +92,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                 </h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <p className="text-xs text-slate-400 uppercase font-bold tracking-wider">Before</p>
+                                        <p className="text-xs text-zinc-400 uppercase font-bold tracking-wider">Before</p>
                                         <img src={project.beforeImage} alt="Before" className="w-full h-32 object-cover rounded-xl opacity-70 grayscale" />
                                     </div>
                                     <div className="space-y-2">
@@ -111,17 +111,17 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <div className="flex items-center gap-4 mb-4">
                                 <div className="flex items-center gap-1">
                                     {[...Array(5)].map((_, i) => (
-                                        <FaStar key={i} className={`w-5 h-5 ${i < Math.floor(project.rating) ? 'text-yellow-400' : 'text-slate-600'}`} />
+                                        <FaStar key={i} className={`w-5 h-5 ${i < Math.floor(project.rating) ? 'text-yellow-400' : 'text-zinc-600'}`} />
                                     ))}
-                                    <span className="text-slate-300 ml-2">{project.rating}</span>
+                                    <span className="text-zinc-300 ml-2">{project.rating}</span>
                                 </div>
                                 <div className="text-emerald-400 font-semibold">{project.completionTime}</div>
                             </div>
-                            <p className="text-slate-300 leading-relaxed text-lg">{project.description}</p>
+                            <p className="text-zinc-300 leading-relaxed text-lg">{project.description}</p>
                         </div>
 
                         {/* Client Info */}
-                        <div className="glass-effect p-4 rounded-xl border border-slate-700/50">
+                        <div className="glass-effect p-4 rounded-xl border border-zinc-700/50">
                             <h3 className="text-white font-semibold mb-2">Client</h3>
                             <p className="text-emerald-400 font-medium text-lg">{project.client}</p>
                         </div>
@@ -131,7 +131,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <h3 className="text-white font-semibold mb-3">Technologies Used</h3>
                             <div className="flex flex-wrap gap-2">
                                 {project.technologies?.map((tech, index) => (
-                                    <span key={index} className="px-3 py-1 bg-slate-700/50 text-slate-300 rounded-full text-sm border border-slate-600">
+                                    <span key={index} className="px-3 py-1 bg-zinc-700/50 text-zinc-300 rounded-full text-sm border border-zinc-600">
                                         {tech}
                                     </span>
                                 ))}
@@ -143,7 +143,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <h3 className="text-white font-semibold mb-3">Key Results</h3>
                             <div className="space-y-3">
                                 {project.results?.map((result, index) => (
-                                    <div key={index} className="flex items-center gap-3 text-slate-300 bg-slate-800/30 p-3 rounded-xl">
+                                    <div key={index} className="flex items-center gap-3 text-zinc-300 bg-zinc-800/30 p-3 rounded-xl">
                                         <div className="p-2 bg-emerald-500/10 rounded-lg">
                                             <FaCheck className="w-5 h-5 text-emerald-400" />
                                         </div>
@@ -212,32 +212,32 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
                     <span className="text-emerald-400 text-sm font-bold uppercase tracking-wider">
                         {project.category}
                     </span>
-                    <span className="text-slate-300 text-sm font-medium">{project.completionTime}</span>
+                    <span className="text-zinc-300 text-sm font-medium">{project.completionTime}</span>
                 </div>
 
                 <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors duration-300">
                     {project.title}
                 </h3>
 
-                <p className="text-slate-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 leading-relaxed line-clamp-2">
+                <p className="text-zinc-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 leading-relaxed line-clamp-2">
                     {project.description}
                 </p>
 
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-1 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     {project.technologies?.slice(0, 3).map((tech, i) => (
-                        <span key={i} className="px-2 py-1 bg-slate-700/50 text-slate-300 rounded text-xs border border-slate-600">
+                        <span key={i} className="px-2 py-1 bg-zinc-700/50 text-zinc-300 rounded text-xs border border-zinc-600">
                             {tech}
                         </span>
                     ))}
                 </div>
 
                 {/* Rating and Client */}
-                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-4 border-t border-slate-700/50">
+                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-4 border-t border-zinc-700/50">
                     <div className="flex items-center gap-2">
                         <div className="flex">
                             {[...Array(5)].map((_, i) => (
-                                <FaStar key={i} className={`w-4 h-4 ${i < Math.floor(project.rating) ? 'text-yellow-400' : 'text-slate-600'}`} />
+                                <FaStar key={i} className={`w-4 h-4 ${i < Math.floor(project.rating) ? 'text-yellow-400' : 'text-zinc-600'}`} />
                             ))}
                         </div>
                     </div>
@@ -285,7 +285,7 @@ const ProjectsPreview: React.FC = () => {
                 variants={containerVariants}
             >
                 {/* Enhanced Background Elements */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-900/70 to-slate-800/90" />
+                <div className="absolute inset-0 bg-luxury-black" />
                 <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-purple-500/8 rounded-full blur-3xl" />
                 <div className="absolute bottom-1/3 left-1/4 w-80 h-80 bg-emerald-500/8 rounded-full blur-3xl" />
                 <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-blue-500/6 rounded-full blur-3xl" />
@@ -301,7 +301,7 @@ const ProjectsPreview: React.FC = () => {
                         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
                             Portfolio of <span className="text-gradient">Exceptional Work</span>
                         </h2>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
                             Discover our most impactful projects that showcase
                             <span className="text-emerald-400 font-semibold"> innovative solutions, cutting-edge design,</span> and
                             <span className="text-blue-400 font-semibold">measurable business results</span> across various industries.
@@ -317,7 +317,7 @@ const ProjectsPreview: React.FC = () => {
                                     onClick={() => handleFilterChange(category)}
                                     className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${activeFilter === category
                                         ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-lg'
-                                        : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                                        : 'text-zinc-300 hover:text-white hover:bg-zinc-700/50'
                                         }`}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
@@ -327,7 +327,7 @@ const ProjectsPreview: React.FC = () => {
                                 >
                                     {category}
                                     {category !== 'All' && (
-                                        <span className="ml-2 px-2 py-0.5 bg-slate-600/50 rounded-full text-xs">
+                                        <span className="ml-2 px-2 py-0.5 bg-zinc-600/50 rounded-full text-xs">
                                             {PROJECTS.filter(p => p.category === category).length}
                                         </span>
                                     )}
@@ -374,11 +374,11 @@ const ProjectsPreview: React.FC = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                             >
-                                <div className="w-24 h-24 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <FaFolderOpen className="w-12 h-12 text-slate-400" />
+                                <div className="w-24 h-24 bg-zinc-700/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <FaFolderOpen className="w-12 h-12 text-zinc-400" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-4">No Projects Found</h3>
-                                <p className="text-slate-400">Try selecting a different category to see more projects.</p>
+                                <p className="text-zinc-400">Try selecting a different category to see more projects.</p>
                             </motion.div>
                         )}
                     </motion.div>
@@ -389,7 +389,7 @@ const ProjectsPreview: React.FC = () => {
                             <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
                                 Ready to Create <span className="text-gradient">Your Success Story?</span>
                             </h3>
-                            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                                 Join our portfolio of successful projects. Let's discuss how we can bring
                                 your vision to life with innovative solutions and exceptional results.
                             </p>
@@ -405,7 +405,7 @@ const ProjectsPreview: React.FC = () => {
                                     <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </motion.button>
                                 <motion.button
-                                    className="group inline-flex items-center justify-center gap-3 bg-slate-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-slate-600 transition-all duration-300"
+                                    className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-zinc-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >

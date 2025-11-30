@@ -9,18 +9,19 @@ export const AboutUsPage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               About <span className="text-gradient">GrowBrandi</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age. Founded on the principle that every business deserves exceptional digital experiences.
             </p>
           </motion.div>
@@ -28,7 +29,7 @@ export const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
@@ -37,28 +38,28 @@ export const AboutUsPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
                 Our <span className="text-gradient">Story</span>
               </h2>
-              <p className="text-lg text-slate-300 mb-6 leading-relaxed">
+              <p className="text-lg text-zinc-400 mb-6 leading-relaxed font-light">
                 Founded in 2020, GrowBrandi emerged from a simple belief: every business, regardless of size, deserves access to world-class digital solutions. What started as a small team of developers and designers has grown into a full-service digital agency serving clients worldwide.
               </p>
-              <p className="text-lg text-slate-300 mb-6 leading-relaxed">
+              <p className="text-lg text-zinc-400 mb-6 leading-relaxed font-light">
                 Our journey began when we noticed a gap in the market - businesses struggling to find partners who truly understood both technology and business strategy. We set out to bridge that gap by combining technical expertise with deep business acumen.
               </p>
               <div className="grid grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-3xl font-black text-emerald-400 mb-2">200+</div>
-                  <div className="text-slate-400">Projects Completed</div>
+                  <div className="text-3xl font-black text-white mb-2">200+</div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider">Projects Completed</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-black text-blue-400 mb-2">50+</div>
-                  <div className="text-slate-400">Happy Clients</div>
+                  <div className="text-3xl font-black text-white mb-2">50+</div>
+                  <div className="text-zinc-500 text-sm uppercase tracking-wider">Happy Clients</div>
                 </div>
               </div>
             </motion.div>
             <motion.div
-              className="glass-effect rounded-2xl p-8 border border-white/10"
+              className="glass-effect rounded-2xl p-8 border border-white/5"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -66,30 +67,30 @@ export const AboutUsPage: React.FC = () => {
             >
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <FaLightbulb className="w-6 h-6 text-emerald-400" />
+                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
+                    <FaLightbulb className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Innovation First</h3>
-                    <p className="text-slate-400">We stay ahead of industry trends and emerging technologies to deliver cutting-edge solutions.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Innovation First</h3>
+                    <p className="text-zinc-400 font-light">We stay ahead of industry trends and emerging technologies to deliver cutting-edge solutions.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <FaUsers className="w-6 h-6 text-blue-400" />
+                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
+                    <FaUsers className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Client-Centric</h3>
-                    <p className="text-slate-400">Your success is our success. We build long-term partnerships based on trust and results.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Client-Centric</h3>
+                    <p className="text-zinc-400 font-light">Your success is our success. We build long-term partnerships based on trust and results.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center shrink-0">
-                    <FaCheckCircle className="w-6 h-6 text-purple-400" />
+                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
+                    <FaCheckCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Quality Driven</h3>
-                    <p className="text-slate-400">We maintain the highest standards of quality in every project, from concept to completion.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Quality Driven</h3>
+                    <p className="text-zinc-400 font-light">We maintain the highest standards of quality in every project, from concept to completion.</p>
                   </div>
                 </div>
               </div>
@@ -99,7 +100,7 @@ export const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             className="text-center mb-16"
@@ -108,10 +109,10 @@ export const AboutUsPage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
               Meet Our <span className="text-gradient">Team</span>
             </h2>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
               The brilliant minds behind GrowBrandi's success
             </p>
           </motion.div>
@@ -139,19 +140,19 @@ export const AboutUsPage: React.FC = () => {
             ].map((member, index) => (
               <motion.div
                 key={index}
-                className="glass-effect rounded-2xl p-6 border border-white/10 text-center hover:border-emerald-400/30 transition-all duration-300"
+                className="glass-effect rounded-2xl p-6 border border-white/5 text-center hover:border-white/20 transition-all duration-300"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
               >
-                <div className="w-24 h-24 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full mx-auto mb-4 overflow-hidden">
+                <div className="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 overflow-hidden">
                   <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                <p className="text-emerald-400 font-semibold mb-3">{member.role}</p>
-                <p className="text-slate-400">{member.bio}</p>
+                <h3 className="text-xl font-bold text-white mb-2 font-heading">{member.name}</h3>
+                <p className="text-white/70 font-semibold mb-3">{member.role}</p>
+                <p className="text-zinc-500 font-light">{member.bio}</p>
               </motion.div>
             ))}
           </div>
@@ -166,18 +167,19 @@ export const ProcessPage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Our <span className="text-gradient">Process</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               A proven methodology that ensures project success from initial concept to final delivery. Our systematic approach combines industry best practices with innovative thinking.
             </p>
           </motion.div>
@@ -185,7 +187,7 @@ export const ProcessPage: React.FC = () => {
       </section>
 
       {/* Process Steps */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-6xl">
           <div className="space-y-16">
             {[
@@ -259,17 +261,17 @@ export const ProcessPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <div className="lg:w-1/3">
-                  <div className="text-6xl font-black text-emerald-400/20 mb-4">{processStep.step}</div>
-                  <h3 className="text-3xl font-black text-white mb-4">{processStep.title}</h3>
-                  <p className="text-lg text-slate-300 leading-relaxed">{processStep.description}</p>
+                  <div className="text-6xl font-black text-white/10 mb-4">{processStep.step}</div>
+                  <h3 className="text-3xl font-black text-white mb-4 font-heading">{processStep.title}</h3>
+                  <p className="text-lg text-zinc-400 leading-relaxed font-light">{processStep.description}</p>
                 </div>
                 <div className="lg:w-2/3">
-                  <div className="glass-effect rounded-2xl p-8 border border-white/10">
+                  <div className="glass-effect rounded-2xl p-8 border border-white/5">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {processStep.details.map((detail, detailIndex) => (
                         <div key={detailIndex} className="flex items-center gap-3">
-                          <div className="w-2 h-2 bg-emerald-400 rounded-full shrink-0"></div>
-                          <span className="text-slate-300">{detail}</span>
+                          <div className="w-2 h-2 bg-white rounded-full shrink-0"></div>
+                          <span className="text-zinc-300 font-light">{detail}</span>
                         </div>
                       ))}
                     </div>
@@ -321,18 +323,19 @@ export const CaseStudiesPage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Case <span className="text-gradient">Studies</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               Real success stories from businesses that transformed their digital presence with GrowBrandi. See how we've helped companies achieve remarkable growth and success.
             </p>
           </motion.div>
@@ -340,13 +343,13 @@ export const CaseStudiesPage: React.FC = () => {
       </section>
 
       {/* Case Studies Grid */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {caseStudies.map((study, index) => (
               <motion.div
                 key={index}
-                className="glass-effect rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400/30 transition-all duration-300 cursor-pointer"
+                className="glass-effect rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 cursor-pointer"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -358,17 +361,17 @@ export const CaseStudiesPage: React.FC = () => {
                   <img src={study.image} alt={study.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-6">
-                  <div className="text-emerald-400 font-semibold text-sm mb-2">{study.category}</div>
-                  <h3 className="text-xl font-bold text-white mb-3">{study.title}</h3>
-                  <div className="text-2xl font-black text-gradient mb-4">{study.results}</div>
-                  <button className="text-emerald-400 font-semibold hover:text-emerald-300 transition-colors">
+                  <div className="text-white/70 font-semibold text-sm mb-2 uppercase tracking-wider">{study.category}</div>
+                  <h3 className="text-xl font-bold text-white mb-3 font-heading">{study.title}</h3>
+                  <div className="text-2xl font-black text-white mb-4">{study.results}</div>
+                  <button className="text-zinc-400 font-semibold hover:text-white transition-colors">
                     {selectedCase === index ? 'Hide Details' : 'View Details'} →
                   </button>
                 </div>
 
                 {selectedCase === index && (
                   <motion.div
-                    className="border-t border-white/10 p-6 bg-slate-800/50"
+                    className="border-t border-white/5 p-6 bg-zinc-900/50"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
@@ -377,18 +380,18 @@ export const CaseStudiesPage: React.FC = () => {
                     <div className="space-y-4">
                       <div>
                         <h4 className="text-white font-semibold mb-2">Challenge</h4>
-                        <p className="text-slate-400 text-sm">{study.challenge}</p>
+                        <p className="text-zinc-400 text-sm font-light">{study.challenge}</p>
                       </div>
                       <div>
                         <h4 className="text-white font-semibold mb-2">Solution</h4>
-                        <p className="text-slate-400 text-sm">{study.solution}</p>
+                        <p className="text-zinc-400 text-sm font-light">{study.solution}</p>
                       </div>
                       <div>
                         <h4 className="text-white font-semibold mb-2">Key Results</h4>
                         <ul className="space-y-1">
                           {study.metrics.map((metric, metricIndex) => (
-                            <li key={metricIndex} className="text-slate-400 text-sm flex items-center gap-2">
-                              <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>
+                            <li key={metricIndex} className="text-zinc-400 text-sm flex items-center gap-2 font-light">
+                              <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                               {metric}
                             </li>
                           ))}
@@ -435,18 +438,19 @@ export const CareersPage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Join Our <span className="text-gradient">Team</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               Be part of a passionate team that's shaping the future of digital experiences. We're always looking for talented individuals who share our vision of excellence.
             </p>
           </motion.div>
@@ -454,7 +458,7 @@ export const CareersPage: React.FC = () => {
       </section>
 
       {/* Job Openings */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             className="text-center mb-16"
@@ -463,7 +467,7 @@ export const CareersPage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
               Open <span className="text-gradient">Positions</span>
             </h2>
           </motion.div>
@@ -472,7 +476,7 @@ export const CareersPage: React.FC = () => {
             {jobOpenings.map((job, index) => (
               <motion.div
                 key={index}
-                className="glass-effect rounded-2xl p-8 border border-white/10 hover:border-emerald-400/30 transition-all duration-300"
+                className="glass-effect rounded-2xl p-8 border border-white/5 hover:border-white/20 transition-all duration-300"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -480,8 +484,8 @@ export const CareersPage: React.FC = () => {
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{job.title}</h3>
-                    <div className="flex flex-wrap gap-4 text-slate-400">
+                    <h3 className="text-2xl font-bold text-white mb-2 font-heading">{job.title}</h3>
+                    <div className="flex flex-wrap gap-4 text-zinc-400 font-light">
                       <span>{job.department}</span>
                       <span>•</span>
                       <span>{job.location}</span>
@@ -490,14 +494,14 @@ export const CareersPage: React.FC = () => {
                     </div>
                   </div>
                   <motion.button
-                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-6 py-3 rounded-lg font-bold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0"
+                    className="bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-zinc-200 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     Apply Now
                   </motion.button>
                 </div>
-                <p className="text-slate-300">{job.description}</p>
+                <p className="text-zinc-300 font-light">{job.description}</p>
               </motion.div>
             ))}
           </div>
@@ -513,11 +517,11 @@ export const TeamPage: React.FC = () => {
 
   return (
     <>
-      <section className="relative min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center overflow-hidden py-20">
+      <section className="relative min-h-screen bg-luxury-black flex flex-col items-center justify-center overflow-hidden py-20">
         {/* Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-zinc-800/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-zinc-800/10 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
@@ -528,13 +532,13 @@ export const TeamPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-emerald-400 font-semibold text-sm tracking-wide uppercase mb-4 block">
+            <span className="text-zinc-400 font-semibold text-sm tracking-wide uppercase mb-4 block">
               Meet Our Team
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               The Experts Behind <span className="text-gradient">Your Success</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               Our diverse team of digital experts brings together decades of experience in
               development, design, marketing, and AI to deliver exceptional results for our clients.
             </p>
@@ -555,51 +559,40 @@ export const TeamPage: React.FC = () => {
                 whileHover={{ y: -12, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden border border-white/10">
+                <div className="glass-effect rounded-3xl p-8 h-full relative overflow-hidden border border-white/5">
                   {/* Background Glow Effect */}
                   <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
-                    ? 'bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10'
+                    ? 'bg-white/5'
                     : 'bg-transparent'
                     }`} />
-
-                  {/* Decorative Elements */}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-10 translate-x-10" />
-                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-8 -translate-x-8" />
 
                   <div className="relative z-10">
                     <Link to={`/team/${member.slug}`} className="block">
                       {/* Profile Image */}
                       <div className="relative mb-6">
-                        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                         <div className="relative w-32 h-32 mx-auto">
                           <img
                             src={member.image}
                             alt={member.name}
-                            className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-slate-700 group-hover:border-emerald-400/50 transition-all duration-300"
+                            className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-800 group-hover:border-white/20 transition-all duration-300"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                               if (fallback) fallback.style.display = 'flex';
                             }}
                           />
-                          {/* Fallback initials */}
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl items-center justify-center shadow-xl hidden">
-                            <span className="text-white font-bold text-2xl">
-                              {member.name.split(' ').map(n => n[0]).join('')}
-                            </span>
-                          </div>
                         </div>
                       </div>
 
                       {/* Member Info */}
                       <div className="text-center mb-6">
-                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gradient transition-colors duration-300">
+                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gradient transition-colors duration-300 font-heading">
                           {member.name}
                         </h3>
-                        <div className="text-emerald-400 font-semibold text-lg mb-4">
+                        <div className="text-zinc-400 font-semibold text-lg mb-4">
                           {member.role}
                         </div>
-                        <p className="text-slate-300 text-sm leading-relaxed">
+                        <p className="text-zinc-500 text-sm leading-relaxed font-light">
                           {member.description}
                         </p>
                       </div>
@@ -611,7 +604,7 @@ export const TeamPage: React.FC = () => {
                         {member.specialties.map((specialty, idx) => (
                           <span
                             key={specialty}
-                            className="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs font-medium rounded-full border border-slate-600 group-hover:border-emerald-400/50 group-hover:text-emerald-400 transition-all duration-300"
+                            className="px-3 py-1 bg-zinc-900/50 text-zinc-400 text-xs font-medium rounded-full border border-zinc-800 group-hover:border-white/20 group-hover:text-white transition-all duration-300"
                           >
                             {specialty}
                           </span>
@@ -636,7 +629,7 @@ export const TeamPage: React.FC = () => {
                           <motion.a
                             key={platform}
                             href={url}
-                            className="p-2 rounded-lg bg-slate-700/50 text-slate-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group/social"
+                            className="p-2 rounded-lg bg-zinc-900/50 text-zinc-400 hover:bg-white/10 hover:text-white transition-all duration-300 group/social"
                             whileHover={{ scale: 1.1, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                             aria-label={`${member.name} ${platform}`}
@@ -661,19 +654,19 @@ export const TeamPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            <div className="glass-effect rounded-2xl p-8 max-w-4xl mx-auto border border-white/10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <div className="glass-effect rounded-2xl p-8 max-w-4xl mx-auto border border-white/5">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-heading">
                 Ready to Work with <span className="text-gradient">Our Amazing Team?</span>
               </h2>
-              <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto font-light">
                 Let's discuss your project and see how our expert team can help you achieve
                 your digital goals. We're here to turn your vision into reality.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold px-8 py-3 rounded-lg transition-all duration-200 shadow-lg">
+                <button className="bg-white text-black hover:bg-zinc-200 font-semibold px-8 py-3 rounded-full transition-all duration-200 shadow-lg">
                   Start Your Project
                 </button>
-                <button className="border border-white/20 text-white hover:bg-white/10 font-semibold px-8 py-3 rounded-lg transition-all duration-200">
+                <button className="border border-white/20 text-white hover:bg-white/10 font-semibold px-8 py-3 rounded-full transition-all duration-200">
                   Learn More
                 </button>
               </div>
@@ -717,18 +710,19 @@ export const BlogPage: React.FC = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
               Our <span className="text-gradient">Blog</span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.
             </p>
           </motion.div>
@@ -736,13 +730,13 @@ export const BlogPage: React.FC = () => {
       </section>
 
       {/* Blog Posts */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-luxury-black">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => (
               <motion.article
                 key={index}
-                className="glass-effect rounded-2xl overflow-hidden border border-white/10 hover:border-emerald-400/30 transition-all duration-300"
+                className="glass-effect rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -754,14 +748,14 @@ export const BlogPage: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-emerald-400 font-semibold text-sm">{post.category}</span>
-                    <span className="text-slate-400 text-sm">{post.readTime}</span>
+                    <span className="text-white/70 font-semibold text-sm uppercase tracking-wider">{post.category}</span>
+                    <span className="text-zinc-500 text-sm font-light">{post.readTime}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{post.title}</h3>
-                  <p className="text-slate-400 mb-4">{post.excerpt}</p>
+                  <h3 className="text-xl font-bold text-white mb-3 font-heading">{post.title}</h3>
+                  <p className="text-zinc-400 mb-4 font-light">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-500 text-sm">{post.date}</span>
-                    <button className="text-emerald-400 font-semibold hover:text-emerald-300 transition-colors">
+                    <span className="text-zinc-500 text-sm font-light">{post.date}</span>
+                    <button className="text-white font-semibold hover:text-zinc-300 transition-colors">
                       Read More →
                     </button>
                   </div>

@@ -1,24 +1,49 @@
 import React, { useState, FormEvent } from 'react';
-import { motion } from 'framer-motion';
-import { FaMagic } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
+import { sendEmail } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
+import { CONTACT_INFO, SERVICES } from '../constants';
 
 // --- ContactPage Component ---
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ContactPage: React.FC = () => {
-    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        service: '',
+        message: ''
+    });
     const [isGenerating, setIsGenerating] = useState(false);
     const [aiError, setAiError] = useState('');
     const [formStatus, setFormStatus] = useState<FormStatus>('idle');
+    const [focusedField, setFocusedField] = useState<string | null>(null);
+
+    // EmailJS Configuration
+    const EMAILJS_SERVICE_ID = 'service_s9nqo1u';
+    const EMAILJS_TEMPLATE_ID = 'template_wctqujg';
+    const EMAILJS_PUBLIC_KEY = 'DETrhGT8sUUowOqIR';
+
+    const serviceOptions = SERVICES.map(s => s.title);
 
     const generateBrief = async () => {
+        if (!formData.service || !formData.subject) {
+            setAiError("Please select a Service and enter a Subject first.");
+            return;
+        }
+
         setIsGenerating(true);
         setAiError('');
 
         try {
-            const result = await generateProjectBrief();
+            const result = await generateProjectBrief({
+                service: formData.service,
+                subject: formData.subject
+            });
+
             if (result && result.brief) {
                 setFormData(prev => ({ ...prev, message: result.brief }));
             } else {
@@ -32,86 +57,284 @@ export const ContactPage: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setFormStatus('submitting');
-        // Simulate form submission
-        setTimeout(() => {
-            // Randomly succeed or fail for demo purposes
-            if (Math.random() > 0.2) {
-                setFormStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' });
-            } else {
-                setFormStatus('error');
-            }
-        }, 1500);
+
+        try {
+            await sendEmail(
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
+                e.target as HTMLFormElement,
+                EMAILJS_PUBLIC_KEY
+            );
+
+            setFormStatus('success');
+            setFormData({ name: '', email: '', subject: '', service: '', message: '' });
+
+            // Reset success status after 5 seconds to allow sending another message
+            setTimeout(() => setFormStatus('idle'), 8000);
+        } catch (error) {
+            console.error("Submission failed:", error);
+            setFormStatus('error');
+        }
     }
 
+    const inputClasses = (fieldName: string) => `
+        w-full p-4 rounded-xl bg-zinc-900/50 border 
+        ${focusedField === fieldName ? 'border-emerald-500/50 ring-2 ring-emerald-500/20' : 'border-white/10'} 
+        focus:outline-none text-white transition-all duration-300 placeholder-zinc-500
+    `;
+
+    // Social Icon Mapping
+    const getSocialIcon = (platform: string) => {
+        switch (platform) {
+            case 'linkedin': return FaLinkedin;
+            case 'twitter': return FaTwitter;
+            case 'instagram': return FaInstagram;
+            case 'dribbble': return FaDribbble;
+            default: return FaGithub;
+        }
+    };
+
     return (
-        <>
-            <section className="py-20 px-4">
-                <div className="container mx-auto max-w-3xl">
-                    <div className="text-center mb-16">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                                Contact GrowBrandi for expert <span className="text-gradient">digital solutions</span>
-                            </h1>
-                            <p className="text-lg md:text-xl text-slate-300 mt-6 leading-relaxed max-w-3xl mx-auto">
-                                Let's bring your vision to life! Have a project in mind? We'd love to hear about it. Fill out the form below or let our AI assistant help you draft the perfect message.
-                            </p>
-                        </motion.div>
+        <section id="contact" className="min-h-screen py-24 px-4 bg-luxury-black text-white relative overflow-hidden flex items-center">
+            {/* Background Elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-luxury-black to-luxury-black pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
+                {/* Left Column: Info & Context */}
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="flex flex-col justify-center"
+                >
+                    <h1 className="text-5xl md:text-6xl font-black mb-6 font-heading tracking-tight leading-tight">
+                        Let's Build <br />
+                        <span className="text-gradient">Something Epic</span>
+                    </h1>
+                    <p className="text-xl text-zinc-400 mb-12 max-w-lg leading-relaxed">
+                        Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions.
+                    </p>
+
+                    <div className="space-y-8 mb-12">
+                        <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-emerald-400 shrink-0">
+                                <FaEnvelope className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-1">Email Us</h3>
+                                <p className="text-zinc-400">{CONTACT_INFO.email}</p>
+                                <p className="text-zinc-500 text-sm">Response within 24 hours</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-blue-400 shrink-0">
+                                <FaMapMarkerAlt className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-1">Global HQ</h3>
+                                <p className="text-zinc-400">{CONTACT_INFO.address}</p>
+                                <p className="text-zinc-500 text-sm">Digital-first agency</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="glass-effect rounded-2xl shadow-2xl p-8 md:p-12">
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                                    <input type="text" id="name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
-                                </div>
-                                <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                                    <input type="email" id="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-slate-300 mb-2">Subject</label>
-                                <input type="text" id="subject" value={formData.subject} onChange={e => setFormData({ ...formData, subject: e.target.value })} required className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
-                            </div>
-                            <div>
-                                <div className="flex justify-between items-center mb-2">
-                                    <label htmlFor="message" className="block text-sm font-medium text-slate-300">Message</label>
-                                    <button type="button" onClick={generateBrief} disabled={isGenerating} className="text-xs font-semibold text-cyan-400 hover:text-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
-                                        {isGenerating ? <LoadingSpinner /> : 'Auto-draft with AI'}
-                                        {!isGenerating && <FaMagic className="h-4 w-4" />}
-                                    </button>
-                                </div>
-                                <textarea id="message" rows={6} value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} required className="w-full bg-slate-800 border border-slate-700 rounded-md px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
-                                {aiError && <p className="text-red-400 text-sm mt-2">{aiError}</p>}
-                            </div>
-                            <div>
-                                <motion.button
-                                    type="submit"
-                                    disabled={formStatus === 'submitting'}
-                                    className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:shadow-cyan-500/50 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
-                                    whileHover={{ scale: formStatus === 'idle' ? 1.03 : 1 }}
-                                    whileTap={{ scale: formStatus === 'idle' ? 0.97 : 1 }}
+
+                    <div className="flex space-x-4">
+                        {Object.entries(CONTACT_INFO.social).map(([platform, url], idx) => {
+                            const Icon = getSocialIcon(platform);
+                            return (
+                                <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-all duration-300">
+                                    <Icon className="w-4 h-4" />
+                                </a>
+                            );
+                        })}
+                    </div>
+                </motion.div>
+
+                {/* Right Column: Interactive Form */}
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="relative"
+                >
+                    <div className="glass-effect p-8 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+                        {/* Decorative glow */}
+                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                        <AnimatePresence mode='wait'>
+                            {formStatus === 'success' ? (
+                                <motion.div
+                                    key="success"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    className="flex flex-col items-center justify-center h-full py-12 text-center"
                                 >
-                                    {formStatus === 'submitting' && <LoadingSpinner />}
-                                    {formStatus === 'idle' && 'Send Message'}
-                                    {formStatus === 'success' && 'Message Sent!'}
-                                    {formStatus === 'error' && 'Try Again'}
-                                </motion.button>
-                                {formStatus === 'success' && <p className="text-green-400 text-center mt-4">Thank you! We've received your message and will get back to you shortly.</p>}
-                                {formStatus === 'error' && <p className="text-red-400 text-center mt-4">Something went wrong. Please check your connection and try again.</p>}
-                            </div>
-                        </form>
+                                    <div className="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center mb-6">
+                                        <FaCheckCircle className="w-12 h-12 text-emerald-500" />
+                                    </div>
+                                    <h3 className="text-3xl font-bold text-white mb-4 font-heading">Message Sent!</h3>
+                                    <p className="text-zinc-400 max-w-xs mx-auto mb-8">
+                                        Thank you for reaching out. Our team will analyze your request and get back to you within 24 hours.
+                                    </p>
+                                    <button
+                                        onClick={() => setFormStatus('idle')}
+                                        className="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10"
+                                    >
+                                        Send Another Message
+                                    </button>
+                                </motion.div>
+                            ) : (
+                                <motion.form
+                                    key="form"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    onSubmit={handleSubmit}
+                                    className="space-y-6 relative z-10"
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="name" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                                onFocus={() => setFocusedField('name')}
+                                                onBlur={() => setFocusedField(null)}
+                                                className={inputClasses('name')}
+                                                placeholder="John Doe"
+                                                required
+                                            />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
+                                            <input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                                onFocus={() => setFocusedField('email')}
+                                                onBlur={() => setFocusedField(null)}
+                                                className={inputClasses('email')}
+                                                placeholder="john@example.com"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="service" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
+                                            <select
+                                                id="service"
+                                                name="service"
+                                                value={formData.service}
+                                                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                                                onFocus={() => setFocusedField('service')}
+                                                onBlur={() => setFocusedField(null)}
+                                                className={inputClasses('service')}
+                                                required
+                                            >
+                                                <option value="" disabled>Select a service</option>
+                                                {serviceOptions.map(s => <option key={s} value={s} className="bg-zinc-900">{s}</option>)}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="subject" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
+                                            <input
+                                                type="text"
+                                                id="subject"
+                                                name="subject"
+                                                value={formData.subject}
+                                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                                onFocus={() => setFocusedField('subject')}
+                                                onBlur={() => setFocusedField(null)}
+                                                className={inputClasses('subject')}
+                                                placeholder="Project Inquiry"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <label htmlFor="message" className="block text-sm font-bold text-zinc-400 uppercase tracking-wider">Message</label>
+                                            <motion.button
+                                                type="button"
+                                                onClick={generateBrief}
+                                                disabled={isGenerating}
+                                                className="text-xs flex items-center gap-1 text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50"
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                            >
+                                                <FaMagic className="w-3 h-3" />
+                                                {isGenerating ? 'Generating...' : 'Auto-Generate Brief'}
+                                            </motion.button>
+                                        </div>
+                                        <div className="relative">
+                                            <textarea
+                                                id="message"
+                                                name="message"
+                                                rows={5}
+                                                value={formData.message}
+                                                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                                onFocus={() => setFocusedField('message')}
+                                                onBlur={() => setFocusedField(null)}
+                                                className={inputClasses('message')}
+                                                placeholder="Tell us about your project goals, timeline, and budget..."
+                                                required
+                                            ></textarea>
+                                            {isGenerating && (
+                                                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                                                    <LoadingSpinner />
+                                                </div>
+                                            )}
+                                        </div>
+                                        {aiError && <p className="text-red-400 text-xs mt-2">{aiError}</p>}
+                                    </div>
+
+                                    <motion.button
+                                        type="submit"
+                                        disabled={formStatus === 'submitting'}
+                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-white text-black hover:bg-zinc-200"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        {formStatus === 'submitting' ? (
+                                            <LoadingSpinner />
+                                        ) : (
+                                            <>Send Message <FaPaperPlane /></>
+                                        )}
+                                    </motion.button>
+
+                                    <AnimatePresence>
+                                        {formStatus === 'error' && (
+                                            <motion.p
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0 }}
+                                                className="text-red-400 text-center text-sm font-medium bg-red-500/10 py-2 rounded-lg border border-red-500/20"
+                                            >
+                                                Something went wrong. Please check your connection or EmailJS config.
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.form>
+                            )}
+                        </AnimatePresence>
                     </div>
-                </div>
-            </section>
-        </>
+                </motion.div>
+            </div>
+        </section>
     );
 };

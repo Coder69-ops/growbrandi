@@ -9,7 +9,7 @@ interface ChatMessageBubbleProps {
 }
 
 const UserAvatar = () => (
-  <div className="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-slate-300 flex-shrink-0">
+  <div className="w-8 h-8 rounded-full bg-zinc-600 flex items-center justify-center text-zinc-300 flex-shrink-0">
     <FaUser className="w-5 h-5" />
   </div>
 );
@@ -35,7 +35,7 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
   const messageContainerClasses = isUser ? 'flex-row-reverse' : 'flex-row';
   const bubbleClasses = isUser
     ? 'bg-teal-600 text-white rounded-br-none'
-    : 'bg-slate-700/80 text-slate-200 rounded-bl-none';
+    : 'bg-zinc-700/80 text-zinc-200 rounded-bl-none';
 
   if (!text && !isUser) {
     return (
@@ -54,7 +54,7 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
       <div
         className={`rounded-2xl p-4 max-w-lg lg:max-w-xl break-words ${bubbleClasses}`}
       >
-        <div className="prose prose-sm prose-invert max-w-none prose-p:mb-2 prose-p:last:mb-0 prose-headings:my-2 prose-ul:my-2 prose-ol:my-2 prose-a:text-cyan-400 prose-code:bg-slate-800 prose-code:rounded-sm prose-code:px-1 prose-code:text-xs">
+        <div className="prose prose-sm prose-invert max-w-none prose-p:mb-2 prose-p:last:mb-0 prose-headings:my-2 prose-ul:my-2 prose-ol:my-2 prose-a:text-cyan-400 prose-code:bg-zinc-800 prose-code:rounded-sm prose-code:px-1 prose-code:text-xs">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{

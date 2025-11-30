@@ -37,10 +37,10 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-slate-900 pt-12 md:pt-20 pb-8 md:pb-10">
+    <footer className="relative overflow-hidden bg-luxury-black pt-12 md:pt-20 pb-8 md:pb-10 border-t border-white/5">
       {/* Subtle Background Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none opacity-20" />
+      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
               </div>
               <span className="font-bold text-2xl text-white tracking-tight">{APP_NAME}</span>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-zinc-500 text-sm leading-relaxed max-w-sm font-light">
               {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
             </p>
 
@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-emerald-500 hover:text-white transition-all duration-300"
+                  className="w-8 h-8 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-400 hover:bg-white hover:text-black transition-all duration-300"
                   aria-label={platform}
                 >
                   <span className="sr-only">{platform}</span>
@@ -84,7 +84,7 @@ const Footer: React.FC = () => {
                 <li key={service.title}>
                   <Link
                     to={`/services`}
-                    className="text-slate-400 hover:text-emerald-400 text-sm transition-colors duration-200 block"
+                    className="text-zinc-500 hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {service.title}
                   </Link>
@@ -107,7 +107,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-slate-400 hover:text-emerald-400 text-sm transition-colors duration-200 block"
+                    className="text-zinc-500 hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {link.name}
                   </Link>
@@ -120,18 +120,18 @@ const Footer: React.FC = () => {
           <div className="sm:col-span-2 lg:col-span-3">
             <h3 className="font-semibold text-white mb-4 md:mb-6">Contact</h3>
             <ul className="space-y-3 md:space-y-4">
-              <li className="flex items-start gap-3 text-slate-400 text-sm">
-                <FaMapMarkerAlt className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
+              <li className="flex items-start gap-3 text-zinc-500 text-sm font-light">
+                <FaMapMarkerAlt className="w-4 h-4 text-white mt-0.5 shrink-0" />
                 <span>{CONTACT_INFO.address}</span>
               </li>
-              <li className="flex items-center gap-3 text-slate-400 text-sm">
-                <FaEnvelope className="w-5 h-5 text-emerald-500 shrink-0" />
+              <li className="flex items-center gap-3 text-zinc-500 text-sm font-light">
+                <FaEnvelope className="w-4 h-4 text-white shrink-0" />
                 <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
                   {CONTACT_INFO.email}
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-slate-400 text-sm">
-                <FaPhone className="w-5 h-5 text-emerald-500 shrink-0" />
+              <li className="flex items-center gap-3 text-zinc-500 text-sm font-light">
+                <FaPhone className="w-4 h-4 text-white shrink-0" />
                 <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-white transition-colors">
                   {CONTACT_INFO.phone}
                 </a>
@@ -145,10 +145,10 @@ const Footer: React.FC = () => {
           <p className="text-slate-500 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500">
-            <Link to="/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy</Link>
-            <Link to="/terms-of-service" className="hover:text-slate-300 transition-colors">Terms</Link>
-            <Link to="/sitemap" className="hover:text-slate-300 transition-colors">Sitemap</Link>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-zinc-600 font-light">
+            <Link to="/privacy-policy" className="hover:text-zinc-400 transition-colors">Privacy</Link>
+            <Link to="/terms-of-service" className="hover:text-zinc-400 transition-colors">Terms</Link>
+            <Link to="/sitemap" className="hover:text-zinc-400 transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>
