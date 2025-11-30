@@ -208,7 +208,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Keynote speaker at the 2024 Digital Growth Summit",
       "Awarded 'Digital Innovator of the Year' by TechWeekly"
     ],
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    image: "https://ik.imagekit.io/nltb2bcz4/image.png",
     specialties: ["Business Strategy", "Executive Leadership", "Growth Hacking", "Brand Architecture"],
     social: {
       linkedin: "#",
