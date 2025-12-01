@@ -404,6 +404,7 @@ export const ProjectsPage: React.FC = () => {
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
+                                    aria-label="Sort projects by"
                                     className="glass-effect text-white px-4 py-2 rounded-lg border border-zinc-600 focus:border-blue-400 focus:outline-none bg-zinc-900"
                                 >
                                     <option value="rating">Rating</option>

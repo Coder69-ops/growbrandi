@@ -813,12 +813,12 @@ export const BlogPage: React.FC = () => {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-white/70 font-semibold text-sm uppercase tracking-wider">{post.category}</span>
-                    <span className="text-zinc-500 text-sm font-light">{post.readTime}</span>
+                    <span className="text-zinc-400 text-sm font-light">{post.readTime}</span>
                   </div>
                   <h3 className="text-xl font-bold text-white mb-3 font-heading">{post.title}</h3>
                   <p className="text-zinc-400 mb-4 font-light">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-zinc-500 text-sm font-light">{post.date}</span>
+                    <span className="text-zinc-400 text-sm font-light">{post.date}</span>
                     <button className="text-white font-semibold hover:text-zinc-300 transition-colors">
                       Read More →
                     </button>

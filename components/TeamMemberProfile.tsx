@@ -72,6 +72,8 @@ const TeamMemberProfile: React.FC = () => {
                             exit={{ scale: 0.9, opacity: 0 }}
                             src={member.image}
                             alt={member.name}
+                            width="800"
+                            height="800"
                             className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-white/10"
                         />
                     </motion.div>

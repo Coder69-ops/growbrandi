@@ -34,6 +34,8 @@ const PageLoader: React.FC = () => {
                         <img
                             src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
                             alt="GrowBrandi"
+                            width="64"
+                            height="64"
                             className="w-16 h-auto object-contain relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
                         />
                     </div>
