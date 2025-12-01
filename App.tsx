@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
 
 // Lazy load components
-const HomePage = React.lazy(() => import('./components/Hero').then(module => ({ default: module.HomePage })));
+import { HomePage } from './components/Hero';
 const ServicesPage = React.lazy(() => import('./components/Services').then(module => ({ default: module.ServicesPage })));
 const PortfolioPage = React.lazy(() => import('./components/Portfolio').then(module => ({ default: module.PortfolioPage })));
 const ContactPage = React.lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));

@@ -328,7 +328,7 @@ const HeroSection: React.FC = () => {
                     transition={{ delay: 1, duration: 1 }}
                     className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2"
                 >
-                    <span className="text-xs text-slate-500 uppercase tracking-widest">Scroll</span>
+                    <span className="text-xs text-slate-400 uppercase tracking-widest">Scroll</span>
                     <motion.div
                         animate={{ y: [0, 6, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
