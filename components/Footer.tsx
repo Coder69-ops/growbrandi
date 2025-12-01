@@ -149,10 +149,10 @@ const Footer: React.FC = () => {
           <p className="text-cyan-600 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-zinc-600 font-light">
-            <Link to="/legal/privacy-policy" className="hover:text-zinc-400 transition-colors">Privacy</Link>
-            <Link to="/legal/terms-of-service" className="hover:text-zinc-400 transition-colors">Terms</Link>
-            <Link to="/sitemap" className="hover:text-zinc-400 transition-colors">Sitemap</Link>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-zinc-400 font-light">
+            <Link to="/legal/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link to="/legal/terms-of-service" className="hover:text-white transition-colors">Terms</Link>
+            <Link to="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

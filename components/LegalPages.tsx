@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { APP_NAME, CONTACT_INFO } from '../constants';
 
 // Privacy Policy Page
 export const PrivacyPolicyPage: React.FC = () => {
@@ -19,7 +20,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               Privacy <span className="text-gradient">Policy</span>
             </h1>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: November 15, 2024
+              Last updated: December 01, 2025
             </p>
           </motion.div>
 
@@ -33,8 +34,8 @@ export const PrivacyPolicyPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">1. Introduction</h2>
                 <p>
-                  Welcome to GrowBrandi ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.
-                  If you have any questions or concerns about our policy, or our practices with regards to your personal information, please contact us.
+                  Welcome to {APP_NAME} ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.
+                  This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage with our digital services, including Brand Growth, Web Development, and UI/UX Design.
                 </p>
               </section>
 
@@ -42,31 +43,32 @@ export const PrivacyPolicyPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">2. Information We Collect</h2>
                 <p className="mb-4">We collect personal information that you voluntarily provide to us when you:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Register on the website</li>
-                  <li>Express an interest in obtaining information about us or our products and services</li>
-                  <li>Participate in activities on the website</li>
-                  <li>Contact us</li>
+                  <li>Request a consultation or project quote</li>
+                  <li>Subscribe to our newsletter or marketing communications</li>
+                  <li>Engage with our "Slogan Generator" or "Health Audit" tools</li>
+                  <li>Contact us via email or our contact forms</li>
                 </ul>
+                <p className="mt-4">
+                  The personal information we collect may include names, email addresses, phone numbers, job titles, and specific business requirements relevant to your project.
+                </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. How We Use Your Information</h2>
                 <p className="mb-4">We use personal information collected via our website for a variety of business purposes described below:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>To facilitate account creation and logon process</li>
-                  <li>To send you marketing and promotional communications</li>
-                  <li>To send administrative information to you</li>
-                  <li>To fulfill and manage your orders</li>
-                  <li>To post testimonials</li>
-                  <li>To request feedback</li>
-                  <li>To protect our Services</li>
+                  <li>To provide and deliver the services you request (e.g., delivering audit reports, project proposals)</li>
+                  <li>To communicate with you about your projects, appointments, and account updates</li>
+                  <li>To send you marketing and promotional communications regarding our latest services and offers</li>
+                  <li>To improve our website performance and user experience through analytics</li>
+                  <li>To protect our services and legal rights</li>
                 </ul>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">4. Sharing Your Information</h2>
                 <p>
-                  We only share information with your consent, to comply with laws, to provide you with services, to protect your rights, or to fulfill business obligations.
+                  We do not sell your personal information. We only share information with your consent, to comply with laws, to provide you with services (e.g., sharing data with third-party advertising platforms like Meta or Google for your ad campaigns), or to fulfill business obligations.
                 </p>
               </section>
 
@@ -80,13 +82,13 @@ export const PrivacyPolicyPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Contact Us</h2>
                 <p>
-                  If you have questions or comments about this policy, you may email us at privacy@growbrandi.com or by post to:
+                  If you have questions or comments about this policy, you may email us at {CONTACT_INFO.email} or by post to:
                 </p>
                 <div className="mt-4 p-4 bg-zinc-900/50 rounded-lg border border-white/5">
-                  <p>GrowBrandi Inc.</p>
-                  <p>123 Tech Street</p>
-                  <p>San Francisco, CA 94105</p>
-                  <p>United States</p>
+                  <p className="font-bold text-white">{APP_NAME}</p>
+                  <p>{CONTACT_INFO.address}</p>
+                  <p>Phone: {CONTACT_INFO.phone}</p>
+                  <p>Email: {CONTACT_INFO.email}</p>
                 </div>
               </section>
             </div>
@@ -115,7 +117,7 @@ export const TermsOfServicePage: React.FC = () => {
               Terms of <span className="text-gradient">Service</span>
             </h1>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: November 15, 2024
+              Last updated: December 01, 2025
             </p>
           </motion.div>
 
@@ -129,27 +131,31 @@ export const TermsOfServicePage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">1. Agreement to Terms</h2>
                 <p>
-                  These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and GrowBrandi ("we," "us" or "our"), concerning your access to and use of the GrowBrandi website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
+                  These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and {APP_NAME} ("we," "us" or "our"), concerning your access to and use of the {APP_NAME} website and our digital agency services.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">2. Intellectual Property Rights</h2>
-                <p>
-                  Unless otherwise indicated, the Site is our proprietary property and all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics on the Site (collectively, the "Content") and the trademarks, service marks, and logos contained therein (the "Marks") are owned or controlled by us or licensed to us, and are protected by copyright and trademark laws and various other intellectual property rights.
+                <p className="mb-4">
+                  Unless otherwise indicated, the Site is our proprietary property. However, regarding client projects:
                 </p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li><strong>Client Deliverables:</strong> Upon full payment, all final deliverables (e.g., website code, design assets, ad creatives) created specifically for the Client shall become the property of the Client.</li>
+                  <li><strong>Agency Tools:</strong> {APP_NAME} retains all rights to its background technology, frameworks, pre-existing code, and methodologies used to create the deliverables.</li>
+                  <li><strong>Portfolio Rights:</strong> We reserve the right to display completed projects in our portfolio and marketing materials unless a Non-Disclosure Agreement (NDA) is signed.</li>
+                </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. User Representations</h2>
-                <p className="mb-4">By using the Site, you represent and warrant that:</p>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">3. Service Engagement</h2>
+                <p className="mb-4">
+                  By engaging our services (Web Development, UI/UX Design, Marketing, etc.), you agree that:
+                </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>All registration information you submit will be true, accurate, current, and complete.</li>
-                  <li>You will maintain the accuracy of such information and promptly update such registration information as necessary.</li>
-                  <li>You have the legal capacity and you agree to comply with these Terms of Service.</li>
-                  <li>You are not a minor in the jurisdiction in which you reside.</li>
-                  <li>You will not access the Site through automated or non-human means, whether through a bot, script or otherwise.</li>
-                  <li>You will not use the Site for any illegal or unauthorized purpose.</li>
+                  <li>You will provide all necessary content, assets, and information required for the project in a timely manner.</li>
+                  <li>Project timelines are estimates and may vary based on the scope of changes or delays in feedback.</li>
+                  <li>Payment terms are defined in your specific project proposal or contract.</li>
                 </ul>
               </section>
 
@@ -163,14 +169,14 @@ export const TermsOfServicePage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Limitation of Liability</h2>
                 <p>
-                  In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site, even if we have been advised of the possibility of such damages.
+                  In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site or our services, even if we have been advised of the possibility of such damages.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Governing Law</h2>
                 <p>
-                  These Terms shall be governed by and defined following the laws of the State of California. GrowBrandi and yourself irrevocably consent that the courts of California shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
+                  These Terms shall be governed by and defined following the laws of Bangladesh. {APP_NAME} and yourself irrevocably consent that the courts of Khulna, Bangladesh shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
                 </p>
               </section>
             </div>
@@ -199,7 +205,7 @@ export const CookiePolicyPage: React.FC = () => {
               Cookie <span className="text-gradient">Policy</span>
             </h1>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: November 15, 2024
+              Last updated: December 01, 2025
             </p>
           </motion.div>
 
@@ -223,7 +229,7 @@ export const CookiePolicyPage: React.FC = () => {
                 <p className="mb-4">We use cookies for several purposes:</p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
-                  <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website</li>
+                  <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website (e.g., Google Analytics)</li>
                   <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
                   <li><strong>Marketing Cookies:</strong> Used to track visitors and deliver personalized ads</li>
                 </ul>
@@ -262,7 +268,6 @@ export const CookiePolicyPage: React.FC = () => {
                   <li>Use your browser settings to accept or reject cookies</li>
                   <li>Delete existing cookies from your browser</li>
                   <li>Set your browser to notify you when cookies are being sent</li>
-                  <li>Use our cookie preference center (when available)</li>
                 </ul>
                 <p className="mt-4">
                   Please note that disabling certain cookies may affect the functionality of our website.
@@ -270,35 +275,14 @@ export const CookiePolicyPage: React.FC = () => {
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Third-Party Cookies</h2>
-                <p className="mb-4">
-                  We may use third-party services that set cookies on our website, including:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Google Analytics for website analytics</li>
-                  <li>Facebook Pixel for advertising</li>
-                  <li>LinkedIn Insight Tag for professional targeting</li>
-                  <li>Other marketing and analytics tools</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4 font-heading">6. Updates to This Policy</h2>
-                <p>
-                  We may update this Cookie Policy from time to time. When we do, we will post the updated policy on this page
-                  and update the "Last updated" date at the top of this policy.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-bold text-white mb-4 font-heading">7. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-white mb-4 font-heading">5. Contact Us</h2>
                 <p>
                   If you have any questions about our use of cookies, please contact us at:
                 </p>
                 <div className="mt-4 p-4 bg-zinc-900/50 rounded-lg border border-white/5">
-                  <p><strong>Email:</strong> privacy@growbrandi.com</p>
-                  <p><strong>Address:</strong> GrowBrandi, San Francisco, CA</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                  <p><strong>Email:</strong> {CONTACT_INFO.email}</p>
+                  <p><strong>Address:</strong> {CONTACT_INFO.address}</p>
+                  <p><strong>Phone:</strong> {CONTACT_INFO.phone}</p>
                 </div>
               </section>
             </div>

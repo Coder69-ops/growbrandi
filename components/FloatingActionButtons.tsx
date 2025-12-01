@@ -71,6 +71,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
                         onClick={btn.onClick}
                         onMouseEnter={() => setHoveredButton(btn.id)}
                         onMouseLeave={() => setHoveredButton(null)}
+                        aria-label={btn.label}
                         className={`
               relative group p-4 rounded-full shadow-lg backdrop-blur-md 
               border border-white/10 overflow-hidden

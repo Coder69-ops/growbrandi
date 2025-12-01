@@ -14,8 +14,12 @@ export const AboutUsPage: React.FC = () => {
         description="We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age."
       />
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden min-h-[60vh] flex items-center justify-center">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        {/* Animated background elements */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] animate-pulse delay-1000" />
+
         <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
@@ -23,8 +27,11 @@ export const AboutUsPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
-              About <span className="text-gradient">GrowBrandi</span>
+            <span className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-4 block">
+              Who We Are
+            </span>
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-8 font-heading tracking-tight leading-tight">
+              About <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 animate-gradient-x">GrowBrandi</span>
             </h1>
             <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
               We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age. Founded on the principle that every business deserves exceptional digital experiences.
@@ -34,8 +41,8 @@ export const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Our Story Section */}
-      <section className="py-20 px-4 bg-luxury-black">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative">
+        <div className="container mx-auto max-w-6xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -46,56 +53,64 @@ export const AboutUsPage: React.FC = () => {
               <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
                 Our <span className="text-gradient">Story</span>
               </h2>
-              <p className="text-lg text-zinc-400 mb-6 leading-relaxed font-light">
-                Founded in 2020, GrowBrandi emerged from a simple belief: every business, regardless of size, deserves access to world-class digital solutions. What started as a small team of developers and designers has grown into a full-service digital agency serving clients worldwide.
-              </p>
-              <p className="text-lg text-zinc-400 mb-6 leading-relaxed font-light">
-                Our journey began when we noticed a gap in the market - businesses struggling to find partners who truly understood both technology and business strategy. We set out to bridge that gap by combining technical expertise with deep business acumen.
-              </p>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="text-center">
-                  <div className="text-3xl font-black text-white mb-2">200+</div>
-                  <div className="text-zinc-400 text-sm uppercase tracking-wider">Projects Completed</div>
+              <div className="space-y-6 text-lg text-zinc-400 font-light leading-relaxed">
+                <p>
+                  Founded in 2020, GrowBrandi emerged from a simple belief: every business, regardless of size, deserves access to world-class digital solutions. What started as a small team of developers and designers has grown into a full-service digital agency serving clients worldwide.
+                </p>
+                <p>
+                  Our journey began when we noticed a gap in the market - businesses struggling to find partners who truly understood both technology and business strategy. We set out to bridge that gap by combining technical expertise with deep business acumen.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8 mt-10">
+                <div className="text-center p-6 glass-effect rounded-2xl border border-white/5">
+                  <div className="text-4xl font-black text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">200+</div>
+                  <div className="text-zinc-400 text-sm uppercase tracking-wider font-semibold">Projects Completed</div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-black text-white mb-2">50+</div>
-                  <div className="text-zinc-400 text-sm uppercase tracking-wider">Happy Clients</div>
+                <div className="text-center p-6 glass-effect rounded-2xl border border-white/5">
+                  <div className="text-4xl font-black text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">50+</div>
+                  <div className="text-zinc-400 text-sm uppercase tracking-wider font-semibold">Happy Clients</div>
                 </div>
               </div>
             </motion.div>
+
             <motion.div
-              className="glass-effect rounded-2xl p-8 border border-white/5"
+              className="glass-effect rounded-3xl p-8 border border-white/5 relative overflow-hidden"
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
-                    <FaLightbulb className="w-6 h-6 text-white" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px]" />
+
+              <div className="space-y-8 relative z-10">
+                <div className="flex items-start gap-6 group">
+                  <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 transition-all duration-300">
+                    <FaLightbulb className="w-7 h-7 text-white group-hover:text-blue-400 transition-colors" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Innovation First</h3>
-                    <p className="text-zinc-400 font-light">We stay ahead of industry trends and emerging technologies to deliver cutting-edge solutions.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading group-hover:text-blue-400 transition-colors">Innovation First</h3>
+                    <p className="text-zinc-400 font-light leading-relaxed">We stay ahead of industry trends and emerging technologies to deliver cutting-edge solutions that give you a competitive advantage.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
-                    <FaUsers className="w-6 h-6 text-white" />
+
+                <div className="flex items-start gap-6 group">
+                  <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:border-purple-500/30 group-hover:bg-purple-500/10 transition-all duration-300">
+                    <FaUsers className="w-7 h-7 text-white group-hover:text-purple-400 transition-colors" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Client-Centric</h3>
-                    <p className="text-zinc-400 font-light">Your success is our success. We build long-term partnerships based on trust and results.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading group-hover:text-purple-400 transition-colors">Client-Centric</h3>
+                    <p className="text-zinc-400 font-light leading-relaxed">Your success is our success. We build long-term partnerships based on trust, transparency, and measurable results.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center shrink-0">
-                    <FaCheckCircle className="w-6 h-6 text-white" />
+
+                <div className="flex items-start gap-6 group">
+                  <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10 group-hover:border-pink-500/30 group-hover:bg-pink-500/10 transition-all duration-300">
+                    <FaCheckCircle className="w-7 h-7 text-white group-hover:text-pink-400 transition-colors" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2 font-heading">Quality Driven</h3>
-                    <p className="text-zinc-400 font-light">We maintain the highest standards of quality in every project, from concept to completion.</p>
+                    <h3 className="text-xl font-bold text-white mb-2 font-heading group-hover:text-pink-400 transition-colors">Quality Driven</h3>
+                    <p className="text-zinc-400 font-light leading-relaxed">We maintain the highest standards of quality in every project, from concept to completion, ensuring pixel-perfect delivery.</p>
                   </div>
                 </div>
               </div>
@@ -105,8 +120,9 @@ export const AboutUsPage: React.FC = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 px-4 bg-luxury-black">
-        <div className="container mx-auto max-w-6xl">
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -118,46 +134,50 @@ export const AboutUsPage: React.FC = () => {
               Meet Our <span className="text-gradient">Team</span>
             </h2>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
-              The brilliant minds behind GrowBrandi's success
+              The brilliant minds behind GrowBrandi's success, dedicated to delivering excellence in every project.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sarah Johnson",
-                role: "CEO & Founder",
-                image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=400&fit=crop&crop=face",
-                bio: "10+ years in digital strategy and business development"
-              },
-              {
-                name: "Michael Chen",
-                role: "CTO",
-                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=400&fit=crop&crop=face",
-                bio: "Expert in AI, machine learning, and scalable architectures"
-              },
-              {
-                name: "Emily Rodriguez",
-                role: "Creative Director",
-                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=400&fit=crop&crop=face",
-                bio: "Award-winning designer with a passion for user experience"
-              }
-            ].map((member, index) => (
+            {TEAM_MEMBERS.map((member, index) => (
               <motion.div
                 key={index}
-                className="glass-effect rounded-2xl p-6 border border-white/5 text-center hover:border-white/20 transition-all duration-300"
+                className="glass-effect rounded-2xl p-8 border border-white/5 text-center hover:border-white/20 transition-all duration-300 group relative overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -10 }}
               >
-                <div className="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 overflow-hidden">
-                  <img src={member.image} alt={member.name} loading="lazy" width="400" height="400" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div className="w-32 h-32 bg-white/5 rounded-full mx-auto mb-6 overflow-hidden border-2 border-white/10 group-hover:border-blue-500/50 transition-all duration-300 relative z-10">
+                  <img src={member.image} alt={member.name} loading="lazy" width="400" height="400" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 font-heading">{member.name}</h3>
-                <p className="text-white/70 font-semibold mb-3">{member.role}</p>
-                <p className="text-zinc-400 font-light">{member.bio}</p>
+
+                <div className="relative z-10">
+                  <h3 className="text-xl font-bold text-white mb-2 font-heading group-hover:text-blue-400 transition-colors">{member.name}</h3>
+                  <p className="text-blue-400 font-semibold mb-4 text-sm uppercase tracking-wider">{member.role}</p>
+                  <p className="text-zinc-400 font-light text-sm mb-6 line-clamp-3 leading-relaxed">{member.bio}</p>
+
+                  <div className="flex justify-center gap-4">
+                    {member.social.linkedin && (
+                      <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+                        <FaLinkedin className="w-5 h-5" />
+                      </a>
+                    )}
+                    {member.social.twitter && (
+                      <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-white transition-colors">
+                        <FaTwitter className="w-5 h-5" />
+                      </a>
+                    )}
+                    {member.social.email && (
+                      <a href={`mailto:${member.social.email}`} className="text-zinc-500 hover:text-white transition-colors">
+                        <FaEnvelope className="w-5 h-5" />
+                      </a>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>

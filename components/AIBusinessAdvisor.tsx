@@ -117,8 +117,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         <h3 className="text-2xl font-bold text-white mb-6">Business Details</h3>
 
                         <div>
-                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Website URL</label>
+                            <label htmlFor="website-url" className="block text-sm font-semibold text-zinc-300 mb-2">Website URL</label>
                             <input
+                                id="website-url"
                                 type="text"
                                 placeholder="e.g., www.yourbusiness.com"
                                 className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
@@ -128,8 +129,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Industry</label>
+                            <label htmlFor="industry-select" className="block text-sm font-semibold text-zinc-300 mb-2">Industry</label>
                             <select
+                                id="industry-select"
                                 className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={selectedIndustry}
                                 onChange={(e) => setSelectedIndustry(e.target.value)}
@@ -140,8 +142,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Monthly Ad Spend</label>
+                            <label htmlFor="ad-spend-select" className="block text-sm font-semibold text-zinc-300 mb-2">Monthly Ad Spend</label>
                             <select
+                                id="ad-spend-select"
                                 className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={adSpend}
                                 onChange={(e) => setAdSpend(e.target.value)}
@@ -152,8 +155,9 @@ const AIBusinessAdvisor: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-zinc-300 mb-2">Primary Goal</label>
+                            <label htmlFor="goal-select" className="block text-sm font-semibold text-zinc-300 mb-2">Primary Goal</label>
                             <select
+                                id="goal-select"
                                 className="w-full bg-zinc-800/50 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 transition-colors"
                                 value={selectedGoal}
                                 onChange={(e) => setSelectedGoal(e.target.value)}
