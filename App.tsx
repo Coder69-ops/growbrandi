@@ -22,12 +22,13 @@ const TeamMemberProfile = React.lazy(() => import('./components/TeamMemberProfil
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
 
 // Service Pages
-const WebDevelopmentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.WebDevelopmentPage })));
+// Service Pages
+const BrandGrowthPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.BrandGrowthPage })));
+const SocialMediaContentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.SocialMediaContentPage })));
 const UIUXDesignPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.UIUXDesignPage })));
-const BrandStrategyPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.BrandStrategyPage })));
-const SEOOptimizationPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.SEOOptimizationPage })));
-const DigitalMarketingPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.DigitalMarketingPage })));
-const AISolutionsPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.AISolutionsPage })));
+const WebDevelopmentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.WebDevelopmentPage })));
+const VirtualAssistancePage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.VirtualAssistancePage })));
+const CustomerSupportPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.CustomerSupportPage })));
 
 // Company Pages
 const AboutUsPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.AboutUsPage })));
@@ -263,12 +264,12 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
                   <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
 
                   {/* Services */}
-                  <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
+                  <Route path="/services/brand-growth" element={<PageWrapper><BrandGrowthPage /></PageWrapper>} />
+                  <Route path="/services/social-media-content" element={<PageWrapper><SocialMediaContentPage /></PageWrapper>} />
                   <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
-                  <Route path="/services/brand-strategy" element={<PageWrapper><BrandStrategyPage /></PageWrapper>} />
-                  <Route path="/services/seo-optimization" element={<PageWrapper><SEOOptimizationPage /></PageWrapper>} />
-                  <Route path="/services/digital-marketing" element={<PageWrapper><DigitalMarketingPage /></PageWrapper>} />
-                  <Route path="/services/ai-solutions" element={<PageWrapper><AISolutionsPage /></PageWrapper>} />
+                  <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
+                  <Route path="/services/virtual-assistance" element={<PageWrapper><VirtualAssistancePage /></PageWrapper>} />
+                  <Route path="/services/customer-support" element={<PageWrapper><CustomerSupportPage /></PageWrapper>} />
 
                   {/* Company */}
                   <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />

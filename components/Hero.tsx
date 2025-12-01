@@ -11,6 +11,7 @@ import SloganGenerator from './SloganGenerator';
 import TestimonialsSlider from './TestimonialsSlider';
 import TeamSection from './TeamSection';
 import FAQ from './FAQ';
+import { Logos3 } from './blocks/logos3';
 
 const HeroSection: React.FC = () => {
     const navigate = useNavigate();
@@ -209,7 +210,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             animate={{ y: [0, 15, 0], x: [0, -5, 0] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                            className="absolute bottom-[25%] right-[0%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
+                            className="absolute bottom-[40%] md:bottom-[25%] right-[5%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
@@ -223,34 +224,100 @@ const HeroSection: React.FC = () => {
                         </motion.div>
                     </motion.div>
 
-                    {/* 3. Polished Stats Section (Span 12) */}
+                    {/* 3. Logos Section (Span 12) */}
                     <motion.div
                         variants={itemVariants}
-                        className="lg:col-span-12 mt-12 pt-12 border-t border-white/[0.05]"
+                        className="lg:col-span-12 mt-24 lg:mt-12 pt-12"
                     >
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                            {[
-                                { label: "Projects Delivered", value: "300+", icon: FaRocket, color: "text-blue-400" },
-                                { label: "Client Satisfaction", value: "99%", icon: FaStar, color: "text-yellow-400" },
-                                { label: "Revenue Generated", value: "$50M+", icon: FaChartLine, color: "text-green-400" },
-                                { label: "Years Experience", value: "10+", icon: FaArrowRight, color: "text-purple-400" },
-                            ].map((stat, index) => (
-                                <div key={index} className="group relative p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-500 backdrop-blur-sm overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    <div className="relative z-10">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div className={`p-2 rounded-lg bg-white/[0.03] ${stat.color} group-hover:scale-110 transition-transform duration-300`}>
-                                                <stat.icon className="w-4 h-4" />
-                                            </div>
-                                            <span className="text-sm text-slate-400 font-medium tracking-wide">{stat.label}</span>
-                                        </div>
-                                        <div className="text-4xl font-bold text-white font-['Outfit'] tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all duration-300">
-                                            {stat.value}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <Logos3
+                            heading="Our Tech Stack & Integrations"
+                            logos={[
+                                {
+                                    id: "logo-1",
+                                    description: "React",
+                                    image: "/logos/react.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-2",
+                                    description: "Next.js",
+                                    image: "/logos/nextdotjs.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-3",
+                                    description: "TypeScript",
+                                    image: "/logos/typescript.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-4",
+                                    description: "Tailwind CSS",
+                                    image: "/logos/tailwindcss.svg",
+                                    className: "h-8 w-auto",
+                                },
+                                {
+                                    id: "logo-5",
+                                    description: "OpenAI",
+                                    image: "/logos/openai.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-6",
+                                    description: "Node.js",
+                                    image: "/logos/nodedotjs.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-7",
+                                    description: "Supabase",
+                                    image: "/logos/supabase.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-8",
+                                    description: "Vercel",
+                                    image: "/logos/vercel.svg",
+                                    className: "h-8 w-auto",
+                                },
+                                {
+                                    id: "logo-9",
+                                    description: "Figma",
+                                    image: "/logos/figma.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-10",
+                                    description: "Stripe",
+                                    image: "/logos/stripe.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-11",
+                                    description: "Python",
+                                    image: "/logos/python.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-12",
+                                    description: "Google Cloud",
+                                    image: "/logos/googlecloud.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-13",
+                                    description: "Shopify",
+                                    image: "/logos/shopify.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-14",
+                                    description: "HubSpot",
+                                    image: "/logos/hubspot.svg",
+                                    className: "h-10 w-auto",
+                                },
+                            ]}
+                        />
                     </motion.div>
                 </motion.div>
 

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-    FaCode, FaPalette, FaChess, FaChartLine, FaBullhorn, FaRobot,
+    FaCode, FaPalette, FaChartLine, FaBullhorn, FaVideo, FaHeadset, FaComments,
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
     FaChevronDown, FaBars, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
@@ -29,10 +29,16 @@ interface MegaMenuData {
 const megaMenuData: MegaMenuData = {
     services: [
         {
-            route: '/services/web-development',
-            title: 'Web Development',
-            description: 'Custom web solutions using cutting-edge technologies',
-            icon: FaCode
+            route: '/services/brand-growth',
+            title: 'Brand Growth',
+            description: 'Scale with high-performance ads on TikTok, Meta & Google',
+            icon: FaChartLine
+        },
+        {
+            route: '/services/social-media-content',
+            title: 'Social Media Content',
+            description: 'Engaging video editing and post creation',
+            icon: FaVideo
         },
         {
             route: '/services/ui-ux-design',
@@ -41,28 +47,22 @@ const megaMenuData: MegaMenuData = {
             icon: FaPalette
         },
         {
-            route: '/services/brand-strategy',
-            title: 'Brand Strategy',
-            description: 'Strategic brand development and positioning',
-            icon: FaChess
+            route: '/services/web-development',
+            title: 'Web Development',
+            description: 'Custom web solutions using cutting-edge technologies',
+            icon: FaCode
         },
         {
-            route: '/services/seo-optimization',
-            title: 'SEO Optimization',
-            description: 'Advanced SEO strategies for better rankings',
-            icon: FaChartLine
+            route: '/services/virtual-assistance',
+            title: 'Virtual Assistance',
+            description: 'Professional support for admin and operations',
+            icon: FaHeadset
         },
         {
-            route: '/services/digital-marketing',
-            title: 'Digital Marketing',
-            description: 'Comprehensive marketing strategies for growth',
-            icon: FaBullhorn
-        },
-        {
-            route: '/services/ai-solutions',
-            title: 'AI Solutions',
-            description: 'Cutting-edge AI integration and automation',
-            icon: FaRobot
+            route: '/services/customer-support',
+            title: 'Customer Support',
+            description: '24/7 support to ensure customer satisfaction',
+            icon: FaComments
         }
     ],
     company: [
@@ -241,7 +241,7 @@ const Header: React.FC<HeaderProps> = () => {
                                 loading="eager"
                                 width="180"
                                 height="60"
-                                className="w-auto h-10 lg:h-14 object-contain"
+                                className="w-auto h-8 lg:h-12 object-contain"
                             />
                         </button>
 
