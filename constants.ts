@@ -202,7 +202,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Keynote speaker at the 2024 Digital Growth Summit",
       "Awarded 'Digital Innovator of the Year' by TechWeekly"
     ],
-    image: "https://ik.imagekit.io/nltb2bcz4/image.png",
+    image: "/team/shuvo-mallick.png",
     specialties: ["Business Strategy", "Executive Leadership", "Growth Hacking", "Brand Architecture"],
     social: {
       linkedin: "#",
@@ -242,10 +242,10 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Spearheaded the migration to a serverless architecture, reducing costs by 30%",
       "Contributor to major open-source React libraries"
     ],
-    image: "https://ik.imagekit.io/nltb2bcz4/IMG_2765url.JPG",
+    image: "/team/ovejit.jpg",
     specialties: ["Full Stack Development", "Cloud Architecture", "Team Leadership", "Cybersecurity"],
     social: {
-      linkedin: "#",
+      linkedin: "https://www.linkedin.com/in/ovejit-das-826987354/",
       github: "https://github.com/Coder69-ops",
       email: "oveisawesome@gmail.com"
     }
@@ -262,7 +262,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Certified Google Ads and Meta Blueprint Professional",
       "Developed a proprietary audience targeting framework"
     ],
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    image: "/team/nijhum.jpeg",
     specialties: ["PPC Advertising", "Social Media Strategy", "Conversion Rate Optimization", "Data Analytics"],
     social: {
       linkedin: "#",
@@ -271,9 +271,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
     }
   },
   {
-    name: "Ar Jinia",
+    name: "Sabrina Jui",
     role: "UI/UX Designer",
-    slug: "ar-jinia",
+    slug: "sabrina-jui",
     description: "Creative designer crafting intuitive and visually stunning user experiences.",
     bio: "Jinia believes that great design is invisible—it just works. She creates intuitive, user-centric interfaces that delight users and drive engagement. Her designs balance aesthetic beauty with functional clarity, creating memorable digital experiences that reinforce brand identity. Jinia's process involves deep user research, rapid prototyping, and iterative testing to ensure that every pixel serves a purpose. She is an expert in creating cohesive design systems that scale.",
     achievements: [
@@ -282,12 +282,12 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Created the comprehensive 'Prism' design system used across all internal projects",
       "Featured in 'Best of Behance' for Interaction Design"
     ],
-    image: "https://ik.imagekit.io/nltb2bcz4/WhatsApp%20Image%202025-12-01%20at%203.06.08%20AM.jpeg",
+    image: "/team/sabrina-jui.jpg",
     specialties: ["UI/UX Design", "Interaction Design", "User Research", "Prototyping"],
     social: {
       linkedin: "#",
       dribbble: "#",
-      email: "jinia@growbrandi.com"
+      email: "sabrina@growbrandi.com"
     }
   },
   {
