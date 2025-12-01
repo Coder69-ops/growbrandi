@@ -90,9 +90,9 @@ const AIBusinessAdvisor: React.FC = () => {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black" />
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-cyan-500/5" />
-            <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl" />
+            {/* Removed overlay gradient for dark luxury theme */}
+            <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl" />
 
             <div className="container mx-auto max-w-6xl relative z-10">
                 <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16">

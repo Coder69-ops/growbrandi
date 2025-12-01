@@ -6,6 +6,7 @@ import { FaArrowRight, FaPlay, FaStar, FaRocket, FaChartLine, FaCode, FaLayerGro
 // Import other Home Page sections
 import ServicesPreview from './ServicesPreview';
 import ProjectsPreview from './ProjectsPreview';
+import AIBusinessAdvisor from './AIBusinessAdvisor';
 import SloganGenerator from './SloganGenerator';
 import TestimonialsSlider from './TestimonialsSlider';
 import TeamSection from './TeamSection';
@@ -284,6 +285,7 @@ export const HomePage: React.FC = () => {
             <HeroSection />
             <ServicesPreview />
             <ProjectsPreview />
+            <AIBusinessAdvisor />
             <SloganGenerator />
             <TestimonialsSlider />
             <TeamSection />
