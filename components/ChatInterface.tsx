@@ -14,36 +14,36 @@ interface ChatInterfaceProps {
 }
 
 const INITIAL_SUGGESTIONS = [
-    "Get instant project estimate",
-    "Book free strategy call",
-    "What's your pricing?",
-    "Show me results you deliver"
+    "How can you help my business?",
+    "Tell me about your services",
+    "Do you offer free consultations?",
+    "See client success stories"
 ];
 
 const CONTEXTUAL_SUGGESTIONS = {
     project: [
-        "Get instant cost estimate",
-        "When can we start?",
-        "Book project kickoff call",
-        "What's the guaranteed ROI?"
+        "How do you estimate costs?",
+        "What is your typical timeline?",
+        "How do we get started?",
+        "Do you offer maintenance?"
     ],
     services: [
-        "Which service gets fastest ROI?",
-        "What's included in premium package?",
-        "Book strategy consultation now",
-        "Show me client success stories"
+        "Which service is right for me?",
+        "Tell me more about Brand Growth",
+        "Do you do custom development?",
+        "See your portfolio"
     ],
     pricing: [
-        "What's your starting price?",
-        "Any limited-time offers?",
-        "Book free consultation call",
-        "What ROI can I expect?"
+        "What factors affect pricing?",
+        "Do you have packages?",
+        "Is there a payment plan?",
+        "Get a custom quote"
     ],
     consultation: [
-        "Book free call this week",
-        "What will we discuss?",
-        "How fast can we start?",
-        "Any spots left this month?"
+        "Schedule a free call",
+        "What happens in the consultation?",
+        "Do I need to prepare anything?",
+        "Check available times"
     ]
 };
 

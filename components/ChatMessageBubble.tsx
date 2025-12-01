@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FaUser, FaRobot } from 'react-icons/fa';
@@ -58,7 +59,15 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-              a: ({ node, ...props }) => <a className="hover:underline" target="_blank" rel="noopener noreferrer" {...props} />,
+              a: ({ node, href, ...props }) => {
+                const isInternal = href?.startsWith('/');
+                const className = "text-cyan-300 font-bold underline decoration-cyan-500/50 hover:decoration-cyan-300 hover:text-white transition-all bg-cyan-900/20 px-1 rounded";
+
+                if (isInternal && href) {
+                  return <Link to={href} className={className} {...props} />;
+                }
+                return <a href={href} className={className} target="_blank" rel="noopener noreferrer" {...props} />;
+              },
             }}
           >
             {text}
