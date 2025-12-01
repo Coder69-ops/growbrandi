@@ -347,19 +347,40 @@ const HeroSection: React.FC = () => {
     );
 };
 
+import LazySection from './LazySection';
+
 export const HomePage: React.FC = () => {
     return (
         <div className="bg-[#09090b]">
             <HeroSection />
-            <React.Suspense fallback={<div className="min-h-screen bg-[#09090b]" />}>
+
+            <LazySection fallback={<div className="min-h-screen bg-[#09090b]" />}>
                 <ServicesPreview />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[500px] bg-[#09090b]" />}>
                 <ProjectsPreview />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
                 <AIBusinessAdvisor />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
                 <SloganGenerator />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
                 <TestimonialsSlider />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
                 <TeamSection />
+            </LazySection>
+
+            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
                 <FAQ />
-            </React.Suspense>
+            </LazySection>
         </div>
     );
 };

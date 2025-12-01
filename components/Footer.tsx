@@ -53,9 +53,9 @@ const Footer: React.FC = () => {
                 src="/growbrandi-logo.png"
                 alt="GrowBrandi Logo"
                 loading="lazy"
-                width="150"
-                height="50"
-                className="w-auto h-12 object-contain"
+                width="128"
+                height="32"
+                className="w-32 h-8 lg:w-48 lg:h-12 object-contain"
               />
             </Link>
             <p className="text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
