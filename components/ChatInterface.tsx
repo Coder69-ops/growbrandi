@@ -166,7 +166,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
         }
 
         try {
-            console.log('Sending message:', message);
+
             const responseStream = await chatRef.current.sendMessageStream({ message: message });
 
             let fullResponse = "";
@@ -185,7 +185,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                 });
             }
 
-            console.log('Response received:', fullResponse);
+
         } catch (e: any) {
             console.error('Send message error:', e);
 

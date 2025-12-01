@@ -1,25 +1,46 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import SEO from './components/SEO';
-import { HomePage } from './components/Hero';
-import { ServicesPage } from './components/Services';
-import { PortfolioPage } from './components/Portfolio';
-import { ContactPage } from './components/ContactPage';
-import ChatInterface from './components/ChatInterface';
-import AnimatedBackground from './components/AnimatedBackground';
-import AIUseCases from './components/AIUseCases';
-import ContactAssistant from './components/ContactAssistant';
-import { WebDevelopmentPage, UIUXDesignPage, BrandStrategyPage, SEOOptimizationPage, DigitalMarketingPage, AISolutionsPage } from './components/ServicePages';
-import { AboutUsPage, ProcessPage, CaseStudiesPage, TeamPage, CareersPage, BlogPage } from './components/CompanyPages';
-import TeamMemberProfile from './components/TeamMemberProfile';
+import PageLoader from './components/PageLoader';
 import FloatingActionButtons from './components/FloatingActionButtons';
-import { PrivacyPolicyPage, TermsOfServicePage, CookiePolicyPage } from './components/LegalPages';
 import Footer from './components/Footer';
-import NotFoundPage from './components/NotFoundPage';
-import { routeConfig, getRouteMetadata, getRouteFromPath, Route as AppRoute } from './utils/routeConfig';
+import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
+
+// Lazy load components
+const HomePage = React.lazy(() => import('./components/Hero').then(module => ({ default: module.HomePage })));
+const ServicesPage = React.lazy(() => import('./components/Services').then(module => ({ default: module.ServicesPage })));
+const PortfolioPage = React.lazy(() => import('./components/Portfolio').then(module => ({ default: module.PortfolioPage })));
+const ContactPage = React.lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
+const ChatInterface = React.lazy(() => import('./components/ChatInterface'));
+const AnimatedBackground = React.lazy(() => import('./components/AnimatedBackground'));
+const AIUseCases = React.lazy(() => import('./components/AIUseCases'));
+const ContactAssistant = React.lazy(() => import('./components/ContactAssistant'));
+const TeamMemberProfile = React.lazy(() => import('./components/TeamMemberProfile'));
+const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
+
+// Service Pages
+const WebDevelopmentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.WebDevelopmentPage })));
+const UIUXDesignPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.UIUXDesignPage })));
+const BrandStrategyPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.BrandStrategyPage })));
+const SEOOptimizationPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.SEOOptimizationPage })));
+const DigitalMarketingPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.DigitalMarketingPage })));
+const AISolutionsPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.AISolutionsPage })));
+
+// Company Pages
+const AboutUsPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.AboutUsPage })));
+const ProcessPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.ProcessPage })));
+const CaseStudiesPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.CaseStudiesPage })));
+const TeamPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.TeamPage })));
+const CareersPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.CareersPage })));
+const BlogPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.BlogPage })));
+
+// Legal Pages
+const PrivacyPolicyPage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.PrivacyPolicyPage })));
+const TermsOfServicePage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.TermsOfServicePage })));
+const CookiePolicyPage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.CookiePolicyPage })));
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -52,7 +73,7 @@ function AppContent() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const currentRoute = getRouteFromPath(currentPath);
-  const metadata = getRouteMetadata(currentRoute);
+  const metadata = getRouteMetadata(currentRoute, currentPath);
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
@@ -202,7 +223,9 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
         keywords={metadata.keywords}
         canonicalUrl={`https://growbrandi.com${metadata.path}`}
       />
-      <AnimatedBackground />
+      <Suspense fallback={<PageLoader />}>
+        <AnimatedBackground />
+      </Suspense>
 
       <div className="text-slate-100 w-full relative z-10" style={{ minHeight: '100vh' }}>
         <Header />
@@ -230,48 +253,50 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
         )}
 
         <main id="main-content" role="main" className="w-full">
-          {showAIUseCases ? (
-            <AIUseCases />
-          ) : (
-            <AnimatePresence mode="wait">
-              <Routes location={location} key={location.pathname}>
-                {/* Home */}
-                <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
+          <Suspense fallback={<PageLoader />}>
+            {showAIUseCases ? (
+              <AIUseCases />
+            ) : (
+              <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
+                  {/* Home */}
+                  <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
 
-                {/* Services */}
-                <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
-                <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
-                <Route path="/services/brand-strategy" element={<PageWrapper><BrandStrategyPage /></PageWrapper>} />
-                <Route path="/services/seo-optimization" element={<PageWrapper><SEOOptimizationPage /></PageWrapper>} />
-                <Route path="/services/digital-marketing" element={<PageWrapper><DigitalMarketingPage /></PageWrapper>} />
-                <Route path="/services/ai-solutions" element={<PageWrapper><AISolutionsPage /></PageWrapper>} />
+                  {/* Services */}
+                  <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
+                  <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
+                  <Route path="/services/brand-strategy" element={<PageWrapper><BrandStrategyPage /></PageWrapper>} />
+                  <Route path="/services/seo-optimization" element={<PageWrapper><SEOOptimizationPage /></PageWrapper>} />
+                  <Route path="/services/digital-marketing" element={<PageWrapper><DigitalMarketingPage /></PageWrapper>} />
+                  <Route path="/services/ai-solutions" element={<PageWrapper><AISolutionsPage /></PageWrapper>} />
 
-                {/* Company */}
-                <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
-                <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
-                <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
-                <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
-                <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
-                <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
-                <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
+                  {/* Company */}
+                  <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
+                  <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
+                  <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
+                  <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
+                  <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
+                  <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
+                  <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
 
-                {/* Legal */}
-                <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
-                <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
-                <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
+                  {/* Legal */}
+                  <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
+                  <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
+                  <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
 
-                {/* Contact */}
-                <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+                  {/* Contact */}
+                  <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
 
-                {/* Legacy/Redirects/Other */}
-                <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
-                <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+                  {/* Legacy/Redirects/Other */}
+                  <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
+                  <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
 
-                {/* 404 */}
-                <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
-              </Routes>
-            </AnimatePresence>
-          )}
+                  {/* 404 */}
+                  <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+                </Routes>
+              </AnimatePresence>
+            )}
+          </Suspense>
         </main>
 
         {/* Global Footer */}
@@ -290,22 +315,26 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
       {/* AI Interfaces */}
       <AnimatePresence>
         {isChatOpen && (
-          <ChatInterface
-            isOpen={isChatOpen}
-            onClose={() => setIsChatOpen(false)}
-            systemInstruction={getSystemInstruction()}
-            preloadedChat={chatInstance}
-            isPreloaded={isChatPreloaded}
-          />
+          <Suspense fallback={null}>
+            <ChatInterface
+              isOpen={isChatOpen}
+              onClose={() => setIsChatOpen(false)}
+              systemInstruction={getSystemInstruction()}
+              preloadedChat={chatInstance}
+              isPreloaded={isChatPreloaded}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
 
       <AnimatePresence>
         {isContactAssistantOpen && (
-          <ContactAssistant
-            isOpen={isContactAssistantOpen}
-            onClose={() => setIsContactAssistantOpen(false)}
-          />
+          <Suspense fallback={null}>
+            <ContactAssistant
+              isOpen={isContactAssistantOpen}
+              onClose={() => setIsContactAssistantOpen(false)}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
     </>

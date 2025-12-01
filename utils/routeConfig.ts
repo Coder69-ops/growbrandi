@@ -188,6 +188,10 @@ export const routeConfig: Record<Route, {
     },
 };
 
+import { TEAM_MEMBERS } from '../constants';
+
+// ... existing imports and types ...
+
 // Helper functions for enhanced routing
 export const getRoutesByCategory = (category: string): Route[] => {
     return Object.entries(routeConfig)
@@ -199,12 +203,35 @@ export const isValidRoute = (route: string): route is Route => {
     return route in routeConfig;
 };
 
-export const getRouteMetadata = (route: Route) => {
-    return routeConfig[route] || routeConfig.home;
+export const getRouteMetadata = (route: Route, pathname?: string) => {
+    const baseMetadata = routeConfig[route] || routeConfig.home;
+
+    // Handle dynamic team member routes
+    if (route === 'team' && pathname && pathname.startsWith('/team/')) {
+        const slug = pathname.split('/').pop();
+        const member = TEAM_MEMBERS.find(m => m.slug === slug);
+
+        if (member) {
+            return {
+                ...baseMetadata,
+                title: `${member.name} - ${member.role}`,
+                description: member.description,
+                keywords: [...(baseMetadata.keywords || []), member.name, member.role, ...member.specialties],
+                path: pathname
+            };
+        }
+    }
+
+    return baseMetadata;
 };
 
 // Convert URL path to route
 export const getRouteFromPath = (path: string): Route => {
+    // Handle dynamic team routes
+    if (path.startsWith('/team/')) {
+        return 'team';
+    }
+
     const routeEntry = Object.entries(routeConfig).find(([_, config]) => config.path === path);
     return (routeEntry?.[0] as Route) || 'home';
 };

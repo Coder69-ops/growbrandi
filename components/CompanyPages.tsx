@@ -153,7 +153,7 @@ export const AboutUsPage: React.FC = () => {
                 whileHover={{ y: -5 }}
               >
                 <div className="w-24 h-24 bg-white/5 rounded-full mx-auto mb-4 overflow-hidden">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                  <img src={member.image} alt={member.name} loading="lazy" width="400" height="400" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2 font-heading">{member.name}</h3>
                 <p className="text-white/70 font-semibold mb-3">{member.role}</p>
@@ -371,7 +371,7 @@ export const CaseStudiesPage: React.FC = () => {
                 onClick={() => setSelectedCase(selectedCase === index ? null : index)}
               >
                 <div className="h-48 overflow-hidden">
-                  <img src={study.image} alt={study.title} className="w-full h-full object-cover" />
+                  <img src={study.image} alt={study.title} loading="lazy" width="600" height="400" className="w-full h-full object-cover" />
                 </div>
                 <div className="p-6">
                   <div className="text-white/70 font-semibold text-sm mb-2 uppercase tracking-wider">{study.category}</div>
@@ -425,407 +425,410 @@ export const CaseStudiesPage: React.FC = () => {
 // Careers Page
 export const CareersPage: React.FC = () => {
   const jobOpenings = [
-                  {
-                    title: "Senior Full-Stack Developer",
-                  department: "Engineering",
-                  location: "San Francisco, CA / Remote",
-                  type: "Full-time",
-                  description: "We're looking for an experienced full-stack developer to join our growing team and help build amazing digital experiences."
+    {
+      title: "Senior Full-Stack Developer",
+      department: "Engineering",
+      location: "San Francisco, CA / Remote",
+      type: "Full-time",
+      description: "We're looking for an experienced full-stack developer to join our growing team and help build amazing digital experiences."
     },
-                  {
-                    title: "UI/UX Designer",
-                  department: "Design",
-                  location: "San Francisco, CA / Remote",
-                  type: "Full-time",
-                  description: "Join our creative team to design beautiful, intuitive user experiences that delight our clients and their customers."
+    {
+      title: "UI/UX Designer",
+      department: "Design",
+      location: "San Francisco, CA / Remote",
+      type: "Full-time",
+      description: "Join our creative team to design beautiful, intuitive user experiences that delight our clients and their customers."
     },
-                  {
-                    title: "Digital Marketing Specialist",
-                  department: "Marketing",
-                  location: "Remote",
-                  type: "Full-time",
-                  description: "Help our clients grow their digital presence through strategic marketing campaigns and data-driven optimization."
+    {
+      title: "Digital Marketing Specialist",
+      department: "Marketing",
+      location: "Remote",
+      type: "Full-time",
+      description: "Help our clients grow their digital presence through strategic marketing campaigns and data-driven optimization."
     }
-                  ];
+  ];
 
-                  return (
-                  <>
-                    <SEO
-                      title="Careers"
-                      description="Join our team of digital innovators and creators. We're always looking for talented individuals."
-                    />
-                    {/* Hero Section */}
-                    <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
-                      <div className="container mx-auto max-w-6xl relative z-10">
-                        <motion.div
-                          className="text-center mb-16"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
-                            Join Our <span className="text-gradient">Team</span>
-                          </h1>
-                          <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            Be part of a passionate team that's shaping the future of digital experiences. We're always looking for talented individuals who share our vision of excellence.
-                          </p>
-                        </motion.div>
-                      </div>
-                    </section>
+  return (
+    <>
+      <SEO
+        title="Careers"
+        description="Join our team of digital innovators and creators. We're always looking for talented individuals."
+      />
+      {/* Hero Section */}
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
+              Join Our <span className="text-gradient">Team</span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+              Be part of a passionate team that's shaping the future of digital experiences. We're always looking for talented individuals who share our vision of excellence.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-                    {/* Job Openings */}
-                    <section className="py-20 px-4 bg-luxury-black">
-                      <div className="container mx-auto max-w-4xl">
-                        <motion.div
-                          className="text-center mb-16"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
-                            Open <span className="text-gradient">Positions</span>
-                          </h2>
-                        </motion.div>
+      {/* Job Openings */}
+      <section className="py-20 px-4 bg-luxury-black">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
+              Open <span className="text-gradient">Positions</span>
+            </h2>
+          </motion.div>
 
-                        <div className="space-y-6">
-                          {jobOpenings.map((job, index) => (
-                            <motion.div
-                              key={index}
-                              className="glass-effect rounded-2xl p-8 border border-white/5 hover:border-white/20 transition-all duration-300"
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.6, delay: index * 0.1 }}
-                            >
-                              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                                <div>
-                                  <h3 className="text-2xl font-bold text-white mb-2 font-heading">{job.title}</h3>
-                                  <div className="flex flex-wrap gap-4 text-zinc-400 font-light">
-                                    <span>{job.department}</span>
-                                    <span>•</span>
-                                    <span>{job.location}</span>
-                                    <span>•</span>
-                                    <span>{job.type}</span>
-                                  </div>
-                                </div>
-                                <motion.button
-                                  className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-blue-600 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
-                                  whileHover={{ scale: 1.02 }}
-                                  whileTap={{ scale: 0.98 }}
-                                >
-                                  Apply Now
-                                </motion.button>
-                              </div>
-                              <p className="text-zinc-300 font-light">{job.description}</p>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </section>
-                  </>
-                  );
+          <div className="space-y-6">
+            {jobOpenings.map((job, index) => (
+              <motion.div
+                key={index}
+                className="glass-effect rounded-2xl p-8 border border-white/5 hover:border-white/20 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2 font-heading">{job.title}</h3>
+                    <div className="flex flex-wrap gap-4 text-zinc-400 font-light">
+                      <span>{job.department}</span>
+                      <span>•</span>
+                      <span>{job.location}</span>
+                      <span>•</span>
+                      <span>{job.type}</span>
+                    </div>
+                  </div>
+                  <motion.button
+                    className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-blue-600 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Apply Now
+                  </motion.button>
+                </div>
+                <p className="text-zinc-300 font-light">{job.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
 };
 
 // Team Page
 export const TeamPage: React.FC = () => {
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
 
-                  return (
-                  <>
-                    <SEO
-                      title="Our Team"
-                      description="Meet the diverse team of digital experts behind GrowBrandi's success."
-                    />
-                    <section className="relative min-h-screen bg-luxury-black flex flex-col items-center justify-center overflow-hidden py-20">
-                      {/* Background Elements */}
-                      <div className="absolute inset-0 z-0 pointer-events-none">
-                        {/* Architectural Grid Pattern */}
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+  return (
+    <>
+      <SEO
+        title="Our Team"
+        description="Meet the diverse team of digital experts behind GrowBrandi's success."
+      />
+      <section className="relative min-h-screen bg-luxury-black flex flex-col items-center justify-center overflow-hidden py-20">
+        {/* Background Elements */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* Architectural Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-                        {/* Dynamic Mesh Gradients */}
-                        <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-                        <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen" />
-                        <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] mix-blend-screen" />
-                      </div>
+          {/* Dynamic Mesh Gradients */}
+          <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+          <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen" />
+          <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] mix-blend-screen" />
+        </div>
 
-                      <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
-                        {/* Header */}
-                        <motion.div
-                          className="text-center mb-20"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <span className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-4 block">
-                            Meet Our Team
-                          </span>
-                          <h1 className="text-5xl md:text-7xl font-black text-white mb-8 font-heading tracking-tight leading-tight">
-                            The Experts Behind <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 animate-gradient-x">
-                              Your Success
-                            </span>
-                          </h1>
-                          <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            Our diverse team of digital experts brings together decades of experience in
-                            development, design, marketing, and AI to deliver exceptional results for our clients.
-                          </p>
-                        </motion.div>
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <motion.div
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-4 block">
+              Meet Our Team
+            </span>
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-8 font-heading tracking-tight leading-tight">
+              The Experts Behind <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 animate-gradient-x">
+                Your Success
+              </span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+              Our diverse team of digital experts brings together decades of experience in
+              development, design, marketing, and AI to deliver exceptional results for our clients.
+            </p>
+          </motion.div>
 
-                        {/* Team Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-                          {TEAM_MEMBERS.map((member, index) => (
-                            <motion.div
-                              key={member.name}
-                              className="group relative"
-                              initial={{ opacity: 0, y: 30 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.6, delay: index * 0.1 }}
-                              onMouseEnter={() => setHoveredMember(index)}
-                              onMouseLeave={() => setHoveredMember(null)}
-                              whileHover={{ y: -12, scale: 1.02 }}
-                            >
-                              <div className="glass-effect rounded-[2rem] p-8 h-full relative overflow-hidden border border-white/5 group-hover:border-white/20 transition-all duration-500 bg-zinc-900/30 backdrop-blur-xl">
-                                {/* Background Glow Effect */}
-                                <div className={`absolute inset-0 transition-all duration-700 opacity-0 group-hover:opacity-100 ${hoveredMember === index
-                                  ? 'bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent'
-                                  : ''
-                                  }`} />
+          {/* Team Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            {TEAM_MEMBERS.map((member, index) => (
+              <motion.div
+                key={member.name}
+                className="group relative"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                onMouseEnter={() => setHoveredMember(index)}
+                onMouseLeave={() => setHoveredMember(null)}
+                whileHover={{ y: -12, scale: 1.02 }}
+              >
+                <div className="glass-effect rounded-[2rem] p-8 h-full relative overflow-hidden border border-white/5 group-hover:border-white/20 transition-all duration-500 bg-zinc-900/30 backdrop-blur-xl">
+                  {/* Background Glow Effect */}
+                  <div className={`absolute inset-0 transition-all duration-700 opacity-0 group-hover:opacity-100 ${hoveredMember === index
+                    ? 'bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent'
+                    : ''
+                    }`} />
 
-                                {/* Decorative Gradient Border Top */}
-                                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
+                  {/* Decorative Gradient Border Top */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
 
-                                <div className="relative z-10 flex flex-col h-full">
-                                  <Link to={`/team/${member.slug}`} className="block flex-grow">
-                                    {/* Profile Image Container */}
-                                    <div className="relative mb-8 mx-auto w-40 h-40">
-                                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
-                                      <div className="relative w-full h-full rounded-full p-1 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 group-hover:border-white/30 transition-all duration-500">
-                                        <img
-                                          src={member.image}
-                                          alt={member.name}
-                                          className="w-full h-full object-cover rounded-full shadow-2xl transition-transform duration-500 group-hover:scale-105"
-                                          onError={(e) => {
-                                            e.currentTarget.style.display = 'none';
-                                            const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                            if (fallback) fallback.style.display = 'flex';
-                                          }}
-                                        />
-                                        {/* Fallback */}
-                                        <div className="hidden absolute inset-0 bg-zinc-800 rounded-full items-center justify-center">
-                                          <span className="text-2xl font-bold text-zinc-500">{member.name.charAt(0)}</span>
-                                        </div>
-                                      </div>
-
-                                      {/* Status Indicator */}
-                                      <div className="absolute bottom-2 right-2 w-5 h-5 bg-emerald-500 rounded-full border-4 border-zinc-900 z-20" title="Available"></div>
-                                    </div>
-
-                                    {/* Member Info */}
-                                    <div className="text-center mb-6">
-                                      <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300 font-heading tracking-tight">
-                                        {member.name}
-                                      </h3>
-                                      <div className="text-zinc-400 font-medium text-sm uppercase tracking-wider mb-4 group-hover:text-white transition-colors duration-300">
-                                        {member.role}
-                                      </div>
-                                      <p className="text-zinc-500 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-zinc-400 transition-colors duration-300">
-                                        {member.description}
-                                      </p>
-                                    </div>
-                                  </Link>
-
-                                  {/* Specialties */}
-                                  <div className="mb-8">
-                                    <div className="flex flex-wrap gap-2 justify-center">
-                                      {member.specialties.slice(0, 3).map((specialty, idx) => (
-                                        <span
-                                          key={specialty}
-                                          className="px-3 py-1 bg-white/5 text-zinc-400 text-xs font-medium rounded-full border border-white/5 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 group-hover:text-blue-300 transition-all duration-300"
-                                        >
-                                          {specialty}
-                                        </span>
-                                      ))}
-                                      {member.specialties.length > 3 && (
-                                        <span className="px-2 py-1 text-zinc-500 text-xs font-medium">+ {member.specialties.length - 3}</span>
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  {/* Social Links */}
-                                  <div className="flex justify-center gap-3 mt-auto pt-6 border-t border-white/5 group-hover:border-white/10 transition-colors duration-300">
-                                    {Object.entries(member.social).map(([platform, url]) => {
-                                      if (!url) return null;
-                                      const icons = {
-                                        linkedin: <FaLinkedin className="w-4 h-4" />,
-                                        twitter: <FaTwitter className="w-4 h-4" />,
-                                        github: <FaGithub className="w-4 h-4" />,
-                                        dribbble: <FaDribbble className="w-4 h-4" />,
-                                        instagram: <FaInstagram className="w-4 h-4" />,
-                                        email: <FaEnvelope className="w-4 h-4" />
-                                      };
-
-                                      return (
-                                        <motion.a
-                                          key={platform}
-                                          href={url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/5 hover:border-white/20"
-                                          whileHover={{ scale: 1.1, y: -2 }}
-                                          whileTap={{ scale: 0.95 }}
-                                          aria-label={`${member.name} ${platform}`}
-                                        >
-                                          {icons[platform as keyof typeof icons]}
-                                        </motion.a>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          ))}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <Link to={`/team/${member.slug}`} className="block flex-grow">
+                      {/* Profile Image Container */}
+                      <div className="relative mb-8 mx-auto w-40 h-40">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
+                        <div className="relative w-full h-full rounded-full p-1 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 group-hover:border-white/30 transition-all duration-500">
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            loading="lazy"
+                            width="300"
+                            height="300"
+                            className="w-full h-full object-cover rounded-full shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                          {/* Fallback */}
+                          <div className="hidden absolute inset-0 bg-zinc-800 rounded-full items-center justify-center">
+                            <span className="text-2xl font-bold text-zinc-500">{member.name.charAt(0)}</span>
+                          </div>
                         </div>
 
-                        {/* CTA Section */}
-                        <motion.div
-                          className="text-center mt-32"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <div className="glass-effect rounded-[2.5rem] p-12 max-w-5xl mx-auto border border-white/10 bg-gradient-to-b from-zinc-900/50 to-black/50 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
-
-                            <h2 className="text-4xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
-                              Ready to Work with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Our Amazing Team?</span>
-                            </h2>
-                            <p className="text-zinc-400 text-xl mb-10 max-w-2xl mx-auto font-light">
-                              Let's discuss your project and see how our expert team can help you achieve
-                              your digital goals. We're here to turn your vision into reality.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                              <Link to="/contact">
-                                <motion.button
-                                  className="bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400 font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] text-lg"
-                                  whileHover={{ scale: 1.02 }}
-                                  whileTap={{ scale: 0.98 }}
-                                >
-                                  Start Your Project
-                                </motion.button>
-                              </Link>
-                              <Link to="/about">
-                                <motion.button
-                                  className="glass-effect text-white hover:bg-white/10 font-bold px-10 py-4 rounded-full transition-all duration-300 border border-white/10 hover:border-white/30 text-lg"
-                                  whileHover={{ scale: 1.02 }}
-                                  whileTap={{ scale: 0.98 }}
-                                >
-                                  Learn More
-                                </motion.button>
-                              </Link>
-                            </div>
-                          </div>
-                        </motion.div>
+                        {/* Status Indicator */}
+                        <div className="absolute bottom-2 right-2 w-5 h-5 bg-emerald-500 rounded-full border-4 border-zinc-900 z-20" title="Available"></div>
                       </div>
-                    </section>
-                  </>
-                  );
+
+                      {/* Member Info */}
+                      <div className="text-center mb-6">
+                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300 font-heading tracking-tight">
+                          {member.name}
+                        </h3>
+                        <div className="text-zinc-400 font-medium text-sm uppercase tracking-wider mb-4 group-hover:text-white transition-colors duration-300">
+                          {member.role}
+                        </div>
+                        <p className="text-zinc-500 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-zinc-400 transition-colors duration-300">
+                          {member.description}
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* Specialties */}
+                    <div className="mb-8">
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {member.specialties.slice(0, 3).map((specialty, idx) => (
+                          <span
+                            key={specialty}
+                            className="px-3 py-1 bg-white/5 text-zinc-400 text-xs font-medium rounded-full border border-white/5 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 group-hover:text-blue-300 transition-all duration-300"
+                          >
+                            {specialty}
+                          </span>
+                        ))}
+                        {member.specialties.length > 3 && (
+                          <span className="px-2 py-1 text-zinc-500 text-xs font-medium">+ {member.specialties.length - 3}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Social Links */}
+                    <div className="flex justify-center gap-3 mt-auto pt-6 border-t border-white/5 group-hover:border-white/10 transition-colors duration-300">
+                      {Object.entries(member.social).map(([platform, url]) => {
+                        if (!url) return null;
+                        const icons = {
+                          linkedin: <FaLinkedin className="w-4 h-4" />,
+                          twitter: <FaTwitter className="w-4 h-4" />,
+                          github: <FaGithub className="w-4 h-4" />,
+                          dribbble: <FaDribbble className="w-4 h-4" />,
+                          instagram: <FaInstagram className="w-4 h-4" />,
+                          email: <FaEnvelope className="w-4 h-4" />
+                        };
+
+                        return (
+                          <motion.a
+                            key={platform}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white transition-all duration-300 border border-white/5 hover:border-white/20"
+                            whileHover={{ scale: 1.1, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                            aria-label={`${member.name} ${platform}`}
+                          >
+                            {icons[platform as keyof typeof icons]}
+                          </motion.a>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA Section */}
+          <motion.div
+            className="text-center mt-32"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="glass-effect rounded-[2.5rem] p-12 max-w-5xl mx-auto border border-white/10 bg-gradient-to-b from-zinc-900/50 to-black/50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
+
+              <h2 className="text-4xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
+                Ready to Work with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Our Amazing Team?</span>
+              </h2>
+              <p className="text-zinc-400 text-xl mb-10 max-w-2xl mx-auto font-light">
+                Let's discuss your project and see how our expert team can help you achieve
+                your digital goals. We're here to turn your vision into reality.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/contact">
+                  <motion.button
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400 font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] text-lg"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Start Your Project
+                  </motion.button>
+                </Link>
+                <Link to="/about">
+                  <motion.button
+                    className="glass-effect text-white hover:bg-white/10 font-bold px-10 py-4 rounded-full transition-all duration-300 border border-white/10 hover:border-white/30 text-lg"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Learn More
+                  </motion.button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
 };
 
 // Blog Page
 export const BlogPage: React.FC = () => {
   const blogPosts = [
-                  {
-                    title: "The Future of AI in Web Development",
-                  excerpt: "Exploring how artificial intelligence is revolutionizing the way we build and maintain websites.",
-                  date: "November 10, 2024",
-                  category: "Technology",
-                  image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
-                  readTime: "5 min read"
+    {
+      title: "The Future of AI in Web Development",
+      excerpt: "Exploring how artificial intelligence is revolutionizing the way we build and maintain websites.",
+      date: "November 10, 2024",
+      category: "Technology",
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
+      readTime: "5 min read"
     },
-                  {
-                    title: "Design Systems That Scale",
-                  excerpt: "Best practices for creating design systems that grow with your business and maintain consistency.",
-                  date: "November 5, 2024",
-                  category: "Design",
-                  image: "https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=600&h=400&fit=crop",
-                  readTime: "7 min read"
+    {
+      title: "Design Systems That Scale",
+      excerpt: "Best practices for creating design systems that grow with your business and maintain consistency.",
+      date: "November 5, 2024",
+      category: "Design",
+      image: "https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=600&h=400&fit=crop",
+      readTime: "7 min read"
     },
-                  {
-                    title: "Digital Marketing Trends for 2025",
-                  excerpt: "Key trends and strategies that will dominate digital marketing in the coming year.",
-                  date: "October 28, 2024",
-                  category: "Marketing",
-                  image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-                  readTime: "6 min read"
+    {
+      title: "Digital Marketing Trends for 2025",
+      excerpt: "Key trends and strategies that will dominate digital marketing in the coming year.",
+      date: "October 28, 2024",
+      category: "Marketing",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
+      readTime: "6 min read"
     }
-                  ];
+  ];
 
-                  return (
-                  <>
-                    <SEO
-                      title="Blog"
-                      description="Insights, tips, and industry trends from our team of digital experts."
-                    />
-                    {/* Hero Section */}
-                    <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
-                      <div className="container mx-auto max-w-6xl relative z-10">
-                        <motion.div
-                          className="text-center mb-16"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
-                            Our <span className="text-gradient">Blog</span>
-                          </h1>
-                          <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
-                            Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.
-                          </p>
-                        </motion.div>
-                      </div>
-                    </section>
+  return (
+    <>
+      <SEO
+        title="Blog"
+        description="Insights, tips, and industry trends from our team of digital experts."
+      />
+      {/* Hero Section */}
+      <section className="py-20 px-4 bg-luxury-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 font-heading tracking-tight">
+              Our <span className="text-gradient">Blog</span>
+            </h1>
+            <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+              Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-                    {/* Blog Posts */}
-                    <section className="py-20 px-4 bg-luxury-black">
-                      <div className="container mx-auto max-w-6xl">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                          {blogPosts.map((post, index) => (
-                            <motion.article
-                              key={index}
-                              className="glass-effect rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300"
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.6, delay: index * 0.1 }}
-                              whileHover={{ y: -5 }}
-                            >
-                              <div className="h-48 overflow-hidden">
-                                <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
-                              </div>
-                              <div className="p-6">
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className="text-white/70 font-semibold text-sm uppercase tracking-wider">{post.category}</span>
-                                  <span className="text-zinc-500 text-sm font-light">{post.readTime}</span>
-                                </div>
-                                <h3 className="text-xl font-bold text-white mb-3 font-heading">{post.title}</h3>
-                                <p className="text-zinc-400 mb-4 font-light">{post.excerpt}</p>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-zinc-500 text-sm font-light">{post.date}</span>
-                                  <button className="text-white font-semibold hover:text-zinc-300 transition-colors">
-                                    Read More →
-                                  </button>
-                                </div>
-                              </div>
-                            </motion.article>
-                          ))}
-                        </div>
-                      </div>
-                    </section>
-                  </>
-                  );
+      {/* Blog Posts */}
+      <section className="py-20 px-4 bg-luxury-black">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post, index) => (
+              <motion.article
+                key={index}
+                className="glass-effect rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="h-48 overflow-hidden">
+                  <img src={post.image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover" />
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-white/70 font-semibold text-sm uppercase tracking-wider">{post.category}</span>
+                    <span className="text-zinc-500 text-sm font-light">{post.readTime}</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 font-heading">{post.title}</h3>
+                  <p className="text-zinc-400 mb-4 font-light">{post.excerpt}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-zinc-500 text-sm font-light">{post.date}</span>
+                    <button className="text-white font-semibold hover:text-zinc-300 transition-colors">
+                      Read More →
+                    </button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
 };

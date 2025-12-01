@@ -94,6 +94,9 @@ const TeamSection: React.FC = () => {
                                                 <img
                                                     src={member.image}
                                                     alt={member.name}
+                                                    loading="lazy"
+                                                    width="300"
+                                                    height="300"
                                                     className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-700 group-hover:border-blue-400/50 transition-all duration-300"
                                                     onError={(e) => {
                                                         // Fallback to initials if image fails to load

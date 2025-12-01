@@ -52,6 +52,9 @@ const Footer: React.FC = () => {
               <img
                 src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
                 alt="GrowBrandi Logo"
+                loading="lazy"
+                width="150"
+                height="50"
                 className="w-auto h-12 object-contain"
               />
             </Link>

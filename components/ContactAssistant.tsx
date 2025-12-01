@@ -106,7 +106,6 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
   const handleSubmit = async () => {
     // Here you would normally send the form data to your backend
-    console.log('Submitting form:', formData);
     setShowThankYou(true);
 
     // Auto close after 3 seconds

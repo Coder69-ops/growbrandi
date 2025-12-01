@@ -51,9 +51,9 @@ const TeamMemberProfile: React.FC = () => {
                 {/* Architectural Grid Pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-                {/* Dynamic Mesh Gradients */}
-                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[700px] h-[700px] bg-purple-500/10 rounded-full blur-[120px] mix-blend-screen" />
+                {/* Dynamic Mesh Gradients - Optimized for Mobile */}
+                <div className="absolute top-[-10%] left-[-5%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-blue-600/20 rounded-full blur-[80px] md:blur-[120px] mix-blend-screen animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[350px] md:w-[700px] h-[350px] md:h-[700px] bg-purple-500/10 rounded-full blur-[80px] md:blur-[120px] mix-blend-screen" />
             </div>
 
             {/* Image Modal */}
@@ -79,7 +79,7 @@ const TeamMemberProfile: React.FC = () => {
             </AnimatePresence>
 
             {/* Hero Banner */}
-            <div className="relative min-h-[350px] lg:h-[450px] w-full overflow-hidden flex flex-col justify-center items-center">
+            <div className="relative min-h-[300px] lg:h-[450px] w-full overflow-hidden flex flex-col justify-center items-center">
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-luxury-black/50 to-luxury-black" />
 
@@ -93,7 +93,7 @@ const TeamMemberProfile: React.FC = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 md:-mt-40 relative z-10">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -105,7 +105,7 @@ const TeamMemberProfile: React.FC = () => {
                         <motion.div variants={itemVariants} className="glass-effect rounded-[2rem] border border-white/10 overflow-hidden shadow-2xl lg:sticky lg:top-24 bg-zinc-900/40 backdrop-blur-xl">
                             <div className="p-8 flex flex-col items-center text-center">
                                 <div
-                                    className="relative w-64 h-64 sm:w-72 sm:h-72 mb-8 group cursor-zoom-in"
+                                    className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 mb-8 group cursor-zoom-in"
                                     onClick={() => setIsImageExpanded(true)}
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity duration-500" />
@@ -113,6 +113,9 @@ const TeamMemberProfile: React.FC = () => {
                                         <img
                                             src={member.image}
                                             alt={member.name}
+                                            loading="lazy"
+                                            width="300"
+                                            height="300"
                                             className="w-full h-full object-cover rounded-full shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                                         />
                                     </div>

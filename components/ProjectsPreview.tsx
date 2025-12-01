@@ -71,6 +71,9 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <img
                                 src={project.imageUrl}
                                 alt={project.title}
+                                loading="lazy"
+                                width="800"
+                                height="400"
                                 className="w-full h-48 sm:h-[400px] object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
@@ -103,7 +106,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                             <p className="text-xs text-zinc-400 uppercase font-bold tracking-wider">Before</p>
                                         </div>
                                         <div className="relative overflow-hidden rounded-xl border border-white/5 group-hover:border-red-500/30 transition-colors duration-300">
-                                            <img src={project.beforeImage} alt="Before" className="w-full h-40 object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500" />
+                                            <img src={project.beforeImage} alt="Before" loading="lazy" width="600" height="400" className="w-full h-40 object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500" />
                                             <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                         </div>
                                     </div>
@@ -112,7 +115,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                             <p className="text-xs text-blue-400 uppercase font-bold tracking-wider">After</p>
                                         </div>
                                         <div className="relative overflow-hidden rounded-xl border border-blue-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                                            <img src={project.afterImage} alt="After" className="w-full h-40 object-cover" />
+                                            <img src={project.afterImage} alt="After" loading="lazy" width="600" height="400" className="w-full h-40 object-cover" />
                                             <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                         </div>
                                     </div>
@@ -222,6 +225,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
             <img
                 src={project.imageUrl}
                 alt={project.title}
+                loading="lazy"
+                width="600"
+                height="450"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />

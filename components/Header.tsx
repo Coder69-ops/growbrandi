@@ -238,6 +238,9 @@ const Header: React.FC<HeaderProps> = () => {
                             <img
                                 src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
                                 alt="GrowBrandi Logo"
+                                loading="eager"
+                                width="180"
+                                height="60"
                                 className="w-auto h-10 lg:h-14 object-contain"
                             />
                         </button>
