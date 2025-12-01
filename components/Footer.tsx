@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
           <div className="sm:col-span-2 lg:col-span-4 space-y-4 md:space-y-6">
             <Link to="/" className="flex items-center gap-3 group">
               <img
-                src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
+                src="/growbrandi-logo.png"
                 alt="GrowBrandi Logo"
                 loading="lazy"
                 width="150"

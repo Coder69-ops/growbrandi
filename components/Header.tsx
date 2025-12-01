@@ -236,7 +236,7 @@ const Header: React.FC<HeaderProps> = () => {
                             aria-label="GrowBrandi Home"
                         >
                             <img
-                                src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
+                                src="/growbrandi-logo.png"
                                 alt="GrowBrandi Logo"
                                 loading="eager"
                                 width="180"

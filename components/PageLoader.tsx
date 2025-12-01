@@ -32,7 +32,7 @@ const PageLoader: React.FC = () => {
                     <div className="relative w-24 h-24 bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
                         <img
-                            src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
+                            src="/growbrandi-logo.png"
                             alt="GrowBrandi"
                             width="64"
                             height="64"
