@@ -16,6 +16,14 @@ import { Logos3 } from './blocks/logos3';
 
 const HeroSection: React.FC = () => {
     const navigate = useNavigate();
+    const [isMobile, setIsMobile] = React.useState(true);
+
+    React.useEffect(() => {
+        setIsMobile(window.innerWidth < 768);
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Animation variants
     const containerVariants = {
@@ -142,8 +150,8 @@ const HeroSection: React.FC = () => {
                     >
                         {/* Main Glass Card */}
                         <motion.div
-                            variants={floatVariants}
-                            animate="animate"
+                            variants={!isMobile ? floatVariants : {}}
+                            animate={!isMobile ? "animate" : undefined}
                             className="absolute top-[35%] left-1/2 lg:left-[40%] -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] h-[400px] sm:h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.02] rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden z-20"
                         >
                             {/* Card Header */}
@@ -182,17 +190,17 @@ const HeroSection: React.FC = () => {
 
                         {/* Floating Elements Behind */}
                         <motion.div
-                            animate={{
+                            animate={!isMobile ? {
                                 y: [0, 20, 0],
                                 rotate: [0, 5, 0]
-                            }}
+                            } : {}}
                             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                             className="absolute top-[10%] right-[5%] w-48 h-48 bg-gradient-to-br from-blue-600/30 to-purple-600/30 rounded-2xl blur-xl z-10"
                         />
 
                         {/* Floating Badge 1 */}
                         <motion.div
-                            animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
+                            animate={!isMobile ? { y: [0, -20, 0], x: [0, 10, 0] } : {}}
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                             className="absolute top-[15%] left-[0%] lg:left-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
@@ -209,7 +217,7 @@ const HeroSection: React.FC = () => {
 
                         {/* Floating Badge 2 */}
                         <motion.div
-                            animate={{ y: [0, 15, 0], x: [0, -5, 0] }}
+                            animate={!isMobile ? { y: [0, 15, 0], x: [0, -5, 0] } : {}}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                             className="absolute bottom-[40%] md:bottom-[25%] right-[5%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
