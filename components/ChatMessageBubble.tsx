@@ -15,7 +15,7 @@ const UserAvatar = () => (
 );
 
 const ModelAvatar = () => (
-  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center text-white flex-shrink-0">
+  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white flex-shrink-0">
     <FaRobot className="w-5 h-5" />
   </div>
 );
@@ -34,7 +34,7 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
 
   const messageContainerClasses = isUser ? 'flex-row-reverse' : 'flex-row';
   const bubbleClasses = isUser
-    ? 'bg-teal-600 text-white rounded-br-none'
+    ? 'bg-blue-600 text-white rounded-br-none'
     : 'bg-zinc-700/80 text-zinc-200 rounded-bl-none';
 
   if (!text && !isUser) {

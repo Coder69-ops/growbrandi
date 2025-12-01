@@ -221,88 +221,91 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => (
     <motion.div
-        className={`group relative overflow-hidden rounded-3xl text-center ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
+        className={`group relative rounded-3xl text-center ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
         variants={itemVariants}
         whileHover={{ y: -12, scale: 1.02 }}
         transition={{ duration: 0.3 }}
     >
-        {/* Featured Badge */}
+        {/* Featured Badge - Floating Upper Layer */}
         {featured && (
-            <div className="absolute -top-1 -right-1 z-10">
-                <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-3 py-1 rounded-full text-xs font-bold">
+            <div className="absolute -top-4 -right-2 z-20">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full shadow-lg shadow-blue-500/40 text-xs font-bold tracking-wider uppercase transform rotate-2">
                     POPULAR
                 </div>
             </div>
         )}
 
-        <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
-            {/* Background Decorations */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
+        {/* Inner Content Wrapper with Overflow Hidden */}
+        <div className="relative overflow-hidden rounded-3xl h-full">
+            <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
+                {/* Background Decorations */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
 
-            {/* Service Number */}
-            <div className="absolute top-4 right-4 text-5xl font-black text-zinc-800/30 group-hover:text-zinc-700/40 transition-colors">
-                {(index + 1).toString().padStart(2, '0')}
-            </div>
-
-            <div className="relative z-10">
-                {/* Service Icon */}
-                <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
-                    <div className={`relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`}>
-                        {service.icon}
-                    </div>
+                {/* Service Number */}
+                <div className="absolute top-4 right-4 text-5xl font-black text-zinc-800/30 group-hover:text-zinc-700/40 transition-colors">
+                    {(index + 1).toString().padStart(2, '0')}
                 </div>
 
-                {/* Service Content */}
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gradient transition-colors duration-300">
-                    {service.title}
-                </h3>
-                <p className="text-zinc-300 mb-6 leading-relaxed text-sm">
-                    {service.description}
-                </p>
-
-                {/* Features Grid */}
-                <div className="grid grid-cols-2 gap-2 mb-6">
-                    {service.features?.slice(0, 4).map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-zinc-400">
-                            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
-                            <span className="truncate">{feature}</span>
+                <div className="relative z-10">
+                    {/* Service Icon */}
+                    <div className="relative mb-6">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
+                        <div className={`relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`}>
+                            {service.icon}
                         </div>
-                    ))}
-                </div>
-
-                {/* Price */}
-                <div className="mb-6">
-                    <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
-                        {service.price}
                     </div>
-                    <div className="text-zinc-400 text-xs mt-1">No hidden fees</div>
-                </div>
 
-                {/* Buttons */}
-                <div className="space-y-3">
-                    <motion.button
-                        onClick={onLearnMore}
-                        className={`w-full bg-gradient-to-r ${service.color} text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg`}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        Learn More
-                    </motion.button>
-                    <button
-                        onClick={() => window.location.href = '/contact'}
-                        className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-blue-400 hover:text-blue-400 transition-all"
-                    >
-                        Get Quote
-                    </button>
-                </div>
+                    {/* Service Content */}
+                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gradient transition-colors duration-300">
+                        {service.title}
+                    </h3>
+                    <p className="text-zinc-300 mb-6 leading-relaxed text-sm">
+                        {service.description}
+                    </p>
 
-                {/* Trust Badge */}
-                <div className="mt-6 pt-4 border-t border-zinc-700">
-                    <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
-                        <FaCheckCircle className="w-4 h-4 text-blue-400" />
-                        <span>Money-back guarantee</span>
+                    {/* Features Grid */}
+                    <div className="grid grid-cols-2 gap-2 mb-6">
+                        {service.features?.slice(0, 4).map((feature, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs text-zinc-400">
+                                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                                <span className="truncate">{feature}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Price */}
+                    <div className="mb-6">
+                        <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
+                            {service.price}
+                        </div>
+                        <div className="text-zinc-400 text-xs mt-1">No hidden fees</div>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="space-y-3">
+                        <motion.button
+                            onClick={onLearnMore}
+                            className={`w-full bg-gradient-to-r ${service.color} text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            Learn More
+                        </motion.button>
+                        <button
+                            onClick={() => window.location.href = '/contact'}
+                            className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-blue-400 hover:text-blue-400 transition-all"
+                        >
+                            Get Quote
+                        </button>
+                    </div>
+
+                    {/* Trust Badge */}
+                    <div className="mt-6 pt-4 border-t border-zinc-700">
+                        <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
+                            <FaCheckCircle className="w-4 h-4 text-blue-400" />
+                            <span>Money-back guarantee</span>
+                        </div>
                     </div>
                 </div>
             </div>

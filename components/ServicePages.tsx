@@ -20,7 +20,7 @@ export const WebDevelopmentPage: React.FC = () => {
       ]}
       benefits={[
         "Lightning-Fast Loading Times",
-        "Mobile-First Responsive Design", 
+        "Mobile-First Responsive Design",
         "Search Engine Optimized Structure",
         "Scalable Architecture",
         "Advanced Security Features",
@@ -29,7 +29,7 @@ export const WebDevelopmentPage: React.FC = () => {
         "Regular Updates & Maintenance"
       ]}
       technologies={[
-        "React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "PostgreSQL", 
+        "React", "Next.js", "TypeScript", "Node.js", "Express.js", "MongoDB", "PostgreSQL",
         "AWS", "Docker", "Tailwind CSS", "Framer Motion", "GraphQL", "REST APIs"
       ]}
       process={[
@@ -42,7 +42,7 @@ export const WebDevelopmentPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$2,999",
+          price: "$999",
           features: [
             "5-Page Custom Website",
             "Responsive Design",
@@ -53,7 +53,7 @@ export const WebDevelopmentPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$7,499",
+          price: "$2,999",
           features: [
             "Up to 15 Pages",
             "Advanced Custom Features",
@@ -66,7 +66,7 @@ export const WebDevelopmentPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$15,999",
+          price: "$5,999",
           features: [
             "Unlimited Pages",
             "Custom Web Application",
@@ -111,7 +111,7 @@ export const UIUXDesignPage: React.FC = () => {
         "Scalable Design Systems"
       ]}
       technologies={[
-        "Figma", "Adobe XD", "Sketch", "InVision", "Principle", "Framer", 
+        "Figma", "Adobe XD", "Sketch", "InVision", "Principle", "Framer",
         "Adobe Creative Suite", "Miro", "Whimsical", "UserTesting", "Hotjar"
       ]}
       process={[
@@ -124,10 +124,10 @@ export const UIUXDesignPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$1,999",
+          price: "$799",
           features: [
             "5 Page UI Design",
-            "Basic Wireframes", 
+            "Basic Wireframes",
             "Mobile Responsive Design",
             "Style Guide",
             "2 Revision Rounds",
@@ -135,7 +135,7 @@ export const UIUXDesignPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$4,999",
+          price: "$1,999",
           features: [
             "Complete Website/App Design",
             "User Research & Personas",
@@ -147,7 +147,7 @@ export const UIUXDesignPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$9,999",
+          price: "$3,999",
           features: [
             "Complex Application Design",
             "Advanced User Research",
@@ -191,7 +191,7 @@ export const BrandStrategyPage: React.FC = () => {
         "Long-term Brand Value"
       ]}
       technologies={[
-        "Brand Strategy Frameworks", "Market Research Tools", "Adobe Creative Suite", 
+        "Brand Strategy Frameworks", "Market Research Tools", "Adobe Creative Suite",
         "Figma", "Miro", "Survey Tools", "Analytics Platforms", "Social Listening Tools"
       ]}
       process={[
@@ -204,7 +204,7 @@ export const BrandStrategyPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$3,999",
+          price: "$1,499",
           features: [
             "Brand Audit & Analysis",
             "Basic Brand Positioning",
@@ -215,7 +215,7 @@ export const BrandStrategyPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$8,999",
+          price: "$3,999",
           features: [
             "Comprehensive Brand Strategy",
             "Market Research",
@@ -226,7 +226,7 @@ export const BrandStrategyPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$19,999",
+          price: "$7,999",
           features: [
             "Full Brand Transformation",
             "Advanced Market Research",
@@ -269,7 +269,7 @@ export const SEOOptimizationPage: React.FC = () => {
         "Competitive Advantage"
       ]}
       technologies={[
-        "Google Analytics", "Google Search Console", "SEMrush", "Ahrefs", "Moz", 
+        "Google Analytics", "Google Search Console", "SEMrush", "Ahrefs", "Moz",
         "Screaming Frog", "GTmetrix", "PageSpeed Insights", "Schema Markup Tools"
       ]}
       process={[
@@ -282,7 +282,7 @@ export const SEOOptimizationPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$1,499",
+          price: "$499",
           features: [
             "Basic SEO Audit",
             "Keyword Research (50 keywords)",
@@ -293,7 +293,7 @@ export const SEOOptimizationPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$3,999",
+          price: "$1,499",
           features: [
             "Comprehensive SEO Audit",
             "Advanced Keyword Research",
@@ -306,7 +306,7 @@ export const SEOOptimizationPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$7,999",
+          price: "$2,999",
           features: [
             "Enterprise SEO Strategy",
             "Advanced Technical SEO",
@@ -351,7 +351,7 @@ export const DigitalMarketingPage: React.FC = () => {
         "Competitive Market Position"
       ]}
       technologies={[
-        "Google Ads", "Facebook Ads Manager", "HubSpot", "Mailchimp", "Hootsuite", 
+        "Google Ads", "Facebook Ads Manager", "HubSpot", "Mailchimp", "Hootsuite",
         "Google Analytics", "SEMrush", "Canva", "Buffer", "Zapier", "Hotjar"
       ]}
       process={[
@@ -364,7 +364,7 @@ export const DigitalMarketingPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$2,499",
+          price: "$999",
           features: [
             "2 Social Media Platforms",
             "Basic PPC Campaign",
@@ -375,7 +375,7 @@ export const DigitalMarketingPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$5,999",
+          price: "$2,499",
           features: [
             "Multi-Channel Marketing",
             "Advanced PPC Management",
@@ -387,7 +387,7 @@ export const DigitalMarketingPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$12,999",
+          price: "$4,999",
           features: [
             "Full Marketing Ecosystem",
             "Advanced Analytics Setup",
@@ -431,7 +431,7 @@ export const AISolutionsPage: React.FC = () => {
         "Future-Ready Technology"
       ]}
       technologies={[
-        "Python", "TensorFlow", "PyTorch", "OpenAI GPT", "Hugging Face", "AWS AI/ML", 
+        "Python", "TensorFlow", "PyTorch", "OpenAI GPT", "Hugging Face", "AWS AI/ML",
         "Google Cloud AI", "Azure AI", "Jupyter", "Pandas", "NumPy", "Scikit-learn"
       ]}
       process={[
@@ -444,7 +444,7 @@ export const AISolutionsPage: React.FC = () => {
       ]}
       pricing={{
         starter: {
-          price: "$4,999",
+          price: "$1,999",
           features: [
             "AI Consultation",
             "Simple Chatbot Development",
@@ -455,7 +455,7 @@ export const AISolutionsPage: React.FC = () => {
           ]
         },
         professional: {
-          price: "$14,999",
+          price: "$4,999",
           features: [
             "Custom AI Model Development",
             "Advanced NLP Solutions",
@@ -466,7 +466,7 @@ export const AISolutionsPage: React.FC = () => {
           ]
         },
         enterprise: {
-          price: "$34,999",
+          price: "$9,999",
           features: [
             "Enterprise AI Platform",
             "Multiple AI Models",

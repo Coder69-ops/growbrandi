@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaCheck } from 'react-icons/fa';
 import {
   recommendServices,
-  generateConsultationPlan,
-  estimateProject
+  generateConsultationPlan
 } from '../services/geminiService';
 
 interface ContactAssistantProps {
@@ -163,7 +162,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         <div className="px-6 pt-4">
           <div className="w-full bg-zinc-700 rounded-full h-2">
             <motion.div
-              className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-2 rounded-full"
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${getProgressPercentage()}%` }}
               transition={{ duration: 0.5 }}
@@ -183,25 +182,24 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 exit={{ opacity: 0, y: -20 }}
                 className="text-center py-12"
               >
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FaCheck className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
                 <p className="text-zinc-300">We've received your information and will contact you soon.</p>
               </motion.div>
             ) : (
-              <>
+              <motion.div
+                key={`step-${step}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-4"
+              >
                 {/* Step 1: Basic Information */}
                 {step === 1 && (
-                  <motion.div
-                    key="step1"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-white mb-4">Let's get to know you</h4>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">Name *</label>
@@ -209,67 +207,57 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           type="text"
                           value={formData.name}
                           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
                           placeholder="Your full name"
                           required
                         />
                       </div>
-
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">Email *</label>
                         <input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
                           placeholder="your@email.com"
                           required
                         />
                       </div>
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-zinc-300 mb-2">Company</label>
                       <input
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
-                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
                         placeholder="Your company name"
                       />
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-zinc-300 mb-2">Industry *</label>
                       <input
                         type="text"
                         value={formData.industry}
                         onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
                         placeholder="e.g., Healthcare, E-commerce, SaaS"
                         required
                       />
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Step 2: Project Details */}
                 {step === 2 && (
-                  <motion.div
-                    key="step2"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-white mb-4">Tell us about your project</h4>
-
                     <div>
                       <label className="block text-sm font-medium text-zinc-300 mb-2">Project Type *</label>
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
-                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
                         required
                       >
                         <option value="">Select project type</option>
@@ -283,14 +271,13 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         <option value="Other">Other</option>
                       </select>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">Budget Range *</label>
                         <select
                           value={formData.budget}
                           onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
                           required
                         >
                           <option value="">Select budget</option>
@@ -300,13 +287,12 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           <option value="$50K+">$50K+</option>
                         </select>
                       </div>
-
                       <div>
                         <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline *</label>
                         <select
                           value={formData.timeline}
                           onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+                          className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
                           required
                         >
                           <option value="">Select timeline</option>
@@ -317,21 +303,14 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         </select>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Step 3: Goals */}
                 {step === 3 && (
-                  <motion.div
-                    key="step3"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-white mb-4">What are your goals?</h4>
                     <p className="text-zinc-400 text-sm mb-4">Select all that apply</p>
-
                     <div className="grid grid-cols-2 gap-3">
                       {goalOptions.map(goal => (
                         <button
@@ -339,7 +318,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           type="button"
                           onClick={() => toggleMultiSelect(goal, 'goals')}
                           className={`p-3 rounded-lg text-sm transition-all ${formData.goals.includes(goal)
-                            ? 'bg-emerald-600 text-white'
+                            ? 'bg-blue-600 text-white'
                             : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                             }`}
                         >
@@ -347,21 +326,14 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         </button>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Step 4: Challenges */}
                 {step === 4 && (
-                  <motion.div
-                    key="step4"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-4"
-                  >
+                  <div className="space-y-4">
                     <h4 className="text-lg font-semibold text-white mb-4">What challenges are you facing?</h4>
                     <p className="text-zinc-400 text-sm mb-4">Select all that apply</p>
-
                     <div className="grid grid-cols-2 gap-3">
                       {challengeOptions.map(challenge => (
                         <button
@@ -377,33 +349,25 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         </button>
                       ))}
                     </div>
-
                     <div className="mt-6">
                       <label className="block text-sm font-medium text-zinc-300 mb-2">Additional Message</label>
                       <textarea
                         value={formData.message}
                         onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-3 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500 h-24 resize-none"
+                        className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-3 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 h-24 resize-none"
                         placeholder="Tell us more about your project..."
                       />
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {/* Step 5: AI Insights */}
                 {step === 5 && (
-                  <motion.div
-                    key="step5"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-6"
-                  >
+                  <div className="space-y-6">
                     <h4 className="text-lg font-semibold text-white mb-4">AI-Powered Recommendations</h4>
-
                     {isAnalyzing ? (
                       <div className="text-center py-8">
-                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500 mb-4"></div>
+                        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
                         <p className="text-zinc-300">Analyzing your requirements...</p>
                       </div>
                     ) : aiInsights ? (
@@ -420,7 +384,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                                     <p className="text-zinc-400 text-sm">{service.reason}</p>
                                   </div>
                                   <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                                    service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                                    service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-blue-600'
                                     } text-white`}>
                                     {service.priority}
                                   </span>
@@ -433,26 +397,24 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         {/* Consultation Plan */}
                         {aiInsights.consultation && (
                           <div className="bg-zinc-800/50 rounded-xl p-6">
-                            <h5 className="text-white font-semibold mb-4">Your Consultation Plan</h5>
+                            <h5 className="text-white font-semibold mb-4">Consultation Plan</h5>
                             <div className="space-y-3">
-                              <div className="p-3 bg-emerald-600/20 border border-emerald-500/30 rounded-lg">
-                                <p className="text-emerald-300 font-medium">
-                                  {aiInsights.consultation.consultationType} ({aiInsights.consultation.recommendedDuration})
-                                </p>
-                              </div>
-                              {aiInsights.consultation.personalizedMessage && (
-                                <p className="text-zinc-300 italic">
-                                  "{aiInsights.consultation.personalizedMessage}"
-                                </p>
+                              <p className="text-zinc-300 text-sm">{aiInsights.consultation.summary}</p>
+                              {aiInsights.consultation.keyPoints && (
+                                <ul className="list-disc list-inside text-zinc-400 text-sm space-y-1">
+                                  {aiInsights.consultation.keyPoints.map((point: string, idx: number) => (
+                                    <li key={idx}>{point}</li>
+                                  ))}
+                                </ul>
                               )}
                             </div>
                           </div>
                         )}
                       </div>
                     ) : null}
-                  </motion.div>
+                  </div>
                 )}
-              </>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
@@ -477,7 +439,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                   (step === 3 && formData.goals.length === 0) ||
                   (step === 4 && formData.challenges.length === 0)
                 }
-                className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {step === 4 ? 'Get AI Insights' : 'Next'}
               </button>
@@ -485,7 +447,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
               <button
                 onClick={handleSubmit}
                 disabled={isAnalyzing}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50"
               >
                 Send Message
               </button>

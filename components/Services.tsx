@@ -109,7 +109,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               </div>
               <div>
                 <h2 className="text-4xl font-bold text-white mb-2">{service.title}</h2>
-                <p className="text-emerald-400 font-semibold text-xl">{service.price}</p>
+                <p className="text-blue-400 font-semibold text-xl">{service.price}</p>
               </div>
             </div>
 
@@ -120,7 +120,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               <div className="grid grid-cols-1 gap-4">
                 {service.features?.map((feature, index) => (
                   <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl">
-                    <FaCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" aria-hidden="true" />
+                    <FaCheck className="w-6 h-6 text-blue-400 flex-shrink-0" aria-hidden="true" />
                     <span className="text-zinc-300 font-medium text-lg">{feature}</span>
                   </div>
                 ))}
@@ -139,7 +139,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                   'Industry-leading tools and technologies'
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <FaCircle className="w-3 h-3 text-emerald-400" aria-hidden="true" />
+                    <FaCircle className="w-3 h-3 text-blue-400" aria-hidden="true" />
                     <span className="text-zinc-300">{benefit}</span>
                   </div>
                 ))}
@@ -154,7 +154,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 {steps.map((step, index) => (
                   <div key={index} className="relative">
                     {index < steps.length - 1 && (
-                      <div className="absolute left-6 top-16 w-0.5 h-20 bg-gradient-to-b from-emerald-400 to-blue-400" />
+                      <div className="absolute left-6 top-16 w-0.5 h-20 bg-gradient-to-b from-blue-400 to-cyan-400" />
                     )}
 
                     <div className="flex items-start gap-6">
@@ -165,7 +165,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                       <div className="flex-1 glass-effect p-6 rounded-xl">
                         <div className="flex items-center justify-between mb-3">
                           <h4 className="text-white font-semibold text-lg">{step.step}</h4>
-                          <span className="text-emerald-400 text-sm font-medium bg-emerald-400/10 px-3 py-1 rounded-full">
+                          <span className="text-blue-400 text-sm font-medium bg-blue-400/10 px-3 py-1 rounded-full">
                             {step.duration}
                           </span>
                         </div>
@@ -178,10 +178,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
             </div>
 
             <div className="space-y-4">
-              <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 shadow-xl">
+              <button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-xl">
                 Start Your Project Now
               </button>
-              <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-8 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
+              <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-8 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
                 Schedule Free Consultation
               </button>
             </div>
@@ -196,7 +196,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 <span className="text-white font-bold text-lg">4.9/5</span>
               </div>
               <p className="text-zinc-400">Average rating from 200+ clients</p>
-              <p className="text-emerald-400 text-sm mt-2">✓ 98% project success rate</p>
+              <p className="text-blue-400 text-sm mt-2">✓ 98% project success rate</p>
             </div>
           </div>
         </div>
@@ -241,13 +241,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
       onMouseMove={handleMouseMove}
       onMouseEnter={handleFocus}
       onMouseLeave={handleBlur}
-      className={`relative overflow-hidden rounded-3xl h-full group ${featured ? 'ring-2 ring-emerald-400 ring-opacity-50' : ''}`}
+      className={`relative overflow-hidden rounded-3xl h-full group ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
       variants={itemVariants}
       whileHover={{ y: -12, scale: 1.02, transition: { duration: 0.3 } }}
     >
       {featured && (
         <div className="absolute -top-1 -right-1 z-20">
-          <div className="bg-gradient-to-r from-emerald-400 to-blue-400 text-white px-4 py-2 rounded-full text-sm font-bold">
+          <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 py-2 rounded-full text-sm font-bold">
             MOST POPULAR
           </div>
         </div>
@@ -257,19 +257,19 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(16, 185, 129, 0.15), transparent 40%)`,
+          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
         }}
       />
 
-      <div className={`glass-effect p-8 h-full relative ${featured ? 'bg-gradient-to-br from-emerald-500/5 to-blue-500/5' : ''}`}>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
+      <div className={`glass-effect p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
 
         <div className="relative z-10 h-full flex flex-col">
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
                 <div className={`relative p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`} aria-hidden="true">
                   {service.icon}
                 </div>
@@ -288,7 +288,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             <div className="grid grid-cols-1 gap-3">
               {service.features?.slice(0, 4).map((feature, index) => (
                 <div key={index} className="flex items-center text-zinc-400">
-                  <FaCheck className="w-5 h-5 text-emerald-400 mr-3 flex-shrink-0" aria-hidden="true" />
+                  <FaCheck className="w-5 h-5 text-blue-400 mr-3 flex-shrink-0" aria-hidden="true" />
                   {feature}
                 </div>
               ))}
@@ -304,14 +304,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             >
               Learn More & Get Started
             </motion.button>
-            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
+            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
               Get Free Quote
             </button>
           </div>
 
           <div className="mt-6 pt-4 border-t border-zinc-700 text-center">
             <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
-              <FaShieldAlt className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+              <FaShieldAlt className="w-4 h-4 text-blue-400" aria-hidden="true" />
               <span>30-day money-back guarantee</span>
             </div>
           </div>
@@ -367,8 +367,8 @@ export const ServicesPage: React.FC = () => {
               transition={{ duration: 0.6 }}
             >
               <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8">
-                <FaLayerGroup className="w-5 h-5 text-emerald-400" />
-                <span className="text-sm font-bold text-emerald-400 tracking-wide">COMPREHENSIVE SERVICES</span>
+                <FaLayerGroup className="w-5 h-5 text-blue-400" />
+                <span className="text-sm font-bold text-blue-400 tracking-wide">COMPREHENSIVE SERVICES</span>
                 <FaGem className="w-5 h-5 text-blue-400" />
               </div>
               <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight font-heading tracking-tight text-white">
@@ -491,7 +491,7 @@ export const ServicesPage: React.FC = () => {
 
               <div className="flex items-center justify-center gap-8 pt-8 border-t border-zinc-700">
                 <div className="flex items-center gap-2">
-                  <FaLock className="w-5 h-5 text-emerald-400" />
+                  <FaLock className="w-5 h-5 text-blue-400" />
                   <span className="text-zinc-300 text-sm">SSL Secured</span>
                 </div>
                 <div className="flex items-center gap-2">

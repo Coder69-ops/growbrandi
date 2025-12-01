@@ -24,7 +24,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
           {question}
         </h3>
         <motion.div
-          className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center"
+          className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-500 rounded-full flex items-center justify-center"
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
@@ -41,7 +41,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             className="overflow-hidden"
           >
             <div className="px-8 pb-6 pt-2">
-              <div className="w-full h-px bg-gradient-to-r from-emerald-500/20 to-blue-500/20 mb-4" />
+              <div className="w-full h-px bg-gradient-to-r from-blue-500/20 to-blue-500/20 mb-4" />
               <p className="text-zinc-300 leading-relaxed text-lg">{answer}</p>
             </div>
           </motion.div>
@@ -62,7 +62,7 @@ const FAQ: React.FC = () => {
     <section className="py-24 px-4 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-luxury-black" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
       <div className="container mx-auto max-w-5xl relative z-10">
@@ -74,7 +74,7 @@ const FAQ: React.FC = () => {
           transition={{ duration: 0.6 }}
         >
           <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
-            <span className="text-sm font-medium text-emerald-400">FAQ</span>
+            <span className="text-sm font-medium text-blue-400">FAQ</span>
           </div>
           <h2 className="text-3xl md:text-6xl font-black mb-6">
             Frequently Asked <span className="text-gradient">Questions</span>
@@ -132,7 +132,7 @@ const FAQ: React.FC = () => {
               Can't find the answer you're looking for? Our team is here to help you.
             </p>
             <motion.button
-              className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+              className="bg-gradient-to-r from-blue-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-blue-600 transition-all duration-300"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >

@@ -55,15 +55,15 @@ const SloganGenerator: React.FC = () => {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black" />
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-blue-500/5 to-purple-500/5" />
-            <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-cyan-500/5 to-purple-500/5" />
+            <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
 
             <div className="container mx-auto max-w-5xl relative z-10">
                 <motion.div variants={itemVariants} className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
-                        <FaMagic className="w-4 h-4 text-emerald-400" />
-                        <span className="text-sm font-medium text-emerald-400">GROWBRANDI SMART TOOL</span>
+                        <FaMagic className="w-4 h-4 text-blue-400" />
+                        <span className="text-sm font-medium text-blue-400">GROWBRANDI SMART TOOL</span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
                         Try Our <span className="text-gradient">AI Slogan Generator</span>
@@ -88,7 +88,7 @@ const SloganGenerator: React.FC = () => {
                                 value={keywords}
                                 onChange={(e) => setKeywords(e.target.value)}
                                 placeholder="e.g., sustainable, innovative, coffee, community, growth"
-                                className="w-full bg-zinc-800/50 border border-zinc-600 rounded-2xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300"
+                                className="w-full bg-zinc-800/50 border border-zinc-600 rounded-2xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                                 onKeyPress={(e) => e.key === 'Enter' && handleGenerate()}
                             />
                         </div>
@@ -96,7 +96,7 @@ const SloganGenerator: React.FC = () => {
                             <motion.button
                                 onClick={handleGenerate}
                                 disabled={isLoading}
-                                className="group relative overflow-hidden bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl hover:from-emerald-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-3"
+                                className="group relative overflow-hidden bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-2xl hover:from-blue-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center gap-3"
                                 whileHover={{ scale: 1.02, y: -1 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -149,8 +149,8 @@ const SloganGenerator: React.FC = () => {
                                             <p className="text-lg text-white font-medium flex-1">
                                                 "{slogan}"
                                             </p>
-                                            <button className="opacity-0 group-hover:opacity-100 ml-4 p-2 rounded-lg hover:bg-emerald-500/20 transition-all duration-200">
-                                                <FaCopy className="w-5 h-5 text-emerald-400" />
+                                            <button className="opacity-0 group-hover:opacity-100 ml-4 p-2 rounded-lg hover:bg-blue-500/20 transition-all duration-200">
+                                                <FaCopy className="w-5 h-5 text-blue-400" />
                                             </button>
                                         </div>
                                     </motion.div>

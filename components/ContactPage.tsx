@@ -82,7 +82,7 @@ export const ContactPage: React.FC = () => {
 
     const inputClasses = (fieldName: string) => `
         w-full p-4 rounded-xl bg-zinc-900/50 border 
-        ${focusedField === fieldName ? 'border-emerald-500/50 ring-2 ring-emerald-500/20' : 'border-white/10'} 
+        ${focusedField === fieldName ? 'border-blue-500/50 ring-2 ring-blue-500/20' : 'border-white/10'} 
         focus:outline-none text-white transition-all duration-300 placeholder-zinc-500
     `;
 
@@ -100,7 +100,7 @@ export const ContactPage: React.FC = () => {
     return (
         <section id="contact" className="min-h-screen py-24 px-4 bg-luxury-black text-white relative overflow-hidden flex flex-col justify-center">
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-luxury-black to-luxury-black pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-luxury-black to-luxury-black pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
             <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
@@ -122,7 +122,7 @@ export const ContactPage: React.FC = () => {
 
                     <div className="space-y-8 mb-12">
                         <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-emerald-400 shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-blue-400 shrink-0">
                                 <FaEnvelope className="w-5 h-5" />
                             </div>
                             <div>
@@ -165,7 +165,7 @@ export const ContactPage: React.FC = () => {
                 >
                     <div className="glass-effect p-6 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
                         {/* Decorative glow */}
-                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
                         <AnimatePresence mode='wait'>
                             {formStatus === 'success' ? (
@@ -176,8 +176,8 @@ export const ContactPage: React.FC = () => {
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     className="flex flex-col items-center justify-center h-full py-12 text-center"
                                 >
-                                    <div className="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center mb-6">
-                                        <FaCheckCircle className="w-12 h-12 text-emerald-500" />
+                                    <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
+                                        <FaCheckCircle className="w-12 h-12 text-blue-500" />
                                     </div>
                                     <h3 className="text-3xl font-bold text-white mb-4 font-heading">Message Sent!</h3>
                                     <p className="text-zinc-400 max-w-xs mx-auto mb-8">
@@ -273,7 +273,7 @@ export const ContactPage: React.FC = () => {
                                                 type="button"
                                                 onClick={generateBrief}
                                                 disabled={isGenerating}
-                                                className="text-xs flex items-center gap-1 text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50"
+                                                className="text-xs flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
                                             >
@@ -306,7 +306,7 @@ export const ContactPage: React.FC = () => {
                                     <motion.button
                                         type="submit"
                                         disabled={formStatus === 'submitting'}
-                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-emerald-500 to-blue-500 text-white hover:from-emerald-600 hover:to-blue-600"
+                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >

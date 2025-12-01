@@ -251,8 +251,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold text-gradient">GrowBrandi AI Assistant</h3>
                         {isPreloaded && (
-                            <div className="flex items-center gap-1 bg-green-500/20 text-green-400 px-2 py-1 rounded-full text-xs font-medium">
-                                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                            <div className="flex items-center gap-1 bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full text-xs font-medium">
+                                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
                                 Ready
                             </div>
                         )}
@@ -300,7 +300,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                                 <button
                                     key={suggestion}
                                     onClick={() => handleSendMessage(suggestion)}
-                                    className="bg-emerald-600/20 border border-emerald-500/30 text-emerald-300 text-xs px-3 py-1.5 rounded-full hover:bg-emerald-600/30 transition-colors"
+                                    className="bg-blue-600/20 border border-blue-500/30 text-blue-300 text-xs px-3 py-1.5 rounded-full hover:bg-blue-600/30 transition-colors"
                                 >
                                     {suggestion}
                                 </button>

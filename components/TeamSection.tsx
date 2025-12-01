@@ -36,7 +36,7 @@ const TeamSection: React.FC = () => {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black" />
-            <div className="absolute top-1/4 right-1/3 w-64 md:w-96 h-64 md:h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+            <div className="absolute top-1/4 right-1/3 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/3 left-1/4 w-64 md:w-80 h-64 md:h-80 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute top-2/3 right-1/4 w-48 md:w-64 h-48 md:h-64 bg-purple-500/5 rounded-full blur-3xl" />
 
@@ -44,8 +44,8 @@ const TeamSection: React.FC = () => {
                 {/* Section Header */}
                 <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
-                        <FaUsers className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
-                        <span className="text-xs sm:text-sm font-bold text-emerald-400 tracking-wide">OUR EXPERT TEAM</span>
+                        <FaUsers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
+                        <span className="text-xs sm:text-sm font-bold text-blue-400 tracking-wide">OUR EXPERT TEAM</span>
                         <FaCode className="w-5 h-5 text-blue-400" />
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
@@ -53,7 +53,7 @@ const TeamSection: React.FC = () => {
                     </h2>
                     <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
                         Our diverse team of experts brings together decades of experience in
-                        <span className="text-emerald-400 font-semibold"> design, development, AI, and marketing</span> to
+                        <span className="text-blue-400 font-semibold"> design, development, AI, and marketing</span> to
                         deliver exceptional results that exceed expectations.
                     </p>
                 </motion.div>
@@ -77,24 +77,24 @@ const TeamSection: React.FC = () => {
                             <div className="glass-effect rounded-3xl p-6 md:p-8 h-full relative overflow-hidden">
                                 {/* Background Glow Effect */}
                                 <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
-                                    ? 'bg-gradient-to-br from-emerald-500/10 via-blue-500/10 to-purple-500/10'
+                                    ? 'bg-gradient-to-br from-blue-500/10 via-blue-500/10 to-purple-500/10'
                                     : 'bg-transparent'
                                     }`} />
 
                                 {/* Decorative Elements */}
-                                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-10 translate-x-10" />
+                                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-blue-500/10 rounded-full -translate-y-10 translate-x-10" />
                                 <div className="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-8 -translate-x-8" />
 
                                 <div className="relative z-10">
                                     <Link to={`/team/${member.slug}`} className="block">
                                         {/* Profile Image */}
                                         <div className="relative mb-6">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
+                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                                             <div className="relative w-32 h-32 mx-auto">
                                                 <img
                                                     src={member.image}
                                                     alt={member.name}
-                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-700 group-hover:border-emerald-400/50 transition-all duration-300"
+                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-700 group-hover:border-blue-400/50 transition-all duration-300"
                                                     onError={(e) => {
                                                         // Fallback to initials if image fails to load
                                                         e.currentTarget.style.display = 'none';
@@ -103,7 +103,7 @@ const TeamSection: React.FC = () => {
                                                     }}
                                                 />
                                                 {/* Fallback initials (hidden by default) */}
-                                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl items-center justify-center shadow-xl hidden">
+                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-500 rounded-2xl items-center justify-center shadow-xl hidden">
                                                     <span className="text-white font-bold text-2xl">
                                                         {member.name.split(' ').map(n => n[0]).join('')}
                                                     </span>
@@ -111,8 +111,8 @@ const TeamSection: React.FC = () => {
                                             </div>
 
                                             {/* Online Status Indicator */}
-                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-400 rounded-full border-4 border-zinc-800 flex items-center justify-center">
-                                                <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse" />
+                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-blue-400 rounded-full border-4 border-zinc-800 flex items-center justify-center">
+                                                <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
                                             </div>
                                         </div>
 
@@ -121,7 +121,7 @@ const TeamSection: React.FC = () => {
                                             <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gradient transition-colors duration-300">
                                                 {member.name}
                                             </h3>
-                                            <div className="text-emerald-400 font-semibold text-lg mb-4">
+                                            <div className="text-blue-400 font-semibold text-lg mb-4">
                                                 {member.role}
                                             </div>
                                             <p className="text-zinc-300 text-sm leading-relaxed">
@@ -136,7 +136,7 @@ const TeamSection: React.FC = () => {
                                             {member.specialties.map((specialty, idx) => (
                                                 <motion.span
                                                     key={specialty}
-                                                    className="px-3 py-1 bg-zinc-700/50 text-zinc-300 text-xs font-medium rounded-full border border-zinc-600 group-hover:border-emerald-400/50 group-hover:text-emerald-400 transition-all duration-300"
+                                                    className="px-3 py-1 bg-zinc-700/50 text-zinc-300 text-xs font-medium rounded-full border border-zinc-600 group-hover:border-blue-400/50 group-hover:text-blue-400 transition-all duration-300"
                                                     initial={{ opacity: 0, scale: 0.8 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ delay: idx * 0.1 }}
@@ -163,7 +163,7 @@ const TeamSection: React.FC = () => {
                                                 <motion.a
                                                     key={platform}
                                                     href={url}
-                                                    className="p-2 rounded-lg bg-zinc-700/50 text-zinc-400 hover:bg-emerald-500/20 hover:text-emerald-400 transition-all duration-300 group/social"
+                                                    className="p-2 rounded-lg bg-zinc-700/50 text-zinc-400 hover:bg-blue-500/20 hover:text-blue-400 transition-all duration-300 group/social"
                                                     whileHover={{ scale: 1.1, y: -2 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     aria-label={`${member.name} ${platform}`}
@@ -196,7 +196,7 @@ const TeamSection: React.FC = () => {
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <motion.button
                                 onClick={() => navigate('/contact')}
-                                className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
+                                className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >

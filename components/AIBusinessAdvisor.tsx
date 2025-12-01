@@ -200,7 +200,7 @@ const AIBusinessAdvisor: React.FC = () => {
                                                 <div className="inline-block relative">
                                                     <svg className="w-40 h-40 transform -rotate-90">
                                                         <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" className="text-zinc-700" />
-                                                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" strokeDasharray={440} strokeDashoffset={440 - (440 * insight.score) / 100} className="text-emerald-400 transition-all duration-1000 ease-out" />
+                                                        <circle cx="80" cy="80" r="70" stroke="currentColor" strokeWidth="10" fill="transparent" strokeDasharray={440} strokeDashoffset={440 - (440 * insight.score) / 100} className="text-blue-400 transition-all duration-1000 ease-out" />
                                                     </svg>
                                                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                                                         <span className="text-4xl font-black text-white">{insight.score}</span>
@@ -224,7 +224,7 @@ const AIBusinessAdvisor: React.FC = () => {
                                                     href="https://wa.me/8801755154194?text=I%20want%20to%20book%20a%20strategy%20call%20to%20discuss%20my%20Digital%20Health%20Score%20of%20"
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-green-700 transition-all"
+                                                    className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-cyan-700 transition-all"
                                                 >
                                                     <FaWhatsapp className="w-6 h-6" />
                                                     Book Strategy Call to Unlock Report
@@ -254,7 +254,7 @@ const AIBusinessAdvisor: React.FC = () => {
                             href="https://wa.me/8801755154194"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-green-700 transition-all"
+                            className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-cyan-700 transition-all"
                         >
                             <FaWhatsapp className="w-5 h-5" />
                             Chat on WhatsApp

@@ -195,7 +195,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
 
 
   return (
-    <div className="text-slate-100 w-full" style={{ minHeight: '100vh' }}>
+    <>
       <SEO
         title={metadata.title}
         description={metadata.description || ''}
@@ -203,7 +203,8 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
         canonicalUrl={`https://growbrandi.com${metadata.path}`}
       />
       <AnimatedBackground />
-      <div className="relative z-10 w-full">
+
+      <div className="text-slate-100 w-full relative z-10" style={{ minHeight: '100vh' }}>
         <Header />
 
         {/* Breadcrumb Navigation */}
@@ -307,7 +308,7 @@ Brand Strategy ($5K-15K) | UI/UX Design ($8K-25K) | Web Development ($12K-50K) |
           />
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
 

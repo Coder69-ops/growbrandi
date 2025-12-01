@@ -61,21 +61,21 @@ const TestimonialsSlider: React.FC = () => {
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black" />
             <div className="absolute top-1/4 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
             <div className="container mx-auto max-w-6xl text-center relative z-10">
                 <motion.div variants={itemVariants} className="mb-20">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-8 py-3 mb-8">
-                        <FaQuoteLeft className="w-5 h-5 text-emerald-400" />
-                        <span className="text-sm font-bold text-emerald-400 tracking-wide">CLIENT TESTIMONIALS</span>
-                        <FaCommentDots className="w-5 h-5 text-emerald-400" />
+                        <FaQuoteLeft className="w-5 h-5 text-blue-400" />
+                        <span className="text-sm font-bold text-blue-400 tracking-wide">CLIENT TESTIMONIALS</span>
+                        <FaCommentDots className="w-5 h-5 text-blue-400" />
                     </div>
                     <h2 className="text-3xl md:text-6xl font-black mb-8 leading-tight">
                         What Our <span className="text-gradient">Amazing Clients</span> Say
                     </h2>
                     <p className="text-lg md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed">
                         Don't just take our word for it. Hear from the businesses we've helped transform their
-                        digital presence and <span className="text-emerald-400 font-semibold">achieve remarkable success</span>.
+                        digital presence and <span className="text-blue-400 font-semibold">achieve remarkable success</span>.
                     </p>
                 </motion.div>
 
@@ -91,14 +91,14 @@ const TestimonialsSlider: React.FC = () => {
                         className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Previous testimonial"
                     >
-                        <FaChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-emerald-400" />
+                        <FaChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-blue-400" />
                     </button>
                     <button
                         onClick={handleNext}
                         className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Next testimonial"
                     >
-                        <FaChevronRight className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-emerald-400" />
+                        <FaChevronRight className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-blue-400" />
                     </button>
 
                     {/* Enhanced Testimonial Cards */}
@@ -112,8 +112,8 @@ const TestimonialsSlider: React.FC = () => {
                                         transition={{ duration: 0.3 }}
                                     >
                                         {/* Decorative Elements */}
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
-                                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-emerald-500/10 rounded-full translate-y-12 -translate-x-12" />
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
+                                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 rounded-full translate-y-12 -translate-x-12" />
 
                                         {/* Header with Quote and Rating */}
                                         <div className="flex justify-between items-start mb-8">
@@ -140,8 +140,8 @@ const TestimonialsSlider: React.FC = () => {
                                         {/* Enhanced Author Section */}
                                         <div className="flex items-center gap-6 mt-8 relative z-10">
                                             <div className="relative">
-                                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-2xl blur-lg opacity-50" />
-                                                <div className="relative w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
+                                                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-400 rounded-2xl blur-lg opacity-50" />
+                                                <div className="relative w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-xl">
                                                     <span className="text-white font-bold text-2xl">
                                                         {testimonial.author.charAt(0)}
                                                     </span>
@@ -149,11 +149,11 @@ const TestimonialsSlider: React.FC = () => {
                                             </div>
                                             <div className="flex-1">
                                                 <div className="font-bold text-white text-xl mb-1">{testimonial.author}</div>
-                                                <div className="text-emerald-400 font-semibold text-lg">{testimonial.company}</div>
+                                                <div className="text-blue-400 font-semibold text-lg">{testimonial.company}</div>
                                                 <div className="text-zinc-400 text-sm mt-1">Verified Client</div>
                                             </div>
                                             <div className="hidden md:block">
-                                                <FaCheckCircle className="w-12 h-12 text-emerald-400/20" />
+                                                <FaCheckCircle className="w-12 h-12 text-blue-400/20" />
                                             </div>
                                         </div>
                                     </motion.div>
@@ -172,7 +172,7 @@ const TestimonialsSlider: React.FC = () => {
                             </div>
                             <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
                                 <motion.div
-                                    className="h-full bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full"
+                                    className="h-full bg-gradient-to-r from-blue-400 to-blue-400 rounded-full"
                                     initial={{ width: '0%' }}
                                     animate={{ width: `${((activeIndex + 1) / TESTIMONIALS.length) * 100}%` }}
                                     transition={{ duration: 0.5 }}
@@ -187,7 +187,7 @@ const TestimonialsSlider: React.FC = () => {
                                     key={index}
                                     onClick={() => setActiveIndex(index)}
                                     className={`h-3 rounded-full transition-all duration-300 ${index === activeIndex
-                                        ? 'bg-gradient-to-r from-emerald-400 to-blue-400 w-8 shadow-lg'
+                                        ? 'bg-gradient-to-r from-blue-400 to-blue-400 w-8 shadow-lg'
                                         : 'bg-zinc-600 hover:bg-zinc-500 w-3'
                                         }`}
                                     whileHover={{ scale: 1.2 }}
@@ -197,9 +197,9 @@ const TestimonialsSlider: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                </motion.div>
-            </div>
-        </motion.section>
+                </motion.div >
+            </div >
+        </motion.section >
     )
 }
 

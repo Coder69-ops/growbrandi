@@ -79,7 +79,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             {/* Category Badge */}
             <div className="absolute bottom-4 left-4">
-                <span className="bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
+                <span className="bg-blue-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
                     {project.category}
                 </span>
             </div>
@@ -103,8 +103,8 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     </h3>
                     {project.client && (
                         <div className="flex items-center gap-2 mb-3">
-                            <FaUser className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-                            <p className="text-emerald-400 font-medium">{project.client}</p>
+                            <FaUser className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                            <p className="text-blue-400 font-medium">{project.client}</p>
                         </div>
                     )}
                 </div>
@@ -141,7 +141,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
                     <div className="space-y-2">
                         {project.results.slice(0, 3).map((result, index) => (
                             <div key={index} className="flex items-center text-sm text-zinc-400">
-                                <div className="w-2 h-2 bg-emerald-400 rounded-full mr-3 flex-shrink-0" />
+                                <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0" />
                                 {result}
                             </div>
                         ))}
@@ -151,7 +151,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             <motion.button
                 onClick={() => onViewDetails(project)}
-                className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:bg-zinc-200 flex items-center justify-center gap-2 group/btn"
+                className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:bg-zinc-200 flex items-center justify-center gap-2 group/btn"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
             >
@@ -205,7 +205,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                     {/* Project Info Overlay */}
                     <div className="absolute bottom-6 left-6 right-6">
                         <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                            <span className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
                                 {project.category}
                             </span>
                             {project.completionTime && (
@@ -216,7 +216,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                         </div>
                         <h2 className="text-4xl font-bold text-white mb-2 font-heading">{project.title}</h2>
                         {project.client && (
-                            <p className="text-emerald-400 font-medium text-lg">Client: {project.client}</p>
+                            <p className="text-blue-400 font-medium text-lg">Client: {project.client}</p>
                         )}
                     </div>
                 </div>
@@ -253,7 +253,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                                     </div>
                                 </div>
                                 <motion.button
-                                    className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+                                    className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
@@ -277,7 +277,7 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                                                 transition={{ delay: index * 0.1 }}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-3 h-3 bg-emerald-400 rounded-full" />
+                                                    <div className="w-3 h-3 bg-blue-400 rounded-full" />
                                                     <span className="text-zinc-300 font-medium">{result}</span>
                                                 </div>
                                             </motion.div>
@@ -292,15 +292,15 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                                 <div className="space-y-3">
                                     <div className="flex items-center justify-between">
                                         <span className="text-zinc-400">Planning & Strategy</span>
-                                        <span className="text-emerald-400 font-medium">Week 1-2</span>
+                                        <span className="text-blue-400 font-medium">Week 1-2</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-zinc-400">Design & Development</span>
-                                        <span className="text-emerald-400 font-medium">Week 3-6</span>
+                                        <span className="text-blue-400 font-medium">Week 3-6</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-zinc-400">Testing & Launch</span>
-                                        <span className="text-emerald-400 font-medium">Week 7-8</span>
+                                        <span className="text-blue-400 font-medium">Week 7-8</span>
                                     </div>
                                 </div>
                             </div>
@@ -339,7 +339,7 @@ export const ProjectsPage: React.FC = () => {
             <section className="py-24 px-4 relative overflow-hidden bg-luxury-black">
                 {/* Background Elements */}
                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/90 to-zinc-800/70" />
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
                 <div className="glass-effect p-8 h-full relative border-white/5">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
@@ -355,15 +355,15 @@ export const ProjectsPage: React.FC = () => {
                                 transition={{ duration: 0.8 }}
                             >
                                 <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8 border border-white/10">
-                                    <FaBriefcase className="w-5 h-5 text-emerald-400" />
-                                    <span className="text-sm font-bold text-emerald-400 tracking-wide">OUR PORTFOLIO</span>
+                                    <FaBriefcase className="w-5 h-5 text-blue-400" />
+                                    <span className="text-sm font-bold text-blue-400 tracking-wide">OUR PORTFOLIO</span>
                                 </div>
                                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight font-heading">
                                     Projects That <span className="text-gradient">Drive Results</span>
                                 </h1>
                                 <p className="text-xl md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed font-light">
                                     Discover how we've helped businesses achieve extraordinary growth through
-                                    <span className="text-emerald-400 font-semibold"> innovative digital solutions</span> and
+                                    <span className="text-blue-400 font-semibold"> innovative digital solutions</span> and
                                     <span className="text-blue-400 font-semibold"> strategic thinking</span>.
                                 </p>
                             </motion.div>
@@ -383,7 +383,7 @@ export const ProjectsPage: React.FC = () => {
                                         key={category}
                                         onClick={() => setFilter(category)}
                                         className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${filter === category
-                                            ? 'bg-gradient-to-r from-emerald-500 to-blue-500 text-white'
+                                            ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white'
                                             : 'glass-effect text-zinc-300 hover:text-white hover:bg-zinc-700/50 border border-white/5'
                                             }`}
                                     >
@@ -398,7 +398,7 @@ export const ProjectsPage: React.FC = () => {
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="glass-effect text-white px-4 py-2 rounded-lg border border-zinc-600 focus:border-emerald-400 focus:outline-none bg-zinc-900"
+                                    className="glass-effect text-white px-4 py-2 rounded-lg border border-zinc-600 focus:border-blue-400 focus:outline-none bg-zinc-900"
                                 >
                                     <option value="rating">Rating</option>
                                     <option value="title">Title</option>
@@ -441,14 +441,14 @@ export const ProjectsPage: React.FC = () => {
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <motion.button
-                                        className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+                                        className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-blue-600 transition-all duration-300"
                                         whileHover={{ scale: 1.02, y: -2 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
                                         Start Your Project
                                     </motion.button>
                                     <motion.button
-                                        className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-zinc-700/50 transition-all duration-300 border border-zinc-600 hover:border-emerald-400"
+                                        className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-zinc-700/50 transition-all duration-300 border border-zinc-600 hover:border-blue-400"
                                         whileHover={{ scale: 1.02, y: -2 }}
                                         whileTap={{ scale: 0.98 }}
                                     >

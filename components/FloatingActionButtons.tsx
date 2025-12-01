@@ -47,7 +47,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
     ];
 
     return (
-        <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4 items-end">
+        <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex flex-col gap-3 md:gap-4 items-end">
             {buttons.map((btn, index) => (
                 <div key={btn.id} className="relative flex items-center">
                     {/* Tooltip */}
@@ -95,7 +95,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
 
                         {/* Status Indicator (for Chat) */}
                         {btn.id === 'chat' && btn.ready && (
-                            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-green-400 border-2 border-cyan-600 rounded-full z-20" />
+                            <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-blue-400 border-2 border-cyan-600 rounded-full z-20" />
                         )}
                     </motion.button>
                 </div>
