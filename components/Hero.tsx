@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaPlay, FaStar, FaRocket, FaChartLine, FaCode, FaLayerGroup, FaBolt } from 'react-icons/fa';
 
 // Import other Home Page sections
-import ServicesPreview from './ServicesPreview';
-import ProjectsPreview from './ProjectsPreview';
-import AIBusinessAdvisor from './AIBusinessAdvisor';
-import SloganGenerator from './SloganGenerator';
-import TestimonialsSlider from './TestimonialsSlider';
-import TeamSection from './TeamSection';
-import FAQ from './FAQ';
+// Lazy load other Home Page sections
+const ServicesPreview = React.lazy(() => import('./ServicesPreview'));
+const ProjectsPreview = React.lazy(() => import('./ProjectsPreview'));
+const AIBusinessAdvisor = React.lazy(() => import('./AIBusinessAdvisor'));
+const SloganGenerator = React.lazy(() => import('./SloganGenerator'));
+const TestimonialsSlider = React.lazy(() => import('./TestimonialsSlider'));
+const TeamSection = React.lazy(() => import('./TeamSection'));
+const FAQ = React.lazy(() => import('./FAQ'));
 import { Logos3 } from './blocks/logos3';
 
 const HeroSection: React.FC = () => {
@@ -55,10 +56,10 @@ const HeroSection: React.FC = () => {
                 {/* Architectural Grid Pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
-                {/* Dynamic Mesh Gradients */}
-                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-                <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen" />
-                <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] mix-blend-screen" />
+                {/* Dynamic Mesh Gradients - Optimized for Mobile */}
+                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse hidden md:block" />
+                <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen hidden md:block" />
+                <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] mix-blend-screen hidden md:block" />
 
                 {/* Noise Texture Overlay */}
                 <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
@@ -350,13 +351,15 @@ export const HomePage: React.FC = () => {
     return (
         <div className="bg-[#09090b]">
             <HeroSection />
-            <ServicesPreview />
-            <ProjectsPreview />
-            <AIBusinessAdvisor />
-            <SloganGenerator />
-            <TestimonialsSlider />
-            <TeamSection />
-            <FAQ />
+            <React.Suspense fallback={<div className="min-h-screen bg-[#09090b]" />}>
+                <ServicesPreview />
+                <ProjectsPreview />
+                <AIBusinessAdvisor />
+                <SloganGenerator />
+                <TestimonialsSlider />
+                <TeamSection />
+                <FAQ />
+            </React.Suspense>
         </div>
     );
 };

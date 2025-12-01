@@ -116,6 +116,7 @@ const Logos3 = ({
                                                     "h-10 md:h-14 lg:h-16 w-auto object-contain",
                                                     logo.className
                                                 )}
+                                                loading="lazy"
                                             />
                                         </div>
                                     </div>
