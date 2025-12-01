@@ -32,7 +32,7 @@ const NotFoundPage = () => {
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="mb-8"
         >
-          <div className="text-8xl font-black text-gradient bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+          <div className="text-8xl font-black text-gradient bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             404
           </div>
         </motion.div>
@@ -60,7 +60,7 @@ const NotFoundPage = () => {
         >
           <motion.button
             onClick={() => navigate('/')}
-            className="bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-emerald-500/20"
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg shadow-blue-500/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -69,7 +69,7 @@ const NotFoundPage = () => {
 
           <motion.button
             onClick={() => window.history.back()}
-            className="border border-zinc-600 text-zinc-300 px-8 py-3 rounded-lg font-semibold hover:border-emerald-400 hover:text-emerald-400 transition-all duration-300"
+            className="border border-zinc-600 text-zinc-300 px-8 py-3 rounded-lg font-semibold hover:border-blue-400 hover:text-blue-400 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -90,7 +90,7 @@ const NotFoundPage = () => {
               <button
                 key={link.label}
                 onClick={() => navigate(link.route)}
-                className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
+                className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
               >
                 {link.label}
               </button>

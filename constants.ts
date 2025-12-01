@@ -19,7 +19,7 @@ export const COMPANY_STATS: CompanyStat[] = [
 export const CONTACT_INFO = {
   email: 'hello@growbrandi.com',
   phone: '+880 1755 154 194',
-  address: 'San Francisco, CA',
+  address: 'Khulna, Bangladesh',
   social: {
     linkedin: 'https://linkedin.com/company/growbrandi',
     twitter: 'https://twitter.com/growbrandi',
@@ -69,7 +69,7 @@ export const SERVICES: Service[] = [
     icon: ICONS['Brand Growth'],
     features: ['TikTok Ads', 'Meta Ads (Facebook/Instagram)', 'Google Ads', 'Performance Analytics'],
     price: 'From $399 | Pro $1,199',
-    color: 'from-emerald-500 to-teal-500'
+    color: 'from-blue-500 to-cyan-500'
   },
   {
     title: 'Social Media Content',
@@ -109,7 +109,7 @@ export const SERVICES: Service[] = [
     icon: ICONS['Customer Support'],
     features: ['Live Chat Support', 'Email Support', 'Ticket Management', 'Weekly/Monthly Packages'],
     price: 'From $299/mo | Pro $1,199',
-    color: 'from-green-500 to-emerald-500'
+    color: 'from-sky-500 to-blue-600'
   },
 ];
 
@@ -282,7 +282,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
       "Created the comprehensive 'Prism' design system used across all internal projects",
       "Featured in 'Best of Behance' for Interaction Design"
     ],
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    image: "https://ik.imagekit.io/nltb2bcz4/WhatsApp%20Image%202025-12-01%20at%203.06.08%20AM.jpeg",
     specialties: ["UI/UX Design", "Interaction Design", "User Research", "Prototyping"],
     social: {
       linkedin: "#",

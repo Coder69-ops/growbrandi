@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
     <footer className="relative overflow-hidden bg-luxury-black pt-12 md:pt-20 pb-8 md:pb-10 border-t border-white/5">
       {/* Subtle Background Elements */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none opacity-20" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-zinc-800/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -49,10 +49,11 @@ const Footer: React.FC = () => {
           {/* Brand Section - Spans full width on mobile, 4 cols on desktop */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-4 md:space-y-6">
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
-                <FaRocket className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-bold text-2xl text-white tracking-tight">{APP_NAME}</span>
+              <img
+                src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
+                alt="GrowBrandi Logo"
+                className="w-auto h-12 object-contain"
+              />
             </Link>
             <p className="text-zinc-500 text-sm leading-relaxed max-w-sm font-light">
               {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
@@ -142,7 +143,7 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <p className="text-slate-500 text-sm">
+          <p className="text-cyan-600 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-zinc-600 font-light">

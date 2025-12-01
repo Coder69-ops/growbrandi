@@ -17,7 +17,7 @@ const Hero: React.FC = () => {
         <section className="relative overflow-hidden">
             {/* Background Elements */}
             <div className="absolute inset-0 bg-luxury-black">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/20 via-luxury-black to-luxury-black" />
                 <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
                     <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[100px] animate-pulse" />
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-zinc-800/10 rounded-full blur-[100px] animate-pulse delay-1000" />
@@ -32,8 +32,8 @@ const Hero: React.FC = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
-                            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                            <span className="text-sm font-medium text-emerald-400">Powerful Growth Engine</span>
+                            <span className="flex h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
+                            <span className="text-sm font-medium text-cyan-400">Powerful Growth Engine</span>
                         </div>
 
                         <h1 className="text-3xl sm:text-4xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tight font-heading">
@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
                         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <motion.button
                                 onClick={() => navigate('/contact')}
-                                className="group relative px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                                className="group relative px-8 py-4 bg-white text-black hover:from-blue-600 rounded-full font-bold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >

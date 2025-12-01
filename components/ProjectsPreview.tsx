@@ -77,13 +77,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
                             <div className="absolute top-4 left-4 flex gap-2">
                                 <div className="bg-zinc-900/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold border border-white/10 shadow-lg flex items-center gap-2">
-                                    <FaBriefcase className="w-3 h-3 text-emerald-400" />
+                                    <FaBriefcase className="w-3 h-3 text-blue-400" />
                                     {project.category}
                                 </div>
                             </div>
 
                             {project.growthMetrics && (
-                                <div className="absolute bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-blue-500 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 animate-pulse-glow">
+                                <div className="absolute bottom-6 right-6 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2 animate-pulse-glow">
                                     <FaChartLine className="w-4 h-4" />
                                     {project.growthMetrics}
                                 </div>
@@ -94,7 +94,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                         {project.beforeImage && project.afterImage && (
                             <div className="bg-zinc-900/50 rounded-2xl p-6 border border-white/5">
                                 <h3 className="text-white font-bold mb-6 flex items-center gap-2 text-lg">
-                                    <FaExchangeAlt className="w-5 h-5 text-emerald-400" />
+                                    <FaExchangeAlt className="w-5 h-5 text-blue-400" />
                                     Transformation Results
                                 </h3>
                                 <div className="grid grid-cols-2 gap-6">
@@ -109,11 +109,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                     </div>
                                     <div className="space-y-3 group">
                                         <div className="flex items-center justify-between">
-                                            <p className="text-xs text-emerald-400 uppercase font-bold tracking-wider">After</p>
+                                            <p className="text-xs text-blue-400 uppercase font-bold tracking-wider">After</p>
                                         </div>
-                                        <div className="relative overflow-hidden rounded-xl border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                        <div className="relative overflow-hidden rounded-xl border border-blue-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
                                             <img src={project.afterImage} alt="After" className="w-full h-40 object-cover" />
-                                            <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                            <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +132,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                     ))}
                                     <span className="text-zinc-300 ml-2 font-medium">{project.rating}</span>
                                 </div>
-                                <div className="text-emerald-400 font-semibold bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+                                <div className="text-blue-400 font-semibold bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20">
                                     {project.completionTime}
                                 </div>
                             </div>
@@ -147,7 +147,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                                 <p className="text-zinc-400 text-xs uppercase tracking-wider font-semibold mb-1">Client</p>
                                 <p className="text-white font-bold text-lg">{project.client}</p>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold">
                                 {project.client.charAt(0)}
                             </div>
                         </div>
@@ -170,14 +170,14 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                         {/* Results */}
                         <div>
                             <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                                <FaChartLine className="w-4 h-4 text-emerald-400" />
+                                <FaChartLine className="w-4 h-4 text-blue-400" />
                                 Key Results
                             </h3>
                             <div className="space-y-3">
                                 {project.results?.map((result, index) => (
-                                    <div key={index} className="flex items-start gap-3 text-zinc-300 bg-zinc-800/30 p-4 rounded-xl border border-white/5 hover:border-emerald-500/30 transition-colors duration-300">
-                                        <div className="mt-0.5 p-1 bg-emerald-500/20 rounded-full">
-                                            <FaCheck className="w-3 h-3 text-emerald-400" />
+                                    <div key={index} className="flex items-start gap-3 text-zinc-300 bg-zinc-800/30 p-4 rounded-xl border border-white/5 hover:border-blue-500/30 transition-colors duration-300">
+                                        <div className="mt-0.5 p-1 bg-blue-500/20 rounded-full">
+                                            <FaCheck className="w-3 h-3 text-blue-400" />
                                         </div>
                                         <span className="font-medium">{result}</span>
                                     </div>
@@ -189,7 +189,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                         <div className="flex gap-4 pt-4">
                             <button
                                 onClick={() => window.location.href = '/contact'}
-                                className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-xl font-bold hover:from-emerald-600 hover:to-blue-600 transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 group"
+                                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-xl font-bold hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 group"
                             >
                                 <FaRocket className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
                                 Start Similar Project
@@ -226,20 +226,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
         </div>
-
         {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-full -translate-y-20 translate-x-20 blur-2xl group-hover:bg-emerald-500/30 transition-colors duration-500" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full -translate-y-20 translate-x-20 blur-2xl group-hover:bg-blue-500/30 transition-colors duration-500" />
 
         {/* Growth Badge */}
         {project.growthMetrics && (
             <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg z-10 flex items-center gap-2 transform group-hover:scale-105 transition-transform duration-300">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
                 {project.growthMetrics}
             </div>
         )}
 
         {/* Project Number */}
-        <div className="absolute top-6 right-6 w-12 h-12 bg-black/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-emerald-500/50 transition-colors duration-300">
+        <div className="absolute top-6 right-6 w-12 h-12 bg-black/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/50 transition-colors duration-300">
             <span className="text-white/80 font-bold font-heading text-lg">{(index + 1).toString().padStart(2, '0')}</span>
         </div>
 
@@ -248,7 +247,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
             <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                 {/* Category */}
                 <div className="flex items-center gap-3 mb-4">
-                    <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider rounded-lg border border-emerald-500/20">
+                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider rounded-lg border border-blue-500/20">
                         {project.category}
                     </span>
                     <span className="text-zinc-400 text-sm flex items-center gap-1">
@@ -288,7 +287,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) =>
                         className="flex items-center gap-2 text-white font-bold text-sm group/btn"
                     >
                         View Case Study
-                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-emerald-500 transition-colors duration-300">
+                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-blue-500 transition-colors duration-300">
                             <FaArrowRight className="w-3 h-3 group-hover/btn:-rotate-45 transition-transform duration-300" />
                         </div>
                     </button>
@@ -335,7 +334,7 @@ const ProjectsPreview: React.FC = () => {
                 <div className="absolute inset-0">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
                     <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse" />
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] animate-pulse delay-1000" />
+                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px] animate-pulse delay-1000" />
                 </div>
 
                 <div className="container mx-auto max-w-7xl relative z-10">
@@ -343,15 +342,15 @@ const ProjectsPreview: React.FC = () => {
                     <motion.div variants={itemVariants} className="text-center mb-20">
                         <div className="inline-flex items-center gap-3 glass-effect rounded-full px-6 py-2 mb-8 border border-white/5">
                             <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                             </span>
-                            <span className="text-sm font-bold text-emerald-400 tracking-widest uppercase">Featured Work</span>
+                            <span className="text-sm font-bold text-blue-400 tracking-widest uppercase">Featured Work</span>
                         </div>
 
                         <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight tracking-tight text-white">
                             Crafting Digital <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-500 animate-gradient-x">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-purple-500 animate-gradient-x">
                                 Masterpieces
                             </span>
                         </h2>
@@ -447,13 +446,13 @@ const ProjectsPreview: React.FC = () => {
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
                         <div className="relative overflow-hidden rounded-[3rem] p-12 lg:p-20 border border-white/10 bg-zinc-900/50 backdrop-blur-xl">
-                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-blue-500/10 to-purple-500/10" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-purple-500/10" />
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
-                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]" />
+                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
 
                             <div className="relative z-10 max-w-4xl mx-auto">
                                 <h3 className="text-4xl md:text-5xl font-black text-white mb-6 font-heading">
-                                    Ready to Create <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-500">Your Success Story?</span>
+                                    Ready to Create <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">Your Success Story?</span>
                                 </h3>
                                 <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
                                     Join our portfolio of successful projects. Let's discuss how we can bring

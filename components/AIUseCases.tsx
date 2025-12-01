@@ -67,7 +67,7 @@ const ProjectEstimator = () => {
           <select
             value={formData.projectType}
             onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
             required
           >
             <option value="">Select project type</option>
@@ -88,7 +88,7 @@ const ProjectEstimator = () => {
                 type="button"
                 onClick={() => toggleFeature(feature)}
                 className={`text-xs px-3 py-2 rounded-full transition-all ${formData.features.includes(feature)
-                  ? 'bg-emerald-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
                   }`}
               >
@@ -104,7 +104,7 @@ const ProjectEstimator = () => {
             <select
               value={formData.timeline}
               onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select timeline</option>
@@ -121,7 +121,7 @@ const ProjectEstimator = () => {
             <select
               value={formData.budget}
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-emerald-500"
+              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Select budget</option>
@@ -140,7 +140,7 @@ const ProjectEstimator = () => {
             value={formData.industry}
             onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
             placeholder="e.g., Healthcare, E-commerce, Education"
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-emerald-500"
+            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -148,7 +148,7 @@ const ProjectEstimator = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50"
         >
           {loading ? 'Analyzing...' : 'Get GrowBrandi Estimation'}
         </button>
@@ -160,7 +160,7 @@ const ProjectEstimator = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
         >
-          <h3 className="text-lg font-semibold text-emerald-400">GrowBrandi Project Estimation</h3>
+          <h3 className="text-lg font-semibold text-blue-400">GrowBrandi Project Estimation</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-zinc-700/50 rounded-lg p-4">
@@ -179,7 +179,7 @@ const ProjectEstimator = () => {
               <ul className="space-y-1 text-sm text-zinc-300">
                 {estimation.recommendations.map((rec: string, idx: number) => (
                   <li key={idx} className="flex items-start space-x-2">
-                    <span className="text-emerald-400">•</span>
+                    <span className="text-blue-400">•</span>
                     <span>{rec}</span>
                   </li>
                 ))}
@@ -189,7 +189,7 @@ const ProjectEstimator = () => {
 
           <button
             onClick={() => navigate('/contact')}
-            className="w-full mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-emerald-500/20"
+            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-blue-500/20"
           >
             Book Free Consultation
           </button>
@@ -357,7 +357,7 @@ const ServiceRecommender = () => {
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-semibold text-white">{service.service}</h4>
                     <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'
+                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-cyan-600'
                       } text-white`}>
                       {service.priority} Priority
                     </span>
@@ -699,7 +699,7 @@ const ConsultationPlanner = () => {
                 <ul className="space-y-1 text-sm text-zinc-300">
                   {plan.expectedOutcomes.map((outcome: string, idx: number) => (
                     <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-green-400">✓</span>
+                      <span className="text-cyan-400">✓</span>
                       <span>{outcome}</span>
                     </li>
                   ))}
@@ -710,7 +710,7 @@ const ConsultationPlanner = () => {
 
           <button
             onClick={() => navigate('/contact')}
-            className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all"
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all"
           >
             Book This Consultation
           </button>
@@ -729,7 +729,7 @@ const AIUseCases: React.FC = () => {
       title: 'GrowBrandi Project Estimator',
       description: 'Get instant project cost and timeline estimates powered by GrowBrandi intelligence',
       icon: <FaCalculator className="w-6 h-6 sm:w-8 sm:h-8" />,
-      color: 'from-emerald-500 to-teal-500',
+      color: 'from-blue-500 to-cyan-500',
       demo: ProjectEstimator
     },
     {

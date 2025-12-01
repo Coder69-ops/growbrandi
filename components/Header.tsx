@@ -156,14 +156,14 @@ const MegaMenuSection: React.FC<{
                             closeMegaMenu();
                         }}
                         className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${currentRoute === item.route
-                            ? 'bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-500/30'
+                            ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30'
                             : 'hover:bg-white/5 border border-transparent hover:border-white/10'
                             }`}
                     >
                         <div className="flex items-start gap-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${currentRoute === item.route
-                                ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                                : 'bg-white/10 group-hover:bg-emerald-500/20'
+                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                : 'bg-white/10 group-hover:bg-blue-500/20'
                                 }`}>
                                 <item.icon className="w-5 h-5 text-white" />
                             </div>
@@ -222,7 +222,7 @@ const Header: React.FC<HeaderProps> = () => {
         <>
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-emerald-500 text-white px-4 py-2 rounded-lg z-50"
+                className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-500 text-white px-4 py-2 rounded-lg z-50"
             >
                 Skip to main content
             </a>
@@ -235,20 +235,11 @@ const Header: React.FC<HeaderProps> = () => {
                             className="flex items-center gap-3 group hover:opacity-90 transition-all duration-200"
                             aria-label="GrowBrandi Home"
                         >
-                            <div className="relative">
-                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-lg blur-sm opacity-50 group-hover:opacity-70 transition-opacity" />
-                                <div className="relative w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-lg flex items-center justify-center">
-                                    <FaRocket className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
-                                </div>
-                            </div>
-                            <div>
-                                <span className="text-xl lg:text-2xl font-bold text-white tracking-tight block">
-                                    GrowBrandi
-                                </span>
-                                <span className="text-xs text-zinc-500 font-medium tracking-widest uppercase hidden lg:block">
-                                    Creative Growth Partners
-                                </span>
-                            </div>
+                            <img
+                                src="https://ik.imagekit.io/nltb2bcz4/growbrandi.png"
+                                alt="GrowBrandi Logo"
+                                className="w-auto h-10 lg:h-14 object-contain pl-2"
+                            />
                         </button>
 
                         {/* Desktop Mega Menu Navigation */}
@@ -340,14 +331,14 @@ const Header: React.FC<HeaderProps> = () => {
                                                     closeMegaMenu();
                                                 }}
                                                 className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === service.route
-                                                    ? 'bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-500/30'
+                                                    ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30'
                                                     : 'hover:bg-white/5 border border-transparent hover:border-white/10'
                                                     }`}
                                             >
                                                 <div className="flex items-start gap-4">
                                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === service.route
-                                                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                                                        : 'bg-white/10 group-hover:bg-emerald-500/20'
+                                                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                                        : 'bg-white/10 group-hover:bg-blue-500/20'
                                                         }`}>
                                                         <service.icon className="w-6 h-6 text-white" />
                                                     </div>
@@ -376,14 +367,14 @@ const Header: React.FC<HeaderProps> = () => {
                                                     closeMegaMenu();
                                                 }}
                                                 className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === item.route
-                                                    ? 'bg-gradient-to-r from-emerald-500/20 to-blue-500/20 border border-emerald-500/30'
+                                                    ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30'
                                                     : 'hover:bg-white/5 border border-transparent hover:border-white/10'
                                                     }`}
                                             >
                                                 <div className="flex items-start gap-4">
                                                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === item.route
-                                                        ? 'bg-gradient-to-r from-emerald-500 to-blue-500'
-                                                        : 'bg-white/10 group-hover:bg-emerald-500/20'
+                                                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                                        : 'bg-white/10 group-hover:bg-blue-500/20'
                                                         }`}>
                                                         <item.icon className="w-6 h-6 text-white" />
                                                     </div>
@@ -485,7 +476,7 @@ const Header: React.FC<HeaderProps> = () => {
                                         navigate('/contact');
                                         closeMegaMenu();
                                     }}
-                                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg"
+                                    className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg"
                                 >
                                     <FaPaperPlane className="w-5 h-5" />
                                     Get Started

@@ -99,7 +99,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             </div>
                             <div>
                                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{service.title}</h2>
-                                <p className="text-emerald-400 font-semibold text-lg">{service.price}</p>
+                                <p className="text-blue-400 font-semibold text-lg">{service.price}</p>
                             </div>
                         </div>
 
@@ -112,7 +112,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <div className="grid grid-cols-1 gap-3">
                                 {service.features?.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 glass-effect p-3 rounded-xl">
-                                        <FaCheck className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                                        <FaCheck className="w-5 h-5 text-blue-400 flex-shrink-0" />
                                         <span className="text-zinc-300 font-medium">{feature}</span>
                                     </div>
                                 ))}
@@ -131,7 +131,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                     'Post-launch support included'
                                 ].map((benefit, index) => (
                                     <div key={index} className="flex items-center gap-3">
-                                        <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-blue-400 rounded-full" />
+                                        <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full" />
                                         <span className="text-zinc-300">{benefit}</span>
                                     </div>
                                 ))}
@@ -147,7 +147,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 <div key={index} className="relative">
                                     {/* Timeline Line */}
                                     {index < steps.length - 1 && (
-                                        <div className="absolute left-6 top-12 w-0.5 h-16 bg-gradient-to-b from-emerald-400 to-blue-400" />
+                                        <div className="absolute left-6 top-12 w-0.5 h-16 bg-gradient-to-b from-blue-400 to-cyan-400" />
                                     )}
 
                                     <div className="flex items-start gap-4">
@@ -160,7 +160,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                         <div className="flex-1 glass-effect p-4 rounded-xl">
                                             <div className="flex items-center justify-between mb-2">
                                                 <h4 className="text-white font-semibold">{step.step}</h4>
-                                                <span className="text-emerald-400 text-sm font-medium">{step.duration}</span>
+                                                <span className="text-blue-400 text-sm font-medium">{step.duration}</span>
                                             </div>
                                             <p className="text-zinc-300 text-sm">{step.description}</p>
                                         </div>
@@ -183,11 +183,11 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                     // Wait, I can just change the button to use an anchor tag or pass navigate.
                                     // Let's modify ServiceModal props to accept navigate.
                                 }}
-                                className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300"
+                                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300"
                             >
                                 <a href="/contact" className="block w-full h-full flex items-center justify-center">Get Started Now</a>
                             </button>
-                            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-emerald-400 hover:text-emerald-400 transition-all">
+                            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
                                 <a href="/contact" className="block w-full h-full flex items-center justify-center">Schedule Consultation</a>
                             </button>
                         </div>
@@ -221,7 +221,7 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => (
     <motion.div
-        className={`group relative overflow-hidden rounded-3xl text-center ${featured ? 'ring-2 ring-emerald-400 ring-opacity-50' : ''}`}
+        className={`group relative overflow-hidden rounded-3xl text-center ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
         variants={itemVariants}
         whileHover={{ y: -12, scale: 1.02 }}
         transition={{ duration: 0.3 }}
@@ -229,15 +229,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
         {/* Featured Badge */}
         {featured && (
             <div className="absolute -top-1 -right-1 z-10">
-                <div className="bg-gradient-to-r from-emerald-400 to-blue-400 text-white px-3 py-1 rounded-full text-xs font-bold">
+                <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-3 py-1 rounded-full text-xs font-bold">
                     POPULAR
                 </div>
             </div>
         )}
 
-        <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-emerald-500/5 to-blue-500/5' : ''}`}>
+        <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
             {/* Background Decorations */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-full -translate-y-16 translate-x-16" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
 
             {/* Service Number */}
@@ -248,7 +248,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
             <div className="relative z-10">
                 {/* Service Icon */}
                 <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
                     <div className={`relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`}>
                         {service.icon}
                     </div>
@@ -266,7 +266,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 <div className="grid grid-cols-2 gap-2 mb-6">
                     {service.features?.slice(0, 4).map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2 text-xs text-zinc-400">
-                            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                            <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
                             <span className="truncate">{feature}</span>
                         </div>
                     ))}
@@ -292,7 +292,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     </motion.button>
                     <button
                         onClick={() => window.location.href = '/contact'}
-                        className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-emerald-400 hover:text-emerald-400 transition-all"
+                        className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-blue-400 hover:text-blue-400 transition-all"
                     >
                         Get Quote
                     </button>
@@ -301,7 +301,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 {/* Trust Badge */}
                 <div className="mt-6 pt-4 border-t border-zinc-700">
                     <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
-                        <FaCheckCircle className="w-4 h-4 text-emerald-400" />
+                        <FaCheckCircle className="w-4 h-4 text-blue-400" />
                         <span>Money-back guarantee</span>
                     </div>
                 </div>
@@ -332,16 +332,16 @@ const ServicesPreview: React.FC = () => {
             >
                 {/* Enhanced Background Elements */}
                 <div className="absolute inset-0 bg-luxury-black" />
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl" />
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl" />
                 <div className="absolute top-2/3 left-2/3 w-64 h-64 bg-purple-500/6 rounded-full blur-3xl" />
 
                 <div className="container mx-auto max-w-7xl relative z-10">
                     {/* Enhanced Section Header */}
                     <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
                         <div className="inline-flex items-center gap-3 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
-                            <FaLayerGroup className="w-5 h-5 text-emerald-400" />
-                            <span className="text-sm font-bold text-emerald-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
+                            <FaLayerGroup className="w-5 h-5 text-blue-400" />
+                            <span className="text-sm font-bold text-blue-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
                             <FaStar className="w-5 h-5 text-blue-400" />
                         </div>
                         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
@@ -350,7 +350,7 @@ const ServicesPreview: React.FC = () => {
                         </h2>
                         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
                             Transform your business with
-                            <span className="text-emerald-400 font-semibold">GrowBrandi's award-winning services</span> that combine
+                            <span className="text-blue-400 font-semibold">GrowBrandi's award-winning services</span> that combine
                             <span className="text-blue-400 font-semibold">intelligent technology</span> with data-driven strategies
                             to deliver <span className="text-gradient font-semibold">measurable, exceptional results</span>.
                         </p>
@@ -409,10 +409,10 @@ const ServicesPreview: React.FC = () => {
                             ].map((step, index) => (
                                 <motion.div
                                     key={index}
-                                    className="glass-effect p-6 rounded-2xl text-center group hover:bg-gradient-to-br hover:from-emerald-500/5 hover:to-blue-500/5 transition-all duration-300"
+                                    className="glass-effect p-6 rounded-2xl text-center group hover:bg-gradient-to-br hover:from-blue-500/5 hover:to-cyan-500/5 transition-all duration-300"
                                     whileHover={{ y: -5, scale: 1.02 }}
                                 >
-                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-emerald-400">
+                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-blue-400">
                                         {step.icon}
                                     </div>
                                     <h4 className="text-white font-bold text-lg mb-2">{step.title}</h4>
@@ -437,7 +437,7 @@ const ServicesPreview: React.FC = () => {
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                 <motion.button
                                     onClick={() => navigate('/services')}
-                                    className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 to-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
+                                    className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
@@ -459,7 +459,7 @@ const ServicesPreview: React.FC = () => {
                             {/* Trust Indicators */}
                             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-8 pt-8 border-t border-zinc-700">
                                 <div className="flex items-center gap-2">
-                                    <FaLock className="w-5 h-5 text-emerald-400" />
+                                    <FaLock className="w-5 h-5 text-blue-400" />
                                     <span className="text-zinc-300 text-sm">SSL Secured</span>
                                 </div>
                                 <div className="flex items-center gap-2">
