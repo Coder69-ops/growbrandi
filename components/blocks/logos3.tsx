@@ -110,6 +110,8 @@ const Logos3 = ({
                                             <img
                                                 src={logo.image}
                                                 alt={logo.description}
+                                                width={40}
+                                                height={40}
                                                 className={cn(
                                                     "h-10 md:h-14 lg:h-16 w-auto object-contain",
                                                     logo.className

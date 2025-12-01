@@ -62,7 +62,7 @@ const PageLoader: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <span className="text-zinc-500 text-xs font-medium tracking-[0.2em] uppercase">Initializing</span>
+                    <span className="text-zinc-400 text-xs font-medium tracking-[0.2em] uppercase">Initializing</span>
                     <motion.span
                         animate={{ opacity: [0, 1, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}

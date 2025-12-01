@@ -59,6 +59,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                 {/* Close Button */}
                 <button
                     onClick={onClose}
+                    aria-label="Close modal"
                     className="absolute top-6 right-6 p-3 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-red-500/20 hover:border-red-500/50 border border-white/5 transition-all duration-300 z-20 group"
                 >
                     <FaTimes className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
@@ -392,7 +393,7 @@ const ProjectsPreview: React.FC = () => {
                                     <span className="relative z-10 flex items-center gap-2">
                                         {category}
                                         {category !== 'All' && (
-                                            <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-500'}`}>
+                                            <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-zinc-800 text-zinc-400'}`}>
                                                 {PROJECTS.filter(p => p.category === category).length}
                                             </span>
                                         )}
@@ -444,7 +445,7 @@ const ProjectsPreview: React.FC = () => {
                                     <FaFolderOpen className="w-10 h-10 text-zinc-600" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-2">No Projects Found</h3>
-                                <p className="text-zinc-500">We couldn't find any projects in this category.</p>
+                                <p className="text-zinc-400">We couldn't find any projects in this category.</p>
                             </motion.div>
                         )}
                     </motion.div>

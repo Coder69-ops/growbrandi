@@ -55,11 +55,11 @@ export const AboutUsPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-8">
                 <div className="text-center">
                   <div className="text-3xl font-black text-white mb-2">200+</div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider">Projects Completed</div>
+                  <div className="text-zinc-400 text-sm uppercase tracking-wider">Projects Completed</div>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-black text-white mb-2">50+</div>
-                  <div className="text-zinc-500 text-sm uppercase tracking-wider">Happy Clients</div>
+                  <div className="text-zinc-400 text-sm uppercase tracking-wider">Happy Clients</div>
                 </div>
               </div>
             </motion.div>
@@ -157,7 +157,7 @@ export const AboutUsPage: React.FC = () => {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2 font-heading">{member.name}</h3>
                 <p className="text-white/70 font-semibold mb-3">{member.role}</p>
-                <p className="text-zinc-500 font-light">{member.bio}</p>
+                <p className="text-zinc-400 font-light">{member.bio}</p>
               </motion.div>
             ))}
           </div>
@@ -618,7 +618,7 @@ export const TeamPage: React.FC = () => {
                           />
                           {/* Fallback */}
                           <div className="hidden absolute inset-0 bg-zinc-800 rounded-full items-center justify-center">
-                            <span className="text-2xl font-bold text-zinc-500">{member.name.charAt(0)}</span>
+                            <span className="text-2xl font-bold text-zinc-400">{member.name.charAt(0)}</span>
                           </div>
                         </div>
 
@@ -634,7 +634,7 @@ export const TeamPage: React.FC = () => {
                         <div className="text-zinc-400 font-medium text-sm uppercase tracking-wider mb-4 group-hover:text-white transition-colors duration-300">
                           {member.role}
                         </div>
-                        <p className="text-zinc-500 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-zinc-400 transition-colors duration-300">
+                        <p className="text-zinc-400 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-zinc-400 transition-colors duration-300">
                           {member.description}
                         </p>
                       </div>
@@ -652,7 +652,7 @@ export const TeamPage: React.FC = () => {
                           </span>
                         ))}
                         {member.specialties.length > 3 && (
-                          <span className="px-2 py-1 text-zinc-500 text-xs font-medium">+ {member.specialties.length - 3}</span>
+                          <span className="px-2 py-1 text-zinc-400 text-xs font-medium">+ {member.specialties.length - 3}</span>
                         )}
                       </div>
                     </div>

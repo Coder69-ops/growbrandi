@@ -63,8 +63,9 @@ const ProjectEstimator = () => {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Project Type</label>
+          <label htmlFor="projectType" className="block text-sm font-medium text-zinc-300 mb-2">Project Type</label>
           <select
+            id="projectType"
             value={formData.projectType}
             onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
             className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -100,8 +101,9 @@ const ProjectEstimator = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
+            <label htmlFor="timeline" className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
             <select
+              id="timeline"
               value={formData.timeline}
               onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
               className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -117,8 +119,9 @@ const ProjectEstimator = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Budget Range</label>
+            <label htmlFor="budget" className="block text-sm font-medium text-zinc-300 mb-2">Budget Range</label>
             <select
+              id="budget"
               value={formData.budget}
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
               className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -134,8 +137,9 @@ const ProjectEstimator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
+          <label htmlFor="industry" className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
           <input
+            id="industry"
             type="text"
             value={formData.industry}
             onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
@@ -250,8 +254,9 @@ const ServiceRecommender = () => {
     <div className="space-y-6">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
+          <label htmlFor="industry" className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
           <input
+            id="industry"
             type="text"
             value={formData.industry}
             onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
@@ -301,8 +306,9 @@ const ServiceRecommender = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Budget</label>
+            <label htmlFor="budget" className="block text-sm font-medium text-zinc-300 mb-2">Budget</label>
             <select
+              id="budget"
               value={formData.budget}
               onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
               className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -317,8 +323,9 @@ const ServiceRecommender = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
+            <label htmlFor="timeline" className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
             <select
+              id="timeline"
               value={formData.timeline}
               onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
               className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -793,7 +800,7 @@ const AIUseCases: React.FC = () => {
                       }`}>
                       {useCase.title}
                     </h3>
-                    <p className="text-sm text-zinc-500 mt-1 line-clamp-2">
+                    <p className="text-sm text-zinc-400 mt-1 line-clamp-2">
                       {useCase.description}
                     </p>
                   </div>

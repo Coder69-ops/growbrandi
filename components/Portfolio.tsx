@@ -86,7 +86,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
                                     <FaStar key={i} className={i < Math.floor(project.rating) ? "fill-current" : "text-zinc-700"} />
                                 ))}
                             </div>
-                            <span className="text-xs text-zinc-500 font-mono">{project.rating}/5.0</span>
+                            <span className="text-xs text-zinc-400 font-mono">{project.rating}/5.0</span>
                         </div>
                     </div>
 

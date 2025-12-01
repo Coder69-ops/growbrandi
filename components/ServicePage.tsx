@@ -290,7 +290,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                     <h3 className="text-2xl font-bold text-white mb-2 capitalize">{planName}</h3>
                     <div className="text-4xl font-black text-white mb-6 tracking-tight">
                       {plan.price}
-                      <span className="text-lg font-normal text-zinc-500 ml-2">/project</span>
+                      <span className="text-lg font-normal text-zinc-400 ml-2">/project</span>
                     </div>
                     <ul className="space-y-4 mb-8">
                       {plan.features.map((feature, featureIndex) => (

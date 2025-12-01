@@ -83,7 +83,7 @@ export const ContactPage: React.FC = () => {
     const inputClasses = (fieldName: string) => `
         w-full p-4 rounded-xl bg-zinc-900/50 border 
         ${focusedField === fieldName ? 'border-blue-500/50 ring-2 ring-blue-500/20' : 'border-white/10'} 
-        focus:outline-none text-white transition-all duration-300 placeholder-zinc-500
+        focus:outline-none text-white transition-all duration-300 placeholder-zinc-400
     `;
 
     // Social Icon Mapping
@@ -128,7 +128,7 @@ export const ContactPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-1">Email Us</h3>
                                 <p className="text-zinc-400">{CONTACT_INFO.email}</p>
-                                <p className="text-zinc-500 text-sm">Response within 24 hours</p>
+                                <p className="text-zinc-400 text-sm">Response within 24 hours</p>
                             </div>
                         </div>
 
@@ -139,7 +139,7 @@ export const ContactPage: React.FC = () => {
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-1">Global HQ</h3>
                                 <p className="text-zinc-400">{CONTACT_INFO.address}</p>
-                                <p className="text-zinc-500 text-sm">Digital-first agency</p>
+                                <p className="text-zinc-400 text-sm">Digital-first agency</p>
                             </div>
                         </div>
                     </div>

@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
                 className="w-auto h-12 object-contain"
               />
             </Link>
-            <p className="text-zinc-500 text-sm leading-relaxed max-w-sm font-light">
+            <p className="text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
               {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
             </p>
 
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
                 <li key={service.title}>
                   <Link
                     to={`/services`}
-                    className="text-zinc-500 hover:text-white text-sm transition-colors duration-200 block font-light"
+                    className="text-zinc-400 hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {service.title}
                   </Link>
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-zinc-500 hover:text-white text-sm transition-colors duration-200 block font-light"
+                    className="text-zinc-400 hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {link.name}
                   </Link>
@@ -124,17 +124,17 @@ const Footer: React.FC = () => {
           <div className="sm:col-span-2 lg:col-span-3">
             <h3 className="font-semibold text-white mb-4 md:mb-6">Contact</h3>
             <ul className="space-y-3 md:space-y-4">
-              <li className="flex items-start gap-3 text-zinc-500 text-sm font-light">
+              <li className="flex items-start gap-3 text-zinc-400 text-sm font-light">
                 <FaMapMarkerAlt className="w-4 h-4 text-white mt-0.5 shrink-0" />
                 <span>{CONTACT_INFO.address}</span>
               </li>
-              <li className="flex items-center gap-3 text-zinc-500 text-sm font-light">
+              <li className="flex items-center gap-3 text-zinc-400 text-sm font-light">
                 <FaEnvelope className="w-4 h-4 text-white shrink-0" />
                 <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
                   {CONTACT_INFO.email}
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-zinc-500 text-sm font-light">
+              <li className="flex items-center gap-3 text-zinc-400 text-sm font-light">
                 <FaPhone className="w-4 h-4 text-white shrink-0" />
                 <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-white transition-colors">
                   {CONTACT_INFO.phone}

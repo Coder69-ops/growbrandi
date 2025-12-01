@@ -121,7 +121,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             {project.technologies && (
                 <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-zinc-500 mb-3 uppercase tracking-wide flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
                         <FaCode className="w-4 h-4" />
                         Technologies
                     </h4>
@@ -137,7 +137,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             {project.results && (
                 <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-zinc-500 mb-3 uppercase tracking-wide flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
                         <FaChartLine className="w-4 h-4" />
                         Key Results
                     </h4>
