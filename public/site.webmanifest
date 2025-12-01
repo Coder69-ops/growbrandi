@@ -1,13 +1,17 @@
 {
-  "name": "GrowBrandi - AI-Powered Digital Agency",
+  "name": "GrowBrandi - Digital Agency",
   "short_name": "GrowBrandi",
-  "description": "Transform your business with AI-powered digital solutions. Expert web development, UI/UX design, and digital marketing services.",
+  "description": "Transform your business with digital solutions. Expert web development, UI/UX design, and digital marketing services.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#10b981",
   "orientation": "portrait-primary",
-  "categories": ["business", "productivity", "technology"],
+  "categories": [
+    "business",
+    "productivity",
+    "technology"
+  ],
   "lang": "en",
   "icons": [
     {
