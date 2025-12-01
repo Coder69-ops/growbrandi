@@ -45,6 +45,7 @@ export default {
                 'slide-in-up': 'slide-in-up 0.6s ease-out',
                 'fade-in': 'fade-in 0.8s ease-out forwards',
                 'slide-up-fade': 'slide-up-fade 0.8s ease-out forwards',
+                'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
                 'pulse-glow': {

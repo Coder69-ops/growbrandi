@@ -136,13 +136,13 @@ const HeroSection: React.FC = () => {
                     {/* 2. Enhanced Visual / Floating Interface (Span 5) */}
                     <motion.div
                         variants={itemVariants}
-                        className="lg:col-span-5 relative h-[320px] lg:h-[600px] perspective-1000"
+                        className="lg:col-span-5 relative h-[400px] lg:h-[600px] perspective-1000 w-full max-w-[500px] lg:max-w-none mx-auto lg:mx-0"
                     >
                         {/* Main Glass Card */}
                         <motion.div
                             variants={floatVariants}
                             animate="animate"
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.02] rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden z-20"
+                            className="absolute top-[35%] left-1/2 lg:left-[40%] -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] h-[400px] sm:h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.02] rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden z-20"
                         >
                             {/* Card Header */}
                             <div className="h-12 border-b border-white/10 flex items-center px-6 gap-2">
@@ -157,19 +157,19 @@ const HeroSection: React.FC = () => {
                                     <div className="h-8 w-32 bg-white/10 rounded-lg animate-pulse" />
                                     <div className="h-8 w-8 bg-blue-500 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
                                 </div>
-                                <div className="h-40 w-full bg-gradient-to-b from-white/5 to-transparent rounded-xl border border-white/5 relative overflow-hidden">
+                                <div className="h-32 sm:h-40 w-full bg-gradient-to-b from-white/5 to-transparent rounded-xl border border-white/5 relative overflow-hidden">
                                     <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-blue-500/20 to-transparent" />
                                     <svg className="absolute bottom-0 left-0 right-0 w-full h-24 stroke-blue-500 fill-none stroke-2" viewBox="0 0 100 20" preserveAspectRatio="none">
                                         <path d="M0 20 Q 25 5 50 15 T 100 0" />
                                     </svg>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="h-24 bg-white/5 rounded-xl border border-white/5 p-4">
+                                    <div className="h-20 sm:h-24 bg-white/5 rounded-xl border border-white/5 p-4">
                                         <FaBolt className="text-yellow-400 mb-2" />
                                         <div className="h-2 w-12 bg-white/20 rounded mb-1" />
                                         <div className="h-4 w-8 bg-white/40 rounded" />
                                     </div>
-                                    <div className="h-24 bg-white/5 rounded-xl border border-white/5 p-4">
+                                    <div className="h-20 sm:h-24 bg-white/5 rounded-xl border border-white/5 p-4">
                                         <FaCode className="text-purple-400 mb-2" />
                                         <div className="h-2 w-12 bg-white/20 rounded mb-1" />
                                         <div className="h-4 w-8 bg-white/40 rounded" />
@@ -192,7 +192,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                            className="absolute top-[20%] left-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
+                            className="absolute top-[15%] left-[0%] lg:left-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
@@ -209,7 +209,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             animate={{ y: [0, 15, 0], x: [0, -5, 0] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                            className="absolute bottom-[20%] right-[-10%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
+                            className="absolute bottom-[25%] right-[0%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
