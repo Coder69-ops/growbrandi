@@ -1,15 +1,18 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
-import { sendEmail } from '../services/emailService';
+import { sendEmail, sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
+import ContactAssistant from './ContactAssistant';
 import { CONTACT_INFO, SERVICES } from '../constants';
 
 // --- ContactPage Component ---
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ContactPage: React.FC = () => {
+    const location = useLocation();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -21,6 +24,9 @@ export const ContactPage: React.FC = () => {
     const [aiError, setAiError] = useState('');
     const [formStatus, setFormStatus] = useState<FormStatus>('idle');
     const [focusedField, setFocusedField] = useState<string | null>(null);
+    const [isAssistantOpen, setIsAssistantOpen] = useState(false);
+    const [aiContext, setAiContext] = useState<string | null>(null);
+    const hasSentRef = useRef(false);
 
     // EmailJS Configuration
     const EMAILJS_SERVICE_ID = 'service_s9nqo1u';
@@ -28,6 +34,81 @@ export const ContactPage: React.FC = () => {
     const EMAILJS_PUBLIC_KEY = 'DETrhGT8sUUowOqIR';
 
     const serviceOptions = SERVICES.map(s => s.title);
+
+    useEffect(() => {
+        if (location.state && location.state.data) {
+            const { source, data, userInfo, autoSend } = location.state;
+            let formattedMessage = '';
+            let subject = '';
+
+            if (source === 'estimator') {
+                subject = 'Project Estimation Inquiry';
+                formattedMessage = `I used your AI Project Estimator.
+Estimated Cost: ${data.estimatedCost}
+Timeline: ${data.estimatedTimeline}
+Recommendations: ${data.recommendations?.join(', ')}
+
+I would like to discuss this estimation.`;
+            } else if (source === 'recommender') {
+                subject = 'Service Recommendation Inquiry';
+                formattedMessage = `I used your AI Service Recommender.
+Priority Services: ${data.priorityServices?.map((s: any) => s.service).join(', ')}
+
+I'm interested in getting started with these services.`;
+            } else if (source === 'analyzer') {
+                subject = 'Growth Strategy Discussion';
+                formattedMessage = `I used your Business Growth Analyzer.
+Growth Potential: ${data.growthPotential}
+Predictions: 1 Year - ${data.predictions?.oneYear}
+
+I'd like to discuss a strategy to achieve these results.`;
+            } else if (source === 'planner') {
+                subject = 'Consultation Booking';
+                formattedMessage = `I used your Consultation Planner.
+Recommended Session: ${data.consultationType} (${data.recommendedDuration})
+Topics: ${data.keyTopics?.join(', ')}
+
+I would like to book this consultation.`;
+            }
+
+            if (formattedMessage) {
+                const newFormData = {
+                    name: userInfo?.name || '',
+                    email: userInfo?.email || '',
+                    subject: subject,
+                    service: 'Brand Growth',
+                    message: formattedMessage
+                };
+
+                setFormData(newFormData);
+                setAiContext('We have pre-filled your message with the AI results.');
+
+                if (autoSend && userInfo?.name && userInfo?.email && !hasSentRef.current) {
+                    hasSentRef.current = true;
+                    handleAutoSend(newFormData);
+                }
+            }
+        }
+    }, [location.state]);
+
+    const handleAutoSend = async (data: any) => {
+        setFormStatus('submitting');
+        try {
+            await sendEmailData(
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
+                data,
+                EMAILJS_PUBLIC_KEY
+            );
+            setFormStatus('success');
+            setAiContext(null);
+            // Reset success status after 8 seconds
+            setTimeout(() => setFormStatus('idle'), 8000);
+        } catch (error) {
+            console.error("Auto-submission failed:", error);
+            setFormStatus('error');
+        }
+    };
 
     const generateBrief = async () => {
         if (!formData.service || !formData.subject) {
@@ -62,17 +143,18 @@ export const ContactPage: React.FC = () => {
         setFormStatus('submitting');
 
         try {
-            await sendEmail(
+            await sendEmailData(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
-                e.target as HTMLFormElement,
+                formData,
                 EMAILJS_PUBLIC_KEY
             );
 
             setFormStatus('success');
             setFormData({ name: '', email: '', subject: '', service: '', message: '' });
+            setAiContext(null);
 
-            // Reset success status after 5 seconds to allow sending another message
+            // Reset success status after 8 seconds to allow sending another message
             setTimeout(() => setFormStatus('idle'), 8000);
         } catch (error) {
             console.error("Submission failed:", error);
@@ -116,9 +198,24 @@ export const ContactPage: React.FC = () => {
                         Let's Build <br />
                         <span className="text-gradient">Something Epic</span>
                     </h1>
-                    <p className="text-xl text-zinc-400 mb-12 max-w-lg leading-relaxed">
+                    <p className="text-xl text-zinc-400 mb-8 max-w-lg leading-relaxed">
                         Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions.
                     </p>
+
+                    <div className="mb-12">
+                        <button
+                            onClick={() => setIsAssistantOpen(true)}
+                            className="group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 hover:from-blue-600/30 hover:to-cyan-600/30 border border-blue-500/30 rounded-xl transition-all duration-300"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                                <FaMagic className="w-4 h-4" />
+                            </div>
+                            <div className="text-left">
+                                <p className="text-sm text-blue-400 font-bold uppercase tracking-wider">Not sure where to start?</p>
+                                <p className="text-white font-semibold">Try our AI Project Assistant</p>
+                            </div>
+                        </button>
+                    </div>
 
                     <div className="space-y-8 mb-12">
                         <div className="flex items-start space-x-4">
@@ -180,8 +277,8 @@ export const ContactPage: React.FC = () => {
                                         <FaCheckCircle className="w-12 h-12 text-blue-500" />
                                     </div>
                                     <h3 className="text-3xl font-bold text-white mb-4 font-heading">Message Sent!</h3>
-                                    <p className="text-zinc-400 max-w-xs mx-auto mb-8">
-                                        Thank you for reaching out. Our team will analyze your request and get back to you within 24 hours.
+                                    <p className="text-zinc-400 max-w-md mx-auto mb-8">
+                                        Thank you for reaching out. We have received your request and a confirmation email has been sent to your inbox. Our team will review your details and get back to you within 24 hours.
                                     </p>
                                     <button
                                         onClick={() => setFormStatus('idle')}
@@ -199,6 +296,17 @@ export const ContactPage: React.FC = () => {
                                     onSubmit={handleSubmit}
                                     className="space-y-6 relative z-10"
                                 >
+                                    {aiContext && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-start gap-3"
+                                        >
+                                            <FaRobot className="w-5 h-5 text-blue-400 mt-0.5" />
+                                            <p className="text-sm text-blue-200">{aiContext}</p>
+                                        </motion.div>
+                                    )}
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label htmlFor="name" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
@@ -335,6 +443,7 @@ export const ContactPage: React.FC = () => {
                     </div>
                 </motion.div>
             </div>
+            <ContactAssistant isOpen={isAssistantOpen} onClose={() => setIsAssistantOpen(false)} />
         </section>
     );
 };

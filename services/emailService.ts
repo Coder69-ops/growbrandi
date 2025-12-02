@@ -28,3 +28,18 @@ export const sendEmail = async (
         throw error;
     }
 };
+
+export const sendEmailData = async (
+    serviceId: string,
+    templateId: string,
+    data: Record<string, unknown>,
+    publicKey: string
+) => {
+    try {
+        const result = await emailjs.send(serviceId, templateId, data, publicKey);
+        return result;
+    } catch (error) {
+        console.error('EmailJS Error:', error);
+        throw error;
+    }
+};

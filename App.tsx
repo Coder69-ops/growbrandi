@@ -17,7 +17,7 @@ const PortfolioPage = React.lazy(() => import('./components/Portfolio').then(mod
 const ContactPage = React.lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
 const ChatInterface = React.lazy(() => import('./components/ChatInterface'));
 const AnimatedBackground = React.lazy(() => import('./components/AnimatedBackground'));
-const AIUseCases = React.lazy(() => import('./components/AIUseCases'));
+
 const ContactAssistant = React.lazy(() => import('./components/ContactAssistant'));
 const TeamMemberProfile = React.lazy(() => import('./components/TeamMemberProfile'));
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
@@ -79,7 +79,7 @@ function AppContent() {
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
-  const [showAIUseCases, setShowAIUseCases] = useState(false);
+
   const [isChatPreloaded, setIsChatPreloaded] = useState(false);
   const [chatInstance, setChatInstance] = useState<any>(null);
 
@@ -268,48 +268,44 @@ ${servicesDetails}
 
         <main id="main-content" role="main" className="w-full">
           <Suspense fallback={<PageLoader />}>
-            {showAIUseCases ? (
-              <AIUseCases />
-            ) : (
-              <AnimatePresence mode="wait">
-                <Routes location={location} key={location.pathname}>
-                  {/* Home */}
-                  <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
+            <AnimatePresence mode="wait">
+              <Routes location={location} key={location.pathname}>
+                {/* Home */}
+                <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
 
-                  {/* Services */}
-                  <Route path="/services/brand-growth" element={<PageWrapper><BrandGrowthPage /></PageWrapper>} />
-                  <Route path="/services/social-media-content" element={<PageWrapper><SocialMediaContentPage /></PageWrapper>} />
-                  <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
-                  <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
-                  <Route path="/services/virtual-assistance" element={<PageWrapper><VirtualAssistancePage /></PageWrapper>} />
-                  <Route path="/services/customer-support" element={<PageWrapper><CustomerSupportPage /></PageWrapper>} />
+                {/* Services */}
+                <Route path="/services/brand-growth" element={<PageWrapper><BrandGrowthPage /></PageWrapper>} />
+                <Route path="/services/social-media-content" element={<PageWrapper><SocialMediaContentPage /></PageWrapper>} />
+                <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
+                <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
+                <Route path="/services/virtual-assistance" element={<PageWrapper><VirtualAssistancePage /></PageWrapper>} />
+                <Route path="/services/customer-support" element={<PageWrapper><CustomerSupportPage /></PageWrapper>} />
 
-                  {/* Company */}
-                  <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
-                  <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
-                  <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
-                  <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
-                  <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
-                  <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
-                  <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
+                {/* Company */}
+                <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
+                <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
+                <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
+                <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
+                <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
+                <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
+                <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
 
-                  {/* Legal */}
-                  <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
-                  <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
-                  <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
+                {/* Legal */}
+                <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
+                <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
+                <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
 
-                  {/* Contact */}
-                  <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+                {/* Contact */}
+                <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
 
-                  {/* Legacy/Redirects/Other */}
-                  <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
-                  <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+                {/* Legacy/Redirects/Other */}
+                <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
+                <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
 
-                  {/* 404 */}
-                  <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
-                </Routes>
-              </AnimatePresence>
-            )}
+                {/* 404 */}
+                <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+              </Routes>
+            </AnimatePresence>
           </Suspense>
         </main>
 
@@ -321,8 +317,6 @@ ${servicesDetails}
       <FloatingActionButtons
         onChatOpen={() => setIsChatOpen(true)}
         onContactOpen={() => setIsContactAssistantOpen(true)}
-        onToggleAI={() => setShowAIUseCases(!showAIUseCases)}
-        showAIUseCases={showAIUseCases}
         isChatPreloaded={isChatPreloaded}
       />
 

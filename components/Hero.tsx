@@ -7,7 +7,7 @@ import { FaArrowRight, FaPlay, FaStar, FaRocket, FaChartLine, FaCode, FaLayerGro
 // Lazy load other Home Page sections
 const ServicesPreview = React.lazy(() => import('./ServicesPreview'));
 const ProjectsPreview = React.lazy(() => import('./ProjectsPreview'));
-const AIBusinessAdvisor = React.lazy(() => import('./AIBusinessAdvisor'));
+const AIUseCases = React.lazy(() => import('./AIUseCases'));
 const SloganGenerator = React.lazy(() => import('./SloganGenerator'));
 const TestimonialsSlider = React.lazy(() => import('./TestimonialsSlider'));
 const TeamSection = React.lazy(() => import('./TeamSection'));
@@ -65,7 +65,7 @@ const HeroSection: React.FC = () => {
                 <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -140,6 +140,45 @@ const HeroSection: React.FC = () => {
                         variants={itemVariants}
                         className="lg:col-span-5 relative h-[400px] lg:h-[600px] perspective-1000 w-full max-w-[500px] lg:max-w-none mx-auto lg:mx-0"
                     >
+                        {/* Stacked Card Effect */}
+                        <motion.div
+                            variants={floatVariants}
+                            animate="animate"
+                            className="absolute top-[38%] left-1/2 lg:left-[25%] -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] h-[400px] sm:h-[500px] bg-gradient-to-br from-white/[0.03] to-white/[0.01] rounded-3xl border border-white/5 backdrop-blur-sm shadow-xl z-10 scale-95 -rotate-12 overflow-hidden"
+                        >
+                            {/* Secondary Card Header */}
+                            <div className="h-12 border-b border-white/5 flex items-center px-6 gap-2 opacity-50">
+                                <div className="w-3 h-3 rounded-full bg-zinc-500/50" />
+                                <div className="w-3 h-3 rounded-full bg-zinc-500/50" />
+                                <div className="w-3 h-3 rounded-full bg-zinc-500/50" />
+                            </div>
+
+                            {/* Secondary Card Content */}
+                            <div className="p-6 space-y-6 opacity-40 grayscale">
+                                <div className="flex items-center justify-between">
+                                    <div className="h-8 w-24 bg-white/10 rounded-lg" />
+                                    <div className="h-8 w-8 bg-white/10 rounded-lg" />
+                                </div>
+                                <div className="h-32 sm:h-40 w-full bg-white/5 rounded-xl border border-white/5 relative overflow-hidden">
+                                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2 h-20">
+                                        {[40, 70, 50, 90, 60, 80].map((h, i) => (
+                                            <div key={i} className="w-full bg-white/20 rounded-t-sm" style={{ height: `${h}%` }} />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="h-20 sm:h-24 bg-white/5 rounded-xl border border-white/5 p-4">
+                                        <div className="h-8 w-8 bg-white/10 rounded-full mb-2" />
+                                        <div className="h-2 w-16 bg-white/20 rounded" />
+                                    </div>
+                                    <div className="h-20 sm:h-24 bg-white/5 rounded-xl border border-white/5 p-4">
+                                        <div className="h-8 w-8 bg-white/10 rounded-full mb-2" />
+                                        <div className="h-2 w-16 bg-white/20 rounded" />
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+
                         {/* Main Glass Card */}
                         <motion.div
                             variants={floatVariants}
@@ -322,26 +361,7 @@ const HeroSection: React.FC = () => {
                     </motion.div>
                 </motion.div>
 
-                {/* Scroll Indicator */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1, duration: 1 }}
-                    className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2"
-                >
-                    <span className="text-xs text-slate-400 uppercase tracking-widest">Scroll</span>
-                    <motion.div
-                        animate={{ y: [0, 6, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="w-5 h-8 rounded-full border border-slate-600 flex justify-center pt-2"
-                    >
-                        <motion.div
-                            animate={{ y: [0, 4, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-1 h-1 bg-slate-400 rounded-full"
-                        />
-                    </motion.div>
-                </motion.div>
+
             </div>
         </div>
     );
@@ -363,7 +383,7 @@ export const HomePage: React.FC = () => {
             </LazySection>
 
             <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
-                <AIBusinessAdvisor />
+                <AIUseCases />
             </LazySection>
 
             <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt, FaCheck, FaArrowRight, FaSpinner, FaChevronLeft } from 'react-icons/fa';
 import {
   estimateProject,
   recommendServices,
@@ -9,16 +9,119 @@ import {
   generateConsultationPlan
 } from '../services/geminiService';
 
-interface UseCase {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  color: string;
-  demo: React.ComponentType<any>;
-}
+// --- Shared UI Components ---
 
-// Project Estimator Component
+const InputField = ({ label, ...props }: any) => (
+  <div className="space-y-2">
+    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
+    <input
+      {...props}
+      className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+    />
+  </div>
+);
+
+const SelectField = ({ label, options, ...props }: any) => (
+  <div className="space-y-2">
+    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
+    <div className="relative">
+      <select
+        {...props}
+        className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+      >
+        {options.map((opt: any) => (
+          <option key={opt.value} value={opt.value} className="bg-zinc-900">{opt.label}</option>
+        ))}
+      </select>
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+      </div>
+    </div>
+  </div>
+);
+
+const OptionButton = ({ selected, onClick, children, colorClass = 'bg-blue-600' }: any) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`text-xs font-medium px-4 py-2 rounded-full transition-all duration-300 border ${selected
+      ? `${colorClass} text-white border-transparent shadow-lg shadow-blue-500/20`
+      : 'bg-zinc-800/50 text-zinc-400 border-white/5 hover:bg-zinc-700 hover:text-white'
+      }`}
+  >
+    {children}
+  </button>
+);
+
+const ResultCard = ({ title, children, color = "blue" }: any) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className={`bg-zinc-900/80 backdrop-blur-xl border border-${color}-500/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden`}
+  >
+    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-${color}-500 to-transparent`} />
+    <h3 className={`text-xl font-bold text-white mb-6 flex items-center gap-2`}>
+      <span className={`text-${color}-400`}>AI Analysis:</span> {title}
+    </h3>
+    {children}
+  </motion.div>
+);
+
+const AILoader = () => (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transition-all duration-500">
+    <div className="relative flex flex-col items-center z-10">
+      <motion.div
+        className="relative mb-8"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <motion.div
+          className="absolute -inset-6 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 opacity-30 blur-xl"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        />
+        <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full" />
+        <div className="relative w-32 h-32 bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+          <img
+            src="/growbrandi-logo.png"
+            alt="GrowBrandi"
+            className="w-20 h-auto object-contain relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+          />
+        </div>
+      </motion.div>
+
+      <div className="w-64 h-1.5 bg-zinc-800 rounded-full overflow-hidden relative mb-4">
+        <motion.div
+          className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500"
+          initial={{ x: '-100%' }}
+          animate={{ x: '100%' }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          style={{ width: '50%' }}
+        />
+      </div>
+
+      <motion.div
+        className="flex items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <span className="text-zinc-400 text-sm font-medium tracking-[0.2em] uppercase">Analyzing Data</span>
+        <motion.span
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="text-blue-400 text-sm"
+        >
+          ●
+        </motion.span>
+      </motion.div>
+    </div>
+  </div>
+);
+
+// --- Project Estimator Component ---
+
 const ProjectEstimator = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -26,7 +129,9 @@ const ProjectEstimator = () => {
     features: [] as string[],
     timeline: '',
     budget: '',
-    industry: ''
+    industry: '',
+    name: '',
+    email: ''
   });
   const [estimation, setEstimation] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -54,97 +159,96 @@ const ProjectEstimator = () => {
   };
 
   const featuresOptions = [
-    'E-commerce Integration', 'User Authentication', 'Payment Gateway',
-    'Real-time Chat', 'Analytics Dashboard', 'Mobile App', 'API Integration',
-    'Content Management', 'SEO Optimization', 'Social Media Integration'
+    'E-commerce', 'Auth', 'Payments', 'Chat', 'Analytics',
+    'Mobile App', 'API', 'CMS', 'SEO', 'Social'
   ];
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="projectType" className="block text-sm font-medium text-zinc-300 mb-2">Project Type</label>
-          <select
-            id="projectType"
+    <div className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SelectField
+            label="Project Type"
             value={formData.projectType}
-            onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+            onChange={(e: any) => setFormData({ ...formData, projectType: e.target.value })}
+            options={[
+              { value: "", label: "Select Type" },
+              { value: "Website", label: "Website" },
+              { value: "Web App", label: "Web Application" },
+              { value: "Mobile App", label: "Mobile App" },
+              { value: "E-commerce", label: "E-commerce" },
+              { value: "Branding", label: "Branding" }
+            ]}
             required
-          >
-            <option value="">Select project type</option>
-            <option value="Website">Website</option>
-            <option value="Web App">Web Application</option>
-            <option value="Mobile App">Mobile App</option>
-            <option value="E-commerce">E-commerce Platform</option>
-            <option value="Branding">Branding & Design</option>
-          </select>
+          />
+          <InputField
+            label="Industry"
+            value={formData.industry}
+            onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+            placeholder="e.g. Healthcare"
+            required
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Required Features</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Features</label>
+          <div className="flex flex-wrap gap-2">
             {featuresOptions.map(feature => (
-              <button
+              <OptionButton
                 key={feature}
-                type="button"
+                selected={formData.features.includes(feature)}
                 onClick={() => toggleFeature(feature)}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.features.includes(feature)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
-                  }`}
               >
                 {feature}
-              </button>
+              </OptionButton>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="timeline" className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
-            <select
-              id="timeline"
-              value={formData.timeline}
-              onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select timeline</option>
-              <option value="1-2 weeks">1-2 weeks</option>
-              <option value="1 month">1 month</option>
-              <option value="2-3 months">2-3 months</option>
-              <option value="3-6 months">3-6 months</option>
-              <option value="6+ months">6+ months</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="budget" className="block text-sm font-medium text-zinc-300 mb-2">Budget Range</label>
-            <select
-              id="budget"
-              value={formData.budget}
-              onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select budget</option>
-              <option value="$300-$1K">$300 - $1K</option>
-              <option value="$1K-$5K">$1K - $5K</option>
-              <option value="$5K-$15K">$5K - $15K</option>
-              <option value="$15K+">$15K+</option>
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SelectField
+            label="Timeline"
+            value={formData.timeline}
+            onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
+            options={[
+              { value: "", label: "Select Timeline" },
+              { value: "1-2 weeks", label: "1-2 weeks" },
+              { value: "1 month", label: "1 month" },
+              { value: "2-3 months", label: "2-3 months" },
+              { value: "3-6 months", label: "3-6 months" },
+              { value: "6+ months", label: "6+ months" }
+            ]}
+            required
+          />
+          <SelectField
+            label="Budget"
+            value={formData.budget}
+            onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
+            options={[
+              { value: "", label: "Select Budget" },
+              { value: "$300-$1K", label: "$300 - $1K" },
+              { value: "$1K-$5K", label: "$1K - $5K" },
+              { value: "$5K-$15K", label: "$5K - $15K" },
+              { value: "$15K+", label: "$15K+" }
+            ]}
+            required
+          />
         </div>
 
-        <div>
-          <label htmlFor="industry" className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
-          <input
-            id="industry"
-            type="text"
-            value={formData.industry}
-            onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-            placeholder="e.g., Healthcare, E-commerce, Education"
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputField
+            label="Name"
+            value={formData.name}
+            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Your Name"
+            required
+          />
+          <InputField
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="your@email.com"
             required
           />
         </div>
@@ -152,58 +256,63 @@ const ProjectEstimator = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50"
+          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {loading ? 'Analyzing...' : 'Get GrowBrandi Estimation'}
+          {loading ? 'Processing...' : 'Get Estimation'}
         </button>
       </form>
 
-      {estimation && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
-        >
-          <h3 className="text-lg font-semibold text-blue-400">GrowBrandi Project Estimation</h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-700/50 rounded-lg p-4">
-              <p className="text-sm text-zinc-400">Estimated Cost</p>
-              <p className="text-lg sm:text-xl font-bold text-white">{estimation.estimatedCost}</p>
+      <AnimatePresence>
+        {loading && <AILoader />}
+        {estimation && (
+          <ResultCard title="Project Estimation">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Estimated Cost</p>
+                <p className="text-2xl font-bold text-white">{estimation.estimatedCost}</p>
+              </div>
+              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Timeline</p>
+                <p className="text-2xl font-bold text-white">{estimation.estimatedTimeline}</p>
+              </div>
             </div>
-            <div className="bg-zinc-700/50 rounded-lg p-4">
-              <p className="text-sm text-zinc-400">Timeline</p>
-              <p className="text-lg sm:text-xl font-bold text-white">{estimation.estimatedTimeline}</p>
-            </div>
-          </div>
 
-          {estimation.recommendations && (
-            <div>
-              <h4 className="font-semibold text-white mb-2">GrowBrandi Recommendations</h4>
-              <ul className="space-y-1 text-sm text-zinc-300">
-                {estimation.recommendations.map((rec: string, idx: number) => (
-                  <li key={idx} className="flex items-start space-x-2">
-                    <span className="text-blue-400">•</span>
-                    <span>{rec}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            {estimation.recommendations && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Recommendations</h4>
+                <ul className="space-y-2">
+                  {estimation.recommendations.map((rec: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                      <FaCheck className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
+                      <span>{rec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-          <button
-            onClick={() => navigate('/contact')}
-            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-blue-500/20"
-          >
-            Book Free Consultation
-          </button>
-        </motion.div>
-      )}
+            <button
+              onClick={() => navigate('/contact', {
+                state: {
+                  source: 'estimator',
+                  data: estimation,
+                  userInfo: { name: formData.name, email: formData.email },
+                  autoSend: true
+                }
+              })}
+              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+            >
+              Book Consultation <FaArrowRight className="w-4 h-4" />
+            </button>
+          </ResultCard>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-// Service Recommender Component
+// --- Service Recommender Component ---
+
 const ServiceRecommender = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -211,22 +320,12 @@ const ServiceRecommender = () => {
     currentChallenges: [] as string[],
     goals: [] as string[],
     budget: '',
-    timeline: ''
+    timeline: '',
+    name: '',
+    email: ''
   });
   const [recommendations, setRecommendations] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-
-  const challengesOptions = [
-    'Low website traffic', 'Poor conversion rates', 'Weak brand identity',
-    'Lack of online presence', 'Ineffective marketing', 'Technical issues',
-    'Mobile responsiveness', 'Slow loading speed', 'Poor user experience'
-  ];
-
-  const goalsOptions = [
-    'Increase sales', 'Build brand awareness', 'Generate more leads',
-    'Improve user engagement', 'Expand market reach', 'Enhance customer experience',
-    'Launch new products', 'Enter new markets', 'Improve SEO rankings'
-  ];
 
   const toggleOption = (option: string, field: 'currentChallenges' | 'goals') => {
     setFormData(prev => ({
@@ -251,147 +350,149 @@ const ServiceRecommender = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <InputField
+          label="Industry"
+          value={formData.industry}
+          onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+          placeholder="e.g. SaaS, Retail"
+          required
+        />
+
         <div>
-          <label htmlFor="industry" className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
-          <input
-            id="industry"
-            type="text"
-            value={formData.industry}
-            onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-            placeholder="e.g., Healthcare, E-commerce, SaaS"
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
+          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Challenges</label>
+          <div className="flex flex-wrap gap-2">
+            {['Low Traffic', 'Low Conversion', 'Brand Identity', 'Tech Issues', 'Mobile UX', 'SEO'].map(opt => (
+              <OptionButton
+                key={opt}
+                selected={formData.currentChallenges.includes(opt)}
+                onClick={() => toggleOption(opt, 'currentChallenges')}
+                colorClass="bg-red-500"
+              >
+                {opt}
+              </OptionButton>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Goals</label>
+          <div className="flex flex-wrap gap-2">
+            {['More Sales', 'Awareness', 'Leads', 'Engagement', 'New Market', 'Better UX'].map(opt => (
+              <OptionButton
+                key={opt}
+                selected={formData.goals.includes(opt)}
+                onClick={() => toggleOption(opt, 'goals')}
+                colorClass="bg-green-500"
+              >
+                {opt}
+              </OptionButton>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SelectField
+            label="Budget"
+            value={formData.budget}
+            onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
+            options={[
+              { value: "", label: "Select Budget" },
+              { value: "$300-$1K", label: "$300 - $1K" },
+              { value: "$1K-$5K", label: "$1K - $5K" },
+              { value: "$5K-$15K", label: "$5K - $15K" },
+              { value: "$15K+", label: "$15K+" }
+            ]}
+            required
+          />
+          <SelectField
+            label="Timeline"
+            value={formData.timeline}
+            onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
+            options={[
+              { value: "", label: "Select Timeline" },
+              { value: "Immediate", label: "Immediate" },
+              { value: "Short-term", label: "Short-term" },
+              { value: "Medium-term", label: "Medium-term" },
+              { value: "Long-term", label: "Long-term" }
+            ]}
             required
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Current Challenges</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {challengesOptions.map(challenge => (
-              <button
-                key={challenge}
-                type="button"
-                onClick={() => toggleOption(challenge, 'currentChallenges')}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.currentChallenges.includes(challenge)
-                  ? 'bg-red-600 text-white'
-                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
-                  }`}
-              >
-                {challenge}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Business Goals</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {goalsOptions.map(goal => (
-              <button
-                key={goal}
-                type="button"
-                onClick={() => toggleOption(goal, 'goals')}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.goals.includes(goal)
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
-                  }`}
-              >
-                {goal}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="budget" className="block text-sm font-medium text-zinc-300 mb-2">Budget</label>
-            <select
-              id="budget"
-              value={formData.budget}
-              onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select budget</option>
-              <option value="$300-$1K">$300 - $1K</option>
-              <option value="$1K-$5K">$1K - $5K</option>
-              <option value="$5K-$15K">$5K - $15K</option>
-              <option value="$15K+">$15K+</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="timeline" className="block text-sm font-medium text-zinc-300 mb-2">Timeline</label>
-            <select
-              id="timeline"
-              value={formData.timeline}
-              onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
-              className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
-              required
-            >
-              <option value="">Select timeline</option>
-              <option value="Immediate">Immediate (1-2 weeks)</option>
-              <option value="Short-term">Short-term (1-2 months)</option>
-              <option value="Medium-term">Medium-term (3-6 months)</option>
-              <option value="Long-term">Long-term (6+ months)</option>
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputField
+            label="Name"
+            value={formData.name}
+            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Your Name"
+            required
+          />
+          <InputField
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="your@email.com"
+            required
+          />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50"
+          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50"
         >
-          {loading ? 'Analyzing...' : 'Get GrowBrandi Recommendations'}
+          {loading ? 'Processing...' : 'Get Recommendations'}
         </button>
       </form>
 
-      {recommendations && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
-        >
-          <h3 className="text-lg font-semibold text-blue-400">GrowBrandi Service Recommendations</h3>
-
-          {recommendations.priorityServices && (
-            <div className="space-y-3">
-              {recommendations.priorityServices.map((service: any, idx: number) => (
-                <div key={idx} className="bg-zinc-700/50 rounded-lg p-4">
+      <AnimatePresence>
+        {loading && <AILoader />}
+        {recommendations && (
+          <ResultCard title="Recommended Services" color="indigo">
+            <div className="space-y-4 mb-6">
+              {recommendations.priorityServices?.map((service: any, idx: number) => (
+                <div key={idx} className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold text-white">{service.service}</h4>
-                    <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                      service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-cyan-600'
-                      } text-white`}>
-                      {service.priority} Priority
+                    <h4 className="font-bold text-white">{service.service}</h4>
+                    <span className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
+                      }`}>
+                      {service.priority}
                     </span>
                   </div>
-                  <p className="text-sm text-zinc-300 mb-2">{service.reason}</p>
-                  <div className="flex justify-between text-xs text-zinc-400">
-                    <span>Expected: {service.expectedOutcome}</span>
+                  <p className="text-sm text-zinc-400 mb-3">{service.reason}</p>
+                  <div className="flex justify-between text-xs text-zinc-500 border-t border-white/5 pt-3">
+                    <span>{service.expectedOutcome}</span>
                     <span>{service.estimatedCost}</span>
                   </div>
                 </div>
               ))}
             </div>
-          )}
 
-          <button
-            onClick={() => navigate('/contact')}
-            className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-blue-500/20"
-          >
-            Get Started with These Services
-          </button>
-        </motion.div>
-      )}
+            <button
+              onClick={() => navigate('/contact', {
+                state: {
+                  source: 'recommender',
+                  data: recommendations,
+                  userInfo: { name: formData.name, email: formData.email },
+                  autoSend: true
+                }
+              })}
+              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+            >
+              Start Projects <FaArrowRight className="w-4 h-4" />
+            </button>
+          </ResultCard>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-// Business Growth Analyzer Component
+// --- Business Growth Analyzer Component ---
+
 const BusinessGrowthAnalyzer = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -399,7 +500,9 @@ const BusinessGrowthAnalyzer = () => {
     industry: '',
     marketPosition: '',
     digitalPresence: '',
-    competitorsLevel: ''
+    competitorsLevel: '',
+    name: '',
+    email: ''
   });
   const [analysis, setAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -418,154 +521,159 @@ const BusinessGrowthAnalyzer = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Current Revenue</label>
-            <select
-              value={formData.currentRevenue}
-              onChange={(e) => setFormData(prev => ({ ...prev, currentRevenue: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
-              required
-            >
-              <option value="">Select revenue range</option>
-              <option value="$0-$10K">$0 - $10K</option>
-              <option value="$10K-$100K">$10K - $100K</option>
-              <option value="$100K-$1M">$100K - $1M</option>
-              <option value="$1M+">$1M+</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Industry</label>
-            <input
-              type="text"
-              value={formData.industry}
-              onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
-              placeholder="e.g., SaaS, E-commerce"
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-purple-500"
-              required
-            />
-          </div>
+    <div className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SelectField
+            label="Revenue"
+            value={formData.currentRevenue}
+            onChange={(e: any) => setFormData({ ...formData, currentRevenue: e.target.value })}
+            options={[
+              { value: "", label: "Select Revenue" },
+              { value: "$0-$10K", label: "$0 - $10K" },
+              { value: "$10K-$100K", label: "$10K - $100K" },
+              { value: "$100K-$1M", label: "$100K - $1M" },
+              { value: "$1M+", label: "$1M+" }
+            ]}
+            required
+          />
+          <InputField
+            label="Industry"
+            value={formData.industry}
+            onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+            placeholder="e.g. SaaS"
+            required
+          />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Market Position</label>
-          <select
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <SelectField
+            label="Position"
             value={formData.marketPosition}
-            onChange={(e) => setFormData(prev => ({ ...prev, marketPosition: e.target.value }))}
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+            onChange={(e: any) => setFormData({ ...formData, marketPosition: e.target.value })}
+            options={[
+              { value: "", label: "Select" },
+              { value: "Leader", label: "Leader" },
+              { value: "Established", label: "Established" },
+              { value: "Startup", label: "Startup" },
+              { value: "New", label: "New" }
+            ]}
             required
-          >
-            <option value="">Select position</option>
-            <option value="Market Leader">Market Leader</option>
-            <option value="Established Player">Established Player</option>
-            <option value="Growing Startup">Growing Startup</option>
-            <option value="New Entrant">New Entrant</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Digital Presence</label>
-          <select
+          />
+          <SelectField
+            label="Presence"
             value={formData.digitalPresence}
-            onChange={(e) => setFormData(prev => ({ ...prev, digitalPresence: e.target.value }))}
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+            onChange={(e: any) => setFormData({ ...formData, digitalPresence: e.target.value })}
+            options={[
+              { value: "", label: "Select" },
+              { value: "Strong", label: "Strong" },
+              { value: "Moderate", label: "Moderate" },
+              { value: "Weak", label: "Weak" },
+              { value: "None", label: "None" }
+            ]}
             required
-          >
-            <option value="">Select digital presence</option>
-            <option value="Strong">Strong (SEO optimized, active social media)</option>
-            <option value="Moderate">Moderate (Basic website, some social presence)</option>
-            <option value="Weak">Weak (Minimal online presence)</option>
-            <option value="None">None (Just starting)</option>
-          </select>
+          />
+          <SelectField
+            label="Competition"
+            value={formData.competitorsLevel}
+            onChange={(e: any) => setFormData({ ...formData, competitorsLevel: e.target.value })}
+            options={[
+              { value: "", label: "Select" },
+              { value: "High", label: "High" },
+              { value: "Moderate", label: "Moderate" },
+              { value: "Low", label: "Low" }
+            ]}
+            required
+          />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Competitors Level</label>
-          <select
-            value={formData.competitorsLevel}
-            onChange={(e) => setFormData(prev => ({ ...prev, competitorsLevel: e.target.value }))}
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputField
+            label="Name"
+            value={formData.name}
+            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Your Name"
             required
-          >
-            <option value="">Select competition level</option>
-            <option value="Highly Competitive">Highly Competitive</option>
-            <option value="Moderately Competitive">Moderately Competitive</option>
-            <option value="Low Competition">Low Competition</option>
-            <option value="Blue Ocean">Blue Ocean (New Market)</option>
-          </select>
+          />
+          <InputField
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="your@email.com"
+            required
+          />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50"
+          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
         >
-          {loading ? 'Analyzing...' : 'Get GrowBrandi Growth Analysis'}
+          {loading ? 'Processing...' : 'Analyze Growth'}
         </button>
       </form>
 
-      {analysis && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
-        >
-          <h3 className="text-lg font-semibold text-purple-400">GrowBrandi Growth Analysis</h3>
-
-          <div className="bg-zinc-700/50 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-2">Growth Potential</h4>
-            <p className="text-zinc-300">{analysis.growthPotential}</p>
-          </div>
-
-          {analysis.predictions && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-zinc-400">6 Months</p>
-                <p className="text-sm font-semibold text-white">{analysis.predictions.sixMonths}</p>
-              </div>
-              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-zinc-400">1 Year</p>
-                <p className="text-sm font-semibold text-white">{analysis.predictions.oneYear}</p>
-              </div>
-              <div className="bg-zinc-700/50 rounded-lg p-3 text-center">
-                <p className="text-xs text-zinc-400">3 Years</p>
-                <p className="text-sm font-semibold text-white">{analysis.predictions.threeYears}</p>
-              </div>
+      <AnimatePresence>
+        {loading && <AILoader />}
+        {analysis && (
+          <ResultCard title="Growth Analysis" color="purple">
+            <div className="bg-zinc-800/50 rounded-xl p-6 border border-white/5 mb-6 text-center">
+              <p className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Growth Potential</p>
+              <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+                {analysis.growthPotential}
+              </p>
             </div>
-          )}
 
-          <button
-            onClick={() => navigate('/contact')}
-            className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-purple-500/20"
-          >
-            Discuss Growth Strategy
-          </button>
-        </motion.div>
-      )}
+            {analysis.predictions && (
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                {['sixMonths', 'oneYear', 'threeYears'].map((period, idx) => (
+                  <div key={period} className="bg-zinc-800/50 rounded-xl p-3 border border-white/5 text-center">
+                    <p className="text-[10px] text-zinc-500 uppercase mb-1">
+                      {period === 'sixMonths' ? '6 Mo' : period === 'oneYear' ? '1 Yr' : '3 Yrs'}
+                    </p>
+                    <p className="text-sm font-bold text-white truncate">
+                      {analysis.predictions[period]}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              onClick={() => navigate('/contact', {
+                state: {
+                  source: 'analyzer',
+                  data: analysis,
+                  userInfo: { name: formData.name, email: formData.email },
+                  autoSend: true
+                }
+              })}
+              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+            >
+              Discuss Strategy <FaArrowRight className="w-4 h-4" />
+            </button>
+          </ResultCard>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-// Consultation Planner Component
+// --- Consultation Planner Component ---
+
 const ConsultationPlanner = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     businessType: '',
     specificNeeds: [] as string[],
     urgency: '',
-    experience: ''
+    experience: '',
+    name: '',
+    email: ''
   });
   const [plan, setPlan] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-
-  const needsOptions = [
-    'Website Development', 'Brand Strategy', 'Digital Marketing',
-    'SEO Optimization', 'Social Media', 'E-commerce Setup',
-    'Content Creation', 'Analytics Setup', 'Technical Consulting'
-  ];
 
   const toggleNeed = (need: string) => {
     setFormData(prev => ({
@@ -590,250 +698,292 @@ const ConsultationPlanner = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Business Type</label>
-          <input
-            type="text"
-            value={formData.businessType}
-            onChange={(e) => setFormData(prev => ({ ...prev, businessType: e.target.value }))}
-            placeholder="e.g., Tech Startup, Restaurant, Consulting"
-            className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white placeholder-zinc-400 focus:ring-2 focus:ring-cyan-500"
-            required
-          />
-        </div>
+    <div className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <InputField
+          label="Business Type"
+          value={formData.businessType}
+          onChange={(e: any) => setFormData({ ...formData, businessType: e.target.value })}
+          placeholder="e.g. Startup"
+          required
+        />
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Specific Needs</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {needsOptions.map(need => (
-              <button
-                key={need}
-                type="button"
-                onClick={() => toggleNeed(need)}
-                className={`text-xs px-3 py-2 rounded-full transition-all ${formData.specificNeeds.includes(need)
-                  ? 'bg-cyan-600 text-white'
-                  : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600'
-                  }`}
+          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Needs</label>
+          <div className="flex flex-wrap gap-2">
+            {['Web Dev', 'Strategy', 'Marketing', 'SEO', 'Social', 'E-commerce', 'Content'].map(opt => (
+              <OptionButton
+                key={opt}
+                selected={formData.specificNeeds.includes(opt)}
+                onClick={() => toggleNeed(opt)}
+                colorClass="bg-cyan-500"
               >
-                {need}
-              </button>
+                {opt}
+              </OptionButton>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Urgency</label>
-            <select
-              value={formData.urgency}
-              onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
-              required
-            >
-              <option value="">Select urgency</option>
-              <option value="Immediate">Immediate (ASAP)</option>
-              <option value="High">High (This week)</option>
-              <option value="Medium">Medium (This month)</option>
-              <option value="Low">Low (Planning ahead)</option>
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SelectField
+            label="Urgency"
+            value={formData.urgency}
+            onChange={(e: any) => setFormData({ ...formData, urgency: e.target.value })}
+            options={[
+              { value: "", label: "Select" },
+              { value: "Immediate", label: "Immediate" },
+              { value: "High", label: "High" },
+              { value: "Medium", label: "Medium" },
+              { value: "Low", label: "Low" }
+            ]}
+            required
+          />
+          <SelectField
+            label="Experience"
+            value={formData.experience}
+            onChange={(e: any) => setFormData({ ...formData, experience: e.target.value })}
+            options={[
+              { value: "", label: "Select" },
+              { value: "Beginner", label: "Beginner" },
+              { value: "Intermediate", label: "Intermediate" },
+              { value: "Advanced", label: "Advanced" },
+              { value: "Expert", label: "Expert" }
+            ]}
+            required
+          />
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Experience Level</label>
-            <select
-              value={formData.experience}
-              onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
-              className="w-full bg-zinc-900/50 border border-zinc-700 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-cyan-500"
-              required
-            >
-              <option value="">Select experience</option>
-              <option value="Beginner">Beginner (New to digital)</option>
-              <option value="Intermediate">Intermediate (Some experience)</option>
-              <option value="Advanced">Advanced (Tech-savvy)</option>
-              <option value="Expert">Expert (Industry professional)</option>
-            </select>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputField
+            label="Name"
+            value={formData.name}
+            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Your Name"
+            required
+          />
+          <InputField
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="your@email.com"
+            required
+          />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all disabled:opacity-50"
+          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
         >
-          {loading ? 'Planning...' : 'Create GrowBrandi Plan'}
+          {loading ? 'Processing...' : 'Plan Consultation'}
         </button>
       </form>
 
-      {plan && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-zinc-800/50 backdrop-blur-sm rounded-xl p-6 space-y-4"
-        >
-          <h3 className="text-lg font-semibold text-cyan-400">Your Personalized GrowBrandi Plan</h3>
-
-          <div className="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 rounded-lg p-4 border border-cyan-500/30">
-            <p className="text-white font-medium mb-2">Recommended Session</p>
-            <p className="text-zinc-300 text-sm">{plan.consultationType} - {plan.recommendedDuration}</p>
-          </div>
-
-          {plan.personalizedMessage && (
-            <div className="bg-zinc-700/50 rounded-lg p-4">
-              <p className="text-zinc-300 italic">"{plan.personalizedMessage}"</p>
+      <AnimatePresence>
+        {loading && <AILoader />}
+        {plan && (
+          <ResultCard title="Consultation Plan" color="cyan">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Session Type</p>
+                <p className="text-lg font-bold text-white">{plan.consultationType}</p>
+              </div>
+              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Duration</p>
+                <p className="text-lg font-bold text-white">{plan.recommendedDuration}</p>
+              </div>
             </div>
-          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {plan.keyTopics && (
-              <div>
-                <h4 className="font-semibold text-white mb-2">Discussion Topics</h4>
-                <ul className="space-y-1 text-sm text-zinc-300">
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Key Topics</h4>
+                <div className="flex flex-wrap gap-2">
                   {plan.keyTopics.map((topic: string, idx: number) => (
-                    <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-cyan-400">•</span>
-                      <span>{topic}</span>
-                    </li>
+                    <span key={idx} className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full border border-white/5">
+                      {topic}
+                    </span>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
 
-            {plan.expectedOutcomes && (
-              <div>
-                <h4 className="font-semibold text-white mb-2">Expected Outcomes</h4>
-                <ul className="space-y-1 text-sm text-zinc-300">
-                  {plan.expectedOutcomes.map((outcome: string, idx: number) => (
-                    <li key={idx} className="flex items-start space-x-2">
-                      <span className="text-cyan-400">✓</span>
-                      <span>{outcome}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={() => navigate('/contact')}
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all"
-          >
-            Book This Consultation
-          </button>
-        </motion.div>
-      )}
+            <button
+              onClick={() => navigate('/contact', {
+                state: {
+                  source: 'planner',
+                  data: plan,
+                  userInfo: { name: formData.name, email: formData.email },
+                  autoSend: true
+                }
+              })}
+              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+            >
+              Book This Session <FaArrowRight className="w-4 h-4" />
+            </button>
+          </ResultCard>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-const AIUseCases: React.FC = () => {
-  const [activeUseCase, setActiveUseCase] = useState<string>('estimator');
+// --- Main AIUseCases Component (Menu) ---
 
-  const useCases: UseCase[] = [
+const AIUseCases = () => {
+  const [activeTool, setActiveTool] = useState<string | null>(null);
+
+  const tools = [
     {
       id: 'estimator',
       title: 'GrowBrandi Project Estimator',
-      description: 'Get instant project cost and timeline estimates powered by GrowBrandi intelligence',
-      icon: <FaCalculator className="w-6 h-6 sm:w-8 sm:h-8" />,
-      color: 'from-blue-500 to-cyan-500',
-      demo: ProjectEstimator
+      description: 'Get instant project cost and timeline estimates powered by GrowBrandi AI.',
+      icon: <FaCalculator className="w-6 h-6" />,
+      color: 'blue'
     },
     {
       id: 'recommender',
       title: 'GrowBrandi Service Recommender',
-      description: 'Discover the perfect growth services for your business with GrowBrandi guidance',
-      icon: <FaLightbulb className="w-6 h-6 sm:w-8 sm:h-8" />,
-      color: 'from-blue-500 to-indigo-500',
-      demo: ServiceRecommender
+      description: 'Discover the perfect growth services for your business with GrowBrandi guidance.',
+      icon: <FaLightbulb className="w-6 h-6" />,
+      color: 'indigo'
     },
     {
       id: 'analyzer',
       title: 'Business Growth Analyzer',
-      description: 'Analyze your market position and get data-driven growth predictions',
-      icon: <FaChartBar className="w-6 h-6 sm:w-8 sm:h-8" />,
-      color: 'from-purple-500 to-pink-500',
-      demo: BusinessGrowthAnalyzer
+      description: 'Analyze your market position and get data-driven growth predictions.',
+      icon: <FaChartBar className="w-6 h-6" />,
+      color: 'purple'
     },
     {
       id: 'planner',
       title: 'Strategic Consultation Planner',
-      description: 'Create a personalized consultation agenda tailored to your business needs',
-      icon: <FaCalendarAlt className="w-6 h-6 sm:w-8 sm:h-8" />,
-      color: 'from-cyan-500 to-blue-500',
-      demo: ConsultationPlanner
+      description: 'Create a personalized consultation agenda tailored to your business needs.',
+      icon: <FaCalendarAlt className="w-6 h-6" />,
+      color: 'cyan'
     }
   ];
 
-  const ActiveDemo = useCases.find(u => u.id === activeUseCase)?.demo || ProjectEstimator;
+  const renderActiveTool = () => {
+    switch (activeTool) {
+      case 'estimator': return <ProjectEstimator />;
+      case 'recommender': return <ServiceRecommender />;
+      case 'analyzer': return <BusinessGrowthAnalyzer />;
+      case 'planner': return <ConsultationPlanner />;
+      default: return null;
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-zinc-950 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            AI-Powered Growth Tools
-          </h1>
-          <p className="text-zinc-400 max-w-2xl mx-auto">
-            Leverage our advanced AI tools to estimate projects, discover services, and analyze your business growth potential.
-          </p>
+    <section className="py-24 bg-[#09090b] relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-[#09090b] to-[#09090b]" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6"
+          >
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">AI-Powered Tools</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-white mb-6"
+          >
+            Accelerate Your Growth with <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Intelligent Tools
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-zinc-400 max-w-2xl mx-auto"
+          >
+            Leverage our suite of AI tools to estimate projects, find services, and analyze your business potential instantly.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-4 space-y-4">
-            {useCases.map((useCase) => (
-              <button
-                key={useCase.id}
-                onClick={() => setActiveUseCase(useCase.id)}
-                className={`w-full text-left p-4 rounded-xl transition-all border ${activeUseCase === useCase.id
-                  ? `bg-zinc-900 border-zinc-700 shadow-lg shadow-${useCase.color.split('-')[1]}-500/10`
-                  : 'bg-zinc-900/50 border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700'
-                  }`}
-              >
-                <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br ${useCase.color} text-white`}>
-                    {useCase.icon}
-                  </div>
-                  <div>
-                    <h3 className={`font-semibold ${activeUseCase === useCase.id ? 'text-white' : 'text-zinc-300'
-                      }`}>
-                      {useCase.title}
-                    </h3>
-                    <p className="text-sm text-zinc-400 mt-1 line-clamp-2">
-                      {useCase.description}
-                    </p>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Main Content Area */}
-          <div className="lg:col-span-8">
+        <AnimatePresence mode="wait">
+          {!activeTool ? (
             <motion.div
-              key={activeUseCase}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
-              className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 sm:p-8 shadow-xl"
+              key="menu"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
             >
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  {useCases.find(u => u.id === activeUseCase)?.title}
-                </h2>
-                <p className="text-zinc-400">
-                  {useCases.find(u => u.id === activeUseCase)?.description}
-                </p>
-              </div>
+              {tools.map((tool, index) => (
+                <motion.button
+                  key={tool.id}
+                  onClick={() => setActiveTool(tool.id)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-white/10 text-left transition-all overflow-hidden"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-              <ActiveDemo />
+                  <div className="relative z-10 flex items-start gap-6">
+                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-${tool.color}-500 to-${tool.color}-600 flex items-center justify-center text-white shadow-lg shadow-${tool.color}-500/20 group-hover:scale-110 transition-transform duration-300`}>
+                      {tool.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-${tool.color}-400 transition-colors">
+                        {tool.title}
+                      </h3>
+                      <p className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">
+                        {tool.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                    <FaArrowRight className={`text-${tool.color}-400 w-5 h-5`} />
+                  </div>
+                </motion.button>
+              ))}
             </motion.div>
-          </div>
-        </div>
+          ) : (
+            <motion.div
+              key="tool"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              className="max-w-3xl mx-auto"
+            >
+              <button
+                onClick={() => setActiveTool(null)}
+                className="flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors group"
+              >
+                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-700 transition-colors">
+                  <FaChevronLeft className="w-3 h-3" />
+                </div>
+                <span className="font-medium">Back to Tools</span>
+              </button>
+
+              <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+                {renderActiveTool()}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </section>
   );
 };
 
 export default AIUseCases;
+export { ProjectEstimator, ServiceRecommender, BusinessGrowthAnalyzer, ConsultationPlanner };

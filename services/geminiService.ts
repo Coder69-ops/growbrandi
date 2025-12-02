@@ -114,7 +114,7 @@ export const estimateProject = async (requirements: {
 
         // Create pricing context from constants
         const pricingContext = SERVICES.map(s =>
-            `- ${s.title}: ${s.price}`
+            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
         ).join('\n');
 
         // Create social proof context
@@ -211,7 +211,7 @@ export const recommendServices = async (businessInfo: {
 
         // Create pricing context from constants
         const pricingContext = SERVICES.map(s =>
-            `- ${s.title}: ${s.price}`
+            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
         ).join('\n');
 
         // Create social proof context
@@ -238,8 +238,9 @@ export const recommendServices = async (businessInfo: {
             INSTRUCTIONS:
             1. Recommend specific GrowBrandi services that directly solve the user's challenges.
             2. Base estimated costs STRICTLY on the provided pricing.
-            3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise).
+            3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise). Keep it concise (max 15 words).
             4. Focus on ROI and business outcomes.
+            5. Keep all text descriptions brief to fit on a single page summary.
 
             The output must be only the JSON object.`,
             config: {
@@ -312,7 +313,7 @@ export const analyzeBusinessGrowth = async (businessData: {
 
         // Create pricing context from constants
         const pricingContext = SERVICES.map(s =>
-            `- ${s.title}: ${s.price}`
+            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
         ).join('\n');
 
         // Create social proof context
@@ -410,7 +411,7 @@ export const generateConsultationPlan = async (clientInfo: {
 
         // Create pricing context from constants
         const pricingContext = SERVICES.map(s =>
-            `- ${s.title}: ${s.price}`
+            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
         ).join('\n');
 
         // Create social proof context
@@ -435,9 +436,10 @@ export const generateConsultationPlan = async (clientInfo: {
 
             INSTRUCTIONS:
             1. Design a consultation structure that positions GrowBrandi as the ideal partner.
-            2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs.
-            3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects).
+            2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs. Keep topics short (max 5 words).
+            3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects). Keep it under 30 words.
             4. Emphasize that the consultation is the first step towards measurable growth.
+            5. Ensure all output is concise and suitable for a one-page summary.
 
             The output must be only the JSON object.`,
             config: {

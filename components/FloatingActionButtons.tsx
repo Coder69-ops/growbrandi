@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaTools, FaComments, FaTimes } from 'react-icons/fa';
+import { FaRobot, FaComments } from 'react-icons/fa';
 
 interface FloatingActionButtonsProps {
     onChatOpen: () => void;
     onContactOpen: () => void;
-    onToggleAI: () => void;
-    showAIUseCases: boolean;
     isChatPreloaded: boolean;
 }
 
 const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
     onChatOpen,
     onContactOpen,
-    onToggleAI,
-    showAIUseCases,
     isChatPreloaded,
 }) => {
     const [hoveredButton, setHoveredButton] = useState<string | null>(null);
@@ -27,14 +23,6 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
             onClick: onChatOpen,
             color: 'from-cyan-500 to-blue-600',
             ready: isChatPreloaded,
-        },
-        {
-            id: 'tools',
-            label: showAIUseCases ? 'Close AI Tools' : 'Explore AI Tools',
-            icon: showAIUseCases ? <FaTimes className="w-6 h-6" /> : <FaTools className="w-5 h-5" />,
-            onClick: onToggleAI,
-            color: 'from-purple-500 to-pink-600',
-            ready: true,
         },
         {
             id: 'contact',

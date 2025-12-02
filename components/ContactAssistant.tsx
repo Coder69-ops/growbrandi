@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTimes, FaCheck } from 'react-icons/fa';
+import { FaTimes, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import {
   recommendServices,
   generateConsultationPlan
 } from '../services/geminiService';
+import { sendEmailData } from '../services/emailService';
+import { jsPDF } from 'jspdf';
+import { SERVICES } from '../constants';
 
 interface ContactAssistantProps {
   isOpen: boolean;
@@ -104,11 +107,252 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     }
   };
 
+  const generatePDF = async () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    let yPos = 20;
+
+    // --- Header ---
+    try {
+      const logoUrl = '/growbrandi-logo.png';
+      const img = new Image();
+      img.src = logoUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+      // Assuming logo is roughly 4:1 aspect ratio, adjust as needed
+      doc.addImage(img, 'PNG', margin, yPos, 40, 10);
+    } catch (e) {
+      doc.setFontSize(20);
+      doc.setTextColor(0, 102, 204);
+      doc.setFont('helvetica', 'bold');
+      doc.text('GrowBrandi', margin, yPos + 8);
+    }
+
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont('helvetica', 'normal');
+    const dateStr = new Date().toLocaleDateString();
+    doc.text('AI Consultation Summary', pageWidth - margin - 45, yPos + 4);
+    doc.text(dateStr, pageWidth - margin - doc.getTextWidth(dateStr), yPos + 9);
+
+    yPos += 20;
+
+    // --- Line Separator ---
+    doc.setDrawColor(230, 230, 230);
+    doc.setLineWidth(0.5);
+    doc.line(margin, yPos, pageWidth - margin, yPos);
+    yPos += 10;
+
+    // --- 2-Column Layout: Client & Project ---
+    const colWidth = (pageWidth - (margin * 2) - 10) / 2;
+    const leftColX = margin;
+    const rightColX = margin + colWidth + 10;
+    const startY = yPos;
+
+    // Left Column: Client Details
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Client Details', leftColX, yPos);
+    yPos += 6;
+
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Name: ${formData.name}`, leftColX, yPos); yPos += 5;
+    doc.text(`Email: ${formData.email}`, leftColX, yPos); yPos += 5;
+    doc.text(`Company: ${formData.company || 'N/A'}`, leftColX, yPos); yPos += 5;
+    doc.text(`Industry: ${formData.industry}`, leftColX, yPos);
+
+    // Right Column: Project Overview
+    let rightY = startY;
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Project Overview', rightColX, rightY);
+    rightY += 6;
+
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Type: ${formData.projectType}`, rightColX, rightY); rightY += 5;
+    doc.text(`Budget: ${formData.budget}`, rightColX, rightY); rightY += 5;
+    doc.text(`Timeline: ${formData.timeline}`, rightColX, rightY);
+
+    yPos = Math.max(yPos, rightY) + 10;
+
+    // --- Goals & Challenges (Compact) ---
+    doc.setFillColor(245, 247, 250);
+    doc.roundedRect(margin, yPos, pageWidth - (margin * 2), 25, 2, 2, 'F');
+
+    let boxY = yPos + 6;
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Goals:', margin + 5, boxY);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    doc.text(formData.goals.join(', '), margin + 20, boxY);
+
+    boxY += 8;
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Challenges:', margin + 5, boxY);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    // Handle wrapping for challenges if long
+    const challengesText = formData.challenges.join(', ');
+    const splitChallenges = doc.splitTextToSize(challengesText, pageWidth - (margin * 2) - 30);
+    doc.text(splitChallenges, margin + 28, boxY);
+
+    yPos += 35;
+
+    // --- AI Strategic Recommendations ---
+    if (aiInsights) {
+      doc.setFontSize(14);
+      doc.setTextColor(0, 102, 204);
+      doc.setFont('helvetica', 'bold');
+      doc.text('AI Strategic Recommendations', margin, yPos);
+      yPos += 8;
+
+      // Recommended Services
+      if (aiInsights.services?.priorityServices) {
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Recommended Services', margin, yPos);
+        yPos += 6;
+
+        aiInsights.services.priorityServices.slice(0, 3).forEach((service: any) => {
+          doc.setFontSize(9);
+          doc.setTextColor(0, 0, 0);
+          doc.setFont('helvetica', 'bold');
+          doc.text(`• ${service.service}`, margin + 5, yPos);
+
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(100, 100, 100);
+          const reasonText = ` - ${service.reason}`;
+          const reasonLines = doc.splitTextToSize(reasonText, pageWidth - (margin * 2) - 50);
+          doc.text(reasonLines, margin + 5 + doc.getTextWidth(`• ${service.service}`), yPos);
+
+          yPos += (reasonLines.length * 4) + 2;
+        });
+      }
+      yPos += 5;
+
+      // Action Plan
+      if (aiInsights.consultation) {
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Strategic Action Plan', margin, yPos);
+        yPos += 6;
+
+        doc.setFontSize(9);
+        doc.setTextColor(60, 60, 60);
+        doc.setFont('helvetica', 'italic');
+        const summaryLines = doc.splitTextToSize(`"${aiInsights.consultation.summary}"`, pageWidth - (margin * 2));
+        doc.text(summaryLines, margin, yPos);
+        yPos += (summaryLines.length * 4) + 4;
+
+        if (aiInsights.consultation.keyPoints) {
+          doc.setFont('helvetica', 'normal');
+          aiInsights.consultation.keyPoints.slice(0, 4).forEach((point: string) => {
+            const pointLines = doc.splitTextToSize(`• ${point}`, pageWidth - (margin * 2) - 5);
+            doc.text(pointLines, margin + 5, yPos);
+            yPos += (pointLines.length * 4) + 1;
+          });
+        }
+      }
+    }
+
+    // --- CTA Section ---
+    const ctaY = pageHeight - 40;
+    doc.setFillColor(240, 248, 255); // Light blue
+    doc.rect(margin, ctaY, pageWidth - (margin * 2), 15, 'F');
+
+    doc.setFontSize(10);
+    doc.setTextColor(0, 102, 204);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Ready to execute this plan?', margin + 5, ctaY + 6);
+
+    doc.setFontSize(9);
+    doc.setTextColor(60, 60, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Contact us for a detailed actionable plan tailored to your business.', margin + 5, ctaY + 11);
+
+    // --- Footer ---
+    const footerY = pageHeight - 15;
+    doc.setDrawColor(230, 230, 230);
+    doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Generated by GrowBrandi AI Assistant', margin, footerY);
+    doc.text('www.growbrandi.com', pageWidth - margin - doc.getTextWidth('www.growbrandi.com'), footerY);
+
+    doc.save(`growbrandi-consultation-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
   const handleSubmit = async () => {
-    // Here you would normally send the form data to your backend
+    // EmailJS Configuration
+    const EMAILJS_SERVICE_ID = 'service_s9nqo1u';
+    const EMAILJS_TEMPLATE_ID = 'template_wctqujg';
+    const EMAILJS_PUBLIC_KEY = 'DETrhGT8sUUowOqIR';
+
+    try {
+      // Prepare data for EmailJS
+      const emailData = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: `AI Consultation: ${formData.projectType} for ${formData.company || 'New Client'}`,
+        message: `
+          New AI Consultation Request
+          
+          User Details:
+          - Name: ${formData.name}
+          - Email: ${formData.email}
+          - Company: ${formData.company}
+          - Industry: ${formData.industry}
+          
+          Project Info:
+          - Type: ${formData.projectType}
+          - Budget: ${formData.budget}
+          - Timeline: ${formData.timeline}
+          
+          Goals: ${formData.goals.join(', ')}
+          Challenges: ${formData.challenges.join(', ')}
+          
+          Additional Message:
+          ${formData.message}
+          
+          AI Recommendations:
+          ${JSON.stringify(aiInsights, null, 2)}
+        `
+      };
+
+      await sendEmailData(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData, EMAILJS_PUBLIC_KEY);
+
+      console.log('✅ Email sent successfully via EmailJS');
+    } catch (error) {
+      console.error('❌ Failed to send email:', error);
+      // Continue to show success screen even if email fails (fallback)
+    }
+
+    // Generate and download PDF
+    try {
+      await generatePDF();
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+    }
+
     setShowThankYou(true);
 
-    // Auto close after 3 seconds
+    // Auto close after 5 seconds
     setTimeout(() => {
       onClose();
       setShowThankYou(false);
@@ -125,7 +369,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         challenges: [],
         message: ''
       });
-    }, 3000);
+    }, 5000);
   };
 
   const getProgressPercentage = () => {
@@ -137,14 +381,14 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <motion.div
-        className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-700 w-full max-w-2xl max-h-[90vh] overflow-hidden"
+        className="bg-zinc-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-zinc-700 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col"
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
         {/* Header */}
-        <div className="p-6 border-b border-zinc-700 flex justify-between items-center">
+        <div className="p-6 border-b border-zinc-700 flex justify-between items-center flex-shrink-0">
           <div>
             <h3 className="text-xl font-semibold text-white">AI-Powered Contact Assistant</h3>
             <p className="text-zinc-400 text-sm">Get personalized recommendations as you go</p>
@@ -158,7 +402,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         </div>
 
         {/* Progress Bar */}
-        <div className="px-6 pt-4">
+        <div className="px-6 pt-4 flex-shrink-0">
           <div className="w-full bg-zinc-700 rounded-full h-2">
             <motion.div
               className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full"
@@ -171,7 +415,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+        <div className="p-6 overflow-y-auto flex-1">
           <AnimatePresence mode="wait">
             {showThankYou ? (
               <motion.div
@@ -181,11 +425,17 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 exit={{ opacity: 0, y: -20 }}
                 className="text-center py-12"
               >
-                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <FaCheck className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FaCheck className="w-10 h-10 text-green-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
-                <p className="text-zinc-300">We've received your information and will contact you soon.</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Request Received!</h3>
+                <p className="text-zinc-300 mb-6 max-w-md mx-auto">
+                  We've captured your project details and AI insights. A GrowBrandi expert will review them and contact you shortly.
+                </p>
+                <div className="p-4 bg-zinc-800/50 rounded-lg border border-zinc-700 max-w-sm mx-auto">
+                  <p className="text-sm text-zinc-400 mb-2">A summary of your consultation has been downloaded automatically.</p>
+                  <p className="text-xs text-zinc-500">Check your downloads folder for the PDF file.</p>
+                </div>
               </motion.div>
             ) : (
               <motion.div
@@ -260,13 +510,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         required
                       >
                         <option value="">Select project type</option>
-                        <option value="Website Design">Website Design</option>
-                        <option value="Web Application">Web Application</option>
-                        <option value="Mobile App">Mobile App</option>
-                        <option value="E-commerce Platform">E-commerce Platform</option>
-                        <option value="Brand Identity">Brand Identity</option>
-                        <option value="Digital Marketing">Digital Marketing</option>
-                        <option value="SEO Services">SEO Services</option>
+                        {SERVICES.map((service) => (
+                          <option key={service.title} value={service.title}>
+                            {service.title}
+                          </option>
+                        ))}
                         <option value="Other">Other</option>
                       </select>
                     </div>
@@ -280,10 +528,9 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                           required
                         >
                           <option value="">Select budget</option>
-                          <option value="$1K-$5K">$1K - $5K</option>
-                          <option value="$5K-$15K">$5K - $15K</option>
-                          <option value="$15K-$50K">$15K - $50K</option>
-                          <option value="$50K+">$50K+</option>
+                          <option value="Starter ($299 - $999)">Starter ($299 - $999)</option>
+                          <option value="Professional ($1,000 - $5,000)">Professional ($1,000 - $5,000)</option>
+                          <option value="Enterprise ($5,000+)">Enterprise ($5,000+)</option>
                         </select>
                       </div>
                       <div>
@@ -373,18 +620,20 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                       <div className="space-y-6">
                         {/* Service Recommendations */}
                         {aiInsights.services?.priorityServices && (
-                          <div className="bg-zinc-800/50 rounded-xl p-6">
-                            <h5 className="text-white font-semibold mb-4">Recommended Services</h5>
+                          <div className="bg-zinc-800/50 rounded-xl p-6 border border-zinc-700">
+                            <h5 className="text-white font-semibold mb-4 flex items-center gap-2">
+                              <span className="text-blue-400">★</span> Recommended Services
+                            </h5>
                             <div className="space-y-3">
                               {aiInsights.services.priorityServices.slice(0, 3).map((service: any, idx: number) => (
-                                <div key={idx} className="flex justify-between items-center p-3 bg-zinc-700/50 rounded-lg">
+                                <div key={idx} className="flex justify-between items-center p-3 bg-zinc-700/30 rounded-lg border border-zinc-600/50">
                                   <div>
                                     <p className="text-white font-medium">{service.service}</p>
-                                    <p className="text-zinc-400 text-sm">{service.reason}</p>
+                                    <p className="text-zinc-400 text-xs mt-1">{service.reason}</p>
                                   </div>
-                                  <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-600' :
-                                    service.priority === 'Medium' ? 'bg-yellow-600' : 'bg-blue-600'
-                                    } text-white`}>
+                                  <span className={`text-xs px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                                    service.priority === 'Medium' ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                                    }`}>
                                     {service.priority}
                                   </span>
                                 </div>
@@ -395,16 +644,24 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
                         {/* Consultation Plan */}
                         {aiInsights.consultation && (
-                          <div className="bg-zinc-800/50 rounded-xl p-6">
-                            <h5 className="text-white font-semibold mb-4">Consultation Plan</h5>
+                          <div className="bg-zinc-800/50 rounded-xl p-6 border border-zinc-700">
+                            <h5 className="text-white font-semibold mb-4 flex items-center gap-2">
+                              <span className="text-green-400">📋</span> Action Plan
+                            </h5>
                             <div className="space-y-3">
-                              <p className="text-zinc-300 text-sm">{aiInsights.consultation.summary}</p>
+                              <p className="text-zinc-300 text-sm leading-relaxed italic">"{aiInsights.consultation.summary}"</p>
                               {aiInsights.consultation.keyPoints && (
-                                <ul className="list-disc list-inside text-zinc-400 text-sm space-y-1">
-                                  {aiInsights.consultation.keyPoints.map((point: string, idx: number) => (
-                                    <li key={idx}>{point}</li>
-                                  ))}
-                                </ul>
+                                <div className="mt-4 pt-4 border-t border-zinc-700">
+                                  <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Key Focus Areas</p>
+                                  <ul className="grid grid-cols-1 gap-2">
+                                    {aiInsights.consultation.keyPoints.map((point: string, idx: number) => (
+                                      <li key={idx} className="text-zinc-400 text-sm flex items-start gap-2">
+                                        <span className="text-blue-500 mt-1">•</span>
+                                        {point}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
                               )}
                             </div>
                           </div>
@@ -420,7 +677,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
         {/* Footer */}
         {!showThankYou && (
-          <div className="p-6 border-t border-zinc-700 flex justify-between">
+          <div className="p-6 border-t border-zinc-700 flex justify-between flex-shrink-0">
             <button
               onClick={() => setStep(Math.max(1, step - 1))}
               disabled={step === 1}
@@ -438,7 +695,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                   (step === 3 && formData.goals.length === 0) ||
                   (step === 4 && formData.challenges.length === 0)
                 }
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
               >
                 {step === 4 ? 'Get AI Insights' : 'Next'}
               </button>
@@ -446,9 +703,10 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
               <button
                 onClick={handleSubmit}
                 disabled={isAnalyzing}
-                className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50"
+                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 shadow-lg shadow-green-500/20 flex items-center gap-2"
               >
-                Send Message
+                <span>Submit Request</span>
+                <FaPaperPlane className="w-4 h-4" />
               </button>
             )}
           </div>
