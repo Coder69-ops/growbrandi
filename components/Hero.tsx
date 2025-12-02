@@ -138,13 +138,13 @@ const HeroSection: React.FC = () => {
                     {/* 2. Enhanced Visual / Floating Interface (Span 5) */}
                     <motion.div
                         variants={itemVariants}
-                        className="lg:col-span-5 relative h-[400px] lg:h-[600px] perspective-1000 w-full max-w-[500px] lg:max-w-none mx-auto lg:mx-0"
+                        className="lg:col-span-5 relative h-[500px] lg:h-[600px] perspective-1000 w-full max-w-[500px] lg:max-w-none mx-auto lg:mx-0"
                     >
                         {/* Stacked Card Effect */}
                         <motion.div
                             variants={floatVariants}
                             animate="animate"
-                            className="absolute top-[38%] left-1/2 lg:left-[25%] -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] h-[400px] sm:h-[500px] bg-gradient-to-br from-white/[0.03] to-white/[0.01] rounded-3xl border border-white/5 backdrop-blur-sm shadow-xl z-10 scale-95 -rotate-12 overflow-hidden"
+                            className="absolute top-[45%] lg:top-[38%] left-[35%] lg:left-[25%] -translate-x-1/2 -translate-y-1/2 w-[80%] sm:w-[400px] h-[380px] sm:h-[500px] bg-gradient-to-br from-white/[0.03] to-white/[0.01] rounded-3xl border border-white/5 backdrop-blur-sm shadow-xl z-10 scale-95 -rotate-12 overflow-hidden"
                         >
                             {/* Secondary Card Header */}
                             <div className="h-12 border-b border-white/5 flex items-center px-6 gap-2 opacity-50">
@@ -183,7 +183,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             variants={floatVariants}
                             animate="animate"
-                            className="absolute top-[35%] left-1/2 lg:left-[40%] -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] h-[400px] sm:h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.02] rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden z-20"
+                            className="absolute top-[42%] lg:top-[35%] left-[50%] lg:left-[40%] -translate-x-1/2 -translate-y-1/2 w-[80%] sm:w-[400px] h-[380px] sm:h-[500px] bg-gradient-to-br from-white/[0.08] to-white/[0.02] rounded-3xl border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden z-20"
                         >
                             {/* Card Header */}
                             <div className="h-12 border-b border-white/10 flex items-center px-6 gap-2">
@@ -233,7 +233,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             animate={{ y: [0, -20, 0], x: [0, 10, 0] }}
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                            className="absolute top-[15%] left-[0%] lg:left-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
+                            className="absolute top-[5%] left-[5%] lg:left-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
@@ -250,7 +250,7 @@ const HeroSection: React.FC = () => {
                         <motion.div
                             animate={{ y: [0, 15, 0], x: [0, -5, 0] }}
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                            className="absolute bottom-[40%] md:bottom-[25%] right-[5%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
+                            className="absolute bottom-[5%] right-[5%] lg:right-[-5%] bg-[#09090b]/90 p-4 rounded-2xl border border-white/10 shadow-xl z-30 backdrop-blur-md"
                         >
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
