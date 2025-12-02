@@ -248,7 +248,9 @@ export const recommendServices = async (businessInfo: {
             2. Base estimated costs STRICTLY on the provided pricing.
             3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise). Keep it concise (max 15 words).
             4. Focus on ROI and business outcomes.
-            5. Keep all text descriptions brief to fit on a single page summary.
+            5. Keep "expectedOutcome" concise (max 15 words).
+            6. Keep "executiveSummary" to 2-3 sentences max.
+            7. Keep all text descriptions brief to fit on a single page summary.
 
             The output must be only the JSON object.`,
             config: {
@@ -353,6 +355,9 @@ export const analyzeBusinessGrowth = async (businessData: {
             2. In "Recommended Actions", SPECIFICALLY recommend GrowBrandi services as solutions to their gaps.
             3. Mention how our data-driven approach (proven by 150+ projects) ensures growth.
             4. Be encouraging but honest about the need for professional digital intervention.
+            5. Keep "executiveSummary" to 2-3 sentences max.
+            6. Keep "growthPotential" short and punchy (max 5 words).
+            7. Keep "action" and "impact" descriptions concise (max 15 words).
 
             The output must be only the JSON object.`,
             config: {
@@ -432,7 +437,7 @@ export const generateConsultationPlan = async (clientInfo: {
         `;
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-1.5-flash",
             contents: `Act as a client success manager at GrowBrandi. Create a personalized consultation plan for:
             Business Type: ${clientInfo.businessType}
             Specific Needs: ${clientInfo.specificNeeds.join(', ')}
@@ -451,7 +456,8 @@ export const generateConsultationPlan = async (clientInfo: {
             2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs. Keep topics short (max 5 words).
             3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects). Keep it under 30 words.
             4. Emphasize that the consultation is the first step towards measurable growth.
-            5. Ensure all output is concise and suitable for a one-page summary.
+            5. Keep "executiveSummary" to 2-3 sentences max.
+            6. Ensure all output is concise and suitable for a one-page summary.
 
             The output must be only the JSON object.`,
             config: {
@@ -508,7 +514,7 @@ export const generateProjectBrief = async (details?: { service: string; subject:
         }
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
+            model: "gemini-1.5-flash",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",

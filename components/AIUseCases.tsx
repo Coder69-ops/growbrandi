@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt, FaCheck, FaArrowRight, FaSpinner, FaChevronLeft } from 'react-icons/fa';
+import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt, FaCheck, FaArrowRight, FaSpinner, FaChevronLeft, FaChartLine } from 'react-icons/fa';
 import {
   estimateProject,
   recommendServices,
   analyzeBusinessGrowth,
   generateConsultationPlan
 } from '../services/geminiService';
+import AILoader from './AILoader';
 
 // --- Shared UI Components ---
 
@@ -65,59 +66,6 @@ const ResultCard = ({ title, children, color = "blue" }: any) => (
     </h3>
     {children}
   </motion.div>
-);
-
-const AILoader = () => (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transition-all duration-500">
-    <div className="relative flex flex-col items-center z-10">
-      <motion.div
-        className="relative mb-8"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <motion.div
-          className="absolute -inset-6 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 opacity-30 blur-xl"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        />
-        <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full" />
-        <div className="relative w-32 h-32 bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
-          <img
-            src="/growbrandi-logo.png"
-            alt="GrowBrandi"
-            className="w-20 h-auto object-contain relative z-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-          />
-        </div>
-      </motion.div>
-
-      <div className="w-64 h-1.5 bg-zinc-800 rounded-full overflow-hidden relative mb-4">
-        <motion.div
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500"
-          initial={{ x: '-100%' }}
-          animate={{ x: '100%' }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ width: '50%' }}
-        />
-      </div>
-
-      <motion.div
-        className="flex items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <span className="text-zinc-400 text-sm font-medium tracking-[0.2em] uppercase">Analyzing Data</span>
-        <motion.span
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="text-blue-400 text-sm"
-        >
-          ●
-        </motion.span>
-      </motion.div>
-    </div>
-  </div>
 );
 
 // --- Project Estimator Component ---
@@ -277,6 +225,37 @@ const ProjectEstimator = () => {
               </div>
             </div>
 
+            {estimation.costBreakdown && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Cost Breakdown</h4>
+                <div className="bg-zinc-800/50 rounded-xl overflow-hidden border border-white/5">
+                  {estimation.costBreakdown.map((item: any, idx: number) => (
+                    <div key={idx} className="flex justify-between items-center p-3 border-b border-white/5 last:border-0">
+                      <div>
+                        <p className="text-sm font-medium text-white">{item.service}</p>
+                        <p className="text-xs text-zinc-500">{item.description}</p>
+                      </div>
+                      <span className="text-sm font-bold text-blue-400">{item.cost}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {estimation.potentialChallenges && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Potential Challenges & Solutions</h4>
+                <ul className="space-y-2">
+                  {estimation.potentialChallenges.map((challenge: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                      <span className="text-yellow-500 mt-0.5">•</span>
+                      <span>{challenge}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {estimation.recommendations && (
               <div className="mb-6">
                 <h4 className="font-bold text-white mb-3">Recommendations</h4>
@@ -291,13 +270,23 @@ const ProjectEstimator = () => {
               </div>
             )}
 
+            {estimation.nextSteps && (
+              <div className="mb-6 bg-blue-500/10 rounded-xl p-4 border border-blue-500/20">
+                <h4 className="font-bold text-blue-400 mb-2 text-sm uppercase tracking-wider">Recommended Next Steps</h4>
+                <ol className="list-decimal list-inside space-y-1 text-sm text-zinc-300">
+                  {estimation.nextSteps.map((step: string, idx: number) => (
+                    <li key={idx}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+
             <button
               onClick={() => navigate('/contact', {
                 state: {
                   source: 'estimator',
                   data: estimation,
-                  userInfo: { name: formData.name, email: formData.email },
-                  autoSend: true
+                  userInfo: { name: formData.name, email: formData.email }
                 }
               })}
               className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
@@ -471,13 +460,48 @@ const ServiceRecommender = () => {
               ))}
             </div>
 
+            {recommendations.strategicPlan && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Strategic Implementation Plan</h4>
+                <div className="space-y-4">
+                  {recommendations.strategicPlan.map((phase: any, idx: number) => (
+                    <div key={idx} className="relative pl-6 border-l-2 border-indigo-500/30">
+                      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-zinc-900 border-2 border-indigo-500" />
+                      <div className="flex justify-between items-center mb-1">
+                        <h5 className="font-bold text-indigo-400 text-sm">{phase.phase}</h5>
+                        <span className="text-xs text-zinc-500">{phase.duration}</span>
+                      </div>
+                      <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1">
+                        {phase.activities.map((activity: string, aIdx: number) => (
+                          <li key={aIdx}>{activity}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {recommendations.expectedResults && (
+              <div className="mb-6 bg-indigo-500/10 rounded-xl p-4 border border-indigo-500/20">
+                <h4 className="font-bold text-indigo-400 mb-2 text-sm uppercase tracking-wider">Expected Outcomes</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {recommendations.expectedResults.map((result: string, idx: number) => (
+                    <div key={idx} className="flex items-center gap-2 text-sm text-zinc-300">
+                      <FaChartLine className="w-3 h-3 text-indigo-400" />
+                      <span>{result}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <button
               onClick={() => navigate('/contact', {
                 state: {
                   source: 'recommender',
                   data: recommendations,
-                  userInfo: { name: formData.name, email: formData.email },
-                  autoSend: true
+                  userInfo: { name: formData.name, email: formData.email }
                 }
               })}
               className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
@@ -640,13 +664,60 @@ const BusinessGrowthAnalyzer = () => {
               </div>
             )}
 
+            {analysis.marketOpportunities && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Market Opportunities</h4>
+                <div className="grid grid-cols-1 gap-3">
+                  {analysis.marketOpportunities.map((opp: string, idx: number) => (
+                    <div key={idx} className="bg-zinc-800/30 rounded-lg p-3 border border-white/5 flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
+                        <FaLightbulb className="w-3 h-3" />
+                      </div>
+                      <p className="text-sm text-zinc-300">{opp}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {analysis.digitalGaps && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Digital Gaps to Address</h4>
+                <ul className="space-y-2">
+                  {analysis.digitalGaps.map((gap: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-400">
+                      <span className="text-red-400 mt-0.5">⚠</span>
+                      <span>{gap}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {analysis.recommendedActions && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Strategic Action Plan</h4>
+                <div className="space-y-3">
+                  {analysis.recommendedActions.map((action: any, idx: number) => (
+                    <div key={idx} className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-xl p-4 border border-purple-500/20">
+                      <div className="flex justify-between items-start mb-2">
+                        <h5 className="font-bold text-white text-sm">{action.action}</h5>
+                        <span className="text-xs text-purple-300 bg-purple-500/10 px-2 py-1 rounded-full">{action.timeframe}</span>
+                      </div>
+                      <p className="text-xs text-zinc-400 mb-2">Impact: <span className="text-white">{action.impact}</span></p>
+                      <p className="text-xs text-zinc-500">Est. Investment: {action.investment}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <button
               onClick={() => navigate('/contact', {
                 state: {
                   source: 'analyzer',
                   data: analysis,
-                  userInfo: { name: formData.name, email: formData.email },
-                  autoSend: true
+                  userInfo: { name: formData.name, email: formData.email }
                 }
               })}
               className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
@@ -808,13 +879,26 @@ const ConsultationPlanner = () => {
               </div>
             )}
 
+            {plan.preparationItems && (
+              <div className="mb-6">
+                <h4 className="font-bold text-white mb-3">Preparation Checklist</h4>
+                <ul className="space-y-2">
+                  {plan.preparationItems.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                      <FaCheck className="w-3 h-3 text-cyan-400 mt-1 shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <button
               onClick={() => navigate('/contact', {
                 state: {
                   source: 'planner',
                   data: plan,
-                  userInfo: { name: formData.name, email: formData.email },
-                  autoSend: true
+                  userInfo: { name: formData.name, email: formData.email }
                 }
               })}
               className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
@@ -932,26 +1016,36 @@ const AIUseCases = () => {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02, y: -5 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-white/10 text-left transition-all overflow-hidden"
+                  className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-white/10 text-left transition-all overflow-hidden flex flex-col h-full"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-                  <div className="relative z-10 flex items-start gap-6">
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-${tool.color}-500 to-${tool.color}-600 flex items-center justify-center text-white shadow-lg shadow-${tool.color}-500/20 group-hover:scale-110 transition-transform duration-300`}>
-                      {tool.icon}
+                  {/* Hover Glow Effect */}
+                  <div className={`absolute -right-20 -top-20 w-64 h-64 bg-${tool.color}-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-${tool.color}-500 to-${tool.color}-600 flex items-center justify-center text-white shadow-lg shadow-${tool.color}-500/20 group-hover:scale-110 transition-transform duration-300`}>
+                        {tool.icon}
+                      </div>
+                      <div className={`px-3 py-1 rounded-full bg-${tool.color}-500/10 border border-${tool.color}-500/20 text-${tool.color}-400 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0`}>
+                        Try Now
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-${tool.color}-400 transition-colors">
+
+                    <div className="mb-auto">
+                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-${tool.color}-400 transition-colors">
                         {tool.title}
                       </h3>
                       <p className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">
                         {tool.description}
                       </p>
                     </div>
-                  </div>
 
-                  <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <FaArrowRight className={`text-${tool.color}-400 w-5 h-5`} />
+                    <div className="mt-8 flex items-center gap-2 text-sm font-bold text-zinc-500 group-hover:text-white transition-colors">
+                      <span>Launch Tool</span>
+                      <FaArrowRight className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-${tool.color}-500`} />
+                    </div>
                   </div>
                 </motion.button>
               ))}
@@ -974,7 +1068,7 @@ const AIUseCases = () => {
                 <span className="font-medium">Back to Tools</span>
               </button>
 
-              <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
                 {renderActiveTool()}
               </div>
             </motion.div>

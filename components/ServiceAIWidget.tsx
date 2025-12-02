@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaMagic, FaCalculator, FaChartLine, FaArrowRight, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import { estimateProject, analyzeBusinessGrowth } from '../services/geminiService';
+import AILoader from './AILoader';
 
 interface ServiceAIWidgetProps {
     serviceTitle: string;
@@ -129,6 +130,10 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
+            <AnimatePresence>
+                {loading && <AILoader />}
+            </AnimatePresence>
+
             <AnimatePresence mode='wait'>
                 {step === 'input' ? (
                     <motion.div
@@ -175,7 +180,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                             >
                                 {loading ? (
                                     <>
-                                        <FaSpinner className="animate-spin" /> Processing...
+                                        Processing...
                                     </>
                                 ) : (
                                     <>
