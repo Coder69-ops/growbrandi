@@ -90,6 +90,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
             buttonText: "Calculate Cost",
             resultTitle: "Estimated Cost",
             resultValue: result?.estimatedCost || "Calculating...",
+            summary: result?.executiveSummary,
             negotiable: true
         },
         analyzer: {
@@ -103,6 +104,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
             buttonText: "Analyze Potential",
             resultTitle: "Growth Potential",
             resultValue: result?.growthPotential || "Analyzing...",
+            summary: result?.executiveSummary,
             negotiable: false
         },
         planner: {
@@ -116,6 +118,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
             buttonText: "Create Plan",
             resultTitle: "Recommended Strategy",
             resultValue: result?.consultationType || "Planning...",
+            summary: result?.executiveSummary,
             negotiable: false
         }
     }[widgetType];
@@ -203,6 +206,12 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] sm:text-xs font-bold mb-4 uppercase tracking-wide">
                                 <FaMagic className="w-3 h-3" /> Flexible & Negotiable
                             </div>
+                        )}
+
+                        {config.summary && (
+                            <p className="text-zinc-400 text-sm sm:text-base mb-6 max-w-md mx-auto leading-relaxed">
+                                {config.summary}
+                            </p>
                         )}
 
                         <div className="w-full space-y-3 mb-4">

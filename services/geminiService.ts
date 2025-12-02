@@ -151,6 +151,7 @@ export const estimateProject = async (requirements: {
             7. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
             8. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
             9. In "Recommendations", specifically mention GrowBrandi services related to "${requirements.serviceContext || 'the project'}".
+            10. Generate an "executiveSummary" (2-3 sentences) that explains the estimate professionally and encourages the next step.
             
             The output must be only the JSON object.`,
             config: {
@@ -159,6 +160,7 @@ export const estimateProject = async (requirements: {
                     type: Type.OBJECT,
                     properties: {
                         estimatedCost: { type: Type.STRING },
+                        executiveSummary: { type: Type.STRING },
                         estimatedTimeline: { type: Type.STRING },
                         recommendedServices: {
                             type: Type.ARRAY,
@@ -254,6 +256,7 @@ export const recommendServices = async (businessInfo: {
                 responseSchema: {
                     type: Type.OBJECT,
                     properties: {
+                        executiveSummary: { type: Type.STRING },
                         priorityServices: {
                             type: Type.ARRAY,
                             items: {
@@ -358,6 +361,7 @@ export const analyzeBusinessGrowth = async (businessData: {
                     type: Type.OBJECT,
                     properties: {
                         growthPotential: { type: Type.STRING },
+                        executiveSummary: { type: Type.STRING },
                         marketOpportunities: {
                             type: Type.ARRAY,
                             items: { type: Type.STRING }
@@ -456,6 +460,7 @@ export const generateConsultationPlan = async (clientInfo: {
                     type: Type.OBJECT,
                     properties: {
                         consultationType: { type: Type.STRING },
+                        executiveSummary: { type: Type.STRING },
                         recommendedDuration: { type: Type.STRING },
                         keyTopics: {
                             type: Type.ARRAY,
