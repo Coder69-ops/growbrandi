@@ -103,6 +103,7 @@ export const estimateProject = async (requirements: {
     timeline: string;
     budget: string;
     industry: string;
+    serviceContext?: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
     if (!apiKey) {
@@ -131,6 +132,7 @@ export const estimateProject = async (requirements: {
             Timeline: ${requirements.timeline}
             Budget: ${requirements.budget}
             Industry: ${requirements.industry}
+            Specific Service Context: ${requirements.serviceContext || 'General Project'}
             
             CONTEXT:
             Pricing:
@@ -140,11 +142,15 @@ export const estimateProject = async (requirements: {
             ${socialProofContext}
 
             INSTRUCTIONS:
-            1. Base cost estimates STRICTLY on the provided service pricing.
-            2. Use a professional, confident, and persuasive tone.
-            3. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
-            4. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
-            5. In "Recommendations", specifically mention GrowBrandi services.
+            1. Analyze the client's budget vs our standard pricing.
+            2. CRITICAL: If the client's budget is LOWER than our standard price, provide an estimate that is CLOSE to their entered budget (e.g., slightly higher or a range starting near their budget) to keep them interested. DO NOT quote the full standard price if it creates a sticker shock.
+            3. If the budget is reasonable, lean towards the lower end of our standard range.
+            4. MANDATORY: Professionally state that "This is a preliminary estimate. Final pricing is flexible and depends on your specific scope and requirements."
+            5. KEEP "estimatedCost" VERY SHORT (e.g., "$3k - $5k").
+            6. Use a professional, confident, and persuasive tone.
+            7. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
+            8. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
+            9. In "Recommendations", specifically mention GrowBrandi services related to "${requirements.serviceContext || 'the project'}".
             
             The output must be only the JSON object.`,
             config: {
@@ -302,6 +308,7 @@ export const analyzeBusinessGrowth = async (businessData: {
     marketPosition: string;
     digitalPresence: string;
     competitorsLevel: string;
+    serviceContext?: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
     if (!apiKey) {
@@ -329,6 +336,7 @@ export const analyzeBusinessGrowth = async (businessData: {
             Market Position: ${businessData.marketPosition}
             Digital Presence: ${businessData.digitalPresence}
             Competitors Level: ${businessData.competitorsLevel}
+            Specific Service Context: ${businessData.serviceContext || 'General Growth'}
             
             CONTEXT:
             GrowBrandi Services:
@@ -338,7 +346,7 @@ export const analyzeBusinessGrowth = async (businessData: {
             ${socialProofContext}
 
             INSTRUCTIONS:
-            1. Provide a realistic growth analysis.
+            1. Provide a realistic growth analysis considering the context of "${businessData.serviceContext || 'business growth'}".
             2. In "Recommended Actions", SPECIFICALLY recommend GrowBrandi services as solutions to their gaps.
             3. Mention how our data-driven approach (proven by 150+ projects) ensures growth.
             4. Be encouraging but honest about the need for professional digital intervention.

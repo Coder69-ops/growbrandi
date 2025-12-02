@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaCommentDots, FaLock, FaCheckCircle, FaHeadset, FaLayerGroup, FaStar, FaClipboardList } from 'react-icons/fa';
 import { SERVICES } from '../constants';
+import ServiceAIWidget from './ServiceAIWidget';
 import { Service } from '../types';
 
 const containerVariants = {
@@ -169,28 +170,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             ))}
                         </div>
 
-                        {/* CTA Buttons */}
-                        <div className="pt-6 space-y-4">
-                            <button
-                                onClick={() => {
-                                    onClose();
-                                    // Use window.location as we are inside a modal and might need global navigation access or pass navigate prop
-                                    // But better to use a link or callback. Since this is inside ServiceModal, let's assume we can't easily use navigate hook if not passed.
-                                    // However, ServiceModal is used in ServicesPreview which has navigate.
-                                    // Let's check if we can pass navigate or use window.location.href for simplicity in this specific context if hook isn't available, 
-                                    // BUT ServiceModal is a component defined in the same file, so we can't use the hook from the parent directly without passing it.
-                                    // Actually, ServiceModal is defined outside. Let's pass navigate to it or use window.location.
-                                    // Wait, I can just change the button to use an anchor tag or pass navigate.
-                                    // Let's modify ServiceModal props to accept navigate.
-                                }}
-                                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300"
-                            >
-                                <a href="/contact" className="block w-full h-full flex items-center justify-center">Get Started Now</a>
-                            </button>
-                            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
-                                <a href="/contact" className="block w-full h-full flex items-center justify-center">Schedule Consultation</a>
-                            </button>
+                        {/* AI Widget in Modal */}
+                        <div className="mt-8 pt-8 border-t border-white/10">
+                            <h3 className="text-white font-semibold text-xl mb-4">Get an Instant Estimate</h3>
+                            <ServiceAIWidget serviceTitle={service.title} compact={true} />
                         </div>
+
+
 
                         {/* Trust Indicators */}
                         <div className="glass-effect p-4 rounded-xl text-center">

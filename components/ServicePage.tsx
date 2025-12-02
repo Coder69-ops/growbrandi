@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FaRocket, FaEye, FaCheck, FaStar, FaPhone } from 'react-icons/fa';
 import SEO from './SEO';
+import ServiceAIWidget from './ServiceAIWidget';
 
 interface ServicePageProps {
   title: string;
@@ -318,6 +319,21 @@ const ServicePage: React.FC<ServicePageProps> = ({
             </div>
           </section>
         )}
+
+        {/* AI Analysis Section */}
+        <section className="py-20 px-4">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                Get a <span className="text-gradient">Custom AI Analysis</span>
+              </h2>
+              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+                Not sure where to start? Let our AI analyze your needs and provide a personalized recommendation instantly.
+              </p>
+            </div>
+            <ServiceAIWidget serviceTitle={title} />
+          </div>
+        </section>
 
         {/* CTA Section */}
         <section className="py-20 px-4">
