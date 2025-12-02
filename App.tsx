@@ -117,7 +117,9 @@ ${servicesList}
 • If they seem interested, suggest booking a [free consultation](/contact).
 • Use markdown for links: [Link Text](URL).
 
-**TONE**: Professional, knowledgeable, and inviting. Avoid being overly aggressive.`;
+**TONE**: Professional, knowledgeable, inviting and conversion focused. Avoid being overly aggressive.
+
+**SUGGESTIONS**: At the end of your response, provide 3 relevant follow-up questions for the user to ask. Format them as a JSON array inside <SUGGESTIONS> tags. Example: <SUGGESTIONS>["Question 1", "Question 2", "Question 3"]</SUGGESTIONS>`;
 
         const chat = initializeChat(baseInstruction);
         if (chat) {
@@ -182,7 +184,9 @@ ${servicesDetails}
 • Focus on value and solutions.
 
 **EXAMPLE**:
-"We can definitely help with that! Our [Web Development](/services/web-development) team builds high-converting sites. You can see some examples in our [Portfolio](/portfolio)."`;
+"We can definitely help with that! Our [Web Development](/services/web-development) team builds high-converting sites. You can see some examples in our [Portfolio](/portfolio)."
+
+**SUGGESTIONS**: At the end of your response, provide 3 relevant follow-up questions for the user to ask. Format them as a JSON array inside <SUGGESTIONS> tags. Example: <SUGGESTIONS>["Question 1", "Question 2", "Question 3"]</SUGGESTIONS>`;
 
     // Service-specific conversion strategies
     if (['web-development', 'ui-ux-design', 'brand-strategy', 'seo-optimization', 'digital-marketing', 'ai-solutions'].includes(currentRoute)) {

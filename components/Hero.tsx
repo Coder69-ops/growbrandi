@@ -468,16 +468,16 @@ export const HomePage: React.FC = () => {
                 <ServicesPreview />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[500px] bg-[#09090b]" />}>
-                <ProjectsPreview />
+            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
+                <SloganGenerator />
             </LazySection>
 
             <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
                 <AIUseCases />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
-                <SloganGenerator />
+            <LazySection fallback={<div className="min-h-[500px] bg-[#09090b]" />}>
+                <ProjectsPreview />
             </LazySection>
 
             <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>

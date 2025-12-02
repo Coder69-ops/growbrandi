@@ -89,77 +89,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
                     setIsLoading(false);
                     setIsInitialized(true);
 
-                    // Send welcome message immediately
-                    try {
-                        const response = await chatRef.current.sendMessageStream({ message: "Greet them as a GrowBrandi growth expert and ask what business challenge they want to solve. Be confident and conversion-focused. Max 2 sentences." });
-                        let fullResponse = "";
-                        const aiMessage: ChatMessage = { role: 'model', parts: [{ text: '' }] };
-                        setMessages([aiMessage]);
-
-                        for await (const chunk of response) {
-                            fullResponse += chunk.text;
-                            setMessages([{ role: 'model', parts: [{ text: fullResponse }] }]);
-                        }
-                    } catch (e: any) {
-                        console.error(e);
-                        // Handle initialization errors gracefully
-                        if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
-                            const fallbackMessage: ChatMessage = {
-                                role: 'model',
-                                parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }]
-                            };
-                            setMessages([fallbackMessage]);
-                        } else {
-                            const fallbackMessage: ChatMessage = {
-                                role: 'model',
-                                parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
-                            };
-                            setMessages([fallbackMessage]);
-                        }
-                    }
+                    // Static welcome message - no API call
+                    const welcomeMessage: ChatMessage = {
+                        role: 'model',
+                        parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
+                    };
+                    setMessages([welcomeMessage]);
                     return;
                 }
 
                 // Fallback to regular initialization if preload failed
-                setIsLoading(true);
-                setMessages([]);
+                // Initialize chat silently without welcome message
                 chatRef.current = initializeChat(systemInstruction);
+
                 if (!chatRef.current) {
                     setError('Failed to initialize AI Assistant.');
                     setIsLoading(false);
                     return;
                 }
 
-                try {
-                    const response = await chatRef.current.sendMessageStream({ message: "Say hi briefly and ask what they need help with. Be urgent and conversion-focused. Max 2 sentences." });
-                    let fullResponse = "";
-                    const aiMessage: ChatMessage = { role: 'model', parts: [{ text: '' }] };
-                    setMessages([aiMessage]);
-
-                    for await (const chunk of response) {
-                        fullResponse += chunk.text;
-                        setMessages([{ role: 'model', parts: [{ text: fullResponse }] }]);
-                    }
-                } catch (e: any) {
-                    console.error(e);
-                    // Handle initialization errors gracefully
-                    if (e?.message?.includes('503') || e?.message?.includes('overloaded')) {
-                        const fallbackMessage: ChatMessage = {
-                            role: 'model',
-                            parts: [{ text: "🚀 GrowBrandi AI is experiencing high demand! I'm your business growth expert - what challenge can I help you solve while we get fully connected?" }]
-                        };
-                        setMessages([fallbackMessage]);
-                    } else {
-                        const fallbackMessage: ChatMessage = {
-                            role: 'model',
-                            parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
-                        };
-                        setMessages([fallbackMessage]);
-                    }
-                } finally {
-                    setIsLoading(false);
-                    setIsInitialized(true);
-                }
+                // Static welcome message - no API call
+                const welcomeMessage: ChatMessage = {
+                    role: 'model',
+                    parts: [{ text: "Hi! I'm GrowBrandi AI, your business growth expert. What challenges can I help you solve today? 🚀" }]
+                };
+                setMessages([welcomeMessage]);
+                setIsLoading(false);
+                setIsInitialized(true);
             };
             init();
         }
@@ -204,10 +160,38 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
             for await (const chunk of responseStream) {
                 const chunkText = chunk.text || chunk || '';
                 fullResponse += chunkText;
+
+                // Robust regex for suggestions (handling potential newlines and different flags)
+                // We use [\s\S] instead of . to ensure we match across newlines
+                const suggestionMatch = fullResponse.match(/<SUGGESTIONS>([\s\S]*?)<\/SUGGESTIONS>/);
+                let displayResponse = fullResponse;
+
+                if (suggestionMatch) {
+                    try {
+                        const suggestionsJson = JSON.parse(suggestionMatch[1]);
+                        if (Array.isArray(suggestionsJson)) {
+                            setCurrentSuggestions(suggestionsJson);
+                        }
+                        // Remove the entire suggestions block from the displayed text
+                        displayResponse = fullResponse.replace(/<SUGGESTIONS>[\s\S]*?<\/SUGGESTIONS>/, '').trim();
+                    } catch (e) {
+                        console.error("Failed to parse suggestions:", e);
+                        // Even if parsing fails, hide the tags if we have a full match
+                        displayResponse = fullResponse.replace(/<SUGGESTIONS>[\s\S]*?<\/SUGGESTIONS>/, '').trim();
+                    }
+                } else {
+                    // Progressive hiding: If we see the start tag but not the end tag yet, 
+                    // hide everything from the start tag onwards to prevent "flickering"
+                    const startTagMatch = fullResponse.match(/<SUGGESTIONS>/);
+                    if (startTagMatch && startTagMatch.index !== undefined) {
+                        displayResponse = fullResponse.substring(0, startTagMatch.index).trim();
+                    }
+                }
+
                 setMessages(prev => {
                     const newMessages = [...prev];
                     if (newMessages[aiMessageIndex]) {
-                        newMessages[aiMessageIndex] = { role: 'model', parts: [{ text: fullResponse }] };
+                        newMessages[aiMessageIndex] = { role: 'model', parts: [{ text: displayResponse }] };
                     }
                     return newMessages;
                 });
