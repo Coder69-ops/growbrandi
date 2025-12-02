@@ -356,6 +356,96 @@ const HeroSection: React.FC = () => {
                                     image: "/logos/hubspot.svg",
                                     className: "h-10 w-auto",
                                 },
+                                {
+                                    id: "logo-15",
+                                    description: "Amazon",
+                                    image: "/logos/amazon.svg",
+                                    className: "h-8 w-auto",
+                                },
+                                {
+                                    id: "logo-16",
+                                    description: "Docker",
+                                    image: "/logos/docker.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-17",
+                                    description: "Microsoft",
+                                    image: "/logos/microsoft.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-18",
+                                    description: "Salesforce",
+                                    image: "/logos/salesforce.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-19",
+                                    description: "Google",
+                                    image: "/logos/google.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-20",
+                                    description: "TikTok",
+                                    image: "/logos/tiktok.svg",
+                                    className: "h-8 w-auto",
+                                },
+                                {
+                                    id: "logo-21",
+                                    description: "Meta",
+                                    image: "/logos/meta.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-22",
+                                    description: "Instagram",
+                                    image: "/logos/instagram.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-23",
+                                    description: "WordPress",
+                                    image: "/logos/wordpress.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-24",
+                                    description: "Google Cloud",
+                                    image: "/logos/googlecloud.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-25",
+                                    description: "Cloudflare",
+                                    image: "/logos/cloudflare.svg",
+                                    className: "h-8 w-auto",
+                                },
+                                {
+                                    id: "logo-26",
+                                    description: "Firebase",
+                                    image: "/logos/firebase.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-27",
+                                    description: "NestJS",
+                                    image: "/logos/nestjs.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-28",
+                                    description: "Nuxt.js",
+                                    image: "/logos/nuxt.svg",
+                                    className: "h-10 w-auto",
+                                },
+                                {
+                                    id: "logo-29",
+                                    description: "Vue.js",
+                                    image: "/logos/vue.svg",
+                                    className: "h-9 w-auto",
+                                },
                             ]}
                         />
                     </motion.div>
