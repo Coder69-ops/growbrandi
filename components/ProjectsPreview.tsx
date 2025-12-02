@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaTimes, FaChartLine, FaExchangeAlt, FaStar, FaCheck, FaBriefcase, FaArrowRight, FaCommentDots, FaFolderOpen, FaRocket, FaCode } from 'react-icons/fa';
-import { PROJECTS } from '../constants';
+import { FaTimes, FaChartLine, FaExchangeAlt, FaStar, FaCheck, FaBriefcase, FaArrowRight, FaCommentDots, FaFolderOpen, FaRocket, FaCode, FaWhatsapp } from 'react-icons/fa';
+import { PROJECTS, CONTACT_INFO } from '../constants';
 import { Project } from '../types';
 
 const containerVariants = {
@@ -192,11 +192,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                         {/* CTA Buttons */}
                         <div className="flex gap-4 pt-4">
                             <button
-                                onClick={() => window.location.href = '/contact'}
-                                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-xl font-bold hover:from-blue-600 hover:to-cyan-600 transition-all shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 group"
+                                onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-xl font-bold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 group"
                             >
-                                <FaRocket className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-                                Start Similar Project
+                                <FaWhatsapp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+                                Chat on WhatsApp
                             </button>
                         </div>
                     </div>
@@ -476,13 +476,13 @@ const ProjectsPreview: React.FC = () => {
                                         View Full Portfolio
                                     </motion.button>
                                     <motion.button
-                                        onClick={() => navigate('/contact')}
+                                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
                                         className="group inline-flex items-center justify-center gap-3 bg-transparent border border-white/20 text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-white/10 transition-all duration-300"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        <FaCommentDots className="w-5 h-5" />
-                                        Start Your Project
+                                        <FaWhatsapp className="w-5 h-5" />
+                                        Chat on WhatsApp
                                     </motion.button>
                                 </div>
                             </div>

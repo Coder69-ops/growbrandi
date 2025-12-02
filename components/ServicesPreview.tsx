@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaCommentDots, FaLock, FaCheckCircle, FaHeadset, FaLayerGroup, FaStar, FaClipboardList } from 'react-icons/fa';
-import { SERVICES } from '../constants';
+import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaCommentDots, FaLock, FaCheckCircle, FaHeadset, FaLayerGroup, FaStar, FaClipboardList, FaWhatsapp } from 'react-icons/fa';
+import { SERVICES, CONTACT_INFO } from '../constants';
 import ServiceAIWidget from './ServiceAIWidget';
 import { Service } from '../types';
 
@@ -279,10 +279,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                             Learn More
                         </motion.button>
                         <button
-                            onClick={() => window.location.href = '/contact'}
-                            className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-blue-400 hover:text-blue-400 transition-all"
+                            onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                            className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-green-400 hover:text-green-400 transition-all flex items-center justify-center gap-2"
                         >
-                            Get Quote
+                            <FaWhatsapp className="w-4 h-4" />
+                            Chat on WhatsApp
                         </button>
                     </div>
 
@@ -435,13 +436,13 @@ const ServicesPreview: React.FC = () => {
                                     <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                 </motion.button>
                                 <motion.button
-                                    onClick={() => navigate('/contact')}
-                                    className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-zinc-600 transition-all duration-300"
+                                    onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                    className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-green-600 transition-all duration-300"
                                     whileHover={{ scale: 1.02, y: -2 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
-                                    <FaCommentDots className="w-5 h-5" />
-                                    Get Free Consultation
+                                    <FaWhatsapp className="w-5 h-5" />
+                                    Chat on WhatsApp
                                 </motion.button>
                             </div>
 

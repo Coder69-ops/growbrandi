@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaRocket } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp } from 'react-icons/fa';
 import { APP_NAME, APP_TAGLINE, CONTACT_INFO, SERVICES } from '../constants';
 
 // --- Enhanced Footer Component ---
@@ -32,6 +32,7 @@ const Footer: React.FC = () => {
       case 'twitter': return <FaTwitter className="w-4 h-4" />;
       case 'instagram': return <FaInstagram className="w-4 h-4" />;
       case 'dribbble': return <FaDribbble className="w-4 h-4" />;
+      case 'whatsapp': return <FaWhatsapp className="w-4 h-4" />;
       default: return null;
     }
   };

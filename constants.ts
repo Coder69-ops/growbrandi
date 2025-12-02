@@ -24,7 +24,8 @@ export const CONTACT_INFO = {
     linkedin: 'https://linkedin.com/company/growbrandi',
     twitter: 'https://twitter.com/growbrandi',
     instagram: 'https://instagram.com/growbrandi',
-    dribbble: 'https://dribbble.com/growbrandi'
+    dribbble: 'https://dribbble.com/growbrandi',
+    whatsapp: 'https://wa.me/8801755154194'
   }
 };
 

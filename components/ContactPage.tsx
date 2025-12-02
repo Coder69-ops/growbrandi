@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot } from 'react-icons/fa';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
 import { sendEmail, sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
@@ -175,6 +175,7 @@ I would like to book this consultation.`;
             case 'twitter': return FaTwitter;
             case 'instagram': return FaInstagram;
             case 'dribbble': return FaDribbble;
+            case 'whatsapp': return FaWhatsapp;
             default: return FaGithub;
         }
     };
@@ -226,6 +227,24 @@ I would like to book this consultation.`;
                                 <h3 className="text-lg font-bold text-white mb-1">Email Us</h3>
                                 <p className="text-zinc-400">{CONTACT_INFO.email}</p>
                                 <p className="text-zinc-400 text-sm">Response within 24 hours</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start space-x-4">
+                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-green-400 shrink-0">
+                                <FaWhatsapp className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-1">Phone & WhatsApp</h3>
+                                <p className="text-zinc-400">{CONTACT_INFO.phone}</p>
+                                <a
+                                    href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-green-400 text-sm font-medium hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
+                                >
+                                    Chat on WhatsApp <FaArrowRight className="w-3 h-3" />
+                                </a>
                             </div>
                         </div>
 

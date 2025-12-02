@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowRight, FaPlay, FaStar, FaRocket, FaChartLine, FaCode, FaLayerGroup, FaBolt } from 'react-icons/fa';
+import { FaArrowRight, FaPlay, FaStar, FaRocket, FaChartLine, FaCode, FaLayerGroup, FaBolt, FaWhatsapp } from 'react-icons/fa';
 
 // Import other Home Page sections
 // Lazy load other Home Page sections
@@ -13,6 +13,7 @@ const TestimonialsSlider = React.lazy(() => import('./TestimonialsSlider'));
 const TeamSection = React.lazy(() => import('./TeamSection'));
 const FAQ = React.lazy(() => import('./FAQ'));
 import { Logos3 } from './blocks/logos3';
+import { CONTACT_INFO } from '../constants';
 
 const HeroSection: React.FC = () => {
     const navigate = useNavigate();
@@ -111,13 +112,13 @@ const HeroSection: React.FC = () => {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                onClick={() => navigate('/contact')}
+                                onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
                                 className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 <span className="relative z-10 flex items-center gap-2">
-                                    Start Your Project
-                                    <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    <FaWhatsapp className="w-5 h-5" />
+                                    Chat on WhatsApp
                                 </span>
                             </motion.button>
 

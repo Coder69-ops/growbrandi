@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUsers, FaCode, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaCommentDots, FaBriefcase } from 'react-icons/fa';
+import { FaUsers, FaCode, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaCommentDots, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
 
-import { TEAM_MEMBERS } from '../constants';
+import { TEAM_MEMBERS, CONTACT_INFO } from '../constants';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -198,13 +198,13 @@ const TeamSection: React.FC = () => {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <motion.button
-                                onClick={() => navigate('/contact')}
-                                className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center gap-2"
+                                onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                <FaCommentDots className="w-5 h-5" />
-                                Start a Conversation
+                                <FaWhatsapp className="w-5 h-5" />
+                                Chat on WhatsApp
                             </motion.button>
                             <motion.button
                                 onClick={() => navigate('/portfolio')}
