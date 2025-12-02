@@ -60,6 +60,27 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
     const chatHistoryRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Load history from session storage on mount
+        const savedHistory = sessionStorage.getItem('GROWBRANDI_CHAT_HISTORY');
+        if (savedHistory) {
+            try {
+                const parsedHistory = JSON.parse(savedHistory);
+                if (Array.isArray(parsedHistory) && parsedHistory.length > 0) {
+                    setMessages(parsedHistory);
+                    setIsInitialized(true); // Prevent auto-welcome if we have history
+
+                    // Initialize chat silently without welcome message
+                    if (!chatRef.current) {
+                        chatRef.current = initializeChat(systemInstruction);
+                    }
+                    setIsLoading(false);
+                    return;
+                }
+            } catch (e) {
+                console.error("Failed to parse chat history:", e);
+            }
+        }
+
         if (isOpen && !isInitialized) {
             const init = async () => {
                 // If we have a preloaded chat, use it immediately
@@ -143,6 +164,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, systemIn
             init();
         }
     }, [isOpen, systemInstruction, preloadedChat, isPreloaded, isInitialized]);
+
+    // Save history to session storage whenever messages change
+    useEffect(() => {
+        if (messages.length > 0) {
+            sessionStorage.setItem('GROWBRANDI_CHAT_HISTORY', JSON.stringify(messages));
+        }
+    }, [messages]);
 
     useEffect(() => {
         chatHistoryRef.current?.scrollTo({ top: chatHistoryRef.current.scrollHeight, behavior: 'smooth' });

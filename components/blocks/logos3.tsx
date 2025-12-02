@@ -98,7 +98,7 @@ const Logos3 = ({
                         ]}
                         className="w-full"
                     >
-                        <CarouselContent className="-ml-4">
+                        <CarouselContent className="-ml-4 will-change-transform">
                             {repeatedLogos.map((logo, index) => (
                                 <CarouselItem
                                     // Use index in key because IDs are duplicated
@@ -113,10 +113,10 @@ const Logos3 = ({
                                                 width={40}
                                                 height={40}
                                                 className={cn(
-                                                    "h-10 md:h-14 lg:h-16 w-auto object-contain",
+                                                    "h-10 md:h-14 lg:h-16 w-auto object-contain will-change-transform",
                                                     logo.className
                                                 )}
-                                                loading="lazy"
+                                                loading="eager"
                                             />
                                         </div>
                                     </div>

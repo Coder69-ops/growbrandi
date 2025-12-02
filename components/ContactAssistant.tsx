@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import {
@@ -44,6 +44,35 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
   const [aiInsights, setAiInsights] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+
+  // Load state from session storage on mount
+  useEffect(() => {
+    const savedState = sessionStorage.getItem('GROWBRANDI_CONTACT_STATE');
+    if (savedState) {
+      try {
+        const parsedState = JSON.parse(savedState);
+        if (parsedState) {
+          if (parsedState.step) setStep(parsedState.step);
+          if (parsedState.formData) setFormData(parsedState.formData);
+          if (parsedState.aiInsights) setAiInsights(parsedState.aiInsights);
+          if (parsedState.showThankYou !== undefined) setShowThankYou(parsedState.showThankYou);
+        }
+      } catch (e) {
+        console.error("Failed to parse contact assistant state:", e);
+      }
+    }
+  }, []);
+
+  // Save state to session storage whenever it changes
+  useEffect(() => {
+    const stateToSave = {
+      step,
+      formData,
+      aiInsights,
+      showThankYou
+    };
+    sessionStorage.setItem('GROWBRANDI_CONTACT_STATE', JSON.stringify(stateToSave));
+  }, [step, formData, aiInsights, showThankYou]);
 
   const goalOptions = [
     'Increase Sales', 'Build Brand Awareness', 'Generate Leads',
@@ -311,28 +340,28 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         from_email: formData.email,
         subject: `AI Consultation: ${formData.projectType} for ${formData.company || 'New Client'}`,
         message: `
-          New AI Consultation Request
-          
-          User Details:
-          - Name: ${formData.name}
-          - Email: ${formData.email}
-          - Company: ${formData.company}
-          - Industry: ${formData.industry}
-          
-          Project Info:
-          - Type: ${formData.projectType}
-          - Budget: ${formData.budget}
-          - Timeline: ${formData.timeline}
-          
-          Goals: ${formData.goals.join(', ')}
-          Challenges: ${formData.challenges.join(', ')}
-          
-          Additional Message:
-          ${formData.message}
-          
-          AI Recommendations:
-          ${JSON.stringify(aiInsights, null, 2)}
-        `
+            New AI Consultation Request
+            
+            User Details:
+            - Name: ${formData.name}
+            - Email: ${formData.email}
+            - Company: ${formData.company}
+            - Industry: ${formData.industry}
+            
+            Project Info:
+            - Type: ${formData.projectType}
+            - Budget: ${formData.budget}
+            - Timeline: ${formData.timeline}
+            
+            Goals: ${formData.goals.join(', ')}
+            Challenges: ${formData.challenges.join(', ')}
+            
+            Additional Message:
+            ${formData.message}
+            
+            AI Recommendations:
+            ${JSON.stringify(aiInsights, null, 2)}
+          `
       };
 
       await sendEmailData(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData, EMAILJS_PUBLIC_KEY);
