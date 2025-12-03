@@ -88,7 +88,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
       <motion.div
-        className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-8"
+        className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-8 bg-white/90 dark:bg-zinc-900/90 border border-slate-200 dark:border-white/10"
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.8, y: 50 }}
@@ -96,7 +96,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
       >
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-zinc-700/50 text-zinc-400 hover:text-white hover:bg-zinc-600/50 transition-all z-10"
+          className="absolute top-6 right-6 p-2 rounded-full bg-slate-200 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300 dark:hover:bg-zinc-600/50 transition-all z-10"
         >
           <FaTimes className="w-6 h-6" />
         </button>
@@ -108,27 +108,27 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 {service.icon}
               </div>
               <div>
-                <h2 className="text-4xl font-bold text-white mb-2">{service.title}</h2>
-                <p className="text-blue-400 font-semibold text-xl">{service.price}</p>
+                <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h2>
+                <p className="text-blue-600 dark:text-blue-400 font-semibold text-xl">{service.price}</p>
               </div>
             </div>
 
-            <p className="text-zinc-300 leading-relaxed text-lg">{service.description}</p>
+            <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
 
             <div>
-              <h3 className="text-white font-semibold mb-6 text-2xl">Complete Package Includes</h3>
+              <h3 className="text-slate-900 dark:text-white font-semibold mb-6 text-2xl">Complete Package Includes</h3>
               <div className="grid grid-cols-1 gap-4">
                 {service.features?.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl">
-                    <FaCheck className="w-6 h-6 text-blue-400 flex-shrink-0" aria-hidden="true" />
-                    <span className="text-zinc-300 font-medium text-lg">{feature}</span>
+                  <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+                    <FaCheck className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0" aria-hidden="true" />
+                    <span className="text-slate-700 dark:text-zinc-300 font-medium text-lg">{feature}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="glass-effect p-6 rounded-2xl">
-              <h3 className="text-white font-semibold mb-4 text-xl">Why Choose This Service?</h3>
+            <div className="glass-effect p-6 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+              <h3 className="text-slate-900 dark:text-white font-semibold mb-4 text-xl">Why Choose This Service?</h3>
               <div className="space-y-3">
                 {[
                   'Dedicated project manager assigned',
@@ -139,8 +139,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                   'Industry-leading tools and technologies'
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
-                    <FaCircle className="w-3 h-3 text-blue-400" aria-hidden="true" />
-                    <span className="text-zinc-300">{benefit}</span>
+                    <FaCircle className="w-3 h-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                    <span className="text-slate-600 dark:text-zinc-300">{benefit}</span>
                   </div>
                 ))}
               </div>
@@ -149,7 +149,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
           <div className="space-y-8">
             <div>
-              <h3 className="text-white font-semibold text-2xl mb-6">Our Proven Process</h3>
+              <h3 className="text-slate-900 dark:text-white font-semibold text-2xl mb-6">Our Proven Process</h3>
               <div className="space-y-6">
                 {steps.map((step, index) => (
                   <div key={index} className="relative">
@@ -162,14 +162,14 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         {index + 1}
                       </div>
 
-                      <div className="flex-1 glass-effect p-6 rounded-xl">
+                      <div className="flex-1 glass-effect p-6 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-white font-semibold text-lg">{step.step}</h4>
-                          <span className="text-blue-400 text-sm font-medium bg-blue-400/10 px-3 py-1 rounded-full">
+                          <h4 className="text-slate-900 dark:text-white font-semibold text-lg">{step.step}</h4>
+                          <span className="text-blue-600 dark:text-blue-400 text-sm font-medium bg-blue-100 dark:bg-blue-400/10 px-3 py-1 rounded-full">
                             {step.duration}
                           </span>
                         </div>
-                        <p className="text-zinc-300">{step.description}</p>
+                        <p className="text-slate-600 dark:text-zinc-300">{step.description}</p>
                       </div>
                     </div>
                   </div>
@@ -181,22 +181,22 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               <button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-xl">
                 Start Your Project Now
               </button>
-              <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-8 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
+              <button className="w-full border border-slate-300 dark:border-zinc-600 text-slate-700 dark:text-zinc-300 py-3 px-8 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all">
                 Schedule Free Consultation
               </button>
             </div>
 
-            <div className="glass-effect p-6 rounded-2xl text-center">
+            <div className="glass-effect p-6 rounded-2xl text-center bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <FaStar key={i} className="w-5 h-5 text-yellow-400" />
                   ))}
                 </div>
-                <span className="text-white font-bold text-lg">4.9/5</span>
+                <span className="text-slate-900 dark:text-white font-bold text-lg">4.9/5</span>
               </div>
-              <p className="text-zinc-400">Average rating from 200+ clients</p>
-              <p className="text-blue-400 text-sm mt-2">✓ 98% project success rate</p>
+              <p className="text-slate-600 dark:text-zinc-400">Average rating from 200+ clients</p>
+              <p className="text-blue-600 dark:text-blue-400 text-sm mt-2">✓ 98% project success rate</p>
             </div>
           </div>
         </div>
@@ -261,7 +261,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
         }}
       />
 
-      <div className={`glass-effect p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
+      <div className={`glass-effect p-8 h-full relative bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/5 ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
 
@@ -275,20 +275,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
                 </div>
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-white group-hover:text-gradient transition-colors duration-300">{service.title}</h3>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-gradient transition-colors duration-300">{service.title}</h3>
                 <p className={`text-lg font-semibold bg-gradient-to-r ${service.color} bg-clip-text text-transparent mt-1`}>{service.price}</p>
               </div>
             </div>
           </div>
 
-          <p className="text-zinc-300 mb-8 flex-grow leading-relaxed text-lg">{service.description}</p>
+          <p className="text-slate-600 dark:text-zinc-300 mb-8 flex-grow leading-relaxed text-lg">{service.description}</p>
 
           <div className="mb-8">
-            <h4 className="text-white font-semibold mb-4 text-lg">Key Features:</h4>
+            <h4 className="text-slate-900 dark:text-white font-semibold mb-4 text-lg">Key Features:</h4>
             <div className="grid grid-cols-1 gap-3">
               {service.features?.slice(0, 4).map((feature, index) => (
-                <div key={index} className="flex items-center text-zinc-400">
-                  <FaCheck className="w-5 h-5 text-blue-400 mr-3 flex-shrink-0" aria-hidden="true" />
+                <div key={index} className="flex items-center text-slate-600 dark:text-zinc-400">
+                  <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3 flex-shrink-0" aria-hidden="true" />
                   {feature}
                 </div>
               ))}
@@ -304,14 +304,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
             >
               Learn More & Get Started
             </motion.button>
-            <button className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all">
+            <button className="w-full border border-slate-300 dark:border-zinc-600 text-slate-700 dark:text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all">
               Get Free Quote
             </button>
           </div>
 
-          <div className="mt-6 pt-4 border-t border-zinc-700 text-center">
-            <div className="flex items-center justify-center gap-2 text-sm text-zinc-400">
-              <FaShieldAlt className="w-4 h-4 text-blue-400" aria-hidden="true" />
+          <div className="mt-6 pt-4 border-t border-slate-200 dark:border-zinc-700 text-center">
+            <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-zinc-400">
+              <FaShieldAlt className="w-4 h-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
               <span>30-day money-back guarantee</span>
             </div>
           </div>
@@ -354,10 +354,10 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <>
-      <section className="py-24 px-4 relative overflow-hidden bg-luxury-black">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-800/20 via-luxury-black to-luxury-black" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-zinc-800/10 rounded-full blur-3xl" />
+      <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-slate-50 to-slate-50 dark:from-zinc-800/20 dark:via-luxury-black dark:to-luxury-black" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 dark:bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 dark:bg-zinc-800/10 rounded-full blur-3xl" />
 
         <div className="container mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-20 max-w-5xl mx-auto">
@@ -366,33 +366,33 @@ export const ServicesPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8">
-                <FaLayerGroup className="w-5 h-5 text-blue-400" />
-                <span className="text-sm font-bold text-blue-400 tracking-wide">COMPREHENSIVE SERVICES</span>
-                <FaGem className="w-5 h-5 text-blue-400" />
+              <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                <FaLayerGroup className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">COMPREHENSIVE SERVICES</span>
+                <FaGem className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
-              <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight font-heading tracking-tight text-white">
+              <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight font-heading tracking-tight text-slate-900 dark:text-white">
                 Premium <span className="text-gradient">Digital Solutions</span>
                 <span className="block">For Every Business Need</span>
               </h1>
-              <p className="text-xl md:text-2xl text-zinc-400 leading-relaxed mb-8 font-light">
+              <p className="text-xl md:text-2xl text-slate-600 dark:text-zinc-400 leading-relaxed mb-8 font-light">
                 Transform your business with our comprehensive suite of services. From
-                <span className="text-white font-semibold"> cutting-edge design and development</span> to
-                <span className="text-white font-semibold"> data-driven marketing strategies</span>,
+                <span className="text-slate-900 dark:text-white font-semibold"> cutting-edge design and development</span> to
+                <span className="text-slate-900 dark:text-white font-semibold"> data-driven marketing strategies</span>,
                 we deliver exceptional results that drive growth.
               </p>
             </motion.div>
           </div>
 
           <motion.div className="flex justify-center mb-16">
-            <div className="glass-effect rounded-2xl p-2 inline-flex gap-2">
+            <div className="glass-effect rounded-2xl p-2 inline-flex gap-2 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
               {categories.map((category, index) => (
                 <motion.button
                   key={category}
                   onClick={() => handleFilterChange(category)}
                   className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${activeFilter === category
-                    ? 'bg-white text-black shadow-lg'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5'
                     }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -440,7 +440,7 @@ export const ServicesPage: React.FC = () => {
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                className="glass-effect p-6 rounded-2xl text-center group"
+                className="glass-effect p-6 rounded-2xl text-center group bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10"
                 whileHover={{ scale: 1.02, y: -5 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.2 }}
@@ -454,7 +454,7 @@ export const ServicesPage: React.FC = () => {
                 <div className="text-3xl font-black text-gradient mb-2">
                   {stat.number}
                 </div>
-                <div className="text-zinc-400 text-sm font-medium">
+                <div className="text-slate-600 dark:text-zinc-400 text-sm font-medium">
                   {stat.label}
                 </div>
               </motion.div>
@@ -462,17 +462,17 @@ export const ServicesPage: React.FC = () => {
           </motion.div>
 
           <motion.div className="text-center">
-            <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
                 Ready to <span className="text-gradient">Elevate Your Business?</span>
               </h3>
-              <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                 Get started with a free consultation. Our experts will analyze your needs
                 and recommend the perfect service package for your business goals.
               </p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
                 <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-white text-black font-bold py-4 px-8 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-3 bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -480,7 +480,7 @@ export const ServicesPage: React.FC = () => {
                   Get Free Consultation
                 </motion.button>
                 <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-zinc-600 transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-3 bg-slate-200 dark:bg-zinc-700 text-slate-900 dark:text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-slate-300 dark:hover:bg-zinc-600 transition-all duration-300"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -489,18 +489,18 @@ export const ServicesPage: React.FC = () => {
                 </motion.button>
               </div>
 
-              <div className="flex items-center justify-center gap-8 pt-8 border-t border-zinc-700">
+              <div className="flex items-center justify-center gap-8 pt-8 border-t border-slate-200 dark:border-zinc-700">
                 <div className="flex items-center gap-2">
-                  <FaLock className="w-5 h-5 text-blue-400" />
-                  <span className="text-zinc-300 text-sm">SSL Secured</span>
+                  <FaLock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <span className="text-slate-600 dark:text-zinc-300 text-sm">SSL Secured</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaCheckCircle className="w-5 h-5 text-blue-400" />
-                  <span className="text-zinc-300 text-sm">Money Back Guarantee</span>
+                  <FaCheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <span className="text-slate-600 dark:text-zinc-300 text-sm">Money Back Guarantee</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaHeadset className="w-5 h-5 text-purple-400" />
-                  <span className="text-zinc-300 text-sm">24/7 Support</span>
+                  <FaHeadset className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <span className="text-slate-600 dark:text-zinc-300 text-sm">24/7 Support</span>
                 </div>
               </div>
             </div>

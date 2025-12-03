@@ -59,7 +59,7 @@ const TestimonialsSlider: React.FC = () => {
             variants={containerVariants}
         >
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-luxury-black" />
+            <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
             <div className="absolute top-1/4 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
@@ -73,7 +73,7 @@ const TestimonialsSlider: React.FC = () => {
                     <h2 className="text-3xl md:text-6xl font-black mb-8 leading-tight">
                         What Our <span className="text-gradient">Amazing Clients</span> Say
                     </h2>
-                    <p className="text-lg md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-2xl text-slate-600 dark:text-zinc-300 max-w-4xl mx-auto leading-relaxed transition-colors duration-300">
                         Don't just take our word for it. Hear from the businesses we've helped transform their
                         digital presence and <span className="text-blue-400 font-semibold">achieve remarkable success</span>.
                     </p>
@@ -88,17 +88,17 @@ const TestimonialsSlider: React.FC = () => {
                     {/* Navigation Buttons */}
                     <button
                         onClick={handlePrev}
-                        className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
+                        className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Previous testimonial"
                     >
-                        <FaChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-blue-400" />
+                        <FaChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-slate-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                     </button>
                     <button
                         onClick={handleNext}
-                        className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-white/10 transition-all duration-300 group"
+                        className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 z-10 glass-effect p-2 md:p-3 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 transition-all duration-300 group"
                         aria-label="Next testimonial"
                     >
-                        <FaChevronRight className="w-5 h-5 md:w-6 md:h-6 text-zinc-400 group-hover:text-blue-400" />
+                        <FaChevronRight className="w-5 h-5 md:w-6 md:h-6 text-slate-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
                     </button>
 
                     {/* Enhanced Testimonial Cards */}
@@ -107,7 +107,7 @@ const TestimonialsSlider: React.FC = () => {
                             {TESTIMONIALS.map((testimonial, index) => (
                                 <div key={index} className="w-full flex-shrink-0 px-2">
                                     <motion.div
-                                        className="glass-effect rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden group min-h-[400px] flex flex-col justify-between"
+                                        className="glass-effect rounded-3xl p-6 md:p-12 shadow-2xl relative overflow-hidden group min-h-[400px] flex flex-col justify-between border border-slate-200 dark:border-white/5"
                                         whileHover={{ y: -8, scale: 1.02 }}
                                         transition={{ duration: 0.3 }}
                                     >
@@ -133,7 +133,7 @@ const TestimonialsSlider: React.FC = () => {
                                         </div>
 
                                         {/* Testimonial Content */}
-                                        <blockquote className="text-xl md:text-2xl text-white font-medium leading-relaxed mb-auto relative z-10 flex-grow">
+                                        <blockquote className="text-xl md:text-2xl text-slate-900 dark:text-white font-medium leading-relaxed mb-auto relative z-10 flex-grow">
                                             {testimonial.quote}
                                         </blockquote>
 
@@ -148,9 +148,9 @@ const TestimonialsSlider: React.FC = () => {
                                                 </div>
                                             </div>
                                             <div className="flex-1">
-                                                <div className="font-bold text-white text-xl mb-1">{testimonial.author}</div>
+                                                <div className="font-bold text-slate-900 dark:text-white text-xl mb-1">{testimonial.author}</div>
                                                 <div className="text-blue-400 font-semibold text-lg">{testimonial.company}</div>
-                                                <div className="text-zinc-400 text-sm mt-1">Verified Client</div>
+                                                <div className="text-slate-500 dark:text-zinc-400 text-sm mt-1">Verified Client</div>
                                             </div>
                                             <div className="hidden md:block">
                                                 <FaCheckCircle className="w-12 h-12 text-blue-400/20" />
@@ -166,11 +166,11 @@ const TestimonialsSlider: React.FC = () => {
                     <div className="flex flex-col items-center gap-6 mt-12">
                         {/* Progress Bar */}
                         <div className="w-full max-w-md">
-                            <div className="flex justify-between text-sm text-zinc-400 mb-2">
+                            <div className="flex justify-between text-sm text-slate-500 dark:text-zinc-400 mb-2">
                                 <span>Testimonial {activeIndex + 1} of {TESTIMONIALS.length}</span>
                                 <span>Auto-advancing</span>
                             </div>
-                            <div className="h-2 bg-zinc-700 rounded-full overflow-hidden">
+                            <div className="h-2 bg-slate-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                                 <motion.div
                                     className="h-full bg-gradient-to-r from-blue-400 to-blue-400 rounded-full"
                                     initial={{ width: '0%' }}
@@ -188,7 +188,7 @@ const TestimonialsSlider: React.FC = () => {
                                     onClick={() => setActiveIndex(index)}
                                     className={`h-3 rounded-full transition-all duration-300 ${index === activeIndex
                                         ? 'bg-gradient-to-r from-blue-400 to-blue-400 w-8 shadow-lg'
-                                        : 'bg-zinc-600 hover:bg-zinc-500 w-3'
+                                        : 'bg-slate-300 dark:bg-zinc-600 hover:bg-slate-400 dark:hover:bg-zinc-500 w-3'
                                         }`}
                                     whileHover={{ scale: 1.2 }}
                                     whileTap={{ scale: 0.9 }}

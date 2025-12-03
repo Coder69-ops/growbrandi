@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const AILoader = () => (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-zinc-950/80 backdrop-blur-xl transition-all duration-500 rounded-3xl">
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl transition-all duration-500 rounded-3xl">
         <div className="relative flex flex-col items-center z-10">
             <motion.div
                 className="relative mb-8"
@@ -16,7 +16,7 @@ const AILoader = () => (
                     transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 />
                 <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full" />
-                <div className="relative w-32 h-32 bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden">
+                <div className="relative w-32 h-32 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-3xl border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
                     <img
                         src="/growbrandi-logo.png"
@@ -26,7 +26,7 @@ const AILoader = () => (
                 </div>
             </motion.div>
 
-            <div className="w-64 h-1.5 bg-zinc-800 rounded-full overflow-hidden relative mb-4">
+            <div className="w-64 h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden relative mb-4">
                 <motion.div
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500"
                     initial={{ x: '-100%' }}
@@ -41,11 +41,11 @@ const AILoader = () => (
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
             >
-                <span className="text-zinc-400 text-sm font-medium tracking-[0.2em] uppercase">Analyzing Data</span>
+                <span className="text-slate-500 dark:text-zinc-400 text-sm font-medium tracking-[0.2em] uppercase">Analyzing Data</span>
                 <motion.span
                     animate={{ opacity: [0, 1, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="text-blue-400 text-sm"
+                    className="text-blue-600 dark:text-blue-400 text-sm"
                 >
                     ●
                 </motion.span>

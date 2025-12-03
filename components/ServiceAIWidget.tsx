@@ -125,7 +125,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
     }[widgetType];
 
     return (
-        <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 backdrop-blur-xl ${compact ? 'p-6' : 'p-8 md:p-10'}`}>
+        <div className={`relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl transition-colors duration-300 ${compact ? 'p-6' : 'p-8 md:p-10'}`}>
             {/* Background Gradients */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
@@ -144,32 +144,32 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                         className="relative z-10"
                     >
                         <div className="flex items-center gap-3 mb-2">
-                            <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400">
+                            <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-600 dark:text-blue-400">
                                 {config.icon}
                             </div>
-                            <h3 className="text-xl font-bold text-white">{config.title}</h3>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">{config.title}</h3>
                         </div>
-                        <p className="text-zinc-400 text-sm mb-6">{config.subtitle}</p>
+                        <p className="text-slate-500 dark:text-zinc-400 text-sm mb-6">{config.subtitle}</p>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1.5">{config.input1Label}</label>
+                                <label className="block text-xs font-bold text-slate-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">{config.input1Label}</label>
                                 <input
                                     type="text"
                                     value={input1}
                                     onChange={(e) => setInput1(e.target.value)}
                                     placeholder={config.input1Placeholder}
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                                    className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 transition-colors"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-zinc-500 uppercase tracking-wider mb-1.5">{config.input2Label}</label>
+                                <label className="block text-xs font-bold text-slate-500 dark:text-zinc-500 uppercase tracking-wider mb-1.5">{config.input2Label}</label>
                                 <input
                                     type="text"
                                     value={input2}
                                     onChange={(e) => setInput2(e.target.value)}
                                     placeholder={config.input2Placeholder}
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                                    className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 transition-colors"
                                 />
                             </div>
 
@@ -197,24 +197,24 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                         animate={{ opacity: 1, scale: 1 }}
                         className="relative z-10 text-center flex flex-col items-center justify-center h-full"
                     >
-                        <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-400 mb-3 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                        <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 mb-3 shadow-[0_0_15px_rgba(34,197,94,0.3)]">
                             <FaCheckCircle className="w-5 h-5" />
                         </div>
 
-                        <h3 className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-2">{config.resultTitle}</h3>
+                        <h3 className="text-slate-500 dark:text-zinc-400 text-xs uppercase tracking-widest font-bold mb-2">{config.resultTitle}</h3>
 
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-3 tracking-tighter bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-zinc-400 bg-clip-text text-transparent">
                             {config.resultValue}
                         </div>
 
                         {config.negotiable && (
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] sm:text-xs font-bold mb-4 uppercase tracking-wide">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[10px] sm:text-xs font-bold mb-4 uppercase tracking-wide">
                                 <FaMagic className="w-3 h-3" /> Flexible & Negotiable
                             </div>
                         )}
 
                         {config.summary && (
-                            <p className="text-zinc-400 text-sm sm:text-base mb-6 max-w-md mx-auto leading-relaxed">
+                            <p className="text-slate-600 dark:text-zinc-400 text-sm sm:text-base mb-6 max-w-md mx-auto leading-relaxed">
                                 {config.summary}
                             </p>
                         )}
@@ -225,14 +225,14 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                                 placeholder="Your Name"
                                 value={clientName}
                                 onChange={(e) => setClientName(e.target.value)}
-                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 text-sm"
+                                className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 text-sm"
                             />
                             <input
                                 type="email"
                                 placeholder="Your Email"
                                 value={clientEmail}
                                 onChange={(e) => setClientEmail(e.target.value)}
-                                className="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 text-sm"
+                                className="w-full bg-slate-100 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-zinc-500 focus:outline-none focus:border-blue-500/50 text-sm"
                             />
                         </div>
 
@@ -240,13 +240,13 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
                             <button
                                 onClick={handleProceed}
                                 disabled={!clientName || !clientEmail}
-                                className="w-full bg-white text-black font-bold py-3 sm:py-4 rounded-xl hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] text-sm sm:text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-slate-900 dark:bg-white text-white dark:text-black font-bold py-3 sm:py-4 rounded-xl hover:bg-slate-800 dark:hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] text-sm sm:text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 Discuss This Quote <FaArrowRight className="w-3 h-3" />
                             </button>
                             <button
                                 onClick={() => setStep('input')}
-                                className="text-zinc-500 text-xs sm:text-sm hover:text-white transition-colors py-2"
+                                className="text-slate-500 dark:text-zinc-500 text-xs sm:text-sm hover:text-slate-900 dark:hover:text-white transition-colors py-2"
                             >
                                 Recalculate
                             </button>

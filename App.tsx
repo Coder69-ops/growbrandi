@@ -9,6 +9,7 @@ import FloatingActionButtons from './components/FloatingActionButtons';
 import Footer from './components/Footer';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
 import { SERVICES } from './constants';
+import { ThemeProvider } from './components/ThemeContext';
 
 // Lazy load components
 import { HomePage } from './components/Hero';
@@ -357,9 +358,11 @@ ${servicesDetails}
 function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <AppContent />
-      </BrowserRouter>
+      <ThemeProvider>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AppContent />
+        </BrowserRouter>
+      </ThemeProvider>
     </HelmetProvider>
   );
 }

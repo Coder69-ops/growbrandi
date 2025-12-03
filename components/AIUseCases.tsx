@@ -14,27 +14,27 @@ import AILoader from './AILoader';
 
 const InputField = ({ label, ...props }: any) => (
   <div className="space-y-2">
-    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
+    <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
     <input
       {...props}
-      className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+      className="w-full bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
     />
   </div>
 );
 
 const SelectField = ({ label, options, ...props }: any) => (
   <div className="space-y-2">
-    <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
+    <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
     <div className="relative">
       <select
         {...props}
-        className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+        className="w-full bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
       >
         {options.map((opt: any) => (
-          <option key={opt.value} value={opt.value} className="bg-zinc-900">{opt.label}</option>
+          <option key={opt.value} value={opt.value} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">{opt.label}</option>
         ))}
       </select>
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-zinc-500">
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
       </div>
     </div>
@@ -47,7 +47,7 @@ const OptionButton = ({ selected, onClick, children, colorClass = 'bg-blue-600' 
     onClick={onClick}
     className={`text-xs font-medium px-4 py-2 rounded-full transition-all duration-300 border ${selected
       ? `${colorClass} text-white border-transparent shadow-lg shadow-blue-500/20`
-      : 'bg-zinc-800/50 text-zinc-400 border-white/5 hover:bg-zinc-700 hover:text-white'
+      : 'bg-slate-100 dark:bg-zinc-800/50 text-slate-600 dark:text-zinc-400 border-slate-200 dark:border-white/5 hover:bg-slate-200 dark:hover:bg-zinc-700 hover:text-slate-900 dark:hover:text-white'
       }`}
   >
     {children}
@@ -58,11 +58,11 @@ const ResultCard = ({ title, children, color = "blue" }: any) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`bg-zinc-900/80 backdrop-blur-xl border border-${color}-500/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden`}
+    className={`bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-slate-200 dark:border-${color}-500/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden`}
   >
     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-${color}-500 to-transparent`} />
-    <h3 className={`text-xl font-bold text-white mb-6 flex items-center gap-2`}>
-      <span className={`text-${color}-400`}>AI Analysis:</span> {title}
+    <h3 className={`text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2`}>
+      <span className={`text-${color}-500 dark:text-${color}-400`}>AI Analysis:</span> {title}
     </h3>
     {children}
   </motion.div>
@@ -215,27 +215,27 @@ const ProjectEstimator = () => {
         {estimation && (
           <ResultCard title="Project Estimation">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
-                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Estimated Cost</p>
-                <p className="text-2xl font-bold text-white">{estimation.estimatedCost}</p>
+              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
+                <p className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-1">Estimated Cost</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-white">{estimation.estimatedCost}</p>
               </div>
-              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
-                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Timeline</p>
-                <p className="text-2xl font-bold text-white">{estimation.estimatedTimeline}</p>
+              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
+                <p className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-1">Timeline</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-white">{estimation.estimatedTimeline}</p>
               </div>
             </div>
 
             {estimation.costBreakdown && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Cost Breakdown</h4>
-                <div className="bg-zinc-800/50 rounded-xl overflow-hidden border border-white/5">
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Cost Breakdown</h4>
+                <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5">
                   {estimation.costBreakdown.map((item: any, idx: number) => (
-                    <div key={idx} className="flex justify-between items-center p-3 border-b border-white/5 last:border-0">
+                    <div key={idx} className="flex justify-between items-center p-3 border-b border-slate-200 dark:border-white/5 last:border-0">
                       <div>
                         <p className="text-sm font-medium text-white">{item.service}</p>
                         <p className="text-xs text-zinc-500">{item.description}</p>
                       </div>
-                      <span className="text-sm font-bold text-blue-400">{item.cost}</span>
+                      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{item.cost}</span>
                     </div>
                   ))}
                 </div>
@@ -244,10 +244,10 @@ const ProjectEstimator = () => {
 
             {estimation.potentialChallenges && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Potential Challenges & Solutions</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Potential Challenges & Solutions</h4>
                 <ul className="space-y-2">
                   {estimation.potentialChallenges.map((challenge: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300">
                       <span className="text-yellow-500 mt-0.5">•</span>
                       <span>{challenge}</span>
                     </li>
@@ -258,10 +258,10 @@ const ProjectEstimator = () => {
 
             {estimation.recommendations && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Recommendations</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Recommendations</h4>
                 <ul className="space-y-2">
                   {estimation.recommendations.map((rec: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300">
                       <FaCheck className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" />
                       <span>{rec}</span>
                     </li>
@@ -289,7 +289,7 @@ const ProjectEstimator = () => {
                   userInfo: { name: formData.name, email: formData.email }
                 }
               })}
-              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+              className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-white rounded-xl transition-colors border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 font-semibold"
             >
               Book Consultation <FaArrowRight className="w-4 h-4" />
             </button>
@@ -443,9 +443,9 @@ const ServiceRecommender = () => {
           <ResultCard title="Recommended Services" color="indigo">
             <div className="space-y-4 mb-6">
               {recommendations.priorityServices?.map((service: any, idx: number) => (
-                <div key={idx} className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+                <div key={idx} className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
                   <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-white">{service.service}</h4>
+                    <h4 className="font-bold text-slate-900 dark:text-white">{service.service}</h4>
                     <span className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full ${service.priority === 'High' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'
                       }`}>
                       {service.priority}
@@ -462,16 +462,16 @@ const ServiceRecommender = () => {
 
             {recommendations.strategicPlan && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Strategic Implementation Plan</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Strategic Implementation Plan</h4>
                 <div className="space-y-4">
                   {recommendations.strategicPlan.map((phase: any, idx: number) => (
                     <div key={idx} className="relative pl-6 border-l-2 border-indigo-500/30">
-                      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-zinc-900 border-2 border-indigo-500" />
+                      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-zinc-900 border-2 border-indigo-500" />
                       <div className="flex justify-between items-center mb-1">
                         <h5 className="font-bold text-indigo-400 text-sm">{phase.phase}</h5>
-                        <span className="text-xs text-zinc-500">{phase.duration}</span>
+                        <span className="text-xs text-slate-500 dark:text-zinc-500">{phase.duration}</span>
                       </div>
-                      <ul className="list-disc list-inside text-xs text-zinc-400 space-y-1">
+                      <ul className="list-disc list-inside text-xs text-slate-500 dark:text-zinc-400 space-y-1">
                         {phase.activities.map((activity: string, aIdx: number) => (
                           <li key={aIdx}>{activity}</li>
                         ))}
@@ -487,7 +487,7 @@ const ServiceRecommender = () => {
                 <h4 className="font-bold text-indigo-400 mb-2 text-sm uppercase tracking-wider">Expected Outcomes</h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {recommendations.expectedResults.map((result: string, idx: number) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm text-zinc-300">
+                    <div key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-zinc-300">
                       <FaChartLine className="w-3 h-3 text-indigo-400" />
                       <span>{result}</span>
                     </div>
@@ -504,7 +504,7 @@ const ServiceRecommender = () => {
                   userInfo: { name: formData.name, email: formData.email }
                 }
               })}
-              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+              className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-white rounded-xl transition-colors border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 font-semibold"
             >
               Start Projects <FaArrowRight className="w-4 h-4" />
             </button>
@@ -642,8 +642,8 @@ const BusinessGrowthAnalyzer = () => {
         {loading && <AILoader />}
         {analysis && (
           <ResultCard title="Growth Analysis" color="purple">
-            <div className="bg-zinc-800/50 rounded-xl p-6 border border-white/5 mb-6 text-center">
-              <p className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Growth Potential</p>
+            <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-6 border border-slate-200 dark:border-white/5 mb-6 text-center">
+              <p className="text-xs text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-2">Growth Potential</p>
               <p className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
                 {analysis.growthPotential}
               </p>
@@ -652,11 +652,11 @@ const BusinessGrowthAnalyzer = () => {
             {analysis.predictions && (
               <div className="grid grid-cols-3 gap-4 mb-6">
                 {['sixMonths', 'oneYear', 'threeYears'].map((period, idx) => (
-                  <div key={period} className="bg-zinc-800/50 rounded-xl p-3 border border-white/5 text-center">
-                    <p className="text-[10px] text-zinc-500 uppercase mb-1">
+                  <div key={period} className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-3 border border-slate-200 dark:border-white/5 text-center">
+                    <p className="text-[10px] text-slate-500 dark:text-zinc-500 uppercase mb-1">
                       {period === 'sixMonths' ? '6 Mo' : period === 'oneYear' ? '1 Yr' : '3 Yrs'}
                     </p>
-                    <p className="text-sm font-bold text-white truncate">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
                       {analysis.predictions[period]}
                     </p>
                   </div>
@@ -666,14 +666,14 @@ const BusinessGrowthAnalyzer = () => {
 
             {analysis.marketOpportunities && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Market Opportunities</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Market Opportunities</h4>
                 <div className="grid grid-cols-1 gap-3">
                   {analysis.marketOpportunities.map((opp: string, idx: number) => (
-                    <div key={idx} className="bg-zinc-800/30 rounded-lg p-3 border border-white/5 flex items-start gap-3">
+                    <div key={idx} className="bg-slate-100 dark:bg-zinc-800/30 rounded-lg p-3 border border-slate-200 dark:border-white/5 flex items-start gap-3">
                       <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 mt-0.5">
                         <FaLightbulb className="w-3 h-3" />
                       </div>
-                      <p className="text-sm text-zinc-300">{opp}</p>
+                      <p className="text-sm text-slate-600 dark:text-zinc-300">{opp}</p>
                     </div>
                   ))}
                 </div>
@@ -682,10 +682,10 @@ const BusinessGrowthAnalyzer = () => {
 
             {analysis.digitalGaps && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Digital Gaps to Address</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Digital Gaps to Address</h4>
                 <ul className="space-y-2">
                   {analysis.digitalGaps.map((gap: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-400">
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-500 dark:text-zinc-400">
                       <span className="text-red-400 mt-0.5">⚠</span>
                       <span>{gap}</span>
                     </li>
@@ -696,12 +696,12 @@ const BusinessGrowthAnalyzer = () => {
 
             {analysis.recommendedActions && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Strategic Action Plan</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Strategic Action Plan</h4>
                 <div className="space-y-3">
                   {analysis.recommendedActions.map((action: any, idx: number) => (
-                    <div key={idx} className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 rounded-xl p-4 border border-purple-500/20">
+                    <div key={idx} className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-500/20">
                       <div className="flex justify-between items-start mb-2">
-                        <h5 className="font-bold text-white text-sm">{action.action}</h5>
+                        <h5 className="font-bold text-slate-900 dark:text-white text-sm">{action.action}</h5>
                         <span className="text-xs text-purple-300 bg-purple-500/10 px-2 py-1 rounded-full">{action.timeframe}</span>
                       </div>
                       <p className="text-xs text-zinc-400 mb-2">Impact: <span className="text-white">{action.impact}</span></p>
@@ -720,7 +720,7 @@ const BusinessGrowthAnalyzer = () => {
                   userInfo: { name: formData.name, email: formData.email }
                 }
               })}
-              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+              className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-white rounded-xl transition-colors border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 font-semibold"
             >
               Discuss Strategy <FaArrowRight className="w-4 h-4" />
             </button>
@@ -856,11 +856,11 @@ const ConsultationPlanner = () => {
         {plan && (
           <ResultCard title="Consultation Plan" color="cyan">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
                 <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Session Type</p>
                 <p className="text-lg font-bold text-white">{plan.consultationType}</p>
               </div>
-              <div className="bg-zinc-800/50 rounded-xl p-4 border border-white/5">
+              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
                 <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Duration</p>
                 <p className="text-lg font-bold text-white">{plan.recommendedDuration}</p>
               </div>
@@ -868,10 +868,10 @@ const ConsultationPlanner = () => {
 
             {plan.keyTopics && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Key Topics</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Key Topics</h4>
                 <div className="flex flex-wrap gap-2">
                   {plan.keyTopics.map((topic: string, idx: number) => (
-                    <span key={idx} className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full border border-white/5">
+                    <span key={idx} className="text-xs bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 px-3 py-1 rounded-full border border-slate-200 dark:border-white/5">
                       {topic}
                     </span>
                   ))}
@@ -881,10 +881,10 @@ const ConsultationPlanner = () => {
 
             {plan.preparationItems && (
               <div className="mb-6">
-                <h4 className="font-bold text-white mb-3">Preparation Checklist</h4>
+                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Preparation Checklist</h4>
                 <ul className="space-y-2">
                   {plan.preparationItems.map((item: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-zinc-300">
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300">
                       <FaCheck className="w-3 h-3 text-cyan-400 mt-1 shrink-0" />
                       <span>{item}</span>
                     </li>
@@ -901,7 +901,7 @@ const ConsultationPlanner = () => {
                   userInfo: { name: formData.name, email: formData.email }
                 }
               })}
-              className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10 flex items-center justify-center gap-2 font-semibold"
+              className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-white rounded-xl transition-colors border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 font-semibold"
             >
               Book This Session <FaArrowRight className="w-4 h-4" />
             </button>
@@ -959,8 +959,8 @@ const AIUseCases = () => {
   };
 
   return (
-    <section className="py-24 bg-[#09090b] relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-[#09090b] to-[#09090b]" />
+    <section className="py-24 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-200/40 via-slate-50 to-slate-50 dark:from-blue-900/10 dark:via-[#09090b] dark:to-[#09090b]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
@@ -979,10 +979,10 @@ const AIUseCases = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-white mb-6"
+            className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6"
           >
             Accelerate Your Growth with <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
               Intelligent Tools
             </span>
           </motion.h2>
@@ -992,7 +992,7 @@ const AIUseCases = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-zinc-400 max-w-2xl mx-auto"
+            className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto"
           >
             Leverage our suite of AI tools to estimate projects, find services, and analyze your business potential instantly.
           </motion.p>
@@ -1016,7 +1016,7 @@ const AIUseCases = () => {
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02, y: -5 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative p-8 rounded-3xl bg-zinc-900/50 border border-white/5 hover:border-white/10 text-left transition-all overflow-hidden flex flex-col h-full"
+                  className="group relative p-8 rounded-3xl bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-white/10 text-left transition-all overflow-hidden flex flex-col h-full shadow-lg dark:shadow-none"
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
@@ -1028,21 +1028,21 @@ const AIUseCases = () => {
                       <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-${tool.color}-500 to-${tool.color}-600 flex items-center justify-center text-white shadow-lg shadow-${tool.color}-500/20 group-hover:scale-110 transition-transform duration-300`}>
                         {tool.icon}
                       </div>
-                      <div className={`px-3 py-1 rounded-full bg-${tool.color}-500/10 border border-${tool.color}-500/20 text-${tool.color}-400 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0`}>
+                      <div className={`px-3 py-1 rounded-full bg-${tool.color}-500/10 border border-${tool.color}-500/20 text-${tool.color}-600 dark:text-${tool.color}-400 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0`}>
                         Try Now
                       </div>
                     </div>
 
                     <div className="mb-auto">
-                      <h3 className="text-xl font-bold text-white mb-3 group-hover:text-${tool.color}-400 transition-colors">
+                      <h3 className={`text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-${tool.color}-600 dark:group-hover:text-${tool.color}-400 transition-colors`}>
                         {tool.title}
                       </h3>
-                      <p className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">
+                      <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed group-hover:text-slate-800 dark:group-hover:text-zinc-300 transition-colors">
                         {tool.description}
                       </p>
                     </div>
 
-                    <div className="mt-8 flex items-center gap-2 text-sm font-bold text-zinc-500 group-hover:text-white transition-colors">
+                    <div className={`mt-8 flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-zinc-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors`}>
                       <span>Launch Tool</span>
                       <FaArrowRight className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-${tool.color}-500`} />
                     </div>
@@ -1060,15 +1060,15 @@ const AIUseCases = () => {
             >
               <button
                 onClick={() => setActiveTool(null)}
-                className="flex items-center gap-2 text-zinc-400 hover:text-white mb-8 transition-colors group"
+                className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white mb-8 transition-colors group"
               >
-                <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-700 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-zinc-700 transition-colors shadow-sm dark:shadow-none">
                   <FaChevronLeft className="w-3 h-3" />
                 </div>
                 <span className="font-medium">Back to Tools</span>
               </button>
 
-              <div className="relative bg-zinc-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
+              <div className="relative bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl">
                 {renderActiveTool()}
               </div>
             </motion.div>

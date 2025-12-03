@@ -10,7 +10,7 @@ interface ChatMessageBubbleProps {
 }
 
 const UserAvatar = () => (
-  <div className="w-8 h-8 rounded-full bg-zinc-600 flex items-center justify-center text-zinc-300 flex-shrink-0">
+  <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-zinc-600 flex items-center justify-center text-slate-600 dark:text-zinc-300 flex-shrink-0">
     <FaUser className="w-5 h-5" />
   </div>
 );
@@ -36,7 +36,7 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
   const messageContainerClasses = isUser ? 'flex-row-reverse' : 'flex-row';
   const bubbleClasses = isUser
     ? 'bg-blue-600 text-white rounded-br-none'
-    : 'bg-zinc-700/80 text-zinc-200 rounded-bl-none';
+    : 'bg-white dark:bg-zinc-700/80 text-slate-700 dark:text-zinc-200 rounded-bl-none border border-slate-200 dark:border-transparent shadow-sm dark:shadow-none';
 
   if (!text && !isUser) {
     return (
@@ -55,13 +55,13 @@ const ChatMessageBubble: React.FC<ChatMessageBubbleProps> = ({ message }) => {
       <div
         className={`rounded-2xl p-4 max-w-lg lg:max-w-xl break-words ${bubbleClasses}`}
       >
-        <div className="prose prose-sm prose-invert max-w-none prose-p:mb-2 prose-p:last:mb-0 prose-headings:my-2 prose-ul:my-2 prose-ol:my-2 prose-a:text-cyan-400 prose-code:bg-zinc-800 prose-code:rounded-sm prose-code:px-1 prose-code:text-xs">
+        <div className="prose prose-sm dark:prose-invert max-w-none prose-p:mb-2 prose-p:last:mb-0 prose-headings:my-2 prose-ul:my-2 prose-ol:my-2 prose-a:text-blue-600 dark:prose-a:text-cyan-400 prose-code:bg-slate-100 dark:prose-code:bg-zinc-800 prose-code:rounded-sm prose-code:px-1 prose-code:text-xs prose-strong:text-slate-900 dark:prose-strong:text-white">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               a: ({ node, href, ...props }) => {
                 const isInternal = href?.startsWith('/');
-                const className = "text-cyan-300 font-bold underline decoration-cyan-500/50 hover:decoration-cyan-300 hover:text-white transition-all bg-cyan-900/20 px-1 rounded";
+                const className = "text-blue-600 dark:text-cyan-300 font-bold underline decoration-blue-500/50 dark:decoration-cyan-500/50 hover:decoration-blue-600 dark:hover:decoration-cyan-300 hover:text-blue-800 dark:hover:text-white transition-all bg-blue-50 dark:bg-cyan-900/20 px-1 rounded";
 
                 if (isInternal && href) {
                   return <Link to={href} className={className} {...props} />;

@@ -38,9 +38,9 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative overflow-hidden bg-luxury-black pt-12 md:pt-20 pb-8 md:pb-10 border-t border-white/5">
+    <footer className="relative overflow-hidden bg-slate-50 dark:bg-luxury-black pt-12 md:pt-20 pb-8 md:pb-10 border-t border-slate-200 dark:border-white/5 transition-colors duration-300">
       {/* Subtle Background Elements */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none opacity-20" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/5 dark:bg-white/5 rounded-full blur-3xl pointer-events-none opacity-20" />
       <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
                 className="w-32 h-8 lg:w-48 lg:h-12 object-contain"
               />
             </Link>
-            <p className="text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
+            <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
               {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
             </p>
 
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
               <div className="flex">
                 {[1, 2, 3, 4, 5].map(i => <FaStar key={i} className="w-4 h-4" />)}
               </div>
-              <span className="text-zinc-400 ml-2">Rated 5/5 by 50+ Clients</span>
+              <span className="text-slate-500 dark:text-zinc-400 ml-2">Rated 5/5 by 50+ Clients</span>
             </div>
 
             {/* Social Links */}
@@ -78,7 +78,7 @@ const Footer: React.FC = () => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-zinc-900 border border-white/5 flex items-center justify-center text-zinc-400 hover:bg-white hover:text-black transition-all duration-300"
+                  className="w-8 h-8 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
                   aria-label={platform}
                 >
                   <span className="sr-only">{platform}</span>
@@ -90,13 +90,13 @@ const Footer: React.FC = () => {
 
           {/* Services - Spans 1 col on mobile/tablet, 3 cols on desktop */}
           <div className="lg:col-span-3">
-            <h3 className="font-semibold text-white mb-4 md:mb-6">Services</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Services</h3>
             <ul className="space-y-2 md:space-y-3">
               {SERVICES.slice(0, 6).map((service) => (
                 <li key={service.title}>
                   <Link
                     to={`/services`}
-                    className="text-zinc-400 hover:text-white text-sm transition-colors duration-200 block font-light"
+                    className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {service.title}
                   </Link>
@@ -107,7 +107,7 @@ const Footer: React.FC = () => {
 
           {/* Company - Spans 1 col on mobile/tablet, 2 cols on desktop */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold text-white mb-4 md:mb-6">Company</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Company</h3>
             <ul className="space-y-2 md:space-y-3">
               {[
                 { name: 'About', path: '/about' },
@@ -121,7 +121,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-zinc-400 hover:text-white text-sm transition-colors duration-200 block font-light"
+                    className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {link.name}
                   </Link>
@@ -132,21 +132,21 @@ const Footer: React.FC = () => {
 
           {/* Contact - Spans full width on mobile, 3 cols on desktop */}
           <div className="sm:col-span-2 lg:col-span-3">
-            <h3 className="font-semibold text-white mb-4 md:mb-6">Contact</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Contact</h3>
             <ul className="space-y-3 md:space-y-4">
-              <li className="flex items-start gap-3 text-zinc-400 text-sm font-light">
-                <FaMapMarkerAlt className="w-4 h-4 text-white mt-0.5 shrink-0" />
+              <li className="flex items-start gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
+                <FaMapMarkerAlt className="w-4 h-4 text-slate-900 dark:text-white mt-0.5 shrink-0" />
                 <span>{CONTACT_INFO.address}</span>
               </li>
-              <li className="flex items-center gap-3 text-zinc-400 text-sm font-light">
-                <FaEnvelope className="w-4 h-4 text-white shrink-0" />
-                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-white transition-colors">
+              <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
+                <FaEnvelope className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
+                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {CONTACT_INFO.email}
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-zinc-400 text-sm font-light">
-                <FaPhone className="w-4 h-4 text-white shrink-0" />
-                <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-white transition-colors">
+              <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
+                <FaPhone className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
+                <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
                   {CONTACT_INFO.phone}
                 </a>
               </li>
@@ -155,14 +155,14 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <p className="text-cyan-600 text-sm">
+        <div className="border-t border-slate-200 dark:border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+          <p className="text-slate-500 dark:text-cyan-600 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-zinc-400 font-light">
-            <Link to="/legal/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
-            <Link to="/legal/terms-of-service" className="hover:text-white transition-colors">Terms</Link>
-            <Link to="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500 dark:text-zinc-400 font-light">
+            <Link to="/legal/privacy-policy" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy</Link>
+            <Link to="/legal/terms-of-service" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms</Link>
+            <Link to="/sitemap" className="hover:text-slate-900 dark:hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

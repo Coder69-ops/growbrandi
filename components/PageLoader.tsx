@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const PageLoader: React.FC = () => {
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-luxury-black/90 backdrop-blur-xl transition-all duration-500">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/90 dark:bg-luxury-black/90 backdrop-blur-xl transition-all duration-500">
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] animate-pulse-slow" />
@@ -29,7 +29,7 @@ const PageLoader: React.FC = () => {
                     <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full" />
 
                     {/* Brand Logo */}
-                    <div className="relative w-24 h-24 bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-white/10 flex items-center justify-center shadow-2xl overflow-hidden group">
+                    <div className="relative w-24 h-24 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-2xl overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
                         <img
                             src="/growbrandi-logo.png"
@@ -42,7 +42,7 @@ const PageLoader: React.FC = () => {
                 </motion.div>
 
                 {/* Sophisticated Loading Bar */}
-                <div className="w-48 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
+                <div className="w-48 h-1 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden relative">
                     <motion.div
                         className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500"
                         initial={{ x: '-100%' }}
@@ -64,11 +64,11 @@ const PageLoader: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                 >
-                    <span className="text-zinc-400 text-xs font-medium tracking-[0.2em] uppercase">Initializing</span>
+                    <span className="text-slate-500 dark:text-zinc-400 text-xs font-medium tracking-[0.2em] uppercase">Initializing</span>
                     <motion.span
                         animate={{ opacity: [0, 1, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
-                        className="text-blue-400 text-xs"
+                        className="text-blue-600 dark:text-blue-400 text-xs"
                     >
                         ●
                     </motion.span>

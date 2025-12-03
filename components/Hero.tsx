@@ -51,16 +51,16 @@ const HeroSection: React.FC = () => {
     };
 
     return (
-        <div className="relative min-h-screen w-full overflow-hidden bg-[#09090b] text-white pt-12 lg:pt-20">
+        <div className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white pt-12 lg:pt-20 transition-colors duration-300">
             {/* Enhanced Background Effects */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 {/* Architectural Grid Pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] dark:[mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
                 {/* Dynamic Mesh Gradients - Optimized for Mobile */}
-                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse hidden md:block" />
-                <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen hidden md:block" />
-                <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] mix-blend-screen hidden md:block" />
+                <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/10 dark:bg-blue-600/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse hidden md:block" />
+                <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 dark:bg-cyan-500/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen hidden md:block" />
+                <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full blur-[100px] mix-blend-multiply dark:mix-blend-screen hidden md:block" />
 
                 {/* Noise Texture Overlay */}
                 <div className="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" />
@@ -82,27 +82,27 @@ const HeroSection: React.FC = () => {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] w-fit mb-8 backdrop-blur-md hover:bg-white/[0.05] transition-colors cursor-default"
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/[0.03] dark:bg-white/[0.03] border border-slate-900/[0.08] dark:border-white/[0.08] w-fit mb-8 backdrop-blur-md hover:bg-slate-900/[0.05] dark:hover:bg-white/[0.05] transition-colors cursor-default"
                         >
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
-                            <span className="text-xs font-semibold text-slate-300 tracking-wider uppercase">Accepting New Clients for Q1</span>
+                            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 tracking-wider uppercase">Accepting New Clients for Q1</span>
                         </motion.div>
 
                         <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] mb-8 font-['Outfit']">
                             We Build <br />
                             <span className="relative inline-block">
                                 <span className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 blur-xl"></span>
-                                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 animate-text-shimmer bg-[length:200%_auto]">
+                                <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 animate-text-shimmer bg-[length:200%_auto]">
                                     Digital Empires
                                 </span>
                             </span> <br />
                             Growth, Content, & Tech.
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed mb-10 font-light border-l-2 border-white/10 pl-6">
+                        <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed mb-10 font-light border-l-2 border-slate-900/10 dark:border-white/10 pl-6">
                             From high-ROI ad campaigns and viral content to custom web development and expert virtual assistants, we provide the full-stack growth engine your business needs.
                         </p>
 
@@ -111,7 +111,7 @@ const HeroSection: React.FC = () => {
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => navigate('/contact')}
-                                className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
+                                className="group relative px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-lg overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:shadow-[0_0_40px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 <span className="relative z-10 flex items-center gap-2">
@@ -124,9 +124,9 @@ const HeroSection: React.FC = () => {
                                 whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => navigate('/portfolio')}
-                                className="px-8 py-4 rounded-full font-medium text-lg text-white border border-white/10 hover:border-white/30 backdrop-blur-sm transition-all flex items-center gap-3 group"
+                                className="px-8 py-4 rounded-full font-medium text-lg text-slate-900 dark:text-white border border-slate-900/10 dark:border-white/10 hover:border-slate-900/30 dark:hover:border-white/30 backdrop-blur-sm transition-all flex items-center gap-3 group"
                             >
-                                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                                <div className="w-8 h-8 rounded-full bg-slate-900/5 dark:bg-white/10 flex items-center justify-center group-hover:bg-slate-900/10 dark:group-hover:bg-white/20 transition-colors">
                                     <FaPlay className="w-3 h-3 ml-0.5" />
                                 </div>
                                 View Showreel
@@ -460,34 +460,34 @@ import LazySection from './LazySection';
 
 export const HomePage: React.FC = () => {
     return (
-        <div className="bg-[#09090b]">
+        <div className="bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
             <HeroSection />
 
-            <LazySection fallback={<div className="min-h-screen bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-screen bg-slate-50 dark:bg-[#09090b]" />}>
                 <ServicesPreview />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <SloganGenerator />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[600px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <AIUseCases />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[500px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[500px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <ProjectsPreview />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <TestimonialsSlider />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[600px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[600px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <TeamSection />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[400px] bg-[#09090b]" />}>
+            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <FAQ />
             </LazySection>
         </div>

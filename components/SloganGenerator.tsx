@@ -47,14 +47,14 @@ const SloganGenerator: React.FC = () => {
 
     return (
         <motion.section
-            className="py-24 px-4 relative overflow-hidden bg-luxury-black"
+            className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1, margin: "-100px" }}
             variants={containerVariants}
         >
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-luxury-black" />
+            <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
             {/* Removed overlay gradient for dark luxury theme */}
             <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
@@ -62,13 +62,13 @@ const SloganGenerator: React.FC = () => {
             <div className="container mx-auto max-w-5xl relative z-10">
                 <motion.div variants={itemVariants} className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
-                        <FaMagic className="w-4 h-4 text-blue-400" />
-                        <span className="text-sm font-medium text-blue-400">GROWBRANDI SMART TOOL</span>
+                        <FaMagic className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">GROWBRANDI SMART TOOL</span>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0 text-slate-900 dark:text-white">
                         Try Our <span className="text-gradient">AI Slogan Generator</span>
                     </h2>
-                    <p className="text-base sm:text-lg md:text-xl text-zinc-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+                    <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
                         Experience the power of AI in action! Enter a few keywords about your business
                         and watch our intelligent system craft compelling slogans tailored to your brand.
                     </p>
@@ -80,7 +80,7 @@ const SloganGenerator: React.FC = () => {
                 >
                     <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
                         <div className="flex-1">
-                            <label className="block text-sm font-semibold text-zinc-300 mb-3">
+                            <label className="block text-sm font-semibold text-slate-700 dark:text-zinc-300 mb-3">
                                 Enter Keywords
                             </label>
                             <input
@@ -88,7 +88,7 @@ const SloganGenerator: React.FC = () => {
                                 value={keywords}
                                 onChange={(e) => setKeywords(e.target.value)}
                                 placeholder="e.g., sustainable, innovative, coffee, community, growth"
-                                className="w-full bg-zinc-800/50 border border-zinc-600 rounded-2xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                                className="w-full bg-white dark:bg-zinc-800/50 border border-slate-300 dark:border-zinc-600 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                                 onKeyPress={(e) => e.key === 'Enter' && handleGenerate()}
                             />
                         </div>
@@ -142,15 +142,15 @@ const SloganGenerator: React.FC = () => {
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: i * 0.1 }}
-                                        className="group glass-effect p-6 rounded-2xl hover:bg-white/5 transition-all duration-300 cursor-pointer"
+                                        className="group glass-effect p-6 rounded-2xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all duration-300 cursor-pointer"
                                         whileHover={{ scale: 1.02 }}
                                     >
                                         <div className="flex items-center justify-between">
-                                            <p className="text-lg text-white font-medium flex-1">
+                                            <p className="text-lg text-slate-800 dark:text-white font-medium flex-1">
                                                 "{slogan}"
                                             </p>
-                                            <button className="opacity-0 group-hover:opacity-100 ml-4 p-2 rounded-lg hover:bg-blue-500/20 transition-all duration-200">
-                                                <FaCopy className="w-5 h-5 text-blue-400" />
+                                            <button className="opacity-0 group-hover:opacity-100 ml-4 p-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-all duration-200">
+                                                <FaCopy className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                             </button>
                                         </div>
                                     </motion.div>

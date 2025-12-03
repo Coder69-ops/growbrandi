@@ -81,7 +81,7 @@ const Logos3 = ({
     return (
         <section className="py-4 w-full">
             <div className="container flex flex-col items-center text-center mb-10">
-                <h1 className="text-lg font-bold text-pretty md:text-2xl lg:text-3xl text-white/80">
+                <h1 className="text-lg font-bold text-pretty md:text-2xl lg:text-3xl text-slate-600 dark:text-white/80">
                     {heading}
                 </h1>
             </div>

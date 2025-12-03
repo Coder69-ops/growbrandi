@@ -35,7 +35,7 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
             {[...Array(5)].map((_, index) => (
                 <FaStar
                     key={index}
-                    className={`w-5 h-5 ${index < rating ? 'text-yellow-400' : 'text-zinc-600'}`}
+                    className={`w-5 h-5 ${index < rating ? 'text-yellow-400' : 'text-slate-300 dark:text-zinc-600'}`}
                 />
             ))}
         </div>
@@ -45,21 +45,21 @@ const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
 // --- Enhanced ProjectCard Component ---
 const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project) => void }> = ({ project, onViewDetails }) => (
     <motion.div
-        className="glass-effect rounded-3xl overflow-hidden group relative border border-white/5"
+        className="glass-effect rounded-3xl overflow-hidden group relative border border-slate-200 dark:border-white/5 bg-white dark:bg-zinc-900"
         variants={itemVariants}
         whileHover={{ y: -12, scale: 1.03, transition: { duration: 0.4 } }}
     >
         {/* Featured Badge */}
         {project.rating >= 4.9 && (
             <div className="absolute top-4 right-4 z-20">
-                <div className="bg-white text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 tracking-wider">
-                    <FaStar className="w-3 h-3" />
+                <div className="bg-white text-black px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 tracking-wider shadow-lg">
+                    <FaStar className="w-3 h-3 text-yellow-500" />
                     FEATURED
                 </div>
             </div>
         )}
 
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden h-64">
             <img
                 src={project.imageUrl}
                 alt={project.title}
@@ -82,7 +82,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             {/* Category Badge */}
             <div className="absolute bottom-4 left-4">
-                <span className="bg-blue-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
+                <span className="bg-blue-600/90 dark:bg-blue-500/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                     {project.category}
                 </span>
             </div>
@@ -90,7 +90,7 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
             {/* Completion Time */}
             {project.completionTime && (
                 <div className="absolute bottom-4 right-4">
-                    <span className="bg-zinc-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm flex items-center gap-2">
+                    <span className="bg-slate-900/90 dark:bg-zinc-900/90 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm flex items-center gap-2 shadow-lg">
                         <FaClock className="w-4 h-4" aria-hidden="true" />
                         {project.completionTime}
                     </span>
@@ -101,50 +101,55 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
         <div className="p-8">
             <div className="flex justify-between items-start mb-6">
                 <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white group-hover:text-white transition-colors duration-300 font-heading tracking-tight">
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 font-heading tracking-tight">
                         {project.title}
                     </h3>
                     {project.client && (
                         <div className="flex items-center gap-2 mb-3">
-                            <FaUser className="w-4 h-4 text-blue-400" aria-hidden="true" />
-                            <p className="text-blue-400 font-medium">{project.client}</p>
+                            <FaUser className="w-4 h-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+                            <p className="text-blue-600 dark:text-blue-400 font-medium">{project.client}</p>
                         </div>
                     )}
                 </div>
                 <div className="flex flex-col items-end">
                     <StarRating rating={project.rating} />
-                    <span className="text-yellow-400 text-sm font-medium mt-1">{project.rating}</span>
+                    <span className="text-yellow-500 dark:text-yellow-400 text-sm font-medium mt-1">{project.rating}</span>
                 </div>
             </div>
 
-            <p className="text-zinc-400 leading-relaxed mb-6 font-light">{project.description}</p>
+            <p className="text-slate-600 dark:text-zinc-400 leading-relaxed mb-6 font-light line-clamp-3">{project.description}</p>
 
             {project.technologies && (
                 <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
                         <FaCode className="w-4 h-4" />
                         Technologies
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech, index) => (
-                            <span key={index} className="bg-zinc-800/50 text-zinc-300 px-3 py-2 rounded-lg text-sm font-medium border border-white/10 hover:border-white/30 transition-colors">
+                        {project.technologies.slice(0, 4).map((tech, index) => (
+                            <span key={index} className="bg-slate-100 dark:bg-zinc-800/50 text-slate-600 dark:text-zinc-300 px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 dark:border-white/10 hover:border-blue-500/30 dark:hover:border-white/30 transition-colors">
                                 {tech}
                             </span>
                         ))}
+                        {project.technologies.length > 4 && (
+                            <span className="bg-slate-100 dark:bg-zinc-800/50 text-slate-600 dark:text-zinc-300 px-3 py-2 rounded-lg text-sm font-medium border border-slate-200 dark:border-white/10">
+                                +{project.technologies.length - 4}
+                            </span>
+                        )}
                     </div>
                 </div>
             )}
 
             {project.results && (
                 <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
+                    <h4 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 mb-3 uppercase tracking-wide flex items-center gap-2">
                         <FaChartLine className="w-4 h-4" />
                         Key Results
                     </h4>
                     <div className="space-y-2">
-                        {project.results.slice(0, 3).map((result, index) => (
-                            <div key={index} className="flex items-center text-sm text-zinc-400">
-                                <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 flex-shrink-0" />
+                        {project.results.slice(0, 2).map((result, index) => (
+                            <div key={index} className="flex items-center text-sm text-slate-600 dark:text-zinc-400">
+                                <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full mr-3 flex-shrink-0" />
                                 {result}
                             </div>
                         ))}
@@ -154,11 +159,11 @@ const ProjectCard: React.FC<{ project: Project; onViewDetails: (project: Project
 
             <motion.button
                 onClick={() => onViewDetails(project)}
-                className="w-full border border-zinc-600 text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-400 hover:text-blue-400 transition-all duration-300 shadow-lg hover:shadow-xl hover:bg-zinc-200 flex items-center justify-center gap-2 group/btn"
+                className="w-full border border-slate-200 dark:border-zinc-600 text-slate-700 dark:text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all duration-300 shadow-sm hover:shadow-md hover:bg-slate-50 dark:hover:bg-zinc-800 flex items-center justify-center gap-2 group/btn"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
             >
-                <span>Learn More & Get Started</span>
+                <span>View Case Study</span>
                 <FaArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
             </motion.button>
         </div>
@@ -178,11 +183,11 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
             onClick={onClose}
         >
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl border border-white/10"
+                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-zinc-900"
                 initial={{ scale: 0.8, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 50 }}
@@ -211,11 +216,11 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                     {/* Project Info Overlay */}
                     <div className="absolute bottom-6 left-6 right-6">
                         <div className="flex items-center gap-3 mb-4">
-                            <span className="bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                            <span className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                                 {project.category}
                             </span>
                             {project.completionTime && (
-                                <span className="bg-zinc-900/80 text-white px-4 py-2 rounded-full text-sm">
+                                <span className="bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm border border-white/10">
                                     {project.completionTime}
                                 </span>
                             )}
@@ -233,16 +238,16 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                         {/* Project Details */}
                         <div className="space-y-8">
                             <div>
-                                <h3 className="text-2xl font-bold text-white mb-4 font-heading">Project Overview</h3>
-                                <p className="text-zinc-400 mb-8 flex-grow leading-relaxed text-lg font-light">{project.description}</p>
+                                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">Project Overview</h3>
+                                <p className="text-slate-600 dark:text-zinc-400 mb-8 flex-grow leading-relaxed text-lg font-light">{project.description}</p>
                             </div>
 
                             {project.technologies && (
                                 <div>
-                                    <h3 className="text-xl font-semibold text-white mb-4 font-heading">Technologies Used</h3>
+                                    <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 font-heading">Technologies Used</h3>
                                     <div className="flex flex-wrap gap-3">
                                         {project.technologies.map((tech, index) => (
-                                            <span key={index} className="bg-zinc-800 text-zinc-300 px-4 py-2 rounded-lg font-medium border border-zinc-700">
+                                            <span key={index} className="bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 px-4 py-2 rounded-lg font-medium border border-slate-200 dark:border-zinc-700">
                                                 {tech}
                                             </span>
                                         ))}
@@ -250,16 +255,16 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                                 </div>
                             )}
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between p-6 bg-slate-50 dark:bg-zinc-800/50 rounded-2xl border border-slate-200 dark:border-white/5">
                                 <div>
-                                    <h3 className="text-xl font-semibold text-white mb-2 font-heading">Client Rating</h3>
+                                    <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 font-heading">Client Rating</h3>
                                     <div className="flex items-center gap-3">
                                         <StarRating rating={project.rating} />
-                                        <span className="text-yellow-400 font-bold text-xl">{project.rating}</span>
+                                        <span className="text-yellow-500 dark:text-yellow-400 font-bold text-xl">{project.rating}</span>
                                     </div>
                                 </div>
                                 <motion.button
-                                    className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-600 transition-all duration-300"
+                                    className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
@@ -272,19 +277,19 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                         <div className="space-y-8">
                             {project.results && (
                                 <div>
-                                    <h3 className="text-2xl font-bold text-white mb-6 font-heading">Results & Impact</h3>
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 font-heading">Results & Impact</h3>
                                     <div className="space-y-4">
                                         {project.results.map((result, index) => (
                                             <motion.div
                                                 key={index}
-                                                className="glass-effect p-4 rounded-xl border border-white/5"
+                                                className="glass-effect p-4 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/5"
                                                 initial={{ opacity: 0, x: 20 }}
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: index * 0.1 }}
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-3 h-3 bg-blue-400 rounded-full" />
-                                                    <span className="text-zinc-300 font-medium">{result}</span>
+                                                    <div className="w-3 h-3 bg-blue-600 dark:bg-blue-400 rounded-full" />
+                                                    <span className="text-slate-700 dark:text-zinc-300 font-medium">{result}</span>
                                                 </div>
                                             </motion.div>
                                         ))}
@@ -293,20 +298,20 @@ const ProjectModal: React.FC<{ project: Project | null; isOpen: boolean; onClose
                             )}
 
                             {/* Additional Project Info */}
-                            <div className="glass-effect p-6 rounded-xl border border-white/5">
-                                <h3 className="text-xl font-semibold text-white mb-4 font-heading">Project Timeline</h3>
+                            <div className="glass-effect p-6 rounded-xl border border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-white/5">
+                                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-4 font-heading">Project Timeline</h3>
                                 <div className="space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-zinc-400">Planning & Strategy</span>
-                                        <span className="text-blue-400 font-medium">Week 1-2</span>
+                                    <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-2">
+                                        <span className="text-slate-500 dark:text-zinc-400">Planning & Strategy</span>
+                                        <span className="text-blue-600 dark:text-blue-400 font-medium">Week 1-2</span>
+                                    </div>
+                                    <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/5 pb-2">
+                                        <span className="text-slate-500 dark:text-zinc-400">Design & Development</span>
+                                        <span className="text-blue-600 dark:text-blue-400 font-medium">Week 3-6</span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-zinc-400">Design & Development</span>
-                                        <span className="text-blue-400 font-medium">Week 3-6</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-zinc-400">Testing & Launch</span>
-                                        <span className="text-blue-400 font-medium">Week 7-8</span>
+                                        <span className="text-slate-500 dark:text-zinc-400">Testing & Launch</span>
+                                        <span className="text-blue-600 dark:text-blue-400 font-medium">Week 7-8</span>
                                     </div>
                                 </div>
                             </div>
@@ -342,129 +347,124 @@ export const ProjectsPage: React.FC = () => {
 
     return (
         <>
-            <section className="py-24 px-4 relative overflow-hidden bg-luxury-black">
+            <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300">
                 {/* Background Elements */}
-                <div className="absolute inset-0 bg-gradient-to-br from-zinc-900/90 to-zinc-800/70" />
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-                <div className="glass-effect p-8 h-full relative border-white/5">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-zinc-500/5 rounded-full translate-y-12 -translate-x-12 blur-2xl" />
-                    <div className="absolute top-2/3 left-2/3 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-slate-50 to-slate-50 dark:from-zinc-900/90 dark:via-luxury-black dark:to-luxury-black" />
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
 
-                    <div className="container mx-auto max-w-7xl relative z-10">
-                        {/* Enhanced Header */}
-                        <div className="text-center mb-20">
-                            <motion.div
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8 }}
-                            >
-                                <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8 border border-white/10">
-                                    <FaBriefcase className="w-5 h-5 text-blue-400" />
-                                    <span className="text-sm font-bold text-blue-400 tracking-wide">OUR PORTFOLIO</span>
-                                </div>
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight font-heading">
-                                    Projects That <span className="text-gradient">Drive Results</span>
-                                </h1>
-                                <p className="text-xl md:text-2xl text-zinc-300 max-w-4xl mx-auto leading-relaxed font-light">
-                                    Discover how we've helped businesses achieve extraordinary growth through
-                                    <span className="text-blue-400 font-semibold"> innovative digital solutions</span> and
-                                    <span className="text-blue-400 font-semibold"> strategic thinking</span>.
-                                </p>
-                            </motion.div>
-                        </div>
-
-                        {/* Filter and Sort Controls */}
+                <div className="container mx-auto max-w-7xl relative z-10">
+                    {/* Enhanced Header */}
+                    <div className="text-center mb-20">
                         <motion.div
-                            className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12"
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.6 }}
+                            transition={{ duration: 0.8 }}
                         >
-                            {/* Category Filter */}
-                            <div className="flex flex-wrap gap-3">
-                                {categories.map((category) => (
-                                    <button
-                                        key={category}
-                                        onClick={() => setFilter(category)}
-                                        className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${filter === category
-                                            ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white'
-                                            : 'glass-effect text-zinc-300 hover:text-white hover:bg-zinc-700/50 border border-white/5'
-                                            }`}
-                                    >
-                                        {category}
-                                    </button>
-                                ))}
+                            <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-3 mb-8 border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-white/5">
+                                <FaBriefcase className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">OUR PORTFOLIO</span>
                             </div>
-
-                            {/* Sort Options */}
-                            <div className="flex items-center gap-4">
-                                <span className="text-zinc-400 font-medium">Sort by:</span>
-                                <select
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                    aria-label="Sort projects by"
-                                    className="glass-effect text-white px-4 py-2 rounded-lg border border-zinc-600 focus:border-blue-400 focus:outline-none bg-zinc-900"
-                                >
-                                    <option value="rating">Rating</option>
-                                    <option value="title">Title</option>
-                                </select>
-                            </div>
-                        </motion.div>
-
-                        {/* Projects Grid */}
-                        <motion.div
-                            className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
-                            variants={containerVariants}
-                            initial="hidden"
-                            animate="visible"
-                        >
-                            <AnimatePresence>
-                                {filteredProjects.map((project) => (
-                                    <ProjectCard
-                                        key={project.title}
-                                        project={project}
-                                        onViewDetails={handleViewDetails}
-                                    />
-                                ))}
-                            </AnimatePresence>
-                        </motion.div>
-
-                        {/* Call to Action */}
-                        <motion.div
-                            className="text-center"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6, duration: 0.6 }}
-                        >
-                            <div className="glass-effect rounded-3xl p-12 max-w-4xl mx-auto border border-white/5">
-                                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 font-heading">
-                                    Ready to Start Your <span className="text-gradient">Next Project?</span>
-                                </h2>
-                                <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
-                                    Let's discuss how we can help you achieve similar results with a custom digital solution
-                                    tailored to your business needs.
-                                </p>
-                                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                    <motion.button
-                                        className="bg-gradient-to-r from-blue-500 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-600 hover:to-blue-600 transition-all duration-300"
-                                        whileHover={{ scale: 1.02, y: -2 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        Start Your Project
-                                    </motion.button>
-                                    <motion.button
-                                        className="glass-effect text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-zinc-700/50 transition-all duration-300 border border-zinc-600 hover:border-blue-400"
-                                        whileHover={{ scale: 1.02, y: -2 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        Schedule Consultation
-                                    </motion.button>
-                                </div>
-                            </div>
+                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight font-heading text-slate-900 dark:text-white">
+                                Projects That <span className="text-gradient">Drive Results</span>
+                            </h1>
+                            <p className="text-xl md:text-2xl text-slate-600 dark:text-zinc-300 max-w-4xl mx-auto leading-relaxed font-light">
+                                Discover how we've helped businesses achieve extraordinary growth through
+                                <span className="text-blue-600 dark:text-blue-400 font-semibold"> innovative digital solutions</span> and
+                                <span className="text-blue-600 dark:text-blue-400 font-semibold"> strategic thinking</span>.
+                            </p>
                         </motion.div>
                     </div>
+
+                    {/* Filter and Sort Controls */}
+                    <motion.div
+                        className="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4, duration: 0.6 }}
+                    >
+                        {/* Category Filter */}
+                        <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+                            {categories.map((category) => (
+                                <button
+                                    key={category}
+                                    onClick={() => setFilter(category)}
+                                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 ${filter === category
+                                        ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg'
+                                        : 'glass-effect text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-zinc-700/50 border border-slate-200 dark:border-white/5'
+                                        }`}
+                                >
+                                    {category}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Sort Options */}
+                        <div className="flex items-center gap-4">
+                            <span className="text-slate-600 dark:text-zinc-400 font-medium">Sort by:</span>
+                            <select
+                                value={sortBy}
+                                onChange={(e) => setSortBy(e.target.value)}
+                                aria-label="Sort projects by"
+                                className="glass-effect text-slate-900 dark:text-white px-4 py-2 rounded-lg border border-slate-200 dark:border-zinc-600 focus:border-blue-500 focus:outline-none bg-white/50 dark:bg-zinc-900"
+                            >
+                                <option value="rating">Rating</option>
+                                <option value="title">Title</option>
+                            </select>
+                        </div>
+                    </motion.div>
+
+                    {/* Projects Grid */}
+                    <motion.div
+                        className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        <AnimatePresence>
+                            {filteredProjects.map((project) => (
+                                <ProjectCard
+                                    key={project.title}
+                                    project={project}
+                                    onViewDetails={handleViewDetails}
+                                />
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    {/* Call to Action */}
+                    <motion.div
+                        className="text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6, duration: 0.6 }}
+                    >
+                        <div className="glass-effect rounded-3xl p-12 max-w-4xl mx-auto border border-slate-200 dark:border-white/5 bg-white/50 dark:bg-white/5">
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 font-heading">
+                                Ready to Start Your <span className="text-gradient">Next Project?</span>
+                            </h2>
+                            <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
+                                Let's discuss how we can help you achieve similar results with a custom digital solution
+                                tailored to your business needs.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <motion.button
+                                    className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-blue-600 transition-all duration-300 shadow-lg"
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    Start Your Project
+                                </motion.button>
+                                <motion.button
+                                    className="glass-effect text-slate-700 dark:text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-100 dark:hover:bg-zinc-700/50 transition-all duration-300 border border-slate-200 dark:border-zinc-600 hover:border-blue-500 dark:hover:border-blue-400"
+                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    Schedule Consultation
+                                </motion.button>
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 

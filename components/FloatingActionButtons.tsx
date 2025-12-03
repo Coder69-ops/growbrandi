@@ -45,11 +45,11 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
                                 initial={{ opacity: 0, x: 10, scale: 0.9 }}
                                 animate={{ opacity: 1, x: 0, scale: 1 }}
                                 exit={{ opacity: 0, x: 10, scale: 0.9 }}
-                                className="absolute right-full mr-4 px-3 py-1.5 bg-zinc-900/90 backdrop-blur-md border border-white/10 rounded-lg text-sm text-white font-medium whitespace-nowrap shadow-xl"
+                                className="absolute right-full mr-4 px-3 py-1.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-lg text-sm text-slate-900 dark:text-white font-medium whitespace-nowrap shadow-xl"
                             >
                                 {btn.label}
                                 {/* Arrow */}
-                                <div className="absolute top-1/2 -right-1 w-2 h-2 bg-zinc-900/90 border-t border-r border-white/10 transform rotate-45 -translate-y-1/2" />
+                                <div className="absolute top-1/2 -right-1 w-2 h-2 bg-white/90 dark:bg-zinc-900/90 border-t border-r border-slate-200 dark:border-white/10 transform rotate-45 -translate-y-1/2" />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -62,7 +62,7 @@ const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
                         aria-label={btn.label}
                         className={`
               relative group p-4 rounded-full shadow-lg backdrop-blur-md 
-              border border-white/10 overflow-hidden
+              border border-white/20 dark:border-white/10 overflow-hidden
               ${btn.id === 'chat' && !btn.ready ? 'cursor-wait' : 'cursor-pointer'}
             `}
                         whileHover={{ scale: 1.1 }}

@@ -163,9 +163,9 @@ I would like to book this consultation.`;
     }
 
     const inputClasses = (fieldName: string) => `
-        w-full p-4 rounded-xl bg-zinc-900/50 border 
-        ${focusedField === fieldName ? 'border-blue-500/50 ring-2 ring-blue-500/20' : 'border-white/10'} 
-        focus:outline-none text-white transition-all duration-300 placeholder-zinc-400
+        w-full p-4 rounded-xl bg-white dark:bg-zinc-900/50 border 
+        ${focusedField === fieldName ? 'border-blue-500/50 ring-2 ring-blue-500/20' : 'border-slate-200 dark:border-white/10'} 
+        focus:outline-none text-slate-900 dark:text-white transition-all duration-300 placeholder-slate-400 dark:placeholder-zinc-400
     `;
 
     // Social Icon Mapping
@@ -181,9 +181,9 @@ I would like to book this consultation.`;
     };
 
     return (
-        <section id="contact" className="min-h-screen py-24 px-4 bg-luxury-black text-white relative overflow-hidden flex flex-col justify-center">
+        <section id="contact" className="min-h-screen py-24 px-4 bg-slate-50 dark:bg-luxury-black text-slate-900 dark:text-white relative overflow-hidden flex flex-col justify-center transition-colors duration-300">
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-luxury-black to-luxury-black pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-100/40 via-slate-50 to-slate-50 dark:from-blue-900/20 dark:via-luxury-black dark:to-luxury-black pointer-events-none transition-colors duration-300" />
             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
             <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
@@ -199,7 +199,7 @@ I would like to book this consultation.`;
                         Let's Build <br />
                         <span className="text-gradient">Something Epic</span>
                     </h1>
-                    <p className="text-xl text-zinc-400 mb-8 max-w-lg leading-relaxed">
+                    <p className="text-xl text-slate-600 dark:text-zinc-400 mb-8 max-w-lg leading-relaxed">
                         Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions.
                     </p>
 
@@ -220,18 +220,18 @@ I would like to book this consultation.`;
 
                     <div className="space-y-8 mb-12">
                         <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-blue-400 shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-blue-600 dark:text-blue-400 shrink-0 shadow-sm dark:shadow-none">
                                 <FaEnvelope className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white mb-1">Email Us</h3>
-                                <p className="text-zinc-400">{CONTACT_INFO.email}</p>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Email Us</h3>
+                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.email}</p>
                                 <p className="text-zinc-400 text-sm">Response within 24 hours</p>
                             </div>
                         </div>
 
                         <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-green-400 shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-green-600 dark:text-green-400 shrink-0 shadow-sm dark:shadow-none">
                                 <FaWhatsapp className="w-6 h-6" />
                             </div>
                             <div>
@@ -241,7 +241,7 @@ I would like to book this consultation.`;
                                     href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-green-400 text-sm font-medium hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
+                                    className="text-green-600 dark:text-green-400 text-sm font-medium hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
                                 >
                                     Chat on WhatsApp <FaArrowRight className="w-3 h-3" />
                                 </a>
@@ -249,7 +249,7 @@ I would like to book this consultation.`;
                         </div>
 
                         <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-blue-400 shrink-0">
+                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-blue-600 dark:text-blue-400 shrink-0 shadow-sm dark:shadow-none">
                                 <FaMapMarkerAlt className="w-5 h-5" />
                             </div>
                             <div>
@@ -264,7 +264,7 @@ I would like to book this consultation.`;
                         {Object.entries(CONTACT_INFO.social).map(([platform, url], idx) => {
                             const Icon = getSocialIcon(platform);
                             return (
-                                <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-zinc-800/50 flex items-center justify-center border border-white/5 text-zinc-400 hover:text-white hover:bg-zinc-700 transition-all duration-300">
+                                <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
                                     <Icon className="w-4 h-4" />
                                 </a>
                             );
@@ -279,7 +279,7 @@ I would like to book this consultation.`;
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="relative"
                 >
-                    <div className="glass-effect p-6 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+                    <div className="glass-effect p-6 md:p-10 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden">
                         {/* Decorative glow */}
                         <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -295,8 +295,8 @@ I would like to book this consultation.`;
                                     <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
                                         <FaCheckCircle className="w-12 h-12 text-blue-500" />
                                     </div>
-                                    <h3 className="text-3xl font-bold text-white mb-4 font-heading">Message Sent!</h3>
-                                    <p className="text-zinc-400 max-w-md mx-auto mb-8">
+                                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-4 font-heading">Message Sent!</h3>
+                                    <p className="text-slate-600 dark:text-zinc-400 max-w-md mx-auto mb-8">
                                         Thank you for reaching out. We have received your request and a confirmation email has been sent to your inbox. Our team will review your details and get back to you within 24 hours.
                                     </p>
                                     <button
@@ -328,7 +328,7 @@ I would like to book this consultation.`;
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="name" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
+                                            <label htmlFor="name" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
                                             <input
                                                 type="text"
                                                 id="name"
@@ -343,7 +343,7 @@ I would like to book this consultation.`;
                                             />
                                         </div>
                                         <div>
-                                            <label htmlFor="email" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
+                                            <label htmlFor="email" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
                                             <input
                                                 type="email"
                                                 id="email"
@@ -361,7 +361,7 @@ I would like to book this consultation.`;
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="service" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
+                                            <label htmlFor="service" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
                                             <select
                                                 id="service"
                                                 name="service"
@@ -373,11 +373,11 @@ I would like to book this consultation.`;
                                                 required
                                             >
                                                 <option value="" disabled>Select a service</option>
-                                                {serviceOptions.map(s => <option key={s} value={s} className="bg-zinc-900">{s}</option>)}
+                                                {serviceOptions.map(s => <option key={s} value={s} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">{s}</option>)}
                                             </select>
                                         </div>
                                         <div>
-                                            <label htmlFor="subject" className="block text-sm font-bold text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
+                                            <label htmlFor="subject" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
                                             <input
                                                 type="text"
                                                 id="subject"
@@ -395,7 +395,7 @@ I would like to book this consultation.`;
 
                                     <div>
                                         <div className="flex justify-between items-center mb-2">
-                                            <label htmlFor="message" className="block text-sm font-bold text-zinc-400 uppercase tracking-wider">Message</label>
+                                            <label htmlFor="message" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Message</label>
                                             <motion.button
                                                 type="button"
                                                 onClick={generateBrief}

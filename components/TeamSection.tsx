@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUsers, FaCode, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaCommentDots, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
+import { FaUsers, FaCode, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
 
 import { TEAM_MEMBERS, CONTACT_INFO } from '../constants';
 
@@ -28,14 +28,14 @@ const TeamSection: React.FC = () => {
 
     return (
         <motion.section
-            className="py-24 px-4 relative overflow-hidden"
+            className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0 }}
             variants={containerVariants}
         >
             {/* Background Elements */}
-            <div className="absolute inset-0 bg-luxury-black" />
+            <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
             <div className="absolute top-1/4 right-1/3 w-64 md:w-96 h-64 md:h-96 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/3 left-1/4 w-64 md:w-80 h-64 md:h-80 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute top-2/3 right-1/4 w-48 md:w-64 h-48 md:h-64 bg-purple-500/5 rounded-full blur-3xl" />
@@ -43,17 +43,17 @@ const TeamSection: React.FC = () => {
             <div className="container mx-auto max-w-7xl relative z-10">
                 {/* Section Header */}
                 <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
-                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
-                        <FaUsers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
-                        <span className="text-xs sm:text-sm font-bold text-blue-400 tracking-wide">OUR EXPERT TEAM</span>
-                        <FaCode className="w-5 h-5 text-blue-400" />
+                    <div className="inline-flex items-center gap-2 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                        <FaUsers className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
+                        <span className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">OUR EXPERT TEAM</span>
+                        <FaCode className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0 text-slate-900 dark:text-white">
                         Meet the <span className="text-gradient">Creative Minds</span> Behind Your Success
                     </h2>
-                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
+                    <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-zinc-300 max-w-5xl mx-auto leading-relaxed px-4 sm:px-0">
                         Our diverse team of experts brings together decades of experience in
-                        <span className="text-blue-400 font-semibold"> design, development, AI, and marketing</span> to
+                        <span className="text-blue-600 dark:text-blue-400 font-semibold"> design, development, AI, and marketing</span> to
                         deliver exceptional results that exceed expectations.
                     </p>
                 </motion.div>
@@ -74,7 +74,7 @@ const TeamSection: React.FC = () => {
                             whileTap={{ scale: 0.98 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <div className="glass-effect rounded-3xl p-6 md:p-8 h-full relative overflow-hidden">
+                            <div className="glass-effect rounded-3xl p-6 md:p-8 h-full relative overflow-hidden bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
                                 {/* Background Glow Effect */}
                                 <div className={`absolute inset-0 transition-all duration-500 ${hoveredMember === index
                                     ? 'bg-gradient-to-br from-blue-500/10 via-blue-500/10 to-purple-500/10'
@@ -97,7 +97,7 @@ const TeamSection: React.FC = () => {
                                                     loading="lazy"
                                                     width="300"
                                                     height="300"
-                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-zinc-700 group-hover:border-blue-400/50 transition-all duration-300"
+                                                    className="w-full h-full object-cover rounded-2xl shadow-xl border-4 border-slate-200 dark:border-zinc-700 group-hover:border-blue-400/50 transition-all duration-300"
                                                     onError={(e) => {
                                                         // Fallback to initials if image fails to load
                                                         e.currentTarget.style.display = 'none';
@@ -114,20 +114,20 @@ const TeamSection: React.FC = () => {
                                             </div>
 
                                             {/* Online Status Indicator */}
-                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-blue-400 rounded-full border-4 border-zinc-800 flex items-center justify-center">
+                                            <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-blue-400 rounded-full border-4 border-slate-50 dark:border-zinc-800 flex items-center justify-center">
                                                 <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
                                             </div>
                                         </div>
 
                                         {/* Member Info */}
                                         <div className="text-center mb-6">
-                                            <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-gradient transition-colors duration-300">
+                                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                                 {member.name}
                                             </h3>
-                                            <div className="text-blue-400 font-semibold text-lg mb-4">
+                                            <div className="text-blue-600 dark:text-blue-400 font-semibold text-lg mb-4">
                                                 {member.role}
                                             </div>
-                                            <p className="text-zinc-300 text-sm leading-relaxed">
+                                            <p className="text-slate-600 dark:text-zinc-300 text-sm leading-relaxed">
                                                 {member.description}
                                             </p>
                                         </div>
@@ -139,7 +139,7 @@ const TeamSection: React.FC = () => {
                                             {member.specialties.map((specialty, idx) => (
                                                 <motion.span
                                                     key={specialty}
-                                                    className="px-3 py-1 bg-zinc-700/50 text-zinc-300 text-xs font-medium rounded-full border border-zinc-600 group-hover:border-blue-400/50 group-hover:text-blue-400 transition-all duration-300"
+                                                    className="px-3 py-1 bg-slate-100 dark:bg-zinc-700/50 text-slate-600 dark:text-zinc-300 text-xs font-medium rounded-full border border-slate-200 dark:border-zinc-600 group-hover:border-blue-400/50 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-300"
                                                     initial={{ opacity: 0, scale: 0.8 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     transition={{ delay: idx * 0.1 }}
@@ -166,7 +166,7 @@ const TeamSection: React.FC = () => {
                                                 <motion.a
                                                     key={platform}
                                                     href={url}
-                                                    className="p-2 rounded-lg bg-zinc-700/50 text-zinc-400 hover:bg-blue-500/20 hover:text-blue-400 transition-all duration-300 group/social"
+                                                    className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-400 hover:bg-blue-500/20 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300 group/social"
                                                     whileHover={{ scale: 1.1, y: -2 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     aria-label={`${member.name} ${platform}`}
@@ -184,22 +184,20 @@ const TeamSection: React.FC = () => {
                     ))}
                 </motion.div>
 
-
-
                 {/* Call to Action */}
                 <motion.div variants={itemVariants} className="text-center">
-                    <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
-                        <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                    <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                        <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
                             Ready to Work with <span className="text-gradient">Our Amazing Team?</span>
                         </h3>
-                        <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                             Let's discuss your project and see how our expert team can help you achieve
                             your digital transformation goals.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <motion.button
                                 onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
-                                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 flex items-center justify-center gap-2"
+                                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -208,7 +206,7 @@ const TeamSection: React.FC = () => {
                             </motion.button>
                             <motion.button
                                 onClick={() => navigate('/portfolio')}
-                                className="bg-zinc-700 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-zinc-600 transition-all duration-300 flex items-center justify-center gap-2"
+                                className="bg-slate-200 dark:bg-zinc-700 text-slate-900 dark:text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-slate-300 dark:hover:bg-zinc-600 transition-all duration-300 flex items-center justify-center gap-2"
                                 whileHover={{ scale: 1.02, y: -2 }}
                                 whileTap={{ scale: 0.98 }}
                             >

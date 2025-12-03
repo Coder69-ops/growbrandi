@@ -38,7 +38,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
     return (
         <motion.div
-            className="group relative rounded-3xl overflow-hidden bg-zinc-900/40 border border-white/5 hover:border-blue-500/30 transition-all duration-500"
+            className="group relative rounded-3xl overflow-hidden bg-white dark:bg-zinc-900/40 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 transition-all duration-500 shadow-lg dark:shadow-none"
             variants={itemVariants}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -70,10 +70,10 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
             {/* Content Section */}
             <div className="p-8 relative z-20 -mt-12">
-                <div className="glass-effect p-6 rounded-2xl border border-white/5 shadow-xl backdrop-blur-xl">
+                <div className="glass-effect p-6 rounded-2xl border border-slate-200 dark:border-white/5 shadow-xl backdrop-blur-xl">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors font-heading">
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-heading">
                                 {project.title}
                             </h3>
                             <p className="text-sm text-blue-400/80 font-medium tracking-wide uppercase">
@@ -90,14 +90,14 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
                         </div>
                     </div>
 
-                    <p className="text-zinc-400 text-sm leading-relaxed mb-6 line-clamp-3 font-light">
+                    <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed mb-6 line-clamp-3 font-light">
                         {project.description}
                     </p>
 
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-2 mb-6">
                         {project.technologies?.slice(0, 3).map((tech, idx) => (
-                            <span key={idx} className="text-xs text-zinc-300 bg-white/5 px-2 py-1 rounded-md border border-white/5 flex items-center gap-1">
+                            <span key={idx} className="text-xs text-slate-600 dark:text-zinc-300 bg-slate-100 dark:bg-white/5 px-2 py-1 rounded-md border border-slate-200 dark:border-white/5 flex items-center gap-1">
                                 <FaCode className="text-blue-500/70 text-[10px]" />
                                 {tech}
                             </span>
@@ -106,9 +106,9 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
                     {/* Action Button */}
                     <button className="w-full group/btn relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 p-[1px] transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-                        <div className="relative bg-zinc-900 group-hover/btn:bg-zinc-900/90 rounded-xl px-4 py-3 transition-all duration-300 flex items-center justify-center gap-2">
-                            <span className="text-sm font-bold text-white group-hover/btn:text-blue-400 transition-colors">View Case Study</span>
-                            <FaArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-1 transition-transform duration-300" />
+                        <div className="relative bg-white dark:bg-zinc-900 group-hover/btn:bg-slate-50 dark:group-hover/btn:bg-zinc-900/90 rounded-xl px-4 py-3 transition-all duration-300 flex items-center justify-center gap-2">
+                            <span className="text-sm font-bold text-slate-900 dark:text-white group-hover/btn:text-blue-600 dark:group-hover/btn:text-blue-400 transition-colors">View Case Study</span>
+                            <FaArrowRight className="w-4 h-4 text-slate-900 dark:text-white group-hover/btn:translate-x-1 transition-transform duration-300" />
                         </div>
                     </button>
                 </div>
@@ -126,7 +126,7 @@ export const PortfolioPage: React.FC = () => {
         : PROJECTS.filter(p => p.category === filter);
 
     return (
-        <div className="min-h-screen bg-luxury-black pt-24 pb-20 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 dark:bg-luxury-black pt-24 pb-20 relative overflow-hidden transition-colors duration-300">
             {/* Background Ambience */}
             <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-slow" />
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-slow delay-1000" />
@@ -144,18 +144,18 @@ export const PortfolioPage: React.FC = () => {
                             <span className="text-sm font-medium text-blue-400 tracking-wide uppercase">Our Masterpieces</span>
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-tight font-heading">
+                        <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-8 tracking-tight leading-tight font-heading transition-colors duration-300">
                             We Build <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-200 to-blue-500 animate-gradient-x">
                                 Digital Legacies
                             </span>
                         </h1>
 
-                        <p className="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto font-light">
+                        <p className="text-xl text-slate-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto font-light transition-colors duration-300">
                             Explore a curated collection of our most impactful work. Where
-                            <span className="text-white font-medium"> strategic vision </span>
+                            <span className="text-slate-900 dark:text-white font-medium"> strategic vision </span>
                             meets
-                            <span className="text-white font-medium"> flawless execution</span>.
+                            <span className="text-slate-900 dark:text-white font-medium"> flawless execution</span>.
                         </p>
                     </motion.div>
                 </div>
@@ -169,8 +169,8 @@ export const PortfolioPage: React.FC = () => {
                             key={category}
                             onClick={() => setFilter(category)}
                             className={`px-8 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border ${filter === category
-                                ? 'bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105'
-                                : 'bg-white/5 text-zinc-400 border-white/5 hover:bg-white/10 hover:border-white/20 hover:text-white'
+                                ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 dark:border-white shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-105'
+                                : 'bg-white dark:bg-white/5 text-slate-600 dark:text-zinc-400 border-slate-200 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-slate-300 dark:hover:border-white/20 hover:text-slate-900 dark:hover:text-white'
                                 }`}
                         >
                             {category}
@@ -198,21 +198,21 @@ export const PortfolioPage: React.FC = () => {
 
             {/* CTA Section */}
             <section className="container mx-auto px-4 sm:px-6 lg:px-8 mt-32 relative z-10">
-                <div className="relative rounded-[3rem] overflow-hidden border border-white/10 bg-zinc-900/50 backdrop-blur-xl p-12 md:p-24 text-center group">
+                <div className="relative rounded-[3rem] overflow-hidden border border-slate-200 dark:border-white/10 bg-white dark:bg-zinc-900/50 backdrop-blur-xl p-12 md:p-24 text-center group shadow-2xl dark:shadow-none">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                     <div className="relative z-10 max-w-3xl mx-auto">
-                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-heading">
+                        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-8 font-heading">
                             Ready to build your <span className="text-blue-400">Success Story?</span>
                         </h2>
-                        <p className="text-zinc-400 mb-12 text-xl font-light">
+                        <p className="text-slate-600 dark:text-zinc-400 mb-12 text-xl font-light">
                             Join the ranks of industry leaders who chose GrowBrandi to transform their digital presence.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <button className="px-10 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-bold text-lg hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all duration-300 transform hover:-translate-y-1">
                                 Start Your Project
                             </button>
-                            <button className="px-10 py-4 bg-white/5 text-white border border-white/10 rounded-xl font-bold text-lg hover:bg-white/10 transition-all duration-300">
+                            <button className="px-10 py-4 bg-white dark:bg-white/5 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 rounded-xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-300">
                                 View Pricing
                             </button>
                         </div>

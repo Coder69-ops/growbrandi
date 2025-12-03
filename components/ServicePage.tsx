@@ -31,16 +31,16 @@ const ServicePage: React.FC<ServicePageProps> = ({
   return (
     <>
       <SEO title={title} description={description} />
-      <div className="bg-luxury-black min-h-screen">
+      <div className="bg-slate-50 dark:bg-luxury-black min-h-screen transition-colors duration-300">
         {/* Hero Section */}
         <section className="py-20 px-4 relative">
           <div className="absolute inset-0 z-0 pointer-events-none">
             {/* Architectural Grid Pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] dark:[mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
             {/* Dynamic Mesh Gradients */}
-            <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-            <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 rounded-full blur-[120px] mix-blend-screen" />
+            <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/10 dark:bg-blue-600/20 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse" />
+            <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-cyan-500/10 dark:bg-cyan-500/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen" />
           </div>
           <div className="container mx-auto max-w-6xl relative z-10">
             <motion.div
@@ -49,10 +49,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
+              <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                 {title}
               </h1>
-              <p className="text-xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+              <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
                 {description}
               </p>
             </motion.div>
@@ -76,7 +76,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
               </Link>
               <Link to="/portfolio">
                 <motion.button
-                  className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5 border border-white/10 hover:border-white/30"
+                  className="glass-effect text-slate-700 dark:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-slate-100 dark:hover:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -89,7 +89,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
         </section>
 
         {/* Features Section */}
-        <section className="py-20 px-4 bg-luxury-black">
+        <section className="py-20 px-4 bg-white dark:bg-luxury-black transition-colors duration-300">
           <div className="container mx-auto max-w-6xl">
             <motion.div
               className="text-center mb-16"
@@ -98,10 +98,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                 What's <span className="text-gradient">Included</span>
               </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                 Comprehensive solutions designed to deliver exceptional results
               </p>
             </motion.div>
@@ -110,18 +110,18 @@ const ServicePage: React.FC<ServicePageProps> = ({
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className="glass-effect rounded-2xl p-8 border border-white/5 hover:border-white/10 transition-all duration-500"
+                  className="glass-effect rounded-2xl p-8 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-white/10 transition-all duration-500 bg-slate-50/50 dark:bg-white/5"
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   whileHover={{ y: -5 }}
                 >
-                  <div className="w-12 h-12 bg-zinc-800/50 rounded-lg flex items-center justify-center mb-4 border border-white/5">
-                    <FaCheck className="w-5 h-5 text-white" />
+                  <div className="w-12 h-12 bg-blue-500/10 dark:bg-zinc-800/50 rounded-lg flex items-center justify-center mb-4 border border-blue-500/20 dark:border-white/5">
+                    <FaCheck className="w-5 h-5 text-blue-600 dark:text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">{feature}</h3>
-                  <p className="text-zinc-400 leading-relaxed">Professional implementation with attention to detail and best practices.</p>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature}</h3>
+                  <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Professional implementation with attention to detail and best practices.</p>
                 </motion.div>
               ))}
             </div>
@@ -138,10 +138,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                 Why Choose <span className="text-gradient">GrowBrandi</span>
               </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                 Experience the difference with our proven approach and expertise
               </p>
             </motion.div>
@@ -156,12 +156,12 @@ const ServicePage: React.FC<ServicePageProps> = ({
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                 >
-                  <div className="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center mt-1 shrink-0 border border-white/5">
-                    <FaStar className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-blue-500/10 dark:bg-zinc-800 rounded-lg flex items-center justify-center mt-1 shrink-0 border border-blue-500/20 dark:border-white/5">
+                    <FaStar className="w-4 h-4 text-blue-600 dark:text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">{benefit}</h3>
-                    <p className="text-zinc-400 leading-relaxed">Delivered with excellence and backed by our commitment to your success.</p>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">{benefit}</h3>
+                    <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">Delivered with excellence and backed by our commitment to your success.</p>
                   </div>
                 </motion.div>
               ))}
@@ -171,7 +171,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
 
         {/* Technologies Section (if provided) */}
         {technologies.length > 0 && (
-          <section className="py-20 px-4 bg-luxury-black">
+          <section className="py-20 px-4 bg-white dark:bg-luxury-black transition-colors duration-300">
             <div className="container mx-auto max-w-6xl">
               <motion.div
                 className="text-center mb-16"
@@ -180,10 +180,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                   <span className="text-gradient">Technologies</span> We Use
                 </h2>
-                <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+                <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                   Cutting-edge tools and frameworks for optimal performance
                 </p>
               </motion.div>
@@ -192,14 +192,14 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 {technologies.map((tech, index) => (
                   <motion.div
                     key={index}
-                    className="glass-effect rounded-xl px-6 py-3 border border-white/5 hover:border-white/20 transition-all duration-300"
+                    className="glass-effect rounded-xl px-6 py-3 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-white/20 transition-all duration-300 bg-white/50 dark:bg-white/5"
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: index * 0.05 }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <span className="text-white font-medium">{tech}</span>
+                    <span className="text-slate-700 dark:text-white font-medium">{tech}</span>
                   </motion.div>
                 ))}
               </div>
@@ -218,10 +218,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                   Our <span className="text-gradient">Process</span>
                 </h2>
-                <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+                <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                   A systematic approach that ensures success at every step
                 </p>
               </motion.div>
@@ -236,12 +236,12 @@ const ServicePage: React.FC<ServicePageProps> = ({
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: index * 0.1 }}
                   >
-                    <div className="w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-lg">
+                    <div className="w-16 h-16 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-full flex items-center justify-center text-blue-600 dark:text-white font-bold text-xl shrink-0 shadow-lg">
                       {index + 1}
                     </div>
-                    <div className="glass-effect rounded-xl p-6 flex-1 border border-white/5">
-                      <h3 className="text-xl font-bold text-white mb-2">Step {index + 1}</h3>
-                      <p className="text-zinc-400 leading-relaxed">{step}</p>
+                    <div className="glass-effect rounded-xl p-6 flex-1 border border-slate-200 dark:border-white/5 bg-white/50 dark:bg-white/5">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Step {index + 1}</h3>
+                      <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">{step}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -252,7 +252,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
 
         {/* Pricing Section (if provided) */}
         {pricing && (
-          <section className="py-20 px-4 bg-luxury-black">
+          <section className="py-20 px-4 bg-white dark:bg-luxury-black transition-colors duration-300">
             <div className="container mx-auto max-w-6xl">
               <motion.div
                 className="text-center mb-16"
@@ -261,10 +261,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+                <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                   <span className="text-gradient">Pricing</span> Plans
                 </h2>
-                <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+                <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                   Choose the perfect plan for your business needs
                 </p>
               </motion.div>
@@ -274,8 +274,8 @@ const ServicePage: React.FC<ServicePageProps> = ({
                   <motion.div
                     key={planName}
                     className={`glass-effect rounded-2xl p-8 border transition-all duration-300 ${planName === 'professional'
-                      ? 'border-white/20 ring-1 ring-white/10 scale-105 shadow-2xl shadow-black/50'
-                      : 'border-white/5 hover:border-white/10'
+                      ? 'border-blue-500/30 dark:border-white/20 ring-1 ring-blue-500/20 dark:ring-white/10 scale-105 shadow-2xl shadow-blue-500/10 dark:shadow-black/50 bg-white dark:bg-white/10'
+                      : 'border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10 bg-slate-50/50 dark:bg-white/5'
                       }`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -284,19 +284,19 @@ const ServicePage: React.FC<ServicePageProps> = ({
                     whileHover={{ y: -5 }}
                   >
                     {planName === 'professional' && (
-                      <div className="bg-white text-black text-xs font-bold px-3 py-1 rounded-full text-center mb-4 inline-block tracking-wider uppercase">
+                      <div className="bg-blue-600 dark:bg-white text-white dark:text-black text-xs font-bold px-3 py-1 rounded-full text-center mb-4 inline-block tracking-wider uppercase">
                         Most Popular
                       </div>
                     )}
-                    <h3 className="text-2xl font-bold text-white mb-2 capitalize">{planName}</h3>
-                    <div className="text-4xl font-black text-white mb-6 tracking-tight">
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 capitalize">{planName}</h3>
+                    <div className="text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                       {plan.price}
-                      <span className="text-lg font-normal text-zinc-400 ml-2">/project</span>
+                      <span className="text-lg font-normal text-slate-500 dark:text-zinc-400 ml-2">/project</span>
                     </div>
                     <ul className="space-y-4 mb-8">
                       {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center gap-3 text-zinc-400">
-                          <FaCheck className="w-4 h-4 text-white shrink-0" />
+                        <li key={featureIndex} className="flex items-center gap-3 text-slate-600 dark:text-zinc-400">
+                          <FaCheck className="w-4 h-4 text-blue-600 dark:text-white shrink-0" />
                           {feature}
                         </li>
                       ))}
@@ -305,7 +305,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                       <motion.button
                         className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${planName === 'professional'
                           ? 'bg-gradient-to-r from-blue-500 to-blue-500 text-white hover:from-blue-600 hover:to-blue-600 shadow-[0_0_20px_rgba(59,130,246,0.3)]'
-                          : 'glass-effect text-white hover:bg-white/5'
+                          : 'glass-effect text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/5 border border-slate-200 dark:border-white/10'
                           }`}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -324,10 +324,10 @@ const ServicePage: React.FC<ServicePageProps> = ({
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                 Get a <span className="text-gradient">Custom AI Analysis</span>
               </h2>
-              <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
                 Not sure where to start? Let our AI analyze your needs and provide a personalized recommendation instantly.
               </p>
             </div>
@@ -339,16 +339,16 @@ const ServicePage: React.FC<ServicePageProps> = ({
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl">
             <motion.div
-              className="glass-effect rounded-3xl p-12 text-center border border-white/10 bg-gradient-to-b from-zinc-900/50 to-black/50"
+              className="glass-effect rounded-3xl p-12 text-center border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-gradient-to-b dark:from-zinc-900/50 dark:to-black/50"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 tracking-tight">
                 Ready to Get <span className="text-gradient">Started?</span>
               </h2>
-              <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto font-light">
+              <p className="text-xl text-slate-600 dark:text-zinc-400 mb-10 max-w-2xl mx-auto font-light">
                 Let's discuss your project and create something amazing together.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -364,7 +364,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                 </Link>
                 <Link to="/contact">
                   <motion.button
-                    className="glass-effect text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/5 border border-white/10 hover:border-white/30"
+                    className="glass-effect text-slate-700 dark:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-slate-100 dark:hover:bg-white/5 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30"
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
                   >

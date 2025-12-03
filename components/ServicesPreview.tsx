@@ -72,7 +72,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
             onClick={onClose}
         >
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-slate-900/80 dark:bg-black/80 backdrop-blur-sm" />
 
             {/* Modal Content */}
             <motion.div
@@ -85,7 +85,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-zinc-700/50 text-zinc-400 hover:text-white hover:bg-zinc-600/50 transition-all z-10"
+                    className="absolute top-6 right-6 p-2 rounded-full bg-slate-200/50 dark:bg-zinc-700/50 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300/50 dark:hover:bg-zinc-600/50 transition-all z-10"
                 >
                     <FaTimes className="w-6 h-6" />
                 </button>
@@ -99,22 +99,22 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 {service.icon}
                             </div>
                             <div>
-                                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{service.title}</h2>
-                                <p className="text-blue-400 font-semibold text-lg">{service.price}</p>
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h2>
+                                <p className="text-blue-600 dark:text-blue-400 font-semibold text-lg">{service.price}</p>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <p className="text-zinc-300 leading-relaxed text-lg">{service.description}</p>
+                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
 
                         {/* Features */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4 text-xl">What's Included</h3>
+                            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 text-xl">What's Included</h3>
                             <div className="grid grid-cols-1 gap-3">
                                 {service.features?.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 glass-effect p-3 rounded-xl">
-                                        <FaCheck className="w-5 h-5 text-blue-400 flex-shrink-0" />
-                                        <span className="text-zinc-300 font-medium">{feature}</span>
+                                        <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{feature}</span>
                                     </div>
                                 ))}
                             </div>
@@ -122,7 +122,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                         {/* Benefits */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4 text-xl">Key Benefits</h3>
+                            <h3 className="text-slate-900 dark:text-white font-semibold mb-4 text-xl">Key Benefits</h3>
                             <div className="space-y-3">
                                 {[
                                     'Dedicated project manager',
@@ -132,8 +132,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                     'Post-launch support included'
                                 ].map((benefit, index) => (
                                     <div key={index} className="flex items-center gap-3">
-                                        <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full" />
-                                        <span className="text-zinc-300">{benefit}</span>
+                                        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" />
+                                        <span className="text-slate-600 dark:text-zinc-300">{benefit}</span>
                                     </div>
                                 ))}
                             </div>
@@ -142,7 +142,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                     {/* Process Timeline */}
                     <div className="space-y-6">
-                        <h3 className="text-white font-semibold text-xl">Our Process</h3>
+                        <h3 className="text-slate-900 dark:text-white font-semibold text-xl">Our Process</h3>
                         <div className="space-y-4">
                             {steps.map((step, index) => (
                                 <div key={index} className="relative">
@@ -160,10 +160,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                         {/* Step Content */}
                                         <div className="flex-1 glass-effect p-4 rounded-xl">
                                             <div className="flex items-center justify-between mb-2">
-                                                <h4 className="text-white font-semibold">{step.step}</h4>
-                                                <span className="text-blue-400 text-sm font-medium">{step.duration}</span>
+                                                <h4 className="text-slate-900 dark:text-white font-semibold">{step.step}</h4>
+                                                <span className="text-blue-600 dark:text-blue-400 text-sm font-medium">{step.duration}</span>
                                             </div>
-                                            <p className="text-zinc-300 text-sm">{step.description}</p>
+                                            <p className="text-slate-600 dark:text-zinc-300 text-sm">{step.description}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -171,8 +171,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         </div>
 
                         {/* AI Widget in Modal */}
-                        <div className="mt-8 pt-8 border-t border-white/10">
-                            <h3 className="text-white font-semibold text-xl mb-4">Get an Instant Estimate</h3>
+                        <div className="mt-8 pt-8 border-t border-slate-200 dark:border-white/10">
+                            <h3 className="text-slate-900 dark:text-white font-semibold text-xl mb-4">Get an Instant Estimate</h3>
                             <ServiceAIWidget serviceTitle={service.title} compact={true} />
                         </div>
 
@@ -183,12 +183,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <div className="flex items-center justify-center gap-4 mb-2">
                                 <div className="flex items-center gap-1">
                                     {[...Array(5)].map((_, i) => (
-                                        <FaStar key={i} className="w-4 h-4 text-yellow-400" />
+                                        <FaStar key={i} className="w-4 h-4 text-yellow-500 dark:text-yellow-400" />
                                     ))}
                                 </div>
-                                <span className="text-white font-semibold">4.9/5</span>
+                                <span className="text-slate-900 dark:text-white font-semibold">4.9/5</span>
                             </div>
-                            <p className="text-zinc-400 text-sm">Based on 150+ client reviews</p>
+                            <p className="text-slate-500 dark:text-zinc-400 text-sm">Based on 150+ client reviews</p>
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
 
                 {/* Service Number */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-zinc-800/30 group-hover:text-zinc-700/40 transition-colors">
+                <div className="absolute top-4 right-4 text-5xl font-black text-slate-200 dark:text-zinc-800/30 group-hover:text-slate-300 dark:group-hover:text-zinc-700/40 transition-colors">
                     {(index + 1).toString().padStart(2, '0')}
                 </div>
 
@@ -243,18 +243,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     </div>
 
                     {/* Service Content */}
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gradient transition-colors duration-300">
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-gradient transition-colors duration-300">
                         {service.title}
                     </h3>
-                    <p className="text-zinc-300 mb-6 leading-relaxed text-sm">
+                    <p className="text-slate-600 dark:text-zinc-300 mb-6 leading-relaxed text-sm">
                         {service.description}
                     </p>
 
                     {/* Features Grid */}
                     <div className="grid grid-cols-2 gap-2 mb-6">
                         {service.features?.slice(0, 4).map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-xs text-zinc-400">
-                                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                            <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
+                                <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full" />
                                 <span className="truncate">{feature}</span>
                             </div>
                         ))}
@@ -265,7 +265,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                         <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
                             {service.price}
                         </div>
-                        <div className="text-zinc-400 text-xs mt-1">No hidden fees</div>
+                        <div className="text-slate-400 dark:text-zinc-400 text-xs mt-1">No hidden fees</div>
                     </div>
 
                     {/* Buttons */}
@@ -280,7 +280,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                         </motion.button>
                         <button
                             onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
-                            className="w-full border border-zinc-600 text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-green-400 hover:text-green-400 transition-all flex items-center justify-center gap-2"
+                            className="w-full border border-slate-300 dark:border-zinc-600 text-slate-600 dark:text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-green-500 hover:text-green-600 dark:hover:border-green-400 dark:hover:text-green-400 transition-all flex items-center justify-center gap-2"
                         >
                             <FaWhatsapp className="w-4 h-4" />
                             Chat on WhatsApp
@@ -288,9 +288,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     </div>
 
                     {/* Trust Badge */}
-                    <div className="mt-6 pt-4 border-t border-zinc-700">
-                        <div className="flex items-center justify-center gap-2 text-xs text-zinc-400">
-                            <FaCheckCircle className="w-4 h-4 text-blue-400" />
+                    <div className="mt-6 pt-4 border-t border-slate-200 dark:border-zinc-700">
+                        <div className="flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
+                            <FaCheckCircle className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                             <span>Money-back guarantee</span>
                         </div>
                     </div>
@@ -314,14 +314,14 @@ const ServicesPreview: React.FC = () => {
     return (
         <>
             <motion.section
-                className="py-12 md:py-24 px-4 relative overflow-hidden"
+                className="py-12 md:py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, amount: 0 }}
                 variants={containerVariants}
             >
                 {/* Enhanced Background Elements */}
-                <div className="absolute inset-0 bg-luxury-black" />
+                <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl" />
                 <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl" />
                 <div className="absolute top-2/3 left-2/3 w-64 h-64 bg-purple-500/6 rounded-full blur-3xl" />
@@ -334,14 +334,14 @@ const ServicesPreview: React.FC = () => {
                             <span className="text-sm font-bold text-blue-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
                             <FaStar className="w-5 h-5 text-blue-400" />
                         </div>
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0">
+                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0 text-slate-900 dark:text-white">
                             Comprehensive <span className="text-gradient">Digital Solutions</span>
                             <span className="block">For Your Business</span>
                         </h2>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-zinc-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
+                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-zinc-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
                             Transform your business with
-                            <span className="text-blue-400 font-semibold">GrowBrandi's award-winning services</span> that combine
-                            <span className="text-blue-400 font-semibold">intelligent technology</span> with data-driven strategies
+                            <span className="text-blue-600 dark:text-blue-400 font-semibold"> GrowBrandi's award-winning services</span> that combine
+                            <span className="text-blue-600 dark:text-blue-400 font-semibold"> intelligent technology</span> with data-driven strategies
                             to deliver <span className="text-gradient font-semibold">measurable, exceptional results</span>.
                         </p>
                     </motion.div>
@@ -365,10 +365,10 @@ const ServicesPreview: React.FC = () => {
                     {/* Process Overview */}
                     <motion.div variants={itemVariants} className="mb-20">
                         <div className="text-center mb-12">
-                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 px-4 sm:px-0">
+                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 px-4 sm:px-0">
                                 Our <span className="text-gradient">Proven Process</span>
                             </h3>
-                            <p className="text-zinc-300 text-base sm:text-lg max-w-3xl mx-auto px-4 sm:px-0">
+                            <p className="text-slate-600 dark:text-zinc-300 text-base sm:text-lg max-w-3xl mx-auto px-4 sm:px-0">
                                 Every project follows our streamlined methodology for consistent,
                                 high-quality results that exceed expectations.
                             </p>
@@ -402,11 +402,11 @@ const ServicesPreview: React.FC = () => {
                                     className="glass-effect p-6 rounded-2xl text-center group hover:bg-gradient-to-br hover:from-blue-500/5 hover:to-cyan-500/5 transition-all duration-300"
                                     whileHover={{ y: -5, scale: 1.02 }}
                                 >
-                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-blue-400">
+                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-blue-600 dark:text-blue-400">
                                         {step.icon}
                                     </div>
-                                    <h4 className="text-white font-bold text-lg mb-2">{step.title}</h4>
-                                    <p className="text-zinc-400 text-sm">{step.description}</p>
+                                    <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-2">{step.title}</h4>
+                                    <p className="text-slate-600 dark:text-zinc-400 text-sm">{step.description}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -417,10 +417,10 @@ const ServicesPreview: React.FC = () => {
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
                         <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
-                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
                                 Ready to <span className="text-gradient">Transform Your Business?</span>
                             </h3>
-                            <p className="text-xl text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                            <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
                                 Choose from our comprehensive service offerings or let us create a
                                 custom solution tailored specifically to your unique business needs.
                             </p>
@@ -447,18 +447,18 @@ const ServicesPreview: React.FC = () => {
                             </div>
 
                             {/* Trust Indicators */}
-                            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-8 pt-8 border-t border-zinc-700">
+                            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-8 pt-8 border-t border-slate-200 dark:border-zinc-700">
                                 <div className="flex items-center gap-2">
-                                    <FaLock className="w-5 h-5 text-blue-400" />
-                                    <span className="text-zinc-300 text-sm">SSL Secured</span>
+                                    <FaLock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">SSL Secured</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaCheckCircle className="w-5 h-5 text-blue-400" />
-                                    <span className="text-zinc-300 text-sm">Money Back Guarantee</span>
+                                    <FaCheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">Money Back Guarantee</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaHeadset className="w-5 h-5 text-purple-400" />
-                                    <span className="text-zinc-300 text-sm">24/7 Support</span>
+                                    <FaHeadset className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">24/7 Support</span>
                                 </div>
                             </div>
                         </div>
