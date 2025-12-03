@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaCommentDots, FaLock, FaCheckCircle, FaHeadset, FaLayerGroup, FaStar, FaClipboardList, FaWhatsapp } from 'react-icons/fa';
+import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaLock, FaCheckCircle, FaHeadset, FaStar, FaClipboardList, FaWhatsapp, FaPlay } from 'react-icons/fa';
 import { SERVICES, CONTACT_INFO } from '../constants';
 import ServiceAIWidget from './ServiceAIWidget';
 import { Service } from '../types';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,7 +79,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-[95%] md:w-full max-w-5xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-4 md:p-8"
+                className="relative w-[95%] md:w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-4 md:p-8 shadow-2xl"
                 initial={{ scale: 0.8, y: 50 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.8, y: 50 }}
@@ -95,7 +98,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                     <div className="space-y-6">
                         {/* Header */}
                         <div className="flex items-center gap-4">
-                            <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white`}>
+                            <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-lg`}>
                                 {service.icon}
                             </div>
                             <div>
@@ -112,7 +115,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <h3 className="text-slate-900 dark:text-white font-semibold mb-4 text-xl">What's Included</h3>
                             <div className="grid grid-cols-1 gap-3">
                                 {service.features?.map((feature, index) => (
-                                    <div key={index} className="flex items-center gap-3 glass-effect p-3 rounded-xl">
+                                    <div key={index} className="flex items-center gap-3 bg-slate-50 dark:bg-white/5 p-3 rounded-xl border border-slate-100 dark:border-white/5">
                                         <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                                         <span className="text-slate-700 dark:text-zinc-300 font-medium">{feature}</span>
                                     </div>
@@ -153,12 +156,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                                     <div className="flex items-start gap-4">
                                         {/* Step Number */}
-                                        <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center text-white font-bold text-sm relative z-10`}>
+                                        <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center text-white font-bold text-sm relative z-10 shadow-lg`}>
                                             {index + 1}
                                         </div>
 
                                         {/* Step Content */}
-                                        <div className="flex-1 glass-effect p-4 rounded-xl">
+                                        <div className="flex-1 bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/5">
                                             <div className="flex items-center justify-between mb-2">
                                                 <h4 className="text-slate-900 dark:text-white font-semibold">{step.step}</h4>
                                                 <span className="text-blue-600 dark:text-blue-400 text-sm font-medium">{step.duration}</span>
@@ -176,10 +179,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                             <ServiceAIWidget serviceTitle={service.title} compact={true} />
                         </div>
 
-
-
                         {/* Trust Indicators */}
-                        <div className="glass-effect p-4 rounded-xl text-center">
+                        <div className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl text-center border border-slate-100 dark:border-white/5">
                             <div className="flex items-center justify-center gap-4 mb-2">
                                 <div className="flex items-center gap-1">
                                     {[...Array(5)].map((_, i) => (
@@ -205,100 +206,345 @@ interface ServiceCardProps {
     featured?: boolean;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => (
-    <motion.div
-        className={`group relative rounded-3xl text-center ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
-        variants={itemVariants}
-        whileHover={{ y: -12, scale: 1.02 }}
-        transition={{ duration: 0.3 }}
-    >
-        {/* Featured Badge - Floating Upper Layer */}
-        {featured && (
-            <div className="absolute -top-4 -right-2 z-20">
-                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1.5 rounded-full shadow-lg shadow-blue-500/40 text-xs font-bold tracking-wider uppercase transform rotate-2">
-                    POPULAR
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => {
+    // Check service types for specific visuals
+    const isSocialMedia = service.title === 'Creative Studio';
+    const isBrandGrowth = service.title === 'Performance Marketing';
+    const isUIUX = service.title === 'UI/UX Design';
+    const isWebDev = service.title === 'Web & Shopify Dev';
+    const isVA = service.title === 'E-commerce Management';
+    const isSupport = service.title === 'Social Media Management';
+
+    return (
+        <GlassCard
+            className={`h-full flex flex-col ${featured ? 'ring-2 ring-blue-400/50' : ''}`}
+            hoverEffect={true}
+            variants={itemVariants}
+        >
+            {/* Featured Badge */}
+            {featured && (
+                <div className="absolute top-0 right-0 z-20">
+                    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-1 rounded-bl-2xl rounded-tr-2xl shadow-lg text-xs font-bold tracking-wider uppercase">
+                        POPULAR
+                    </div>
                 </div>
-            </div>
-        )}
+            )}
 
-        {/* Inner Content Wrapper with Overflow Hidden */}
-        <div className="relative overflow-hidden rounded-3xl h-full">
-            <div className={`glass-effect p-6 md:p-8 h-full relative ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
-                {/* Background Decorations */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
-
+            <div className="p-6 md:p-8 flex-1 relative z-10">
                 {/* Service Number */}
-                <div className="absolute top-4 right-4 text-5xl font-black text-slate-200 dark:text-zinc-800/30 group-hover:text-slate-300 dark:group-hover:text-zinc-700/40 transition-colors">
+                <div className="absolute top-4 right-4 text-6xl font-black text-slate-100 dark:text-white/5 pointer-events-none">
                     {(index + 1).toString().padStart(2, '0')}
                 </div>
 
-                <div className="relative z-10">
-                    {/* Service Icon */}
-                    <div className="relative mb-6">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
-                        <div className={`relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`}>
-                            {service.icon}
-                        </div>
-                    </div>
-
-                    {/* Service Content */}
-                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 group-hover:text-gradient transition-colors duration-300">
-                        {service.title}
-                    </h3>
-                    <p className="text-slate-600 dark:text-zinc-300 mb-6 leading-relaxed text-sm">
-                        {service.description}
-                    </p>
-
-                    {/* Features Grid */}
-                    <div className="grid grid-cols-2 gap-2 mb-6">
-                        {service.features?.slice(0, 4).map((feature, idx) => (
-                            <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
-                                <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full" />
-                                <span className="truncate">{feature}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Price */}
-                    <div className="mb-6">
-                        <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
-                            {service.price}
-                        </div>
-                        <div className="text-slate-400 dark:text-zinc-400 text-xs mt-1">No hidden fees</div>
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="space-y-3">
-                        <motion.button
-                            onClick={onLearnMore}
-                            className={`w-full bg-gradient-to-r ${service.color} text-white py-3 px-6 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg`}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            Learn More
-                        </motion.button>
-                        <button
-                            onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
-                            className="w-full border border-slate-300 dark:border-zinc-600 text-slate-600 dark:text-zinc-300 py-2 px-6 rounded-xl text-sm hover:border-green-500 hover:text-green-600 dark:hover:border-green-400 dark:hover:text-green-400 transition-all flex items-center justify-center gap-2"
-                        >
-                            <FaWhatsapp className="w-4 h-4" />
-                            Chat on WhatsApp
-                        </button>
-                    </div>
-
-                    {/* Trust Badge */}
-                    <div className="mt-6 pt-4 border-t border-slate-200 dark:border-zinc-700">
-                        <div className="flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
-                            <FaCheckCircle className="w-4 h-4 text-blue-500 dark:text-blue-400" />
-                            <span>Money-back guarantee</span>
-                        </div>
+                {/* Service Icon */}
+                <div className="relative mb-6 inline-block">
+                    <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full" />
+                    <div className={`relative flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} text-white shadow-lg`}>
+                        {service.icon}
                     </div>
                 </div>
+
+                {/* Service Content */}
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                    {service.title}
+                </h3>
+                <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm">
+                    {service.description}
+                </p>
+
+                {/* Priority 1: Social Media Visual Artifact */}
+                {isSocialMedia && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        {/* Floating 3D Mockups */}
+                        <div className="absolute inset-0 flex items-center justify-center perspective-1000">
+                            {/* Phone Mockup */}
+                            <motion.div
+                                animate={{ y: [0, -5, 0], rotate: [-2, 2, -2] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-24 h-40 bg-slate-900 rounded-[18px] border-4 border-slate-900 shadow-xl relative z-10 transform rotate-[-5deg]"
+                            >
+                                <div className="w-full h-full bg-slate-800 rounded-[14px] overflow-hidden relative">
+                                    <img src="/foriphonecard.jpg" alt="Content" className="w-full h-full object-cover opacity-80" />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                                            <FaPlay className="w-3 h-3 text-white ml-0.5" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            {/* Floating Logos */}
+                            <motion.div
+                                animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-4 right-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
+                            >
+                                <img src="/logos/instagram.svg" alt="IG" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-8 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
+                            >
+                                <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, -6, 0], x: [0, -3, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-10 left-6 w-7 h-7 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-0"
+                            >
+                                <img src="/logos/youtube.svg" alt="YT" className="w-full h-full object-contain" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Priority 2: Brand Growth Visual Artifact */}
+                {isBrandGrowth && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Central Chart Element */}
+                            <motion.div
+                                animate={{ scale: [1, 1.05, 1] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-500/30"
+                            >
+                                <FaChartLine className="w-8 h-8 text-blue-500" />
+                            </motion.div>
+
+                            {/* Floating Ad Platform Logos */}
+                            <motion.div
+                                animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-6 right-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
+                            >
+                                <img src="/logos/google-ads.svg" alt="Google Ads" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-6 left-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
+                            >
+                                <img src="/logos/meta.svg" alt="Meta" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, -8, 0], x: [0, -8, 0] }}
+                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-8 left-10 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5"
+                            >
+                                <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Priority 3: UI/UX Design Visual Artifact */}
+                {isUIUX && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Abstract UI Elements */}
+                            <div className="absolute inset-0 opacity-20 dark:opacity-10">
+                                <div className="absolute top-4 left-4 w-24 h-16 bg-blue-500 rounded-lg" />
+                                <div className="absolute bottom-4 right-4 w-24 h-24 bg-purple-500 rounded-full" />
+                            </div>
+
+                            {/* Floating Design Tool Logos */}
+                            <motion.div
+                                animate={{ rotate: [0, 10, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center p-3 border border-slate-100 dark:border-white/5 z-10"
+                            >
+                                <img src="/logos/figma.svg" alt="Figma" className="w-full h-full object-contain" />
+                            </motion.div>
+
+                            <motion.div
+                                animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/react.svg" alt="React" className="w-full h-full object-contain" />
+                            </motion.div>
+
+                            <motion.div
+                                animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
+                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/tailwindcss.svg" alt="Tailwind" className="w-full h-full object-contain" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Priority 4: Web Development Visual Artifact */}
+                {isWebDev && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Code Window */}
+                            <div className="w-32 h-24 bg-slate-900 rounded-lg shadow-xl border border-slate-700 p-2 relative z-10 transform -rotate-3">
+                                <div className="flex gap-1 mb-2">
+                                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                                </div>
+                                <div className="space-y-1">
+                                    <div className="h-1 w-16 bg-slate-700 rounded" />
+                                    <div className="h-1 w-12 bg-slate-700 rounded ml-2" />
+                                    <div className="h-1 w-20 bg-slate-700 rounded ml-2" />
+                                </div>
+                            </div>
+
+                            {/* Floating Tech Logos */}
+                            <motion.div
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-4 right-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/nextdotjs.svg" alt="Next.js" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-4 left-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/shopify.svg" alt="Shopify" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
+                            >
+                                <img src="/logos/typescript.svg" alt="TS" className="w-full h-full object-contain" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Priority 5: Virtual Assistance Visual Artifact */}
+                {isVA && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Central Task Element */}
+                            <motion.div
+                                animate={{ rotate: [0, 5, 0, -5, 0] }}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-20 h-24 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-white/10 p-3 flex flex-col gap-2 relative z-10"
+                            >
+                                <div className="w-full h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                <div className="w-3/4 h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                <div className="flex items-center gap-2 mt-auto">
+                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                                        <FaCheck className="w-3 h-3 text-green-500" />
+                                    </div>
+                                    <div className="w-8 h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                </div>
+                            </motion.div>
+
+                            {/* Floating Tool Logos */}
+                            <motion.div
+                                animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-6 right-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/google.svg" alt="Google" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-6 left-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/microsoft.svg" alt="Microsoft" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-10 left-6 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
+                            >
+                                <img src="/logos/openai.svg" alt="OpenAI" className="w-full h-full object-contain" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Priority 6: Customer Support Visual Artifact */}
+                {isSupport && (
+                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Central Support Element */}
+                            <motion.div
+                                animate={{ scale: [1, 1.05, 1] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 relative z-10"
+                            >
+                                <FaHeadset className="w-8 h-8 text-white" />
+                            </motion.div>
+
+                            {/* Floating Support Platform Logos */}
+                            <motion.div
+                                animate={{ y: [0, -10, 0], x: [0, 8, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/salesforce.svg" alt="Salesforce" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ y: [0, 10, 0], x: [0, -8, 0] }}
+                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                            >
+                                <img src="/logos/hubspot.svg" alt="HubSpot" className="w-full h-full object-contain" />
+                            </motion.div>
+                            <motion.div
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
+                            >
+                                <FaWhatsapp className="w-5 h-5 text-green-500" />
+                            </motion.div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Features Grid */}
+                <div className="grid grid-cols-2 gap-2 mb-6">
+                    {service.features?.slice(0, 4).map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
+                            <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full flex-shrink-0" />
+                            <span className="truncate">{feature}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Price */}
+                <div className="mb-6 pt-4 border-t border-slate-100 dark:border-white/5">
+                    <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
+                        {service.price}
+                    </div>
+                    <div className="text-slate-400 dark:text-zinc-500 text-xs mt-1">No hidden fees</div>
+                </div>
+
+                {/* Buttons */}
+                <div className="space-y-3 mt-auto">
+                    <motion.button
+                        onClick={onLearnMore}
+                        className={`w-full bg-gradient-to-r ${service.color} text-white py-3 px-6 rounded-xl font-semibold text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all duration-300`}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        Learn More
+                    </motion.button>
+                    <button
+                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                        className="w-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 py-2.5 px-6 rounded-xl text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2"
+                    >
+                        <FaWhatsapp className="w-4 h-4 text-green-500" />
+                        Chat on WhatsApp
+                    </button>
+                </div>
             </div>
-        </div>
-    </motion.div>
-);
+        </GlassCard>
+    );
+};
 
 // --- Enhanced Services Preview Section ---
 const ServicesPreview: React.FC = () => {
@@ -313,43 +559,24 @@ const ServicesPreview: React.FC = () => {
 
     return (
         <>
-            <motion.section
-                className="py-12 md:py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0 }}
-                variants={containerVariants}
-            >
-                {/* Enhanced Background Elements */}
-                <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/8 rounded-full blur-3xl" />
-                <div className="absolute top-2/3 left-2/3 w-64 h-64 bg-purple-500/6 rounded-full blur-3xl" />
+            <section className="relative py-20 md:py-32 overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+                <BackgroundEffects />
 
-                <div className="container mx-auto max-w-7xl relative z-10">
-                    {/* Enhanced Section Header */}
-                    <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16 lg:mb-20">
-                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3 mb-6 sm:mb-8 mx-4 sm:mx-0">
-                            <FaLayerGroup className="w-5 h-5 text-blue-400" />
-                            <span className="text-sm font-bold text-blue-400 tracking-wide">GROWBRANDI PREMIUM SERVICES</span>
-                            <FaStar className="w-5 h-5 text-blue-400" />
-                        </div>
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-6 sm:mb-8 leading-tight px-4 sm:px-0 text-slate-900 dark:text-white">
-                            Comprehensive <span className="text-gradient">Digital Solutions</span>
-                            <span className="block">For Your Business</span>
-                        </h2>
-                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 dark:text-zinc-300 max-w-5xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4 sm:px-0">
-                            Transform your business with
-                            <span className="text-blue-600 dark:text-blue-400 font-semibold"> GrowBrandi's award-winning services</span> that combine
-                            <span className="text-blue-600 dark:text-blue-400 font-semibold"> intelligent technology</span> with data-driven strategies
-                            to deliver <span className="text-gradient font-semibold">measurable, exceptional results</span>.
-                        </p>
-                    </motion.div>
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <SectionHeading
+                        badge="GrowBrandi Premium Services"
+                        title="Comprehensive Digital Solutions"
+                        highlight="For Your Business"
+                        description="Transform your business with GrowBrandi's award-winning services that combine intelligent technology with data-driven strategies."
+                    />
 
                     {/* Enhanced Services Grid */}
                     <motion.div
-                        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-0"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20"
                         variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
                     >
                         {SERVICES.map((service, index) => (
                             <ServiceCard
@@ -357,88 +584,80 @@ const ServicesPreview: React.FC = () => {
                                 service={service}
                                 index={index}
                                 onLearnMore={() => handleLearnMore(service)}
-                                featured={index === 1} // Make UI/UX Design featured
+                                featured={service.title === 'UI/UX Design'}
                             />
                         ))}
                     </motion.div>
 
                     {/* Process Overview */}
-                    <motion.div variants={itemVariants} className="mb-20">
+                    <motion.div
+                        variants={itemVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="mb-20"
+                    >
                         <div className="text-center mb-12">
-                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 px-4 sm:px-0">
-                                Our <span className="text-gradient">Proven Process</span>
+                            <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">Proven Process</span>
                             </h3>
-                            <p className="text-slate-600 dark:text-zinc-300 text-base sm:text-lg max-w-3xl mx-auto px-4 sm:px-0">
-                                Every project follows our streamlined methodology for consistent,
-                                high-quality results that exceed expectations.
+                            <p className="text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto">
+                                Every project follows our streamlined methodology for consistent, high-quality results.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                             {[
-                                {
-                                    icon: <FaSearch className="w-8 h-8" />,
-                                    title: 'Discovery',
-                                    description: 'Understanding your goals and requirements'
-                                },
-                                {
-                                    icon: <FaLightbulb className="w-8 h-8" />,
-                                    title: 'Strategy',
-                                    description: 'Crafting the perfect solution approach'
-                                },
-                                {
-                                    icon: <FaRocket className="w-8 h-8" />,
-                                    title: 'Execution',
-                                    description: 'Bringing your vision to life with precision'
-                                },
-                                {
-                                    icon: <FaChartLine className="w-8 h-8" />,
-                                    title: 'Optimization',
-                                    description: 'Continuous improvement and growth'
-                                }
+                                { icon: <FaSearch />, title: 'Discovery', desc: 'Understanding goals' },
+                                { icon: <FaLightbulb />, title: 'Strategy', desc: 'Crafting solutions' },
+                                { icon: <FaRocket />, title: 'Execution', desc: 'Precision delivery' },
+                                { icon: <FaChartLine />, title: 'Optimization', desc: 'Continuous growth' }
                             ].map((step, index) => (
-                                <motion.div
+                                <GlassCard
                                     key={index}
-                                    className="glass-effect p-6 rounded-2xl text-center group hover:bg-gradient-to-br hover:from-blue-500/5 hover:to-cyan-500/5 transition-all duration-300"
-                                    whileHover={{ y: -5, scale: 1.02 }}
+                                    className="p-6 text-center group"
+                                    hoverEffect={true}
                                 >
-                                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform flex justify-center text-blue-600 dark:text-blue-400">
+                                    <div className="text-3xl mb-4 text-blue-500 dark:text-blue-400 flex justify-center group-hover:scale-110 transition-transform">
                                         {step.icon}
                                     </div>
                                     <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-2">{step.title}</h4>
-                                    <p className="text-slate-600 dark:text-zinc-400 text-sm">{step.description}</p>
-                                </motion.div>
+                                    <p className="text-slate-500 dark:text-zinc-400 text-sm">{step.desc}</p>
+                                </GlassCard>
                             ))}
                         </div>
                     </motion.div>
 
-
-
                     {/* Enhanced Call to Action */}
-                    <motion.div variants={itemVariants} className="text-center">
-                        <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
-                            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-                                Ready to <span className="text-gradient">Transform Your Business?</span>
+                    <motion.div
+                        variants={itemVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                        className="text-center"
+                    >
+                        <GlassCard className="p-8 md:p-12 max-w-4xl mx-auto bg-gradient-to-br from-slate-900 to-slate-800 dark:from-white/10 dark:to-white/5 border-none text-white">
+                            <h3 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+                                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Transform Your Business?</span>
                             </h3>
-                            <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                                Choose from our comprehensive service offerings or let us create a
-                                custom solution tailored specifically to your unique business needs.
+                            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                                Choose from our comprehensive service offerings or let us create a custom solution tailored specifically to your unique business needs.
                             </p>
-                            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <motion.button
                                     onClick={() => navigate('/services')}
-                                    className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-2xl hover:shadow-blue-500/25 transition-all duration-300"
-                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    className="inline-flex items-center justify-center gap-3 bg-blue-500 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-all"
+                                    whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
                                     <FaClipboardList className="w-5 h-5" />
                                     Explore All Services
-                                    <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    <FaArrowRight className="w-4 h-4" />
                                 </motion.button>
                                 <motion.button
                                     onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
-                                    className="group inline-flex items-center justify-center gap-3 bg-zinc-700 text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-green-600 transition-all duration-300"
-                                    whileHover={{ scale: 1.02, y: -2 }}
+                                    className="inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white font-bold py-4 px-8 rounded-xl text-lg hover:bg-white/20 transition-all border border-white/10"
+                                    whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                 >
                                     <FaWhatsapp className="w-5 h-5" />
@@ -447,24 +666,24 @@ const ServicesPreview: React.FC = () => {
                             </div>
 
                             {/* Trust Indicators */}
-                            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-8 pt-8 border-t border-slate-200 dark:border-zinc-700">
+                            <div className="flex flex-wrap items-center justify-center gap-6 mt-8 pt-8 border-t border-white/10">
                                 <div className="flex items-center gap-2">
-                                    <FaLock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">SSL Secured</span>
+                                    <FaLock className="w-4 h-4 text-blue-400" />
+                                    <span className="text-slate-300 text-sm">SSL Secured</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaCheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">Money Back Guarantee</span>
+                                    <FaCheckCircle className="w-4 h-4 text-blue-400" />
+                                    <span className="text-slate-300 text-sm">Money Back Guarantee</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaHeadset className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                    <span className="text-slate-600 dark:text-zinc-300 text-sm">24/7 Support</span>
+                                    <FaHeadset className="w-4 h-4 text-blue-400" />
+                                    <span className="text-slate-300 text-sm">24/7 Support</span>
                                 </div>
                             </div>
-                        </div>
+                        </GlassCard>
                     </motion.div>
                 </div>
-            </motion.section>
+            </section>
 
             {/* Service Modal */}
             <AnimatePresence>

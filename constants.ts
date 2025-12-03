@@ -65,52 +65,52 @@ const ICONS = {
 
 export const SERVICES: Service[] = [
   {
-    title: 'Brand Growth',
-    description: 'Maximize your ROI with data-driven ad campaigns on TikTok, Meta, and Google. We use advanced targeting and creative testing to scale your revenue.',
-    icon: ICONS['Brand Growth'],
-    features: ['TikTok Ads', 'Meta Ads (Facebook/Instagram)', 'Google Ads', 'Performance Analytics'],
-    price: 'From $399 | Pro $1,199',
-    color: 'from-blue-500 to-cyan-500'
-  },
-  {
-    title: 'Social Media Content',
-    description: 'Dominate your niche with viral-ready short-form content. Our expert editors and strategists create videos that capture attention and drive engagement.',
-    icon: ICONS['Social Media Content'],
-    features: ['Video Editing (Reels/TikToks)', 'Post Design', 'Content Strategy', 'Trend Analysis'],
-    price: 'From $599/mo | Pro $2,999/mo',
-    color: 'from-purple-500 to-pink-500'
-  },
-  {
-    title: 'UI/UX Design',
-    description: 'Transform your digital presence with award-winning design. We create intuitive, beautiful interfaces that convert visitors into loyal customers.',
-    icon: ICONS['UI/UX Design'],
-    features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
-    price: 'From $799 | Pro $1,999',
-    color: 'from-blue-500 to-indigo-500'
-  },
-  {
-    title: 'Web Development',
-    description: 'Build a robust digital foundation with custom web solutions. From high-speed Shopify stores to complex web applications, we code for performance and scale.',
+    title: 'Web & Shopify Dev',
+    description: 'Custom Shopify and WordPress development to build robust, high-converting online stores. We specialize in scalable e-commerce architectures.',
     icon: ICONS['Web Development'],
-    features: ['Shopify Development', 'WordPress Solutions', 'Custom Web Apps', 'E-commerce Optimization'],
+    features: ['Shopify Development', 'WordPress Solutions', 'Custom Theme Dev', 'Store Optimization'],
     price: 'From $999 | Pro $2,999',
     color: 'from-orange-500 to-red-500'
   },
   {
-    title: 'Virtual Assistance',
-    description: 'Streamline your operations with our elite virtual assistants. Delegate administrative, research, and operational tasks to focus on high-level strategy.',
+    title: 'E-commerce Management',
+    description: 'Comprehensive business management for your e-commerce store. We handle operations, inventory, and strategy so you can focus on growth.',
     icon: ICONS['Virtual Assistance'],
-    features: ['Admin Support', 'Data Entry', 'Research', 'Calendar Management'],
-    price: 'From $299/mo | Pro $999/mo',
+    features: ['Business Operations', 'Inventory Management', 'Order Processing', 'Growth Strategy'],
+    price: 'From $499/mo | Pro $1,499/mo',
     color: 'from-cyan-500 to-blue-500'
   },
   {
-    title: 'Customer Support',
-    description: 'Deliver 24/7 world-class support. Our trained agents handle inquiries, resolve issues, and ensure your customers remain happy and loyal.',
+    title: 'Social Media Management',
+    description: 'Full-service social media handling. From scheduling posts to community engagement, we keep your brand active and growing across all platforms.',
     icon: ICONS['Customer Support'],
-    features: ['Live Chat Support', 'Email Support', 'Ticket Management', 'Weekly/Monthly Packages'],
-    price: 'From $299/mo | Pro $1,199',
-    color: 'from-sky-500 to-blue-600'
+    features: ['Schedule Posts', 'Community Management', 'Profile Optimization', 'Engagement Strategy'],
+    price: 'From $399/mo | Pro $999/mo',
+    color: 'from-purple-500 to-indigo-500'
+  },
+  {
+    title: 'Performance Marketing',
+    description: 'Data-driven Meta Ads (Facebook/Instagram) campaigns designed to scale revenue. We focus on ROAS and precise audience targeting.',
+    icon: ICONS['Brand Growth'],
+    features: ['Meta Ads', 'Audience Targeting', 'A/B Testing', 'ROI Tracking'],
+    price: 'From $599 | Pro $1,999',
+    color: 'from-blue-500 to-cyan-500'
+  },
+  {
+    title: 'Creative Studio',
+    description: 'High-impact content creation including video editing, motion graphics, and custom background music to make your brand unforgettable.',
+    icon: ICONS['Social Media Content'],
+    features: ['Video Content Creation', 'Background Music', 'Motion Graphics', 'Content Strategy'],
+    price: 'From $499 | Pro $1,499',
+    color: 'from-pink-500 to-rose-500'
+  },
+  {
+    title: 'UI/UX Design',
+    description: 'Award-winning interface design that combines aesthetics with usability. We create digital experiences that convert visitors into loyal customers.',
+    icon: ICONS['UI/UX Design'],
+    features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
+    price: 'From $799 | Pro $1,999',
+    color: 'from-violet-500 to-purple-500'
   },
 ];
 

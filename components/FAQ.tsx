@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaQuestionCircle, FaEnvelope } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { FAQ_DATA } from '../constants';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
   question,
@@ -10,25 +14,30 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
   onClick
 }) => {
   return (
-    <motion.div
-      className="glass-effect rounded-2xl overflow-hidden bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/5"
+    <GlassCard
+      className="overflow-hidden p-0"
+      hoverEffect={true}
       whileHover={{ scale: 1.01, y: -2 }}
-      transition={{ duration: 0.2 }}
     >
       <button
         onClick={onClick}
-        className="w-full px-6 md:px-8 py-4 md:py-6 text-left flex justify-between items-center hover:bg-slate-100 dark:hover:bg-white/5 transition-all duration-300 group"
+        className="w-full px-6 md:px-8 py-5 md:py-6 text-left flex justify-between items-center hover:bg-slate-50 dark:hover:bg-white/5 transition-all duration-300 group"
         aria-expanded={isOpen}
       >
-        <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white pr-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-          {question}
-        </h3>
+        <div className="flex items-center gap-4">
+          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen ? 'bg-blue-500 text-white' : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-zinc-500 group-hover:bg-blue-500/10 group-hover:text-blue-500'}`}>
+            <FaQuestionCircle className="w-4 h-4" />
+          </div>
+          <h3 className={`text-lg md:text-xl font-bold transition-colors duration-300 ${isOpen ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
+            {question}
+          </h3>
+        </div>
         <motion.div
-          className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-500 rounded-full flex items-center justify-center"
+          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-colors duration-300 ${isOpen ? 'bg-blue-500 border-blue-500 text-white' : 'border-slate-200 dark:border-white/10 text-slate-400 dark:text-zinc-500'}`}
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
         >
-          <FaChevronDown className="w-5 h-5 text-white" />
+          <FaChevronDown className="w-4 h-4" />
         </motion.div>
       </button>
       <AnimatePresence>
@@ -37,56 +46,41 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="overflow-hidden"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden bg-slate-50/50 dark:bg-white/5"
           >
-            <div className="px-8 pb-6 pt-2">
-              <div className="w-full h-px bg-gradient-to-r from-blue-500/20 to-blue-500/20 mb-4" />
+            <div className="px-8 pb-8 pt-2 pl-[4.5rem]">
               <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{answer}</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </GlassCard>
   );
 };
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+    <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+      <BackgroundEffects />
 
-      <div className="container mx-auto max-w-5xl relative z-10">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-            <span className="text-sm font-medium text-blue-600 dark:text-blue-400">FAQ</span>
-          </div>
-          <h2 className="text-3xl md:text-6xl font-black mb-6 text-slate-900 dark:text-white">
-            Frequently Asked <span className="text-gradient">Questions</span>
-          </h2>
-          <p className="text-lg md:text-xl text-slate-600 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed">
-            Get answers to common questions about our services, process, and how we can help
-            transform your business with our AI-powered digital solutions.
-          </p>
-        </motion.div>
+      <div className="container mx-auto max-w-4xl relative z-10">
+        <SectionHeading
+          badge="Common Questions"
+          title="Frequently Asked"
+          highlight="Questions"
+          description="Get answers to common questions about our services, process, and how we can help transform your business with our AI-powered digital solutions."
+        />
 
         <motion.div
-          className="space-y-6"
+          className="space-y-4"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -124,21 +118,23 @@ const FAQ: React.FC = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
-          <div className="glass-effect rounded-2xl p-6 md:p-8 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+          <GlassCard className="p-8 md:p-10 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
               Still have questions?
             </h3>
-            <p className="text-slate-600 dark:text-zinc-300 mb-6">
-              Can't find the answer you're looking for? Our team is here to help you.
+            <p className="text-slate-600 dark:text-zinc-300 mb-8 max-w-xl mx-auto">
+              Can't find the answer you're looking for? Our team is here to help you with any specific inquiries you may have.
             </p>
             <motion.button
-              className="bg-gradient-to-r from-blue-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl hover:from-blue-600 hover:to-blue-600 transition-all duration-300 shadow-lg shadow-blue-500/20"
-              whileHover={{ scale: 1.05, y: -2 }}
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
+              <FaEnvelope className="w-4 h-4" />
               Contact Our Team
             </motion.button>
-          </div>
+          </GlassCard>
         </motion.div>
       </div>
     </section>

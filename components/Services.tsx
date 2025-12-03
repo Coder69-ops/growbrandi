@@ -1,8 +1,12 @@
 import React, { useRef, useState, MouseEvent } from 'react';
-import { motion } from 'framer-motion';
-import { FaTimes, FaCheck, FaCircle, FaStar, FaShieldAlt, FaLayerGroup, FaGem, FaCommentDots, FaChartPie, FaLock, FaCheckCircle, FaHeadset } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaTimes, FaCheck, FaCircle, FaStar, FaShieldAlt, FaLayerGroup, FaGem, FaCommentDots, FaChartPie, FaLock, FaCheckCircle, FaHeadset, FaArrowRight } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { SERVICES } from '../constants';
 import { Service } from '../types';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,6 +33,7 @@ interface ServiceModalProps {
 }
 
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
+  const navigate = useNavigate();
   if (!isOpen || !service) return null;
 
   const processSteps = {
@@ -78,130 +83,140 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
   ];
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-
-      <motion.div
-        className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-8 bg-white/90 dark:bg-zinc-900/90 border border-slate-200 dark:border-white/10"
-        initial={{ scale: 0.8, y: 50 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.8, y: 50 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-slate-200 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-300 dark:hover:bg-zinc-600/50 transition-all z-10"
         >
-          <FaTimes className="w-6 h-6" />
-        </button>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <div className="flex items-center gap-4">
-              <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white`} aria-hidden="true">
-                {service.icon}
-              </div>
-              <div>
-                <h2 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h2>
-                <p className="text-blue-600 dark:text-blue-400 font-semibold text-xl">{service.price}</p>
-              </div>
-            </div>
+          <motion.div
+            className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-3xl p-0 bg-white dark:bg-[#09090b] border border-slate-200 dark:border-white/10 shadow-2xl"
+            initial={{ scale: 0.9, y: 50, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            exit={{ scale: 0.9, y: 50, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Image/Gradient */}
+            <div className={`h-48 w-full bg-gradient-to-r ${service.color} relative overflow-hidden`}>
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+              <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
 
-            <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
-
-            <div>
-              <h3 className="text-slate-900 dark:text-white font-semibold mb-6 text-2xl">Complete Package Includes</h3>
-              <div className="grid grid-cols-1 gap-4">
-                {service.features?.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-4 glass-effect p-4 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-                    <FaCheck className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0" aria-hidden="true" />
-                    <span className="text-slate-700 dark:text-zinc-300 font-medium text-lg">{feature}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-effect p-6 rounded-2xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-              <h3 className="text-slate-900 dark:text-white font-semibold mb-4 text-xl">Why Choose This Service?</h3>
-              <div className="space-y-3">
-                {[
-                  'Dedicated project manager assigned',
-                  '24/7 priority customer support',
-                  'Unlimited revisions until satisfied',
-                  '30-day money-back guarantee',
-                  'Post-launch support included',
-                  'Industry-leading tools and technologies'
-                ].map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <FaCircle className="w-3 h-3 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-                    <span className="text-slate-600 dark:text-zinc-300">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-slate-900 dark:text-white font-semibold text-2xl mb-6">Our Proven Process</h3>
-              <div className="space-y-6">
-                {steps.map((step, index) => (
-                  <div key={index} className="relative">
-                    {index < steps.length - 1 && (
-                      <div className="absolute left-6 top-16 w-0.5 h-20 bg-gradient-to-b from-blue-400 to-cyan-400" />
-                    )}
-
-                    <div className="flex items-start gap-6">
-                      <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${service.color} flex items-center justify-center text-white font-bold relative z-10`}>
-                        {index + 1}
-                      </div>
-
-                      <div className="flex-1 glass-effect p-6 rounded-xl bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-                        <div className="flex items-center justify-between mb-3">
-                          <h4 className="text-slate-900 dark:text-white font-semibold text-lg">{step.step}</h4>
-                          <span className="text-blue-600 dark:text-blue-400 text-sm font-medium bg-blue-100 dark:bg-blue-400/10 px-3 py-1 rounded-full">
-                            {step.duration}
-                          </span>
-                        </div>
-                        <p className="text-slate-600 dark:text-zinc-300">{step.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-8 rounded-2xl font-bold text-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-xl">
-                Start Your Project Now
+              <button
+                onClick={onClose}
+                className="absolute top-6 right-6 p-2 rounded-full bg-black/20 text-white hover:bg-black/40 transition-all z-10 backdrop-blur-md border border-white/10"
+              >
+                <FaTimes className="w-5 h-5" />
               </button>
-              <button className="w-full border border-slate-300 dark:border-zinc-600 text-slate-700 dark:text-zinc-300 py-3 px-8 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all">
-                Schedule Free Consultation
-              </button>
-            </div>
 
-            <div className="glass-effect p-6 rounded-2xl text-center bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className="w-5 h-5 text-yellow-400" />
-                  ))}
+              <div className="absolute bottom-6 left-8 flex items-end gap-6">
+                <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl">
+                  {service.icon}
                 </div>
-                <span className="text-slate-900 dark:text-white font-bold text-lg">4.9/5</span>
+                <div className="text-white mb-1">
+                  <h2 className="text-3xl md:text-4xl font-bold">{service.title}</h2>
+                  <p className="text-white/80 font-medium text-lg">{service.price}</p>
+                </div>
               </div>
-              <p className="text-slate-600 dark:text-zinc-400">Average rating from 200+ clients</p>
-              <p className="text-blue-600 dark:text-blue-400 text-sm mt-2">✓ 98% project success rate</p>
             </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
+
+            <div className="p-8 md:p-10 grid grid-cols-1 lg:grid-cols-2 gap-12 bg-slate-50 dark:bg-[#09090b]">
+              {/* Left Column */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Overview</h3>
+                  <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Complete Package Includes</h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    {service.features?.map((feature, index) => (
+                      <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm">
+                        <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                          <FaCheck className="w-3 h-3 text-green-500" />
+                        </div>
+                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-500/10">
+                  <h3 className="text-blue-900 dark:text-blue-100 font-bold mb-4 flex items-center gap-2">
+                    <FaShieldAlt className="w-5 h-5" />
+                    Why Choose This Service?
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      'Dedicated project manager assigned',
+                      '24/7 priority customer support',
+                      'Unlimited revisions until satisfied',
+                      '30-day money-back guarantee',
+                      'Post-launch support included'
+                    ].map((benefit, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <FaCircle className="w-2 h-2 text-blue-500" />
+                        <span className="text-slate-700 dark:text-blue-200/80 text-sm">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Our Proven Process</h3>
+                  <div className="space-y-6">
+                    {steps.map((step, index) => (
+                      <div key={index} className="relative pl-8 border-l-2 border-slate-200 dark:border-white/10 last:border-0">
+                        <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 border-white dark:border-zinc-900 ${index === 0 ? 'bg-blue-500' : 'bg-slate-300 dark:bg-zinc-700'}`} />
+
+                        <div className="bg-white dark:bg-white/5 p-5 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm">
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-bold text-slate-900 dark:text-white">{step.step}</h4>
+                            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded-full">
+                              {step.duration}
+                            </span>
+                          </div>
+                          <p className="text-sm text-slate-600 dark:text-zinc-400">{step.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="sticky top-0 space-y-4 pt-4">
+                  <button
+                    onClick={() => navigate('/contact', { state: { service: service.title } })}
+                    className={`w-full bg-gradient-to-r ${service.color} text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2`}
+                  >
+                    Start Your Project Now <FaArrowRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => navigate('/contact')}
+                    className="w-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white py-4 px-8 rounded-xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-300"
+                  >
+                    Schedule Free Consultation
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 mt-4 text-sm text-slate-500 dark:text-zinc-500">
+                    <FaLock className="w-3 h-3" />
+                    <span>Secure payment & money-back guarantee</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -213,111 +228,53 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, featured = false }) => {
-  const divRef = useRef<HTMLDivElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [opacity, setOpacity] = useState(0);
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!divRef.current || isFocused) return;
-    const div = divRef.current;
-    const rect = div.getBoundingClientRect();
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-    setOpacity(1);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-    setOpacity(0);
-  };
-
   return (
-    <motion.div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleFocus}
-      onMouseLeave={handleBlur}
-      className={`relative overflow-hidden rounded-3xl h-full group ${featured ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
-      variants={itemVariants}
-      whileHover={{ y: -12, scale: 1.02, transition: { duration: 0.3 } }}
+    <GlassCard
+      className={`h-full flex flex-col p-0 overflow-hidden ${featured ? 'ring-2 ring-blue-500/50 dark:ring-blue-400/50' : ''}`}
+      hoverEffect={true}
     >
       {featured && (
-        <div className="absolute -top-1 -right-1 z-20">
-          <div className="bg-gradient-to-r from-blue-400 to-cyan-400 text-white px-4 py-2 rounded-full text-sm font-bold">
-            MOST POPULAR
+        <div className="absolute top-4 right-4 z-20">
+          <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            POPULAR
           </div>
         </div>
       )}
 
-      <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300"
-        style={{
-          opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, rgba(59, 130, 246, 0.15), transparent 40%)`,
-        }}
-      />
+      {/* Card Header with Gradient */}
+      <div className={`relative p-8 pb-0`}>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
 
-      <div className={`glass-effect p-8 h-full relative bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/5 ${featured ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5' : ''}`}>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full -translate-y-16 translate-x-16" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-purple-500/10 rounded-full translate-y-12 -translate-x-12" />
-
-        <div className="relative z-10 h-full flex flex-col">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 rounded-2xl blur-lg group-hover:blur-xl transition-all" />
-                <div className={`relative p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-xl group-hover:scale-110 transition-transform duration-300`} aria-hidden="true">
-                  {service.icon}
-                </div>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-gradient transition-colors duration-300">{service.title}</h3>
-                <p className={`text-lg font-semibold bg-gradient-to-r ${service.color} bg-clip-text text-transparent mt-1`}>{service.price}</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-slate-600 dark:text-zinc-300 mb-8 flex-grow leading-relaxed text-lg">{service.description}</p>
-
-          <div className="mb-8">
-            <h4 className="text-slate-900 dark:text-white font-semibold mb-4 text-lg">Key Features:</h4>
-            <div className="grid grid-cols-1 gap-3">
-              {service.features?.slice(0, 4).map((feature, index) => (
-                <div key={index} className="flex items-center text-slate-600 dark:text-zinc-400">
-                  <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 mr-3 flex-shrink-0" aria-hidden="true" />
-                  {feature}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-auto space-y-4">
-            <motion.button
-              onClick={onLearnMore}
-              className={`w-full bg-gradient-to-r ${service.color} text-white py-4 px-6 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              Learn More & Get Started
-            </motion.button>
-            <button className="w-full border border-slate-300 dark:border-zinc-600 text-slate-700 dark:text-zinc-300 py-3 px-6 rounded-xl hover:border-blue-500 hover:text-blue-600 dark:hover:border-blue-400 dark:hover:text-blue-400 transition-all">
-              Get Free Quote
-            </button>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-slate-200 dark:border-zinc-700 text-center">
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-zinc-400">
-              <FaShieldAlt className="w-4 h-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-              <span>30-day money-back guarantee</span>
-            </div>
+        <div className="relative z-10 flex items-start justify-between mb-6">
+          <div className={`p-3 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-lg`}>
+            {service.icon}
           </div>
         </div>
+
+        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h3>
+        <p className={`text-lg font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>{service.price}</p>
       </div>
-    </motion.div>
+
+      <div className="p-8 pt-4 flex-grow flex flex-col">
+        <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{service.description}</p>
+
+        <div className="space-y-3 mb-8">
+          {service.features?.slice(0, 3).map((feature, index) => (
+            <div key={index} className="flex items-center text-sm text-slate-600 dark:text-zinc-400">
+              <FaCheckCircle className="w-4 h-4 text-blue-500 mr-3 flex-shrink-0" />
+              {feature}
+            </div>
+          ))}
+        </div>
+
+        <button
+          onClick={onLearnMore}
+          className="w-full py-3 rounded-xl font-bold text-sm bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-all duration-300 border border-slate-200 dark:border-white/10"
+        >
+          View Details
+        </button>
+      </div>
+    </GlassCard>
   );
 };
 
@@ -327,6 +284,7 @@ export const ServicesPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [displayedServices, setDisplayedServices] = useState(SERVICES);
+  const navigate = useNavigate();
 
   const categories = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
 
@@ -354,51 +312,29 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <>
-      <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-50/50 via-slate-50 to-slate-50 dark:from-zinc-800/20 dark:via-luxury-black dark:to-luxury-black" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 dark:bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 dark:bg-zinc-800/10 rounded-full blur-3xl" />
+      <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+        <BackgroundEffects />
 
         <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="text-center mb-20 max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-3 glass-effect rounded-full px-8 py-3 mb-8 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                <FaLayerGroup className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">COMPREHENSIVE SERVICES</span>
-                <FaGem className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <h1 className="text-4xl md:text-6xl font-black mb-8 leading-tight font-heading tracking-tight text-slate-900 dark:text-white">
-                Premium <span className="text-gradient">Digital Solutions</span>
-                <span className="block">For Every Business Need</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-slate-600 dark:text-zinc-400 leading-relaxed mb-8 font-light">
-                Transform your business with our comprehensive suite of services. From
-                <span className="text-slate-900 dark:text-white font-semibold"> cutting-edge design and development</span> to
-                <span className="text-slate-900 dark:text-white font-semibold"> data-driven marketing strategies</span>,
-                we deliver exceptional results that drive growth.
-              </p>
-            </motion.div>
-          </div>
+          <SectionHeading
+            badge="Comprehensive Services"
+            title="Premium Digital"
+            highlight="Solutions"
+            description="Transform your business with our comprehensive suite of services. From cutting-edge design and development to data-driven marketing strategies."
+          />
 
           <motion.div className="flex justify-center mb-16">
-            <div className="glass-effect rounded-2xl p-2 inline-flex gap-2 bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+            <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/10 shadow-lg overflow-x-auto max-w-full">
               {categories.map((category, index) => (
                 <motion.button
                   key={category}
                   onClick={() => handleFilterChange(category)}
-                  className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${activeFilter === category
+                  className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 whitespace-nowrap ${activeFilter === category
                     ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/5'
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   {category}
                 </motion.button>
@@ -413,97 +349,109 @@ export const ServicesPage: React.FC = () => {
             animate="visible"
             layout
           >
-            {displayedServices.map((service, index) => (
-              <motion.div
-                key={service.title}
-                layout
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <ServiceCard
-                  service={service}
-                  onLearnMore={() => handleLearnMore(service)}
-                  featured={service.title === 'UI/UX Design'}
-                />
-              </motion.div>
-            ))}
+            <AnimatePresence mode='popLayout'>
+              {displayedServices.map((service, index) => (
+                <motion.div
+                  key={service.title}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ServiceCard
+                    service={service}
+                    onLearnMore={() => handleLearnMore(service)}
+                    featured={service.title === 'UI/UX Design'}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </motion.div>
 
-          <motion.div className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
+          {/* Stats Section */}
+          <motion.div
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
             {[
               { number: '500+', label: 'Projects Completed', icon: '🎯' },
               { number: '98%', label: 'Client Satisfaction', icon: '⭐' },
               { number: '24/7', label: 'Support Available', icon: '💬' },
               { number: '15+', label: 'Industry Awards', icon: '🏆' }
             ].map((stat, index) => (
-              <motion.div
+              <GlassCard
                 key={index}
-                className="glass-effect p-6 rounded-2xl text-center group bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10"
-                whileHover={{ scale: 1.02, y: -5 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                layout
+                className="p-6 text-center flex flex-col items-center justify-center"
+                hoverEffect={true}
               >
-                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
-                  {stat.icon}
-                </div>
-                <div className="text-3xl font-black text-gradient mb-2">
+                <div className="text-4xl mb-4">{stat.icon}</div>
+                <div className="text-3xl font-black text-slate-900 dark:text-white mb-2">
                   {stat.number}
                 </div>
-                <div className="text-slate-600 dark:text-zinc-400 text-sm font-medium">
+                <div className="text-slate-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wider">
                   {stat.label}
                 </div>
-              </motion.div>
+              </GlassCard>
             ))}
           </motion.div>
 
-          <motion.div className="text-center">
-            <div className="glass-effect rounded-3xl p-8 md:p-12 max-w-4xl mx-auto bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-              <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-                Ready to <span className="text-gradient">Elevate Your Business?</span>
-              </h3>
-              <p className="text-xl text-slate-600 dark:text-zinc-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Get started with a free consultation. Our experts will analyze your needs
-                and recommend the perfect service package for your business goals.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
-                <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-blue-600 text-white font-bold py-4 px-8 rounded-full text-lg shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] transition-all duration-300"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <FaCommentDots className="w-5 h-5" />
-                  Get Free Consultation
-                </motion.button>
-                <motion.button
-                  className="group inline-flex items-center justify-center gap-3 bg-slate-200 dark:bg-zinc-700 text-slate-900 dark:text-white font-bold py-4 px-8 rounded-2xl text-lg hover:bg-slate-300 dark:hover:bg-zinc-600 transition-all duration-300"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <FaChartPie className="w-5 h-5" />
-                  View Our Portfolio
-                </motion.button>
-              </div>
+          {/* CTA Section */}
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <GlassCard className="p-10 md:p-16 max-w-4xl mx-auto bg-gradient-to-br from-blue-600 to-indigo-700 text-white border-none">
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+              <div className="relative z-10">
+                <h3 className="text-3xl md:text-5xl font-bold mb-6 text-white">
+                  Ready to Elevate Your Business?
+                </h3>
+                <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+                  Get started with a free consultation. Our experts will analyze your needs
+                  and recommend the perfect service package for your business goals.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-6 justify-center mb-10">
+                  <motion.button
+                    onClick={() => navigate('/contact')}
+                    className="inline-flex items-center justify-center gap-3 bg-white text-blue-600 font-bold py-4 px-8 rounded-xl text-lg shadow-xl hover:bg-blue-50 transition-all duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <FaCommentDots className="w-5 h-5" />
+                    Get Free Consultation
+                  </motion.button>
+                  <motion.button
+                    onClick={() => navigate('/portfolio')}
+                    className="inline-flex items-center justify-center gap-3 bg-blue-700/50 backdrop-blur-md text-white border border-white/20 font-bold py-4 px-8 rounded-xl text-lg hover:bg-blue-700/70 transition-all duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <FaChartPie className="w-5 h-5" />
+                    View Our Portfolio
+                  </motion.button>
+                </div>
 
-              <div className="flex items-center justify-center gap-8 pt-8 border-t border-slate-200 dark:border-zinc-700">
-                <div className="flex items-center gap-2">
-                  <FaLock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <span className="text-slate-600 dark:text-zinc-300 text-sm">SSL Secured</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaCheckCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <span className="text-slate-600 dark:text-zinc-300 text-sm">Money Back Guarantee</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <FaHeadset className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                  <span className="text-slate-600 dark:text-zinc-300 text-sm">24/7 Support</span>
+                <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 pt-8 border-t border-white/10">
+                  <div className="flex items-center gap-2 text-blue-100">
+                    <FaLock className="w-4 h-4" />
+                    <span className="text-sm font-medium">SSL Secured</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-100">
+                    <FaCheckCircle className="w-4 h-4" />
+                    <span className="text-sm font-medium">Money Back Guarantee</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-100">
+                    <FaHeadset className="w-4 h-4" />
+                    <span className="text-sm font-medium">24/7 Support</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </GlassCard>
           </motion.div>
         </div>
       </section>

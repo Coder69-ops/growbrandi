@@ -1,12 +1,15 @@
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight } from 'react-icons/fa';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
-import { sendEmail, sendEmailData } from '../services/emailService';
+import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
 import ContactAssistant from './ContactAssistant';
 import { CONTACT_INFO, SERVICES } from '../constants';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 // --- ContactPage Component ---
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
@@ -163,9 +166,9 @@ I would like to book this consultation.`;
     }
 
     const inputClasses = (fieldName: string) => `
-        w-full p-4 rounded-xl bg-white dark:bg-zinc-900/50 border 
+        w-full p-4 rounded-xl bg-white/50 dark:bg-zinc-900/50 border 
         ${focusedField === fieldName ? 'border-blue-500/50 ring-2 ring-blue-500/20' : 'border-slate-200 dark:border-white/10'} 
-        focus:outline-none text-slate-900 dark:text-white transition-all duration-300 placeholder-slate-400 dark:placeholder-zinc-400
+        focus:outline-none text-slate-900 dark:text-white transition-all duration-300 placeholder-slate-400 dark:placeholder-zinc-500 backdrop-blur-sm
     `;
 
     // Social Icon Mapping
@@ -181,10 +184,8 @@ I would like to book this consultation.`;
     };
 
     return (
-        <section id="contact" className="min-h-screen py-24 px-4 bg-slate-50 dark:bg-luxury-black text-slate-900 dark:text-white relative overflow-hidden flex flex-col justify-center transition-colors duration-300">
-            {/* Background Elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-100/40 via-slate-50 to-slate-50 dark:from-blue-900/20 dark:via-luxury-black dark:to-luxury-black pointer-events-none transition-colors duration-300" />
-            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+        <section id="contact" className="min-h-screen py-24 px-4 bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white relative overflow-hidden flex flex-col justify-center transition-colors duration-300">
+            <BackgroundEffects />
 
             <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
 
@@ -195,48 +196,48 @@ I would like to book this consultation.`;
                     transition={{ duration: 0.6 }}
                     className="flex flex-col justify-center"
                 >
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 font-heading tracking-tight leading-tight">
-                        Let's Build <br />
-                        <span className="text-gradient">Something Epic</span>
-                    </h1>
-                    <p className="text-xl text-slate-600 dark:text-zinc-400 mb-8 max-w-lg leading-relaxed">
-                        Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions.
-                    </p>
+                    <SectionHeading
+                        badge="Get in Touch"
+                        title="Let's Build"
+                        highlight="Something Epic"
+                        description="Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions."
+                        align="left"
+                    />
 
                     <div className="mb-12">
                         <button
                             onClick={() => setIsAssistantOpen(true)}
-                            className="group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 hover:from-blue-600/30 hover:to-cyan-600/30 border border-blue-500/30 rounded-xl transition-all duration-300"
+                            className="group flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-600/10 to-cyan-600/10 hover:from-blue-600/20 hover:to-cyan-600/20 border border-blue-500/30 rounded-xl transition-all duration-300 backdrop-blur-md"
                         >
                             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
                                 <FaMagic className="w-4 h-4" />
                             </div>
                             <div className="text-left">
-                                <p className="text-sm text-blue-400 font-bold uppercase tracking-wider">Not sure where to start?</p>
-                                <p className="text-white font-semibold">Try our AI Project Assistant</p>
+                                <p className="text-sm text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider">Not sure where to start?</p>
+                                <p className="text-slate-900 dark:text-white font-semibold">Try our AI Project Assistant</p>
                             </div>
                         </button>
                     </div>
 
                     <div className="space-y-8 mb-12">
-                        <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-blue-600 dark:text-blue-400 shrink-0 shadow-sm dark:shadow-none">
+                        <GlassCard className="flex items-start space-x-4 p-4" hoverEffect={true}>
+                            <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
                                 <FaEnvelope className="w-5 h-5" />
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Email Us</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.email}</p>
-                                <p className="text-zinc-400 text-sm">Response within 24 hours</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">Response within 24 hours</p>
                             </div>
-                        </div>
+                        </GlassCard>
 
-                        <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-green-600 dark:text-green-400 shrink-0 shadow-sm dark:shadow-none">
-                                <FaWhatsapp className="w-6 h-6" />
+                        <GlassCard className="flex items-start space-x-4 p-4" hoverEffect={true}>
+                            <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center text-green-600 dark:text-green-400 shrink-0">
+                                <FaPhone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white mb-1">Phone & WhatsApp</h3>
-                                <p className="text-zinc-400">{CONTACT_INFO.phone}</p>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Phone & WhatsApp</h3>
+                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.phone}</p>
                                 <a
                                     href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
                                     target="_blank"
@@ -246,18 +247,18 @@ I would like to book this consultation.`;
                                     Chat on WhatsApp <FaArrowRight className="w-3 h-3" />
                                 </a>
                             </div>
-                        </div>
+                        </GlassCard>
 
-                        <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-blue-600 dark:text-blue-400 shrink-0 shadow-sm dark:shadow-none">
+                        <GlassCard className="flex items-start space-x-4 p-4" hoverEffect={true}>
+                            <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
                                 <FaMapMarkerAlt className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white mb-1">Global HQ</h3>
-                                <p className="text-zinc-400">{CONTACT_INFO.address}</p>
-                                <p className="text-zinc-400 text-sm">Digital-first agency</p>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Global HQ</h3>
+                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.address}</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">Digital-first agency</p>
                             </div>
-                        </div>
+                        </GlassCard>
                     </div>
 
                     <div className="flex space-x-4">
@@ -279,7 +280,7 @@ I would like to book this consultation.`;
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="relative"
                 >
-                    <div className="glass-effect p-6 md:p-10 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl relative overflow-hidden">
+                    <GlassCard className="p-6 md:p-10 relative overflow-hidden">
                         {/* Decorative glow */}
                         <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -292,8 +293,8 @@ I would like to book this consultation.`;
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     className="flex flex-col items-center justify-center h-full py-12 text-center"
                                 >
-                                    <div className="w-24 h-24 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
-                                        <FaCheckCircle className="w-12 h-12 text-blue-500" />
+                                    <div className="w-24 h-24 rounded-full bg-green-500/20 flex items-center justify-center mb-6">
+                                        <FaCheckCircle className="w-12 h-12 text-green-500" />
                                     </div>
                                     <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-4 font-heading">Message Sent!</h3>
                                     <p className="text-slate-600 dark:text-zinc-400 max-w-md mx-auto mb-8">
@@ -301,7 +302,7 @@ I would like to book this consultation.`;
                                     </p>
                                     <button
                                         onClick={() => setFormStatus('idle')}
-                                        className="px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10"
+                                        className="px-8 py-3 bg-slate-900 dark:bg-zinc-800 hover:bg-slate-800 dark:hover:bg-zinc-700 text-white rounded-xl transition-colors border border-white/10"
                                     >
                                         Send Another Message
                                     </button>
@@ -322,13 +323,13 @@ I would like to book this consultation.`;
                                             className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 flex items-start gap-3"
                                         >
                                             <FaRobot className="w-5 h-5 text-blue-400 mt-0.5" />
-                                            <p className="text-sm text-blue-200">{aiContext}</p>
+                                            <p className="text-sm text-blue-600 dark:text-blue-200">{aiContext}</p>
                                         </motion.div>
                                     )}
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="name" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
+                                            <label htmlFor="name" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
                                             <input
                                                 type="text"
                                                 id="name"
@@ -343,7 +344,7 @@ I would like to book this consultation.`;
                                             />
                                         </div>
                                         <div>
-                                            <label htmlFor="email" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
+                                            <label htmlFor="email" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
                                             <input
                                                 type="email"
                                                 id="email"
@@ -361,7 +362,7 @@ I would like to book this consultation.`;
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="service" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
+                                            <label htmlFor="service" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
                                             <select
                                                 id="service"
                                                 name="service"
@@ -377,7 +378,7 @@ I would like to book this consultation.`;
                                             </select>
                                         </div>
                                         <div>
-                                            <label htmlFor="subject" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
+                                            <label htmlFor="subject" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
                                             <input
                                                 type="text"
                                                 id="subject"
@@ -395,12 +396,12 @@ I would like to book this consultation.`;
 
                                     <div>
                                         <div className="flex justify-between items-center mb-2">
-                                            <label htmlFor="message" className="block text-sm font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Message</label>
+                                            <label htmlFor="message" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">Message</label>
                                             <motion.button
                                                 type="button"
                                                 onClick={generateBrief}
                                                 disabled={isGenerating}
-                                                className="text-xs flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50"
+                                                className="text-xs flex items-center gap-1 text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors disabled:opacity-50 font-medium"
                                                 whileHover={{ scale: 1.05 }}
                                                 whileTap={{ scale: 0.95 }}
                                             >
@@ -422,18 +423,18 @@ I would like to book this consultation.`;
                                                 required
                                             ></textarea>
                                             {isGenerating && (
-                                                <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                                                <div className="absolute inset-0 bg-white/50 dark:bg-black/50 backdrop-blur-sm rounded-xl flex items-center justify-center z-20">
                                                     <LoadingSpinner />
                                                 </div>
                                             )}
                                         </div>
-                                        {aiError && <p className="text-red-400 text-xs mt-2">{aiError}</p>}
+                                        {aiError && <p className="text-red-500 dark:text-red-400 text-xs mt-2">{aiError}</p>}
                                     </div>
 
                                     <motion.button
                                         type="submit"
                                         disabled={formStatus === 'submitting'}
-                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600"
+                                        className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 disabled:opacity-70 disabled:cursor-not-allowed transform hover:scale-[1.02]"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
@@ -450,16 +451,16 @@ I would like to book this consultation.`;
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0 }}
-                                                className="text-red-400 text-center text-sm font-medium bg-red-500/10 py-2 rounded-lg border border-red-500/20"
+                                                className="text-red-500 dark:text-red-400 text-center text-sm font-medium bg-red-100 dark:bg-red-500/10 py-2 rounded-lg border border-red-200 dark:border-red-500/20"
                                             >
-                                                Something went wrong. Please check your connection or EmailJS config.
+                                                Something went wrong. Please check your connection or try again later.
                                             </motion.p>
                                         )}
                                     </AnimatePresence>
                                 </motion.form>
                             )}
                         </AnimatePresence>
-                    </div>
+                    </GlassCard>
                 </motion.div>
             </div>
             <ContactAssistant isOpen={isAssistantOpen} onClose={() => setIsAssistantOpen(false)} />

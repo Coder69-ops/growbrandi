@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FaTimes, FaChartLine, FaExchangeAlt, FaStar, FaCheck, FaBriefcase, FaArrowRight, FaCommentDots, FaFolderOpen, FaRocket, FaCode, FaWhatsapp } from 'react-icons/fa';
+import { FaTimes, FaChartLine, FaExchangeAlt, FaStar, FaCheck, FaBriefcase, FaArrowRight, FaFolderOpen, FaCode, FaWhatsapp, FaBolt, FaMobileAlt, FaSearch } from 'react-icons/fa';
 import { PROJECTS, CONTACT_INFO } from '../constants';
 import { Project } from '../types';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -45,11 +48,11 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
             onClick={onClose}
         >
             {/* Enhanced Backdrop */}
-            <div className="absolute inset-0 bg-white/90 dark:bg-black/90 backdrop-blur-md" />
+            <div className="absolute inset-0 bg-slate-900/80 dark:bg-black/90 backdrop-blur-md" />
 
             {/* Modal Content */}
             <motion.div
-                className="relative w-[95%] md:w-full max-w-6xl max-h-[90vh] overflow-y-auto glass-effect rounded-3xl p-4 sm:p-10 border border-slate-200 dark:border-white/10 shadow-2xl custom-scrollbar"
+                className="relative w-[95%] md:w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-3xl p-4 sm:p-10 border border-slate-200 dark:border-white/10 shadow-2xl custom-scrollbar"
                 initial={{ scale: 0.9, y: 50, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 50, opacity: 0 }}
@@ -68,7 +71,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
                     {/* Project Visuals (Left Column) */}
                     <div className="lg:col-span-7 space-y-8">
-                        <div className="relative group rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                        <div className="relative group rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-white/10">
                             <img
                                 src={project.imageUrl}
                                 alt={project.title}
@@ -80,7 +83,7 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                             <div className="absolute top-4 left-4 flex gap-2">
-                                <div className="bg-zinc-900/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold border border-white/10 shadow-lg flex items-center gap-2">
+                                <div className="bg-slate-900/80 dark:bg-zinc-900/80 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold border border-white/10 shadow-lg flex items-center gap-2">
                                     <FaBriefcase className="w-3 h-3 text-blue-400" />
                                     {project.category}
                                 </div>
@@ -96,17 +99,17 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
 
                         {/* Before/After Comparison */}
                         {project.beforeImage && project.afterImage && (
-                            <div className="bg-zinc-900/50 rounded-2xl p-6 border border-white/5">
-                                <h3 className="text-white font-bold mb-6 flex items-center gap-2 text-lg">
+                            <div className="bg-slate-50 dark:bg-zinc-900/50 rounded-2xl p-6 border border-slate-200 dark:border-white/5">
+                                <h3 className="text-slate-900 dark:text-white font-bold mb-6 flex items-center gap-2 text-lg">
                                     <FaExchangeAlt className="w-5 h-5 text-blue-400" />
                                     Transformation Results
                                 </h3>
                                 <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-3 group">
                                         <div className="flex items-center justify-between">
-                                            <p className="text-xs text-zinc-400 uppercase font-bold tracking-wider">Before</p>
+                                            <p className="text-xs text-slate-500 dark:text-zinc-400 uppercase font-bold tracking-wider">Before</p>
                                         </div>
-                                        <div className="relative overflow-hidden rounded-xl border border-white/5 group-hover:border-red-500/30 transition-colors duration-300">
+                                        <div className="relative overflow-hidden rounded-xl border border-slate-200 dark:border-white/5 group-hover:border-red-500/30 transition-colors duration-300">
                                             <img src={project.beforeImage} alt="Before" loading="lazy" width="600" height="400" className="w-full h-40 object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500" />
                                             <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                         </div>
@@ -130,13 +133,13 @@ const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose })
                         <div>
                             <h2 className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 leading-tight font-heading">{project.title}</h2>
                             <div className="flex flex-wrap items-center gap-4 mb-6">
-                                <div className="flex items-center gap-1 bg-zinc-800/50 px-3 py-1.5 rounded-lg border border-white/5">
+                                <div className="flex items-center gap-1 bg-slate-100 dark:bg-zinc-800/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/5">
                                     {[...Array(5)].map((_, i) => (
                                         <FaStar key={i} className={`w-4 h-4 ${i < Math.floor(project.rating) ? 'text-yellow-400' : 'text-slate-300 dark:text-zinc-600'}`} />
                                     ))}
                                     <span className="text-slate-700 dark:text-zinc-300 ml-2 font-medium">{project.rating}</span>
                                 </div>
-                                <div className="text-blue-400 font-semibold bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20">
+                                <div className="text-blue-600 dark:text-blue-400 font-semibold bg-blue-50 dark:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-100 dark:border-blue-500/20">
                                     {project.completionTime}
                                 </div>
                             </div>
@@ -213,96 +216,130 @@ interface ProjectCardProps {
     onClick: () => void;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) => (
-    <motion.div
-        className="group relative overflow-hidden rounded-3xl shadow-2xl h-[450px] cursor-pointer border border-slate-200 dark:border-white/5 bg-white dark:bg-zinc-900"
-        variants={itemVariants}
-        whileHover={{ y: -10 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        onClick={onClick}
-    >
-        {/* Image with Zoom Effect */}
-        <div className="absolute inset-0 overflow-hidden">
-            <img
-                src={project.imageUrl}
-                alt={project.title}
-                loading="lazy"
-                width="600"
-                height="450"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
-        </div>
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full -translate-y-20 translate-x-20 blur-2xl group-hover:bg-blue-500/30 transition-colors duration-500" />
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick }) => {
+    // Priority 2: Web Development Visuals
+    const isWebDev = project.category === 'Web Development' || project.category === 'E-Commerce';
 
-        {/* Growth Badge */}
-        {project.growthMetrics && (
-            <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg z-10 flex items-center gap-2 transform group-hover:scale-105 transition-transform duration-300">
-                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                {project.growthMetrics}
+    return (
+        <GlassCard
+            className="group h-[450px] cursor-pointer p-0 overflow-hidden"
+            hoverEffect={true}
+            variants={itemVariants}
+            onClick={onClick}
+        >
+            {/* Image with Zoom Effect */}
+            <div className="absolute inset-0 overflow-hidden">
+                <img
+                    src={project.imageUrl}
+                    alt={project.title}
+                    loading="lazy"
+                    width="600"
+                    height="450"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-500" />
             </div>
-        )}
 
-        {/* Project Number */}
-        <div className="absolute top-6 right-6 w-12 h-12 bg-black/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/50 transition-colors duration-300">
-            <span className="text-white/80 font-bold font-heading text-lg">{(index + 1).toString().padStart(2, '0')}</span>
-        </div>
+            {/* Priority 2: Web Dev Visual Artifacts */}
+            {isWebDev && (
+                <>
+                    {/* Floating Lighthouse Score */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="absolute top-4 right-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg p-2 shadow-lg z-20 border border-slate-200 dark:border-white/10 flex flex-col items-center gap-1 transform group-hover:scale-110 transition-transform"
+                    >
+                        <div className="w-8 h-8 rounded-full border-4 border-green-500 flex items-center justify-center">
+                            <span className="text-[10px] font-bold text-green-600 dark:text-green-400">100</span>
+                        </div>
+                        <span className="text-[8px] uppercase font-bold text-slate-500 dark:text-slate-400">Perf</span>
+                    </motion.div>
 
-        {/* Content Container */}
-        <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
-            <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                {/* Category */}
-                <div className="flex items-center gap-3 mb-4">
-                    <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider rounded-lg border border-blue-500/20">
-                        {project.category}
-                    </span>
-                    <span className="text-zinc-400 text-sm flex items-center gap-1">
-                        <FaStar className="w-3 h-3 text-yellow-500" />
-                        {project.rating}
-                    </span>
+                    {/* Code Snippet Decoration */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="absolute bottom-32 left-4 bg-slate-900/90 backdrop-blur-md rounded-lg p-3 shadow-xl z-20 border border-white/10 w-48 hidden sm:block transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500"
+                    >
+                        <div className="flex gap-1 mb-2">
+                            <div className="w-2 h-2 rounded-full bg-red-500" />
+                            <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                            <div className="w-2 h-2 rounded-full bg-green-500" />
+                        </div>
+                        <div className="space-y-1">
+                            <div className="h-1.5 w-3/4 bg-purple-500/50 rounded-full" />
+                            <div className="h-1.5 w-1/2 bg-blue-500/50 rounded-full ml-2" />
+                            <div className="h-1.5 w-2/3 bg-green-500/50 rounded-full" />
+                        </div>
+                    </motion.div>
+                </>
+            )}
+
+            {/* Growth Badge */}
+            {project.growthMetrics && (
+                <div className="absolute top-6 left-6 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg z-10 flex items-center gap-2 transform group-hover:scale-105 transition-transform duration-300">
+                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                    {project.growthMetrics}
                 </div>
+            )}
 
-                <h3 className="text-3xl font-black text-white mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-300 transition-all duration-300 font-heading">
-                    {project.title}
-                </h3>
-
-                <p className="text-zinc-400 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 line-clamp-2 font-light">
-                    {project.description}
-                </p>
-
-                {/* Technologies & Action */}
-                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 border-t border-white/10 pt-4">
-                    <div className="flex -space-x-2">
-                        {project.technologies?.slice(0, 3).map((tech, i) => (
-                            <div key={i} className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] text-zinc-300 font-bold" title={tech}>
-                                {tech.charAt(0)}
-                            </div>
-                        ))}
-                        {project.technologies && project.technologies.length > 3 && (
-                            <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] text-zinc-300 font-bold">
-                                +{project.technologies.length - 3}
-                            </div>
-                        )}
+            {/* Content Container */}
+            <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end z-10">
+                <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                    {/* Category */}
+                    <div className="flex items-center gap-3 mb-4">
+                        <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider rounded-lg border border-blue-500/20">
+                            {project.category}
+                        </span>
+                        <span className="text-zinc-400 text-sm flex items-center gap-1">
+                            <FaStar className="w-3 h-3 text-yellow-500" />
+                            {project.rating}
+                        </span>
                     </div>
 
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            window.location.href = '/case-studies';
-                        }}
-                        className="flex items-center gap-2 text-white font-bold text-sm group/btn"
-                    >
-                        View Case Study
-                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-blue-500 transition-colors duration-300">
-                            <FaArrowRight className="w-3 h-3 group-hover/btn:-rotate-45 transition-transform duration-300" />
+                    <h3 className="text-3xl font-black text-white mb-3 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-300 transition-all duration-300 font-heading">
+                        {project.title}
+                    </h3>
+
+                    <p className="text-zinc-400 text-sm mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 line-clamp-2 font-light">
+                        {project.description}
+                    </p>
+
+                    {/* Technologies & Action */}
+                    <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200 border-t border-white/10 pt-4">
+                        <div className="flex -space-x-2">
+                            {project.technologies?.slice(0, 3).map((tech, i) => (
+                                <div key={i} className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] text-zinc-300 font-bold" title={tech}>
+                                    {tech.charAt(0)}
+                                </div>
+                            ))}
+                            {project.technologies && project.technologies.length > 3 && (
+                                <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] text-zinc-300 font-bold">
+                                    +{project.technologies.length - 3}
+                                </div>
+                            )}
                         </div>
-                    </button>
+
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = '/case-studies';
+                            }}
+                            className="flex items-center gap-2 text-white font-bold text-sm group/btn"
+                        >
+                            View Case Study
+                            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover/btn:bg-blue-500 transition-colors duration-300">
+                                <FaArrowRight className="w-3 h-3 group-hover/btn:-rotate-45 transition-transform duration-300" />
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </motion.div>
-);
+        </GlassCard>
+    );
+};
 
 // --- Enhanced Projects Preview Section ---
 const ProjectsPreview: React.FC = () => {
@@ -330,44 +367,16 @@ const ProjectsPreview: React.FC = () => {
 
     return (
         <>
-            <motion.section
-                className="py-16 md:py-32 px-4 relative overflow-hidden bg-slate-50 dark:bg-luxury-black transition-colors duration-300"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0 }}
-                variants={containerVariants}
-            >
-                {/* Enhanced Background Elements */}
-                <div className="absolute inset-0">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-100/40 via-slate-50 to-slate-50 dark:from-zinc-800/20 dark:via-luxury-black dark:to-luxury-black transition-colors duration-300" />
-                    <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse" />
-                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px] animate-pulse delay-1000" />
-                </div>
+            <section className="relative py-16 md:py-32 overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+                <BackgroundEffects />
 
-                <div className="container mx-auto max-w-7xl relative z-10">
-                    {/* Enhanced Section Header */}
-                    <motion.div variants={itemVariants} className="text-center mb-20">
-                        <div className="inline-flex items-center gap-3 glass-effect rounded-full px-6 py-2 mb-8 border border-white/5">
-                            <span className="relative flex h-3 w-3">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                            </span>
-                            <span className="text-sm font-bold text-blue-400 tracking-widest uppercase">Featured Work</span>
-                        </div>
-
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 leading-tight tracking-tight text-slate-900 dark:text-white transition-colors duration-300">
-                            Crafting Digital <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-purple-500 animate-gradient-x">
-                                Masterpieces
-                            </span>
-                        </h2>
-
-                        <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light transition-colors duration-300">
-                            Explore our portfolio of award-winning projects where we blend
-                            <span className="text-slate-900 dark:text-white font-medium"> strategic thinking</span> with
-                            <span className="text-slate-900 dark:text-white font-medium"> creative excellence</span> to drive real business growth.
-                        </p>
-                    </motion.div>
+                <div className="container mx-auto max-w-7xl relative z-10 px-4 sm:px-6 lg:px-8">
+                    <SectionHeading
+                        badge="Featured Work"
+                        title="Crafting Digital"
+                        highlight="Masterpieces"
+                        description="Explore our portfolio of award-winning projects where we blend strategic thinking with creative excellence to drive real business growth."
+                    />
 
                     {/* Enhanced Filter Tabs */}
                     <motion.div variants={itemVariants} className="flex justify-center mb-16 overflow-x-auto px-4 pb-4">
@@ -412,6 +421,9 @@ const ProjectsPreview: React.FC = () => {
                                 }`}
                             variants={containerVariants}
                             layout
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.1 }}
                         >
                             <AnimatePresence mode="popLayout">
                                 {displayedProjects.map((project, index) => (
@@ -452,7 +464,7 @@ const ProjectsPreview: React.FC = () => {
 
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
-                        <div className="relative overflow-hidden rounded-[3rem] p-12 lg:p-20 border border-white/10 bg-zinc-900/50 backdrop-blur-xl">
+                        <GlassCard className="p-12 lg:p-20 bg-zinc-900/50 backdrop-blur-xl border border-white/10">
                             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-purple-500/10" />
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
                             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
@@ -486,10 +498,10 @@ const ProjectsPreview: React.FC = () => {
                                     </motion.button>
                                 </div>
                             </div>
-                        </div>
+                        </GlassCard>
                     </motion.div>
                 </div>
-            </motion.section>
+            </section>
 
             {/* Project Modal */}
             <AnimatePresence>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt, FaCheck, FaArrowRight, FaSpinner, FaChevronLeft, FaChartLine } from 'react-icons/fa';
+import { FaCalculator, FaLightbulb, FaChartBar, FaCalendarAlt, FaCheck, FaArrowRight, FaSpinner, FaChevronLeft, FaChartLine, FaRocket, FaBullseye, FaChartPie } from 'react-icons/fa';
 import {
   estimateProject,
   recommendServices,
@@ -9,6 +9,9 @@ import {
   generateConsultationPlan
 } from '../services/geminiService';
 import AILoader from './AILoader';
+import { BackgroundEffects } from './ui/BackgroundEffects';
+import { GlassCard } from './ui/GlassCard';
+import { SectionHeading } from './ui/SectionHeading';
 
 // --- Shared UI Components ---
 
@@ -17,7 +20,7 @@ const InputField = ({ label, ...props }: any) => (
     <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1">{label}</label>
     <input
       {...props}
-      className="w-full bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+      className="w-full bg-white/50 dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 backdrop-blur-sm"
     />
   </div>
 );
@@ -28,7 +31,7 @@ const SelectField = ({ label, options, ...props }: any) => (
     <div className="relative">
       <select
         {...props}
-        className="w-full bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300"
+        className="w-full bg-white/50 dark:bg-zinc-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-300 backdrop-blur-sm"
       >
         {options.map((opt: any) => (
           <option key={opt.value} value={opt.value} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">{opt.label}</option>
@@ -55,17 +58,19 @@ const OptionButton = ({ selected, onClick, children, colorClass = 'bg-blue-600' 
 );
 
 const ResultCard = ({ title, children, color = "blue" }: any) => (
-  <motion.div
+  <GlassCard
+    className={`p-6 md:p-8 border-t-4 border-t-${color}-500`}
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className={`bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-slate-200 dark:border-${color}-500/20 rounded-2xl p-6 shadow-2xl relative overflow-hidden`}
   >
-    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-${color}-500 to-transparent`} />
-    <h3 className={`text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2`}>
-      <span className={`text-${color}-500 dark:text-${color}-400`}>AI Analysis:</span> {title}
+    <h3 className={`text-2xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-3`}>
+      <span className={`p-2 rounded-lg bg-${color}-500/10 text-${color}-500 dark:text-${color}-400`}>
+        <FaRocket className="w-5 h-5" />
+      </span>
+      {title}
     </h3>
     {children}
-  </motion.div>
+  </GlassCard>
 );
 
 // --- Project Estimator Component ---
@@ -113,102 +118,104 @@ const ProjectEstimator = () => {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SelectField
-            label="Project Type"
-            value={formData.projectType}
-            onChange={(e: any) => setFormData({ ...formData, projectType: e.target.value })}
-            options={[
-              { value: "", label: "Select Type" },
-              { value: "Website", label: "Website" },
-              { value: "Web App", label: "Web Application" },
-              { value: "Mobile App", label: "Mobile App" },
-              { value: "E-commerce", label: "E-commerce" },
-              { value: "Branding", label: "Branding" }
-            ]}
-            required
-          />
-          <InputField
-            label="Industry"
-            value={formData.industry}
-            onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
-            placeholder="e.g. Healthcare"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Features</label>
-          <div className="flex flex-wrap gap-2">
-            {featuresOptions.map(feature => (
-              <OptionButton
-                key={feature}
-                selected={formData.features.includes(feature)}
-                onClick={() => toggleFeature(feature)}
-              >
-                {feature}
-              </OptionButton>
-            ))}
+      <GlassCard className="p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Project Type"
+              value={formData.projectType}
+              onChange={(e: any) => setFormData({ ...formData, projectType: e.target.value })}
+              options={[
+                { value: "", label: "Select Type" },
+                { value: "Website", label: "Website" },
+                { value: "Web App", label: "Web Application" },
+                { value: "Mobile App", label: "Mobile App" },
+                { value: "E-commerce", label: "E-commerce" },
+                { value: "Branding", label: "Branding" }
+              ]}
+              required
+            />
+            <InputField
+              label="Industry"
+              value={formData.industry}
+              onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+              placeholder="e.g. Healthcare"
+              required
+            />
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SelectField
-            label="Timeline"
-            value={formData.timeline}
-            onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
-            options={[
-              { value: "", label: "Select Timeline" },
-              { value: "1-2 weeks", label: "1-2 weeks" },
-              { value: "1 month", label: "1 month" },
-              { value: "2-3 months", label: "2-3 months" },
-              { value: "3-6 months", label: "3-6 months" },
-              { value: "6+ months", label: "6+ months" }
-            ]}
-            required
-          />
-          <SelectField
-            label="Budget"
-            value={formData.budget}
-            onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
-            options={[
-              { value: "", label: "Select Budget" },
-              { value: "$300-$1K", label: "$300 - $1K" },
-              { value: "$1K-$5K", label: "$1K - $5K" },
-              { value: "$5K-$15K", label: "$5K - $15K" },
-              { value: "$15K+", label: "$15K+" }
-            ]}
-            required
-          />
-        </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1 mb-3">Features</label>
+            <div className="flex flex-wrap gap-2">
+              {featuresOptions.map(feature => (
+                <OptionButton
+                  key={feature}
+                  selected={formData.features.includes(feature)}
+                  onClick={() => toggleFeature(feature)}
+                >
+                  {feature}
+                </OptionButton>
+              ))}
+            </div>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputField
-            label="Name"
-            value={formData.name}
-            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Your Name"
-            required
-          />
-          <InputField
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="your@email.com"
-            required
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Timeline"
+              value={formData.timeline}
+              onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
+              options={[
+                { value: "", label: "Select Timeline" },
+                { value: "1-2 weeks", label: "1-2 weeks" },
+                { value: "1 month", label: "1 month" },
+                { value: "2-3 months", label: "2-3 months" },
+                { value: "3-6 months", label: "3-6 months" },
+                { value: "6+ months", label: "6+ months" }
+              ]}
+              required
+            />
+            <SelectField
+              label="Budget"
+              value={formData.budget}
+              onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
+              options={[
+                { value: "", label: "Select Budget" },
+                { value: "$300-$1K", label: "$300 - $1K" },
+                { value: "$1K-$5K", label: "$1K - $5K" },
+                { value: "$5K-$15K", label: "$5K - $15K" },
+                { value: "$15K+", label: "$15K+" }
+              ]}
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? 'Processing...' : 'Get Estimation'}
-        </button>
-      </form>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputField
+              label="Name"
+              value={formData.name}
+              onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Your Name"
+              required
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02]"
+          >
+            {loading ? 'Processing...' : 'Get Estimation'}
+          </button>
+        </form>
+      </GlassCard>
 
       <AnimatePresence>
         {loading && <AILoader />}
@@ -232,8 +239,8 @@ const ProjectEstimator = () => {
                   {estimation.costBreakdown.map((item: any, idx: number) => (
                     <div key={idx} className="flex justify-between items-center p-3 border-b border-slate-200 dark:border-white/5 last:border-0">
                       <div>
-                        <p className="text-sm font-medium text-white">{item.service}</p>
-                        <p className="text-xs text-zinc-500">{item.description}</p>
+                        <p className="text-sm font-medium text-slate-900 dark:text-white">{item.service}</p>
+                        <p className="text-xs text-slate-500 dark:text-zinc-500">{item.description}</p>
                       </div>
                       <span className="text-sm font-bold text-blue-600 dark:text-blue-400">{item.cost}</span>
                     </div>
@@ -273,7 +280,7 @@ const ProjectEstimator = () => {
             {estimation.nextSteps && (
               <div className="mb-6 bg-blue-500/10 rounded-xl p-4 border border-blue-500/20">
                 <h4 className="font-bold text-blue-400 mb-2 text-sm uppercase tracking-wider">Recommended Next Steps</h4>
-                <ol className="list-decimal list-inside space-y-1 text-sm text-zinc-300">
+                <ol className="list-decimal list-inside space-y-1 text-sm text-slate-600 dark:text-zinc-300">
                   {estimation.nextSteps.map((step: string, idx: number) => (
                     <li key={idx}>{step}</li>
                   ))}
@@ -340,102 +347,104 @@ const ServiceRecommender = () => {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <InputField
-          label="Industry"
-          value={formData.industry}
-          onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
-          placeholder="e.g. SaaS, Retail"
-          required
-        />
-
-        <div>
-          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Challenges</label>
-          <div className="flex flex-wrap gap-2">
-            {['Low Traffic', 'Low Conversion', 'Brand Identity', 'Tech Issues', 'Mobile UX', 'SEO'].map(opt => (
-              <OptionButton
-                key={opt}
-                selected={formData.currentChallenges.includes(opt)}
-                onClick={() => toggleOption(opt, 'currentChallenges')}
-                colorClass="bg-red-500"
-              >
-                {opt}
-              </OptionButton>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Goals</label>
-          <div className="flex flex-wrap gap-2">
-            {['More Sales', 'Awareness', 'Leads', 'Engagement', 'New Market', 'Better UX'].map(opt => (
-              <OptionButton
-                key={opt}
-                selected={formData.goals.includes(opt)}
-                onClick={() => toggleOption(opt, 'goals')}
-                colorClass="bg-green-500"
-              >
-                {opt}
-              </OptionButton>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SelectField
-            label="Budget"
-            value={formData.budget}
-            onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
-            options={[
-              { value: "", label: "Select Budget" },
-              { value: "$300-$1K", label: "$300 - $1K" },
-              { value: "$1K-$5K", label: "$1K - $5K" },
-              { value: "$5K-$15K", label: "$5K - $15K" },
-              { value: "$15K+", label: "$15K+" }
-            ]}
-            required
-          />
-          <SelectField
-            label="Timeline"
-            value={formData.timeline}
-            onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
-            options={[
-              { value: "", label: "Select Timeline" },
-              { value: "Immediate", label: "Immediate" },
-              { value: "Short-term", label: "Short-term" },
-              { value: "Medium-term", label: "Medium-term" },
-              { value: "Long-term", label: "Long-term" }
-            ]}
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <GlassCard className="p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <InputField
-            label="Name"
-            value={formData.name}
-            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Your Name"
+            label="Industry"
+            value={formData.industry}
+            onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+            placeholder="e.g. SaaS, Retail"
             required
           />
-          <InputField
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="your@email.com"
-            required
-          />
-        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50"
-        >
-          {loading ? 'Processing...' : 'Get Recommendations'}
-        </button>
-      </form>
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1 mb-3">Challenges</label>
+            <div className="flex flex-wrap gap-2">
+              {['Low Traffic', 'Low Conversion', 'Brand Identity', 'Tech Issues', 'Mobile UX', 'SEO'].map(opt => (
+                <OptionButton
+                  key={opt}
+                  selected={formData.currentChallenges.includes(opt)}
+                  onClick={() => toggleOption(opt, 'currentChallenges')}
+                  colorClass="bg-red-500"
+                >
+                  {opt}
+                </OptionButton>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1 mb-3">Goals</label>
+            <div className="flex flex-wrap gap-2">
+              {['More Sales', 'Awareness', 'Leads', 'Engagement', 'New Market', 'Better UX'].map(opt => (
+                <OptionButton
+                  key={opt}
+                  selected={formData.goals.includes(opt)}
+                  onClick={() => toggleOption(opt, 'goals')}
+                  colorClass="bg-green-500"
+                >
+                  {opt}
+                </OptionButton>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Budget"
+              value={formData.budget}
+              onChange={(e: any) => setFormData({ ...formData, budget: e.target.value })}
+              options={[
+                { value: "", label: "Select Budget" },
+                { value: "$300-$1K", label: "$300 - $1K" },
+                { value: "$1K-$5K", label: "$1K - $5K" },
+                { value: "$5K-$15K", label: "$5K - $15K" },
+                { value: "$15K+", label: "$15K+" }
+              ]}
+              required
+            />
+            <SelectField
+              label="Timeline"
+              value={formData.timeline}
+              onChange={(e: any) => setFormData({ ...formData, timeline: e.target.value })}
+              options={[
+                { value: "", label: "Select Timeline" },
+                { value: "Immediate", label: "Immediate" },
+                { value: "Short-term", label: "Short-term" },
+                { value: "Medium-term", label: "Medium-term" },
+                { value: "Long-term", label: "Long-term" }
+              ]}
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputField
+              label="Name"
+              value={formData.name}
+              onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Your Name"
+              required
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 transform hover:scale-[1.02]"
+          >
+            {loading ? 'Processing...' : 'Get Recommendations'}
+          </button>
+        </form>
+      </GlassCard>
 
       <AnimatePresence>
         {loading && <AILoader />}
@@ -451,8 +460,8 @@ const ServiceRecommender = () => {
                       {service.priority}
                     </span>
                   </div>
-                  <p className="text-sm text-zinc-400 mb-3">{service.reason}</p>
-                  <div className="flex justify-between text-xs text-zinc-500 border-t border-white/5 pt-3">
+                  <p className="text-sm text-slate-600 dark:text-zinc-400 mb-3">{service.reason}</p>
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-zinc-500 border-t border-slate-200 dark:border-white/5 pt-3">
                     <span>{service.expectedOutcome}</span>
                     <span>{service.estimatedCost}</span>
                   </div>
@@ -545,98 +554,122 @@ const BusinessGrowthAnalyzer = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SelectField
-            label="Revenue"
-            value={formData.currentRevenue}
-            onChange={(e: any) => setFormData({ ...formData, currentRevenue: e.target.value })}
-            options={[
-              { value: "", label: "Select Revenue" },
-              { value: "$0-$10K", label: "$0 - $10K" },
-              { value: "$10K-$100K", label: "$10K - $100K" },
-              { value: "$100K-$1M", label: "$100K - $1M" },
-              { value: "$1M+", label: "$1M+" }
-            ]}
-            required
-          />
-          <InputField
-            label="Industry"
-            value={formData.industry}
-            onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
-            placeholder="e.g. SaaS"
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <SelectField
-            label="Position"
-            value={formData.marketPosition}
-            onChange={(e: any) => setFormData({ ...formData, marketPosition: e.target.value })}
-            options={[
-              { value: "", label: "Select" },
-              { value: "Leader", label: "Leader" },
-              { value: "Established", label: "Established" },
-              { value: "Startup", label: "Startup" },
-              { value: "New", label: "New" }
-            ]}
-            required
-          />
-          <SelectField
-            label="Presence"
-            value={formData.digitalPresence}
-            onChange={(e: any) => setFormData({ ...formData, digitalPresence: e.target.value })}
-            options={[
-              { value: "", label: "Select" },
-              { value: "Strong", label: "Strong" },
-              { value: "Moderate", label: "Moderate" },
-              { value: "Weak", label: "Weak" },
-              { value: "None", label: "None" }
-            ]}
-            required
-          />
-          <SelectField
-            label="Competition"
-            value={formData.competitorsLevel}
-            onChange={(e: any) => setFormData({ ...formData, competitorsLevel: e.target.value })}
-            options={[
-              { value: "", label: "Select" },
-              { value: "High", label: "High" },
-              { value: "Moderate", label: "Moderate" },
-              { value: "Low", label: "Low" }
-            ]}
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputField
-            label="Name"
-            value={formData.name}
-            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Your Name"
-            required
-          />
-          <InputField
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="your@email.com"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
+    <div className="space-y-8 relative">
+      {/* Priority 3: Brand Growth Visual Artifact (Floating Charts) */}
+      <div className="hidden lg:block absolute -right-32 top-10 w-64 h-64 pointer-events-none z-0 opacity-50">
+        <motion.div
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-0 right-0 w-48 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md rounded-xl border border-white/10 p-4 shadow-xl transform rotate-12"
         >
-          {loading ? 'Processing...' : 'Analyze Growth'}
-        </button>
-      </form>
+          <div className="flex items-end justify-between h-full gap-2">
+            <motion.div animate={{ height: ['30%', '60%', '30%'] }} transition={{ duration: 3, repeat: Infinity }} className="w-full bg-purple-400/50 rounded-t-sm" />
+            <motion.div animate={{ height: ['50%', '80%', '50%'] }} transition={{ duration: 4, repeat: Infinity, delay: 0.5 }} className="w-full bg-pink-400/50 rounded-t-sm" />
+            <motion.div animate={{ height: ['40%', '90%', '40%'] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} className="w-full bg-blue-400/50 rounded-t-sm" />
+          </div>
+        </motion.div>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 backdrop-blur-md rounded-full border border-white/10 p-6 shadow-xl flex items-center justify-center"
+        >
+          <FaChartPie className="w-full h-full text-purple-300/50" />
+        </motion.div>
+      </div>
+
+      <GlassCard className="p-6 md:p-8 relative z-10">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Revenue"
+              value={formData.currentRevenue}
+              onChange={(e: any) => setFormData({ ...formData, currentRevenue: e.target.value })}
+              options={[
+                { value: "", label: "Select Revenue" },
+                { value: "$0-$10K", label: "$0 - $10K" },
+                { value: "$10K-$100K", label: "$10K - $100K" },
+                { value: "$100K-$1M", label: "$100K - $1M" },
+                { value: "$1M+", label: "$1M+" }
+              ]}
+              required
+            />
+            <InputField
+              label="Industry"
+              value={formData.industry}
+              onChange={(e: any) => setFormData({ ...formData, industry: e.target.value })}
+              placeholder="e.g. SaaS"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <SelectField
+              label="Position"
+              value={formData.marketPosition}
+              onChange={(e: any) => setFormData({ ...formData, marketPosition: e.target.value })}
+              options={[
+                { value: "", label: "Select" },
+                { value: "Leader", label: "Leader" },
+                { value: "Established", label: "Established" },
+                { value: "Startup", label: "Startup" },
+                { value: "New", label: "New" }
+              ]}
+              required
+            />
+            <SelectField
+              label="Presence"
+              value={formData.digitalPresence}
+              onChange={(e: any) => setFormData({ ...formData, digitalPresence: e.target.value })}
+              options={[
+                { value: "", label: "Select" },
+                { value: "Strong", label: "Strong" },
+                { value: "Moderate", label: "Moderate" },
+                { value: "Weak", label: "Weak" },
+                { value: "None", label: "None" }
+              ]}
+              required
+            />
+            <SelectField
+              label="Competition"
+              value={formData.competitorsLevel}
+              onChange={(e: any) => setFormData({ ...formData, competitorsLevel: e.target.value })}
+              options={[
+                { value: "", label: "Select" },
+                { value: "High", label: "High" },
+                { value: "Moderate", label: "Moderate" },
+                { value: "Low", label: "Low" }
+              ]}
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputField
+              label="Name"
+              value={formData.name}
+              onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Your Name"
+              required
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="your@email.com"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 transform hover:scale-[1.02]"
+          >
+            {loading ? 'Processing...' : 'Analyze Growth'}
+          </button>
+        </form>
+      </GlassCard>
 
       <AnimatePresence>
         {loading && <AILoader />}
@@ -704,7 +737,7 @@ const BusinessGrowthAnalyzer = () => {
                         <h5 className="font-bold text-slate-900 dark:text-white text-sm">{action.action}</h5>
                         <span className="text-xs text-purple-300 bg-purple-500/10 px-2 py-1 rounded-full">{action.timeframe}</span>
                       </div>
-                      <p className="text-xs text-zinc-400 mb-2">Impact: <span className="text-white">{action.impact}</span></p>
+                      <p className="text-xs text-zinc-400 mb-2">Impact: <span className="text-slate-700 dark:text-white">{action.impact}</span></p>
                       <p className="text-xs text-zinc-500">Est. Investment: {action.investment}</p>
                     </div>
                   ))}
@@ -770,123 +803,118 @@ const ConsultationPlanner = () => {
 
   return (
     <div className="space-y-8">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <InputField
-          label="Business Type"
-          value={formData.businessType}
-          onChange={(e: any) => setFormData({ ...formData, businessType: e.target.value })}
-          placeholder="e.g. Startup"
-          required
-        />
+      <GlassCard className="p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <InputField
+            label="Business Type"
+            value={formData.businessType}
+            onChange={(e: any) => setFormData({ ...formData, businessType: e.target.value })}
+            placeholder="e.g. Startup"
+            required
+          />
 
-        <div>
-          <label className="block text-xs font-bold text-zinc-400 uppercase tracking-wider ml-1 mb-3">Needs</label>
-          <div className="flex flex-wrap gap-2">
-            {['Web Dev', 'Strategy', 'Marketing', 'SEO', 'Social', 'E-commerce', 'Content'].map(opt => (
-              <OptionButton
-                key={opt}
-                selected={formData.specificNeeds.includes(opt)}
-                onClick={() => toggleNeed(opt)}
-                colorClass="bg-cyan-500"
-              >
-                {opt}
-              </OptionButton>
-            ))}
+          <div>
+            <label className="block text-xs font-bold text-slate-500 dark:text-zinc-400 uppercase tracking-wider ml-1 mb-3">Needs</label>
+            <div className="flex flex-wrap gap-2">
+              {['Web Dev', 'Strategy', 'Marketing', 'SEO', 'Social', 'E-commerce', 'Content'].map(opt => (
+                <OptionButton
+                  key={opt}
+                  selected={formData.specificNeeds.includes(opt)}
+                  onClick={() => toggleNeed(opt)}
+                  colorClass="bg-cyan-500"
+                >
+                  {opt}
+                </OptionButton>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SelectField
-            label="Urgency"
-            value={formData.urgency}
-            onChange={(e: any) => setFormData({ ...formData, urgency: e.target.value })}
-            options={[
-              { value: "", label: "Select" },
-              { value: "Immediate", label: "Immediate" },
-              { value: "High", label: "High" },
-              { value: "Medium", label: "Medium" },
-              { value: "Low", label: "Low" }
-            ]}
-            required
-          />
-          <SelectField
-            label="Experience"
-            value={formData.experience}
-            onChange={(e: any) => setFormData({ ...formData, experience: e.target.value })}
-            options={[
-              { value: "", label: "Select" },
-              { value: "Beginner", label: "Beginner" },
-              { value: "Intermediate", label: "Intermediate" },
-              { value: "Advanced", label: "Advanced" },
-              { value: "Expert", label: "Expert" }
-            ]}
-            required
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SelectField
+              label="Urgency"
+              value={formData.urgency}
+              onChange={(e: any) => setFormData({ ...formData, urgency: e.target.value })}
+              options={[
+                { value: "", label: "Select" },
+                { value: "ASAP", label: "ASAP" },
+                { value: "This Month", label: "This Month" },
+                { value: "Next Month", label: "Next Month" },
+                { value: "Flexible", label: "Flexible" }
+              ]}
+              required
+            />
+            <SelectField
+              label="Experience"
+              value={formData.experience}
+              onChange={(e: any) => setFormData({ ...formData, experience: e.target.value })}
+              options={[
+                { value: "", label: "Select" },
+                { value: "New to Digital", label: "New to Digital" },
+                { value: "Some Experience", label: "Some Experience" },
+                { value: "Experienced", label: "Experienced" }
+              ]}
+              required
+            />
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputField
-            label="Name"
-            value={formData.name}
-            onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Your Name"
-            required
-          />
-          <InputField
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="your@email.com"
-            required
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InputField
+              label="Name"
+              value={formData.name}
+              onChange={(e: any) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Your Name"
+              required
+            />
+            <InputField
+              label="Email"
+              type="email"
+              value={formData.email}
+              onChange={(e: any) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="your@email.com"
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-cyan-600 to-blue-600 text-white hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
-        >
-          {loading ? 'Processing...' : 'Plan Consultation'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-300 bg-gradient-to-r from-cyan-600 to-teal-600 text-white hover:from-cyan-700 hover:to-teal-700 disabled:opacity-50 transform hover:scale-[1.02]"
+          >
+            {loading ? 'Processing...' : 'Generate Plan'}
+          </button>
+        </form>
+      </GlassCard>
 
       <AnimatePresence>
         {loading && <AILoader />}
         {plan && (
           <ResultCard title="Consultation Plan" color="cyan">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
-                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Session Type</p>
-                <p className="text-lg font-bold text-white">{plan.consultationType}</p>
-              </div>
-              <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
-                <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Duration</p>
-                <p className="text-lg font-bold text-white">{plan.recommendedDuration}</p>
+            <div className="mb-6">
+              <h4 className="font-bold text-slate-900 dark:text-white mb-3">Recommended Agenda</h4>
+              <div className="space-y-4">
+                {plan.agenda?.map((item: any, idx: number) => (
+                  <div key={idx} className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-500 font-bold shrink-0">
+                      {idx + 1}
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-slate-900 dark:text-white">{item.topic}</h5>
+                      <p className="text-sm text-slate-600 dark:text-zinc-400">{item.description}</p>
+                      <span className="text-xs text-cyan-500 font-medium">{item.duration}</span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {plan.keyTopics && (
-              <div className="mb-6">
-                <h4 className="font-bold text-slate-900 dark:text-white mb-3">Key Topics</h4>
-                <div className="flex flex-wrap gap-2">
-                  {plan.keyTopics.map((topic: string, idx: number) => (
-                    <span key={idx} className="text-xs bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 px-3 py-1 rounded-full border border-slate-200 dark:border-white/5">
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {plan.preparationItems && (
-              <div className="mb-6">
+            {plan.preparation && (
+              <div className="mb-6 bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-white/5">
                 <h4 className="font-bold text-slate-900 dark:text-white mb-3">Preparation Checklist</h4>
                 <ul className="space-y-2">
-                  {plan.preparationItems.map((item: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-300">
-                      <FaCheck className="w-3 h-3 text-cyan-400 mt-1 shrink-0" />
-                      <span>{item}</span>
+                  {plan.preparation.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-600 dark:text-zinc-300">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                      {item}
                     </li>
                   ))}
                 </ul>
@@ -903,7 +931,7 @@ const ConsultationPlanner = () => {
               })}
               className="w-full py-3 bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-900 dark:text-white rounded-xl transition-colors border border-slate-200 dark:border-white/10 flex items-center justify-center gap-2 font-semibold"
             >
-              Book This Session <FaArrowRight className="w-4 h-4" />
+              Schedule Call <FaArrowRight className="w-4 h-4" />
             </button>
           </ResultCard>
         )}
@@ -912,172 +940,69 @@ const ConsultationPlanner = () => {
   );
 };
 
-// --- Main AIUseCases Component (Menu) ---
+// --- Main AI Use Cases Component ---
 
-const AIUseCases = () => {
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+const AIUseCases: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('estimator');
 
-  const tools = [
-    {
-      id: 'estimator',
-      title: 'GrowBrandi Project Estimator',
-      description: 'Get instant project cost and timeline estimates powered by GrowBrandi AI.',
-      icon: <FaCalculator className="w-6 h-6" />,
-      color: 'blue'
-    },
-    {
-      id: 'recommender',
-      title: 'GrowBrandi Service Recommender',
-      description: 'Discover the perfect growth services for your business with GrowBrandi guidance.',
-      icon: <FaLightbulb className="w-6 h-6" />,
-      color: 'indigo'
-    },
-    {
-      id: 'analyzer',
-      title: 'Business Growth Analyzer',
-      description: 'Analyze your market position and get data-driven growth predictions.',
-      icon: <FaChartBar className="w-6 h-6" />,
-      color: 'purple'
-    },
-    {
-      id: 'planner',
-      title: 'Strategic Consultation Planner',
-      description: 'Create a personalized consultation agenda tailored to your business needs.',
-      icon: <FaCalendarAlt className="w-6 h-6" />,
-      color: 'cyan'
-    }
+  const tabs = [
+    { id: 'estimator', label: 'Project Estimator', icon: <FaCalculator /> },
+    { id: 'recommender', label: 'Service Recommender', icon: <FaLightbulb /> },
+    { id: 'analyzer', label: 'Growth Analyzer', icon: <FaChartBar /> },
+    { id: 'planner', label: 'Consultation Planner', icon: <FaCalendarAlt /> }
   ];
 
-  const renderActiveTool = () => {
-    switch (activeTool) {
-      case 'estimator': return <ProjectEstimator />;
-      case 'recommender': return <ServiceRecommender />;
-      case 'analyzer': return <BusinessGrowthAnalyzer />;
-      case 'planner': return <ConsultationPlanner />;
-      default: return null;
-    }
-  };
-
   return (
-    <section className="py-24 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-200/40 via-slate-50 to-slate-50 dark:from-blue-900/10 dark:via-[#09090b] dark:to-[#09090b]" />
+    <section className="relative py-20 md:py-32 overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+      <BackgroundEffects />
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6"
-          >
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-            <span className="text-sm font-semibold text-blue-400 uppercase tracking-wider">AI-Powered Tools</span>
-          </motion.div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <SectionHeading
+          badge="AI-Powered Tools"
+          title="Intelligent Business"
+          highlight="Insights"
+          description="Leverage our advanced AI tools to get instant estimates, strategic recommendations, and growth analysis for your business."
+        />
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6"
-          >
-            Accelerate Your Growth with <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">
-              Intelligent Tools
-            </span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto"
-          >
-            Leverage our suite of AI tools to estimate projects, find services, and analyze your business potential instantly.
-          </motion.p>
+        {/* Tabs */}
+        <div className="flex justify-center mb-12 overflow-x-auto px-4 pb-4">
+          <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/5 shadow-xl">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 relative overflow-hidden flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
+                    ? 'text-white shadow-lg bg-gradient-to-r from-blue-600 to-indigo-600'
+                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                  }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <AnimatePresence mode="wait">
-          {!activeTool ? (
+        {/* Content Area */}
+        <div className="max-w-4xl mx-auto">
+          <AnimatePresence mode="wait">
             <motion.div
-              key="menu"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-            >
-              {tools.map((tool, index) => (
-                <motion.button
-                  key={tool.id}
-                  onClick={() => setActiveTool(tool.id)}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative p-8 rounded-3xl bg-white dark:bg-zinc-900/50 border border-slate-200 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-white/10 text-left transition-all overflow-hidden flex flex-col h-full shadow-lg dark:shadow-none"
-                >
-                  <div className={`absolute inset-0 bg-gradient-to-br from-${tool.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                  {/* Hover Glow Effect */}
-                  <div className={`absolute -right-20 -top-20 w-64 h-64 bg-${tool.color}-500/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-${tool.color}-500 to-${tool.color}-600 flex items-center justify-center text-white shadow-lg shadow-${tool.color}-500/20 group-hover:scale-110 transition-transform duration-300`}>
-                        {tool.icon}
-                      </div>
-                      <div className={`px-3 py-1 rounded-full bg-${tool.color}-500/10 border border-${tool.color}-500/20 text-${tool.color}-600 dark:text-${tool.color}-400 text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0`}>
-                        Try Now
-                      </div>
-                    </div>
-
-                    <div className="mb-auto">
-                      <h3 className={`text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-${tool.color}-600 dark:group-hover:text-${tool.color}-400 transition-colors`}>
-                        {tool.title}
-                      </h3>
-                      <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed group-hover:text-slate-800 dark:group-hover:text-zinc-300 transition-colors">
-                        {tool.description}
-                      </p>
-                    </div>
-
-                    <div className={`mt-8 flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-zinc-500 group-hover:text-slate-900 dark:group-hover:text-white transition-colors`}>
-                      <span>Launch Tool</span>
-                      <FaArrowRight className={`w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-${tool.color}-500`} />
-                    </div>
-                  </div>
-                </motion.button>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="tool"
-              initial={{ opacity: 0, x: 50 }}
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              className="max-w-3xl mx-auto"
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <button
-                onClick={() => setActiveTool(null)}
-                className="flex items-center gap-2 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white mb-8 transition-colors group"
-              >
-                <div className="w-8 h-8 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center group-hover:bg-slate-200 dark:group-hover:bg-zinc-700 transition-colors shadow-sm dark:shadow-none">
-                  <FaChevronLeft className="w-3 h-3" />
-                </div>
-                <span className="font-medium">Back to Tools</span>
-              </button>
-
-              <div className="relative bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-8 shadow-2xl">
-                {renderActiveTool()}
-              </div>
+              {activeTab === 'estimator' && <ProjectEstimator />}
+              {activeTab === 'recommender' && <ServiceRecommender />}
+              {activeTab === 'analyzer' && <BusinessGrowthAnalyzer />}
+              {activeTab === 'planner' && <ConsultationPlanner />}
             </motion.div>
-          )}
-        </AnimatePresence>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );
 };
 
 export default AIUseCases;
-export { ProjectEstimator, ServiceRecommender, BusinessGrowthAnalyzer, ConsultationPlanner };
