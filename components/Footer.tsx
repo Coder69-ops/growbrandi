@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
 import { APP_NAME, APP_TAGLINE, CONTACT_INFO, SERVICES } from '../constants';
 
 // --- Enhanced Footer Component ---
@@ -63,6 +63,13 @@ const Footer: React.FC = () => {
               {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
             </p>
 
+            <div className="flex items-center gap-2 text-yellow-500 text-sm font-medium">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map(i => <FaStar key={i} className="w-4 h-4" />)}
+              </div>
+              <span className="text-zinc-400 ml-2">Rated 5/5 by 50+ Clients</span>
+            </div>
+
             {/* Social Links */}
             <div className="flex gap-4 pt-2">
               {Object.entries(CONTACT_INFO.social).map(([platform, url]) => (
@@ -85,7 +92,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-3">
             <h3 className="font-semibold text-white mb-4 md:mb-6">Services</h3>
             <ul className="space-y-2 md:space-y-3">
-              {SERVICES.slice(0, 5).map((service) => (
+              {SERVICES.slice(0, 6).map((service) => (
                 <li key={service.title}>
                   <Link
                     to={`/services`}
@@ -107,6 +114,8 @@ const Footer: React.FC = () => {
                 { name: 'Process', path: '/process' },
                 { name: 'Work', path: '/case-studies' },
                 { name: 'Team', path: '/team' },
+                { name: 'Blog', path: '/blog' },
+                { name: 'Careers', path: '/careers' },
                 { name: 'Contact', path: '/contact' },
               ].map((link) => (
                 <li key={link.name}>

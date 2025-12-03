@@ -99,26 +99,24 @@ const HeroSection: React.FC = () => {
                                     Digital Empires
                                 </span>
                             </span> <br />
-                            Not Just Websites.
+                            Growth, Content, & Tech.
                         </h1>
 
                         <p className="text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed mb-10 font-light border-l-2 border-white/10 pl-6">
-                            GrowBrandi is the elite digital agency for forward-thinking brands. We fuse
-                            <span className="text-white font-medium"> strategic intelligence</span> with
-                            <span className="text-white font-medium"> world-class design</span> to drive exponential growth.
+                            From high-ROI ad campaigns and viral content to custom web development and expert virtual assistants, we provide the full-stack growth engine your business needs.
                         </p>
 
                         <div className="flex flex-wrap items-center gap-5">
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                onClick={() => navigate('/contact')}
                                 className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                 <span className="relative z-10 flex items-center gap-2">
-                                    <FaWhatsapp className="w-5 h-5" />
-                                    Chat on WhatsApp
+                                    <FaRocket className="w-5 h-5" />
+                                    Get Your Free Growth Audit
                                 </span>
                             </motion.button>
 

@@ -9,6 +9,7 @@ interface SEOProps {
     ogImage?: string;
     ogType?: string;
     twitterCard?: string;
+    schema?: string;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -18,11 +19,49 @@ const SEO: React.FC<SEOProps> = ({
     canonicalUrl,
     ogImage = 'https://growbrandi.com/og-image.jpg', // Default OG image
     ogType = 'website',
-    twitterCard = 'summary_large_image'
+    twitterCard = 'summary_large_image',
+    schema
 }) => {
     const siteTitle = 'GrowBrandi';
     const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     const currentUrl = canonicalUrl || typeof window !== 'undefined' ? window.location.href : '';
+
+    const defaultSchema = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "DigitalMarketingAgency",
+        "name": "GrowBrandi",
+        "image": "https://growbrandi.com/growbrandi-logo.png",
+        "@id": "https://growbrandi.com",
+        "url": "https://growbrandi.com",
+        "telephone": "+8801755154194",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Khulna",
+            "addressLocality": "Khulna",
+            "addressCountry": "BD"
+        },
+        "priceRange": "$$$",
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ],
+            "opens": "00:00",
+            "closes": "23:59"
+        },
+        "sameAs": [
+            "https://linkedin.com/company/growbrandi",
+            "https://twitter.com/growbrandi",
+            "https://instagram.com/growbrandi",
+            "https://dribbble.com/growbrandi"
+        ]
+    });
 
     return (
         <Helmet>
@@ -45,6 +84,11 @@ const SEO: React.FC<SEOProps> = ({
             <meta name="twitter:title" content={fullTitle} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={ogImage} />
+
+            {/* Schema.org JSON-LD */}
+            <script type="application/ld+json">
+                {schema || defaultSchema}
+            </script>
         </Helmet>
     );
 };

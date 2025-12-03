@@ -4,8 +4,8 @@ import { Service, Project, Testimonial, CompanyStat, FAQItem, TeamMember } from 
 
 // App Constants
 export const APP_NAME = 'GrowBrandi';
-export const APP_TAGLINE = 'GrowBrandi - Expert Digital Growth Agency';
-export const APP_SUBTITLE = 'Transform Your Business with Expert Digital Solutions';
+export const APP_TAGLINE = 'GrowBrandi - Full-Stack Digital Growth Agency';
+export const APP_SUBTITLE = 'We Build Digital Empires. Growth, Content, & Tech.';
 
 // Company Statistics
 export const COMPANY_STATS: CompanyStat[] = [
@@ -66,7 +66,7 @@ const ICONS = {
 export const SERVICES: Service[] = [
   {
     title: 'Brand Growth',
-    description: 'Scale your business with high-performance ad campaigns on TikTok, Meta, and Google. We focus on measurable ROI and rapid growth.',
+    description: 'Maximize your ROI with data-driven ad campaigns on TikTok, Meta, and Google. We use advanced targeting and creative testing to scale your revenue.',
     icon: ICONS['Brand Growth'],
     features: ['TikTok Ads', 'Meta Ads (Facebook/Instagram)', 'Google Ads', 'Performance Analytics'],
     price: 'From $399 | Pro $1,199',
@@ -74,7 +74,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Social Media Content',
-    description: 'Engage your audience with professional video editing and post creation. We create content that stops the scroll and drives action.',
+    description: 'Dominate your niche with viral-ready short-form content. Our expert editors and strategists create videos that capture attention and drive engagement.',
     icon: ICONS['Social Media Content'],
     features: ['Video Editing (Reels/TikToks)', 'Post Design', 'Content Strategy', 'Trend Analysis'],
     price: 'From $599/mo | Pro $2,999/mo',
@@ -82,7 +82,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'UI/UX Design',
-    description: 'Create stunning, user-friendly interfaces that enhance user experience and boost conversion rates with modern design principles.',
+    description: 'Transform your digital presence with award-winning design. We create intuitive, beautiful interfaces that convert visitors into loyal customers.',
     icon: ICONS['UI/UX Design'],
     features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
     price: 'From $799 | Pro $1,999',
@@ -90,7 +90,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Web Development',
-    description: 'Develop fast, secure, and scalable websites using Shopify and WordPress. We build platforms that sell.',
+    description: 'Build a robust digital foundation with custom web solutions. From high-speed Shopify stores to complex web applications, we code for performance and scale.',
     icon: ICONS['Web Development'],
     features: ['Shopify Development', 'WordPress Solutions', 'Custom Web Apps', 'E-commerce Optimization'],
     price: 'From $999 | Pro $2,999',
@@ -98,7 +98,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Virtual Assistance',
-    description: 'Delegate time-consuming tasks to our professional virtual assistants. Focus on growing your business while we handle the rest.',
+    description: 'Streamline your operations with our elite virtual assistants. Delegate administrative, research, and operational tasks to focus on high-level strategy.',
     icon: ICONS['Virtual Assistance'],
     features: ['Admin Support', 'Data Entry', 'Research', 'Calendar Management'],
     price: 'From $299/mo | Pro $999/mo',
@@ -106,7 +106,7 @@ export const SERVICES: Service[] = [
   },
   {
     title: 'Customer Support',
-    description: 'Provide exceptional 24/7 support to your customers. Our trained team ensures high satisfaction and retention.',
+    description: 'Deliver 24/7 world-class support. Our trained agents handle inquiries, resolve issues, and ensure your customers remain happy and loyal.',
     icon: ICONS['Customer Support'],
     features: ['Live Chat Support', 'Email Support', 'Ticket Management', 'Weekly/Monthly Packages'],
     price: 'From $299/mo | Pro $1,199',
