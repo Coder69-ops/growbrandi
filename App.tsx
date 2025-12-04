@@ -251,17 +251,17 @@ ${servicesDetails}
 
         {/* Breadcrumb Navigation */}
         {breadcrumbs.length > 1 && currentRoute !== 'home' && (
-          <nav className="bg-luxury-black/80 backdrop-blur-md border-b border-white/5 py-3 px-4 sm:px-6 lg:px-8 relative z-20">
+          <nav className="bg-white/80 dark:bg-luxury-black/80 backdrop-blur-md border-b border-slate-200 dark:border-white/5 py-3 px-4 sm:px-6 lg:px-8 relative z-20 transition-colors duration-300">
             <div className="container mx-auto">
               <ol className="flex items-center space-x-2 text-sm font-sans">
                 {breadcrumbs.map((crumb, index) => (
                   <li key={index} className="flex items-center">
                     {index > 0 && (
-                      <svg className="w-4 h-4 text-zinc-600 mx-2" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-slate-400 dark:text-zinc-600 mx-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                       </svg>
                     )}
-                    <span className={index === breadcrumbs.length - 1 ? 'text-white font-medium' : 'text-zinc-500 hover:text-white cursor-pointer transition-colors duration-300'}>
+                    <span className={index === breadcrumbs.length - 1 ? 'text-slate-900 dark:text-white font-medium' : 'text-slate-500 dark:text-zinc-500 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-colors duration-300'}>
                       {crumb}
                     </span>
                   </li>

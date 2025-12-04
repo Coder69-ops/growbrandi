@@ -965,15 +965,15 @@ const AIUseCases: React.FC = () => {
         />
 
         {/* Tabs */}
-        <div className="flex justify-center mb-12 overflow-x-auto px-4 pb-4">
-          <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/5 shadow-xl">
+        <div className="flex justify-start md:justify-center mb-8 md:mb-12 overflow-x-auto px-4 pb-4 -mx-4 md:mx-0 scrollbar-hide">
+          <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-1.5 md:p-2 inline-flex gap-1.5 md:gap-2 border border-slate-200 dark:border-white/5 shadow-xl w-max md:w-auto md:min-w-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 relative overflow-hidden flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                    ? 'text-white shadow-lg bg-gradient-to-r from-blue-600 to-indigo-600'
-                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                className={`flex-none px-4 md:px-6 py-2.5 md:py-3 rounded-xl font-semibold text-xs md:text-sm transition-all duration-300 relative overflow-hidden flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === tab.id
+                  ? 'text-white shadow-lg bg-gradient-to-r from-blue-600 to-indigo-600'
+                  : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
                   }`}
               >
                 {tab.icon}

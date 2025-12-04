@@ -156,7 +156,7 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-slate-200 dark:border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-          <p className="text-slate-500 dark:text-cyan-600 text-sm">
+          <p className="text-slate-500 dark:text-zinc-500 text-sm">
             &copy; {currentYear} {APP_NAME}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500 dark:text-zinc-400 font-light">

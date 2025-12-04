@@ -125,7 +125,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
     }[widgetType];
 
     return (
-        <div className={`relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl transition-colors duration-300 ${compact ? 'p-6' : 'p-8 md:p-10'}`}>
+        <div className={`relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl transition-colors duration-300 ${compact ? 'p-4 md:p-6' : 'p-4 md:p-8 lg:p-10'}`}>
             {/* Background Gradients */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
