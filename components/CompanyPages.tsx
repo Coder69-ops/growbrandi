@@ -10,9 +10,22 @@ import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 
 // About Us Page
+// Hook Import
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
+
 // About Us Page
 export const AboutUsPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+
+  // Helper to get text: handles both legacy translation keys and new multi-lang objects
+  const getText = (field: any) => {
+    if (!field) return '';
+    if (typeof field === 'string') return t(field);
+    return getLocalizedField(field, i18n.language);
+  };
+
   return (
     <>
       <SEO
@@ -125,7 +138,7 @@ export const AboutUsPage: React.FC = () => {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {TEAM_MEMBERS.slice(0, 3).map((member, index) => (
+            {teamMembers.slice(0, 3).map((member: any, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -140,8 +153,8 @@ export const AboutUsPage: React.FC = () => {
 
                   <div className="relative z-10">
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{member.name}</h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4 text-sm uppercase tracking-wider">{t(member.role)}</p>
-                    <p className="text-slate-600 dark:text-zinc-400 font-light text-sm mb-6 line-clamp-3 leading-relaxed">{t(member.description)}</p>
+                    <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4 text-sm uppercase tracking-wider">{getText(member.role)}</p>
+                    <p className="text-slate-600 dark:text-zinc-400 font-light text-sm mb-6 line-clamp-3 leading-relaxed">{getText(member.description)}</p>
 
                     <div className="flex justify-center gap-4">
                       {member.social.linkedin && (
@@ -425,8 +438,16 @@ export const CareersPage: React.FC = () => {
 
 // Team Page
 export const TeamPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
+  const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+
+  // Helper to get text: handles both legacy translation keys and new multi-lang objects
+  const getText = (field: any) => {
+    if (!field) return '';
+    if (typeof field === 'string') return t(field);
+    return getLocalizedField(field, i18n.language);
+  };
 
   return (
     <>
@@ -447,7 +468,7 @@ export const TeamPage: React.FC = () => {
 
           {/* Team Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            {TEAM_MEMBERS.map((member, index) => (
+            {teamMembers.map((member: any, index: number) => (
               <motion.div
                 key={member.name}
                 className="group relative"
@@ -500,10 +521,10 @@ export const TeamPage: React.FC = () => {
                           {member.name}
                         </h3>
                         <div className="text-slate-500 dark:text-zinc-400 font-medium text-sm uppercase tracking-wider mb-4 group-hover:text-slate-900 dark:group-hover:text-white transition-colors duration-300">
-                          {member.role}
+                          {getText(member.role)}
                         </div>
                         <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-slate-700 dark:group-hover:text-zinc-400 transition-colors duration-300">
-                          {member.description}
+                          {getText(member.description)}
                         </p>
                       </div>
                     </Link>
@@ -513,10 +534,10 @@ export const TeamPage: React.FC = () => {
                       <div className="flex flex-wrap gap-2 justify-center">
                         {member.specialties.slice(0, 3).map((specialty, idx) => (
                           <span
-                            key={specialty}
+                            key={idx}
                             className="px-3 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 text-xs font-medium rounded-full border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-all duration-300"
                           >
-                            {specialty}
+                            {getText(specialty)}
                           </span>
                         ))}
                       </div>
@@ -538,7 +559,7 @@ export const TeamPage: React.FC = () => {
                         return (
                           <motion.a
                             key={platform}
-                            href={url}
+                            href={url as string}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-all duration-300 border border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/20"

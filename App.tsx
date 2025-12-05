@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Header from './components/Header';
 import SEO from './components/SEO';
@@ -44,6 +44,22 @@ const BlogPage = React.lazy(() => import('./components/CompanyPages').then(modul
 const PrivacyPolicyPage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.PrivacyPolicyPage })));
 const TermsOfServicePage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.TermsOfServicePage })));
 const CookiePolicyPage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.CookiePolicyPage })));
+
+// Admin Imports
+import { AuthProvider } from './src/context/AuthContext';
+import ProtectedRoute from './src/components/admin/ProtectedRoute';
+import AdminLogin from './src/pages/admin/Login';
+import AdminLayout from './src/components/admin/AdminLayout';
+import AdminDashboard from './src/pages/admin/Dashboard';
+import AdminProjects from './src/pages/admin/Projects';
+import AdminTeam from './src/pages/admin/Team';
+import AdminServices from './src/pages/admin/Services';
+import AdminTestimonials from './src/pages/admin/Testimonials';
+import AdminFAQs from './src/pages/admin/FAQs';
+import AdminSettings from './src/pages/admin/Settings';
+import AdminSeedData from './src/pages/admin/SeedData';
+import AdminSiteContent from './src/pages/admin/SiteContent';
+import AdminContactSettings from './src/pages/admin/ContactSettings';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -308,7 +324,26 @@ ${servicesDetails}
                 <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
 
                 {/* 404 */}
+                {/* 404 */}
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
+
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="projects" element={<AdminProjects />} />
+                    <Route path="team" element={<AdminTeam />} />
+                    <Route path="services" element={<AdminServices />} />
+                    <Route path="testimonials" element={<AdminTestimonials />} />
+                    <Route path="faqs" element={<AdminFAQs />} />
+                    <Route path="settings" element={<AdminSettings />} />
+                    <Route path="seed-data" element={<AdminSeedData />} />
+                    <Route path="site-content" element={<AdminSiteContent />} />
+                    <Route path="contact-settings" element={<AdminContactSettings />} />
+                  </Route>
+                </Route>
               </Routes>
             </AnimatePresence>
           </Suspense>
@@ -359,9 +394,11 @@ function App() {
   return (
     <HelmetProvider>
       <ThemeProvider>
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <AppContent />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <AppContent />
+          </BrowserRouter>
+        </AuthProvider>
       </ThemeProvider>
     </HelmetProvider>
   );

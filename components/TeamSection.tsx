@@ -7,6 +7,8 @@ import { TEAM_MEMBERS, CONTACT_INFO } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -26,9 +28,12 @@ const itemVariants = {
 };
 
 const TeamSection: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [hoveredMember, setHoveredMember] = useState<number | null>(null);
+    const { data: team } = useContent('team_members', TEAM_MEMBERS);
+
+    const localized = (field: any) => getLocalizedField(field, i18n.language);
 
     return (
         <motion.section
@@ -53,9 +58,9 @@ const TeamSection: React.FC = () => {
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 px-4 sm:px-0"
                     variants={containerVariants}
                 >
-                    {TEAM_MEMBERS.map((member, index) => (
+                    {team.map((member, index) => (
                         <motion.div
-                            key={member.name}
+                            key={member.id || index}
                             className="group relative h-full"
                             variants={itemVariants}
                             onMouseEnter={() => setHoveredMember(index)}
@@ -93,7 +98,7 @@ const TeamSection: React.FC = () => {
                                                 {/* Fallback initials */}
                                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl items-center justify-center shadow-xl hidden">
                                                     <span className="text-white font-bold text-3xl">
-                                                        {member.name.split(' ').map(n => n[0]).join('')}
+                                                        {member.name.split(' ').map((n: string) => n[0]).join('')}
                                                     </span>
                                                 </div>
                                             </div>
@@ -111,10 +116,10 @@ const TeamSection: React.FC = () => {
                                                 <FaCheckCircle className="w-4 h-4 text-blue-500" title="Verified Expert" />
                                             </h3>
                                             <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 font-semibold text-lg mb-4">
-                                                {t(member.role)}
+                                                {localized(member.role)}
                                             </div>
                                             <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3">
-                                                {t(member.description)}
+                                                {localized(member.description)}
                                             </p>
                                         </div>
                                     </Link>
@@ -122,12 +127,12 @@ const TeamSection: React.FC = () => {
                                     {/* Specialties */}
                                     <div className="mb-6 mt-auto">
                                         <div className="flex flex-wrap gap-2 justify-center">
-                                            {member.specialties.slice(0, 3).map((specialty, idx) => (
+                                            {member.specialties?.slice(0, 3).map((specialty: any, idx: number) => (
                                                 <span
-                                                    key={specialty}
+                                                    key={idx}
                                                     className="px-3 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-300 text-xs font-medium rounded-full border border-slate-200 dark:border-white/10"
                                                 >
-                                                    {t(specialty)}
+                                                    {localized(specialty)}
                                                 </span>
                                             ))}
                                         </div>
@@ -135,8 +140,8 @@ const TeamSection: React.FC = () => {
 
                                     {/* Social Links */}
                                     <div className="flex justify-center gap-3 pt-6 border-t border-slate-200 dark:border-white/10">
-                                        {Object.entries(member.social).map(([platform, url]) => {
-                                            const icons = {
+                                        {member.social && Object.entries(member.social).map(([platform, url]) => {
+                                            const icons: any = {
                                                 linkedin: <FaLinkedin className="w-4 h-4" />,
                                                 twitter: <FaTwitter className="w-4 h-4" />,
                                                 github: <FaGithub className="w-4 h-4" />,
@@ -145,16 +150,20 @@ const TeamSection: React.FC = () => {
                                                 email: <FaEnvelope className="w-4 h-4" />
                                             };
 
+                                            if (!url || url === '#' || !icons[platform]) return null;
+
                                             return (
                                                 <motion.a
                                                     key={platform}
-                                                    href={url}
+                                                    href={url as string}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
                                                     className="p-2 rounded-lg bg-slate-50 dark:bg-white/5 text-slate-400 dark:text-zinc-500 hover:bg-blue-500/10 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300"
                                                     whileHover={{ scale: 1.1, y: -2 }}
                                                     whileTap={{ scale: 0.95 }}
                                                     aria-label={`${member.name} ${platform}`}
                                                 >
-                                                    {icons[platform as keyof typeof icons]}
+                                                    {icons[platform]}
                                                 </motion.a>
                                             );
                                         })}

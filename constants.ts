@@ -55,12 +55,12 @@ export const FAQ_DATA: FAQItem[] = [
 
 // Using React Icons for a consistent, modern look
 const ICONS = {
-  'Brand Growth': React.createElement(FaChartLine, { className: "w-8 h-8" }),
-  'Social Media Content': React.createElement(FaVideo, { className: "w-8 h-8" }),
-  'UI/UX Design': React.createElement(FaPalette, { className: "w-8 h-8" }),
-  'Web Development': React.createElement(FaCode, { className: "w-8 h-8" }),
-  'Virtual Assistance': React.createElement(FaHeadset, { className: "w-8 h-8" }),
-  'Customer Support': React.createElement(FaComments, { className: "w-8 h-8" }),
+  'Brand Growth': 'FaChartLine',
+  'Social Media Content': 'FaVideo',
+  'UI/UX Design': 'FaPalette',
+  'Web Development': 'FaCode',
+  'Virtual Assistance': 'FaHeadset',
+  'Customer Support': 'FaComments',
 };
 
 export const SERVICES: Service[] = [

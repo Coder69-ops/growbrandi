@@ -6,6 +6,8 @@ import { TESTIMONIALS } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -25,16 +27,24 @@ const itemVariants = {
 };
 
 const TestimonialsSlider: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [activeIndex, setActiveIndex] = useState(0);
     const touchStartX = useRef(0);
+    const { data: testimonials } = useContent('testimonials', TESTIMONIALS);
+
+    // Helper to get text: handles both legacy translation keys and new multi-lang objects
+    const getText = (field: any) => {
+        if (!field) return '';
+        if (typeof field === 'string') return t(field);
+        return getLocalizedField(field, i18n.language);
+    };
 
     const handleNext = () => {
-        setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+        setActiveIndex((prev) => (prev + 1) % testimonials.length);
     };
 
     const handlePrev = () => {
-        setActiveIndex((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+        setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
     };
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -98,7 +108,7 @@ const TestimonialsSlider: React.FC = () => {
                     {/* Enhanced Testimonial Cards */}
                     <div className="relative overflow-hidden rounded-3xl py-4">
                         <div className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
-                            {TESTIMONIALS.map((testimonial, index) => (
+                            {testimonials.map((testimonial, index) => (
                                 <div key={index} className="w-full flex-shrink-0 px-2 md:px-4">
                                     <GlassCard
                                         className="p-8 md:p-12 min-h-[400px] flex flex-col justify-between"
@@ -127,7 +137,7 @@ const TestimonialsSlider: React.FC = () => {
 
                                         {/* Testimonial Content */}
                                         <blockquote className="text-xl md:text-2xl text-slate-800 dark:text-zinc-100 font-medium leading-relaxed mb-8 relative z-10 flex-grow font-heading">
-                                            "{t(testimonial.quote)}"
+                                            "{getText(testimonial.quote)}"
                                         </blockquote>
 
                                         {/* Enhanced Author Section */}
@@ -142,7 +152,7 @@ const TestimonialsSlider: React.FC = () => {
                                             </div>
                                             <div className="flex-1 text-left">
                                                 <div className="font-bold text-slate-900 dark:text-white text-lg md:text-xl mb-0.5">{testimonial.author}</div>
-                                                <div className="text-blue-600 dark:text-blue-400 font-medium text-sm md:text-base">{testimonial.company}</div>
+                                                <div className="text-blue-600 dark:text-blue-400 font-medium text-sm md:text-base">{getText(testimonial.company)}</div>
                                             </div>
                                             <div className="hidden sm:flex items-center gap-3 px-4 py-1.5 bg-white/50 dark:bg-black/20 rounded-lg border border-slate-200 dark:border-white/5">
                                                 <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-6 w-auto object-contain" />
@@ -164,7 +174,7 @@ const TestimonialsSlider: React.FC = () => {
                         {/* Progress Bar */}
                         <div className="w-full max-w-md px-4">
                             <div className="flex justify-between text-xs font-medium text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">
-                                <span>{t('section_headers.testimonials.pager_text', { current: activeIndex + 1, total: TESTIMONIALS.length })}</span>
+                                <span>{t('section_headers.testimonials.pager_text', { current: activeIndex + 1, total: testimonials.length })}</span>
                             </div>
                             <div className="h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                                 <motion.div
@@ -178,7 +188,7 @@ const TestimonialsSlider: React.FC = () => {
 
                         {/* Enhanced Pagination Dots */}
                         <div className="flex items-center gap-3">
-                            {TESTIMONIALS.map((_, index) => (
+                            {testimonials.map((_, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setActiveIndex(index)}

@@ -12,13 +12,21 @@ import TeamSection from './TeamSection';
 import FAQ from './FAQ';
 import LazySection from './LazySection';
 import { useTranslation } from 'react-i18next';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 
 const HeroSection: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const { content, getText } = useSiteContentData();
     const navigate = useNavigate();
     const { scrollY } = useScroll();
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+
+    // Helper to get text with fallback to i18next
+    const getHeroText = (field: string) => {
+        const firestoreText = getText(`hero.${field}`, i18n.language as any);
+        return firestoreText || t(`hero.${field}`);
+    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -103,18 +111,18 @@ const HeroSection: React.FC = () => {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300 tracking-wide uppercase">{t('hero.badge')}</span>
+                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300 tracking-wide uppercase">{getHeroText('badge')}</span>
                         </motion.div>
 
                         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6 font-['Outfit']">
-                            {t('hero.title_prefix')} <br />
+                            {getHeroText('title_prefix')} <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400">
-                                {t('hero.title_highlight')}
+                                {getHeroText('title_highlight')}
                             </span>
                         </h1>
 
                         <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed mb-10 font-light">
-                            {t('hero.description')}
+                            {getHeroText('description')}
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-12">
@@ -125,7 +133,7 @@ const HeroSection: React.FC = () => {
                                 className="w-full sm:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center gap-2"
                             >
                                 <Zap className="w-5 h-5 fill-white dark:fill-black" />
-                                {t('hero.cta_consultation')}
+                                {getHeroText('cta_consultation')}
                             </motion.button>
 
                             <motion.button
@@ -135,7 +143,7 @@ const HeroSection: React.FC = () => {
                                 className="w-full sm:w-auto px-8 py-4 rounded-full font-medium text-lg text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 backdrop-blur-sm transition-all flex items-center justify-center gap-2"
                             >
                                 <Play className="w-4 h-4 fill-slate-900 dark:fill-white" />
-                                {t('hero.cta_showreel')}
+                                {getHeroText('cta_showreel')}
                             </motion.button>
                         </div>
 
@@ -166,7 +174,7 @@ const HeroSection: React.FC = () => {
                                     <span className="text-xs font-bold text-slate-900 dark:text-white">5.0</span>
                                 </div>
                                 <div className="flex items-center gap-1 opacity-80">
-                                    <span className="text-[10px] font-medium text-slate-500 dark:text-zinc-400">{t('hero.trustpilot_on')}</span>
+                                    <span className="text-[10px] font-medium text-slate-500 dark:text-zinc-400">{getHeroText('trustpilot_on')}</span>
                                     <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-5 w-auto object-contain" />
                                 </div>
                             </div>
@@ -174,7 +182,7 @@ const HeroSection: React.FC = () => {
 
                         {/* Trust / Social Proof */}
                         <div className="border-t border-slate-200 dark:border-white/10 pt-8">
-                            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 font-medium uppercase tracking-wider">{t('hero.trusted_by')}</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 font-medium uppercase tracking-wider">{getHeroText('trusted_by')}</p>
                             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
                                 <img src="/logos/amazon.svg" alt="Amazon" className="h-6 w-auto" />
                                 <img src="/logos/google.svg" alt="Google" className="h-6 w-auto" />
@@ -312,26 +320,26 @@ const HeroSection: React.FC = () => {
                                                 <img src="/team/sabrina-jui.jpg" alt="Profile" className="w-full h-full rounded-full object-cover border-2 border-white dark:border-slate-900" />
                                             </div>
                                             <div>
-                                                <div className="text-xs font-bold text-slate-900 dark:text-white">{t('hero.mock_viral_campaign')}</div>
+                                                <div className="text-xs font-bold text-slate-900 dark:text-white">{getHeroText('mock_viral_campaign')}</div>
                                                 <div className="text-[10px] text-slate-500 dark:text-slate-400">@growbrandi</div>
                                             </div>
                                             <button className="ml-auto px-2.5 py-1 bg-blue-500 text-white text-[10px] font-bold rounded-full">
-                                                {t('hero.mock_follow')}
+                                                {getHeroText('mock_follow')}
                                             </button>
                                         </div>
 
                                         <div className="grid grid-cols-3 gap-1.5 mt-1">
                                             <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                                                 <span className="font-bold text-base text-slate-900 dark:text-white">2.4M</span>
-                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{t('hero.mock_views')}</span>
+                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{getHeroText('mock_views')}</span>
                                             </div>
                                             <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                                                 <span className="font-bold text-base text-slate-900 dark:text-white">145K</span>
-                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{t('hero.mock_likes')}</span>
+                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{getHeroText('mock_likes')}</span>
                                             </div>
                                             <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                                                 <span className="font-bold text-base text-green-500">+12%</span>
-                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{t('hero.mock_ctr')}</span>
+                                                <span className="text-[9px] text-slate-500 uppercase tracking-wider">{getHeroText('mock_ctr')}</span>
                                             </div>
                                         </div>
 
@@ -349,7 +357,7 @@ const HeroSection: React.FC = () => {
                         className="lg:col-span-12 mt-12 lg:mt-0 pt-24 border-t border-slate-200 dark:border-white/5"
                     >
                         <Logos3
-                            heading={t('hero.tech_stack')}
+                            heading={getHeroText('tech_stack')}
                             logos={[
                                 { id: "logo-1", description: "React", image: "/logos/react.svg", className: "h-10 w-auto" },
                                 { id: "logo-2", description: "Next.js", image: "/logos/nextdotjs.svg", className: "h-10 w-auto" },

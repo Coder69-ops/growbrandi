@@ -9,6 +9,9 @@ import { Service } from '../types';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
+import { getIcon } from '../src/utils/icons';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -37,12 +40,13 @@ interface ServiceModalProps {
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
     if (!isOpen || !service) return null;
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
-    // Dynamically retrieve process steps from translation file based on service title key
-    // service.title is now a key like 'services.brand_growth.title'
-    // We strip '.title' to get 'services.brand_growth'
-    const serviceRootKey = service.title.replace('.title', '');
+    // Helper to get localized text
+    const localized = (field: any) => getLocalizedField(field, i18n.language);
+
+    // Dynamically retrieve process steps from translation file based on service ID
+    const serviceRootKey = `services.${service.id}`;
 
     // Try to get process steps from translation, fallback to default if not found
     const processStepsData = t(`${serviceRootKey}.process`, { returnObjects: true });
@@ -101,16 +105,17 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         {/* Header */}
                         <div className="flex items-center gap-4">
                             <div className={`p-4 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-lg`}>
-                                {service.icon}
+                                {/* Icon handling: If it's a string (URL) render img, else render component */}
+                                {getIcon(service.icon, "w-8 h-8") || <FaRocket className="w-8 h-8" />}
                             </div>
                             <div>
-                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{t(service.title)}</h2>
-                                <p className="text-blue-600 dark:text-blue-400 font-semibold text-lg">{t(service.price)}</p>
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{localized(service.title)}</h2>
+                                <p className="text-blue-600 dark:text-blue-400 font-semibold text-lg">{localized(service.price)}</p>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(service.description)}</p>
+                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{localized(service.description)}</p>
 
                         {/* Features */}
                         <div>
@@ -119,7 +124,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 {service.features?.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 bg-slate-50 dark:bg-white/5 p-3 rounded-xl border border-slate-100 dark:border-white/5">
                                         <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{t(feature)}</span>
+                                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{localized(feature)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -178,7 +183,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         {/* AI Widget in Modal */}
                         <div className="mt-8 pt-8 border-t border-slate-200 dark:border-white/10">
                             <h3 className="text-slate-900 dark:text-white font-semibold text-xl mb-4">Get an Instant Estimate</h3>
-                            <ServiceAIWidget serviceTitle={t(service.title)} compact={true} />
+                            <ServiceAIWidget serviceTitle={localized(service.title)} compact={true} />
                         </div>
 
                         {/* Trust Indicators */}
@@ -209,15 +214,16 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const localized = (field: any) => getLocalizedField(field, i18n.language);
 
-    // Check service types for specific visuals based on keys
-    const isSocialMedia = service.title === 'services.creative_studio.title';
-    const isBrandGrowth = service.title === 'services.performance_marketing.title';
-    const isUIUX = service.title === 'services.ui_ux_design.title';
-    const isWebDev = service.title === 'services.web_shopify_dev.title';
-    const isVA = service.title === 'services.ecommerce_management.title';
-    const isSupport = service.title === 'services.social_media_management.title';
+    // Check service types for specific visuals based on IDs
+    const isSocialMedia = service.id === 'creative_studio';
+    const isBrandGrowth = service.id === 'performance_marketing';
+    const isUIUX = service.id === 'ui_ux_design_full';
+    const isWebDev = service.id === 'web_shopify_dev';
+    const isVA = service.id === 'ecommerce_management';
+    const isSupport = service.id === 'social_media_management';
 
     return (
         <GlassCard
@@ -244,16 +250,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 <div className="relative mb-6 inline-block">
                     <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full" />
                     <div className={`relative flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} text-white shadow-lg`}>
-                        {service.icon}
+                        {getIcon(service.icon, "w-8 h-8") || <FaRocket className="w-8 h-8" />}
                     </div>
                 </div>
 
                 {/* Service Content */}
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                    {t(service.title)}
+                    {localized(service.title)}
                 </h3>
                 <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm">
-                    {t(service.description)}
+                    {localized(service.description)}
                 </p>
 
                 {/* Priority 1: Social Media Visual Artifact */}
@@ -514,7 +520,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     {service.features?.slice(0, 4).map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
                             <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full flex-shrink-0" />
-                            <span className="truncate">{t(feature)}</span>
+                            <span className="truncate">{localized(feature)}</span>
                         </div>
                     ))}
                 </div>
@@ -522,7 +528,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 {/* Price */}
                 <div className="mb-6 pt-4 border-t border-slate-100 dark:border-white/5">
                     <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
-                        {t(service.price)}
+                        {localized(service.price)}
                     </div>
                     <div className="text-slate-400 dark:text-zinc-500 text-xs mt-1">No hidden fees</div>
                 </div>
@@ -557,6 +563,8 @@ const ServicesPreview: React.FC = () => {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const { data: services, loading } = useContent('services', SERVICES);
+
     const handleLearnMore = (service: Service) => {
         setSelectedService(service);
         setIsModalOpen(true);
@@ -583,13 +591,13 @@ const ServicesPreview: React.FC = () => {
                         whileInView="visible"
                         viewport={{ once: true, amount: 0.1 }}
                     >
-                        {SERVICES.map((service, index) => (
+                        {services.map((service, index) => (
                             <ServiceCard
-                                key={service.title}
+                                key={service.id || index}
                                 service={service}
                                 index={index}
                                 onLearnMore={() => handleLearnMore(service)}
-                                featured={service.title === 'services.ui_ux_design.title'}
+                                featured={service.id === 'ui_ux_design_full'}
                             />
                         ))}
                     </motion.div>

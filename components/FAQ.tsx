@@ -7,6 +7,8 @@ import { FAQ_DATA } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
 
 const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
   question,
@@ -31,7 +33,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             <FaQuestionCircle className="w-4 h-4" />
           </div>
           <h3 className={`text-lg md:text-xl font-bold transition-colors duration-300 ${isOpen ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
-            {t(question)}
+            {question}
           </h3>
         </div>
         <motion.div
@@ -52,7 +54,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             className="overflow-hidden bg-slate-50/50 dark:bg-white/5"
           >
             <div className="px-8 pb-8 pt-2 pl-[4.5rem]">
-              <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(answer)}</p>
+              <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{answer}</p>
             </div>
           </motion.div>
         )}
@@ -62,9 +64,17 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
 };
 
 const FAQ: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { data: faqs } = useContent('faqs', FAQ_DATA);
+
+  // Helper to get text: handles both legacy translation keys and new multi-lang objects
+  const getText = (field: any) => {
+    if (!field) return '';
+    if (typeof field === 'string') return t(field);
+    return getLocalizedField(field, i18n.language);
+  };
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -95,7 +105,7 @@ const FAQ: React.FC = () => {
             }
           }}
         >
-          {FAQ_DATA.map((faq, index) => (
+          {faqs.map((faq, index) => (
             <motion.div
               key={index}
               variants={{
@@ -104,8 +114,8 @@ const FAQ: React.FC = () => {
               }}
             >
               <FAQItem
-                question={faq.question}
-                answer={faq.answer}
+                question={getText(faq.question)}
+                answer={getText(faq.answer)}
                 isOpen={openIndex === index}
                 onClick={() => toggleFAQ(index)}
               />

@@ -10,13 +10,14 @@ export interface Service {
   id: string;
   title: string;
   description: string;
-  icon: React.ReactElement;
+  icon: string;
   features: string[];
   price: string;
   color: string;
 }
 
 export interface Project {
+  id?: string;
   title: string;
   category: string;
   description: string;
@@ -51,6 +52,7 @@ export interface FAQItem {
 }
 
 export interface TeamMember {
+  id?: string;
   name: string;
   role: string;
   description: string;

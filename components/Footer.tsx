@@ -4,15 +4,23 @@ import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
 import { APP_NAME, APP_TAGLINE, CONTACT_INFO, SERVICES } from '../constants';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 
 // --- Enhanced Footer Component ---
 const Footer: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { getText } = useSiteContentData();
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  // Helper to get footer text with fallback
+  const getFooterText = (field: string) => {
+    const firestoreText = getText(`footer.${field}`, i18n.language as any);
+    return firestoreText || t(`footer.${field}`);
+  };
 
   const handleNewsletterSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,7 +70,7 @@ const Footer: React.FC = () => {
               />
             </Link>
             <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
-              {t('app.tagline')}. {t('footer.tagline_desc')}
+              {getFooterText('tagline_desc')}
             </p>
 
             <div className="flex flex-col items-start gap-2 mt-2">
@@ -70,7 +78,7 @@ const Footer: React.FC = () => {
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map(i => <FaStar key={i} className="w-3.5 h-3.5" />)}
                 </div>
-                <span className="text-slate-500 dark:text-zinc-400 text-xs font-semibold">{t('footer.rated_clients')}</span>
+                <span className="text-slate-500 dark:text-zinc-400 text-xs font-semibold">{getFooterText('rated_clients')}</span>
               </div>
               <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-7 w-auto object-contain opacity-100" />
             </div>

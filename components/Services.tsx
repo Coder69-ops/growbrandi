@@ -8,6 +8,7 @@ import { Service } from '../types';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { getIcon } from '../src/utils/icons';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -90,7 +91,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
               <div className="absolute bottom-6 left-8 flex items-end gap-6">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl">
-                  {service.icon}
+                  {getIcon(service.icon, "w-8 h-8")}
                 </div>
                 <div className="text-white mb-1">
                   <h2 className="text-3xl md:text-4xl font-bold">{t(service.title)}</h2>
@@ -216,7 +217,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
 
         <div className="relative z-10 flex items-start justify-between mb-6">
           <div className={`p-3 rounded-2xl bg-gradient-to-r ${service.color} text-white shadow-lg`}>
-            {service.icon}
+            {getIcon(service.icon, "w-8 h-8")}
           </div>
         </div>
 

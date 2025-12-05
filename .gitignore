@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 VERCEL_DEPLOYMENT.md
 .gitignore
+ServiceAccountKey.json

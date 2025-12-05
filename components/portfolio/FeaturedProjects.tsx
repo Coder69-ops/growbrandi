@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useContent } from '../../src/hooks/useContent';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PROJECTS } from '../../constants';
 import { Project } from '../../types';
 import { ProjectModal } from './ProjectModal';
+import { getLocalizedField } from '../../src/utils/localization';
 import {
     FaFolderOpen,
     FaArrowRight,
@@ -54,8 +56,15 @@ const ShowcaseItem: React.FC<{
     index: number;
     onClick: () => void;
 }> = ({ project, index, onClick }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const isEven = index % 2 === 0;
+
+    // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
+    const getText = (field: any) => {
+        if (!field) return '';
+        if (typeof field === 'string') return t(field); // Legacy: translation key
+        return getLocalizedField(field, i18n.language); // New: multi-lang object
+    };
 
     return (
         <motion.div
@@ -90,10 +99,10 @@ const ShowcaseItem: React.FC<{
                 <div className="flex flex-col h-full justify-center">
                     <div className="flex items-center gap-3 mb-6">
                         <span className="px-3 py-1 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full">
-                            {t(project.category)}
+                            {getText(project.category)}
                         </span>
                         <div className="h-px flex-grow bg-slate-200 dark:bg-white/10" />
-                        <span className="text-sm font-semibold text-slate-500 dark:text-zinc-500">{t(project.client)}</span>
+                        <span className="text-sm font-semibold text-slate-500 dark:text-zinc-500">{getText(project.client)}</span>
                     </div>
 
                     {/* Trustpilot Result Badge */}
@@ -108,11 +117,11 @@ const ShowcaseItem: React.FC<{
                     onClick={onClick}
                     className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 font-heading cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
-                    {t(project.title)}
+                    {getText(project.title)}
                 </h2>
 
                 <p className="text-lg text-slate-600 dark:text-zinc-400 mb-8 leading-relaxed">
-                    {t(project.description)}
+                    {getText(project.description)}
                 </p>
 
                 {/* Results Grid - "Make Meaningful" */}
@@ -122,7 +131,7 @@ const ShowcaseItem: React.FC<{
                             <div key={i} className="bg-slate-50 dark:bg-white/5 p-4 rounded-xl border border-slate-100 dark:border-white/5">
                                 <div className="flex items-start gap-3">
                                     <FaRocket className="text-blue-500 mt-1 flex-shrink-0" />
-                                    <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t(res)}</span>
+                                    <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">{getText(res)}</span>
                                 </div>
                             </div>
                         ))}
@@ -162,16 +171,25 @@ const ShowcaseItem: React.FC<{
 };
 
 export const FeaturedProjects: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string>('All');
 
-    const categories = ['All', ...Array.from(new Set(PROJECTS.map(p => p.category)))];
+    const { data: projects, loading } = useContent('projects', PROJECTS);
+
+    // Reset filter when language changes to avoid mismatch
+    React.useEffect(() => {
+        setActiveFilter('All');
+    }, [i18n.language]);
+
+    const getCategory = (p: any) => getLocalizedField(p.category, i18n.language);
+
+    const categories = ['All', ...Array.from(new Set(projects.map((p: any) => getCategory(p))))];
 
     const displayedProjects = activeFilter === 'All'
-        ? PROJECTS
-        : PROJECTS.filter(p => p.category === activeFilter);
+        ? projects
+        : projects.filter((p: any) => getCategory(p) === activeFilter);
 
     const handleProjectClick = (project: Project) => {
         setSelectedProject(project);
@@ -205,7 +223,7 @@ export const FeaturedProjects: React.FC = () => {
                             >
                                 {t(category)}
                                 <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${activeFilter === category ? 'bg-white/20 text-white dark:text-black dark:bg-black/10' : 'bg-slate-100 dark:bg-zinc-800 text-slate-400'}`}>
-                                    {category === 'All' ? PROJECTS.length : PROJECTS.filter(p => p.category === category).length}
+                                    {category === 'All' ? projects.length : projects.filter((p: any) => getCategory(p) === category).length}
                                 </span>
                             </button>
                         ))}

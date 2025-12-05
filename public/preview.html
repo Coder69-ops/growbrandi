@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #09090b;
+                color: white;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white">
+    <!-- Hero Section Preview -->
+    <section id="hero" class="min-h-screen flex items-center justify-center px-4 py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-200/50 dark:bg-white/5 border border-slate-300/50 dark:border-white/10 mb-6">
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span id="hero-badge"
+                    class="text-xs font-medium text-slate-600 dark:text-slate-300 tracking-wide uppercase">
+                    Growth Ecosystem v2.0
+                </span>
+            </div>
+
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
+                <span id="hero-title-prefix">Scale Your Brand with</span>
+                <br />
+                <span id="hero-title-highlight"
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400">
+                    Intelligent Design
+                </span>
+            </h1>
+
+            <p id="hero-description"
+                class="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-10">
+                GrowBrandi combines Advanced AI analytics with High-Impact creative strategy to transform your Digital
+                Presence and drive Measurable Business Growth.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4 justify-center mb-12">
+                <button id="hero-cta-consultation"
+                    class="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all">
+                    Get Your Free Consultation
+                </button>
+                <button id="hero-cta-showreel"
+                    class="px-8 py-4 rounded-full font-medium text-lg text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 transition-all">
+                    View Showreel
+                </button>
+            </div>
+
+            <p id="hero-trusted-by"
+                class="text-sm text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
+                Trusted by Industry Leaders:
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer Section Preview -->
+    <footer id="footer"
+        class="bg-slate-50 dark:bg-luxury-black pt-20 pb-10 border-t border-slate-200 dark:border-white/5">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 id="footer-ready-to-scale" class="text-3xl font-bold text-slate-900 dark:text-white mb-4">
+                    Ready to Scale?
+                </h2>
+                <p id="footer-cta-desc" class="text-lg text-slate-600 dark:text-slate-400 mb-6">
+                    Let's build something extraordinary together.
+                </p>
+                <button id="footer-start-project"
+                    class="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-lg shadow-lg hover:shadow-xl transition-all">
+                    Start Project
+                </button>
+            </div>
+
+            <div class="border-t border-slate-200 dark:border-white/5 pt-8 text-center">
+                <p id="footer-tagline-desc" class="text-slate-600 dark:text-slate-400 text-sm mb-4">
+                    We combine data-driven insights with creative excellence to deliver measurable results.
+                </p>
+                <p id="footer-copyright" class="text-slate-500 dark:text-slate-500 text-sm">
+                    © 2024 GrowBrandi. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Listen for preview updates from parent
+        window.addEventListener('message', (event) => {
+            // Security: Only accept messages from same origin
+            if (event.origin !== window.location.origin) return;
+
+            if (event.data.type === 'PREVIEW_UPDATE') {
+                const { data, section } = event.data;
+
+                // Update hero content
+                if (data.hero) {
+                    updateElement('hero-badge', data.hero.badge);
+                    updateElement('hero-title-prefix', data.hero.title_prefix);
+                    updateElement('hero-title-highlight', data.hero.title_highlight);
+                    updateElement('hero-description', data.hero.description);
+                    updateElement('hero-cta-consultation', data.hero.cta_consultation);
+                    updateElement('hero-cta-showreel', data.hero.cta_showreel);
+                    updateElement('hero-trusted-by', data.hero.trusted_by);
+                }
+
+                // Update footer content
+                if (data.footer) {
+                    updateElement('footer-ready-to-scale', data.footer.ready_to_scale);
+                    updateElement('footer-cta-desc', data.footer.cta_desc);
+                    updateElement('footer-start-project', data.footer.start_project);
+                    updateElement('footer-tagline-desc', data.footer.tagline_desc);
+
+                    // Handle copyright with year placeholder
+                    if (data.footer.copyright) {
+                        const year = new Date().getFullYear();
+                        const copyrightText = data.footer.copyright.replace('{{year}}', year);
+                        updateElement('footer-copyright', copyrightText);
+                    }
+                }
+
+                // Scroll to section if specified
+                if (section) {
+                    const element = document.getElementById(section);
+                    if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+        });
+
+        // Helper function to update element text
+        function updateElement(id, value) {
+            const element = document.getElementById(id);
+            if (element && value) {
+                // Get current language from parent or default to 'en'
+                const lang = getCurrentLanguage();
+
+                // If value is an object with language keys, use the current language
+                if (typeof value === 'object' && value[lang]) {
+                    element.textContent = value[lang];
+                } else if (typeof value === 'string') {
+                    element.textContent = value;
+                }
+            }
+        }
+
+        // Get current language (can be enhanced to sync with parent)
+        function getCurrentLanguage() {
+            return 'en'; // Default to English for now
+        }
+
+        // Notify parent that preview is ready
+        window.parent.postMessage({ type: 'PREVIEW_READY' }, window.location.origin);
+    </script>
+</body>
+
+</html>
