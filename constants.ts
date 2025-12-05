@@ -3,16 +3,16 @@ import { FaChartLine, FaVideo, FaPalette, FaCode, FaHeadset, FaComments } from '
 import { Service, Project, Testimonial, CompanyStat, FAQItem, TeamMember } from './types';
 
 // App Constants
-export const APP_NAME = 'GrowBrandi';
-export const APP_TAGLINE = 'GrowBrandi - Full-Stack Digital Growth Agency';
-export const APP_SUBTITLE = 'We Build Digital Empires. Growth, Content, & Tech.';
+export const APP_NAME = 'app.name';
+export const APP_TAGLINE = 'app.tagline';
+export const APP_SUBTITLE = 'app.subtitle';
 
 // Company Statistics
 export const COMPANY_STATS: CompanyStat[] = [
-  { number: '150+', label: 'Projects Completed', icon: '📊' },
-  { number: '50+', label: 'Happy Clients', icon: '😊' },
-  { number: '5+', label: 'Years Experience', icon: '🏆' },
-  { number: '24/7', label: 'Support Available', icon: '🔧' }
+  { number: '150+', label: 'stats.projects_completed', icon: '📊' },
+  { number: '50+', label: 'stats.happy_clients', icon: '😊' },
+  { number: '5+', label: 'stats.years_experience', icon: '🏆' },
+  { number: '24/7', label: 'stats.support_available', icon: '🔧' }
 ];
 
 // Contact Information
@@ -32,24 +32,24 @@ export const CONTACT_INFO = {
 // FAQ Data
 export const FAQ_DATA: FAQItem[] = [
   {
-    question: 'What makes GrowBrandi different from other digital agencies?',
-    answer: 'GrowBrandi combines intelligent data insights with creative expertise to deliver exceptional digital solutions. Our proprietary growth methodology, cutting-edge tech stack, and obsessive focus on measurable ROI set us apart from traditional agencies.'
+    question: 'faq.q1',
+    answer: 'faq.a1'
   },
   {
-    question: 'How long does a typical project take?',
-    answer: 'Project timelines vary based on scope and complexity. Simple websites take 4-6 weeks, while complex web applications can take 12-16 weeks. We provide detailed timelines during our initial consultation.'
+    question: 'faq.q2',
+    answer: 'faq.a2'
   },
   {
-    question: 'Do you provide ongoing support and maintenance?',
-    answer: 'Yes! We offer comprehensive support packages including regular updates, security monitoring, performance optimization, and 24/7 technical support to ensure your digital assets perform optimally.'
+    question: 'faq.q3',
+    answer: 'faq.a3'
   },
   {
-    question: 'What technologies do you work with?',
-    answer: 'GrowBrandi specializes in cutting-edge technologies including React, Next.js, Node.js, TypeScript, and intelligent automation. Our technical experts choose the optimal tech stack based on your specific project requirements and growth goals.'
+    question: 'faq.q4',
+    answer: 'faq.a4'
   },
   {
-    question: 'Can you help with existing website improvements?',
-    answer: 'Absolutely! We offer website audits, performance optimization, redesigns, and feature enhancements for existing websites. We can work with your current platform or recommend migrations if needed.'
+    question: 'faq.q5',
+    answer: 'faq.a5'
   }
 ];
 
@@ -65,126 +65,292 @@ const ICONS = {
 
 export const SERVICES: Service[] = [
   {
-    title: 'Web & Shopify Dev',
-    description: 'Custom Shopify and WordPress development to build robust, high-converting online stores. We specialize in scalable e-commerce architectures.',
+    id: 'web_shopify_dev',
+    title: 'services.web_shopify_dev.title',
+    description: 'services.web_shopify_dev.description',
     icon: ICONS['Web Development'],
-    features: ['Shopify Development', 'WordPress Solutions', 'Custom Theme Dev', 'Store Optimization'],
-    price: 'From $999 | Pro $2,999',
+    features: [
+      'services.web_shopify_dev.features.shopify_development',
+      'services.web_shopify_dev.features.wordpress_solutions',
+      'services.web_shopify_dev.features.custom_theme_dev',
+      'services.web_shopify_dev.features.store_optimization'
+    ],
+    price: 'services.web_shopify_dev.price',
     color: 'from-orange-500 to-red-500'
   },
   {
-    title: 'E-commerce Management',
-    description: 'Comprehensive business management for your e-commerce store. We handle operations, inventory, and strategy so you can focus on growth.',
+    id: 'ecommerce_management',
+    title: 'services.ecommerce_management.title',
+    description: 'services.ecommerce_management.description',
     icon: ICONS['Virtual Assistance'],
-    features: ['Business Operations', 'Inventory Management', 'Order Processing', 'Growth Strategy'],
-    price: 'From $499/mo | Pro $1,499/mo',
+    features: [
+      'services.ecommerce_management.features.business_operations',
+      'services.ecommerce_management.features.inventory_management',
+      'services.ecommerce_management.features.order_processing',
+      'services.ecommerce_management.features.growth_strategy'
+    ],
+    price: 'services.ecommerce_management.price',
     color: 'from-cyan-500 to-blue-500'
   },
   {
-    title: 'Social Media Management',
-    description: 'Full-service social media handling. From scheduling posts to community engagement, we keep your brand active and growing across all platforms.',
+    id: 'social_media_management',
+    title: 'services.social_media_management.title',
+    description: 'services.social_media_management.description',
     icon: ICONS['Customer Support'],
-    features: ['Schedule Posts', 'Community Management', 'Profile Optimization', 'Engagement Strategy'],
-    price: 'From $399/mo | Pro $999/mo',
+    features: [
+      'services.social_media_management.features.schedule_posts',
+      'services.social_media_management.features.community_management',
+      'services.social_media_management.features.profile_optimization',
+      'services.social_media_management.features.engagement_strategy'
+    ],
+    price: 'services.social_media_management.price',
     color: 'from-purple-500 to-indigo-500'
   },
   {
-    title: 'Performance Marketing',
-    description: 'Data-driven Meta Ads (Facebook/Instagram) campaigns designed to scale revenue. We focus on ROAS and precise audience targeting.',
+    id: 'performance_marketing',
+    title: 'services.performance_marketing.title',
+    description: 'services.performance_marketing.description',
     icon: ICONS['Brand Growth'],
-    features: ['Meta Ads', 'Audience Targeting', 'A/B Testing', 'ROI Tracking'],
-    price: 'From $599 | Pro $1,999',
+    features: [
+      'services.performance_marketing.features.meta_ads',
+      'services.performance_marketing.features.audience_targeting',
+      'services.performance_marketing.features.ab_testing',
+      'services.performance_marketing.features.roi_tracking'
+    ],
+    price: 'services.performance_marketing.price',
     color: 'from-blue-500 to-cyan-500'
   },
   {
-    title: 'Creative Studio',
-    description: 'High-impact content creation including video editing, motion graphics, and custom background music to make your brand unforgettable.',
+    id: 'creative_studio',
+    title: 'services.creative_studio.title',
+    description: 'services.creative_studio.description',
     icon: ICONS['Social Media Content'],
-    features: ['Video Content Creation', 'Background Music', 'Motion Graphics', 'Content Strategy'],
-    price: 'From $499 | Pro $1,499',
+    features: [
+      'services.creative_studio.features.video_content_creation',
+      'services.creative_studio.features.background_music',
+      'services.creative_studio.features.motion_graphics',
+      'services.creative_studio.features.content_strategy'
+    ],
+    price: 'services.creative_studio.price',
     color: 'from-pink-500 to-rose-500'
   },
   {
-    title: 'UI/UX Design',
-    description: 'Award-winning interface design that combines aesthetics with usability. We create digital experiences that convert visitors into loyal customers.',
+    id: 'ui_ux_design_full',
+    title: 'services.ui_ux_design_full.title',
+    description: 'services.ui_ux_design_full.description',
     icon: ICONS['UI/UX Design'],
-    features: ['User Research', 'Wireframing', 'Prototyping', 'Design Systems'],
-    price: 'From $799 | Pro $1,999',
+    features: [
+      'services.ui_ux_design_full.features.user_research',
+      'services.ui_ux_design_full.features.wireframing',
+      'services.ui_ux_design_full.features.prototyping',
+      'services.ui_ux_design_full.features.design_systems'
+    ],
+    price: 'services.ui_ux_design_full.price',
     color: 'from-violet-500 to-purple-500'
   },
 ];
 
 export const PROJECTS: Project[] = [
   {
-    title: "Machain Store",
-    category: "E-commerce",
-    description: "A high-converting Shopify store for a leading fashion retailer. We optimized the user journey and implemented advanced retention strategies.",
+    title: "projects.machain_store.title",
+    category: "services.web_shopify_dev.title",
+    description: "projects.machain_store.description",
     imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
     rating: 5,
-    completionTime: '6 weeks',
-    technologies: ['Shopify', 'Liquid', 'Klaviyo', 'Meta Ads'],
-    client: 'Machain Store',
-    results: ['300% Revenue Increase', '50% Higher AOV', '25% Repeat Purchase Rate'],
-    growthMetrics: '300% Revenue Increase',
+    completionTime: 'projects.machain_store.completion_time',
+    technologies: ['tech.shopify', 'tech.liquid', 'tech.klaviyo', 'tech.meta_ads'],
+    client: 'projects.machain_store.client',
+    results: [
+      'projects.machain_store.results.0',
+      'projects.machain_store.results.1',
+      'projects.machain_store.results.2'
+    ],
+    growthMetrics: 'projects.machain_store.results.0',
     beforeImage: "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
     afterImage: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max"
   },
   {
-    title: "Mauvis",
-    category: "Web Development",
-    description: "A sleek, modern website for a premium beauty brand. Focused on brand storytelling and seamless booking integration.",
+    title: "projects.velvet_vine.title",
+    category: "services.social_media_management.title",
+    description: "projects.velvet_vine.description",
+    imageUrl: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    rating: 5,
+    completionTime: 'projects.velvet_vine.completion_time',
+    technologies: ['tech.instagram', 'tech.tiktok', 'tech.capcut', 'tech.sprout_social'],
+    client: 'projects.velvet_vine.client',
+    results: [
+      'projects.velvet_vine.results.0',
+      'projects.velvet_vine.results.1',
+      'projects.velvet_vine.results.2'
+    ],
+    growthMetrics: 'projects.velvet_vine.growth_metrics'
+  },
+  {
+    title: "projects.adscale_pro.title",
+    category: "services.performance_marketing.title",
+    description: "projects.adscale_pro.description",
+    imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    rating: 5,
+    completionTime: 'projects.adscale_pro.completion_time',
+    technologies: ['tech.meta_ads', 'tech.google_ads', 'tech.ga4', 'tech.supermetrics'],
+    client: 'projects.adscale_pro.client',
+    results: [
+      'projects.adscale_pro.results.0',
+      'projects.adscale_pro.results.1',
+      'projects.adscale_pro.results.2'
+    ],
+    growthMetrics: 'projects.adscale_pro.results.0'
+  },
+  {
+    title: "projects.mauvis_beauty.title",
+    category: "services.web_shopify_dev.title",
+    description: "projects.mauvis_beauty.description",
     imageUrl: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     rating: 5,
-    completionTime: '4 weeks',
-    technologies: ['WordPress', 'Elementor', 'SEO', 'Google Analytics'],
-    client: 'Mauvis Beauty',
-    results: ['10x ROI', '200% More Bookings', 'Top 3 Search Ranking'],
-    growthMetrics: '10x ROI',
+    completionTime: 'projects.mauvis_beauty.completion_time',
+    technologies: ['tech.wordpress', 'tech.elementor', 'tech.seo', 'tech.google_analytics'],
+    client: 'projects.mauvis_beauty.client',
+    results: [
+      'projects.mauvis_beauty.results.0',
+      'projects.mauvis_beauty.results.1',
+      'projects.mauvis_beauty.results.2'
+    ],
+    growthMetrics: 'projects.mauvis_beauty.results.0',
     beforeImage: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     afterImage: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
   },
   {
-    title: "Saravia Gems",
-    category: "E-commerce",
-    description: "Luxury jewelry e-commerce platform built for trust and high-ticket sales. Enhanced product visualization and secure checkout flow.",
+    title: "projects.lumina_reveal.title",
+    category: "services.creative_studio.title",
+    description: "projects.lumina_reveal.description",
+    imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    rating: 5,
+    completionTime: 'projects.lumina_reveal.completion_time',
+    technologies: ['tech.after_effects', 'tech.cinema_4d', 'tech.premiere_pro', 'tech.blender'],
+    client: 'projects.lumina_reveal.client',
+    results: [
+      'projects.lumina_reveal.results.0',
+      'projects.lumina_reveal.results.1',
+      'projects.lumina_reveal.results.2'
+    ],
+    growthMetrics: 'projects.lumina_reveal.results.0'
+  },
+  {
+    title: "projects.peak_performance.title",
+    category: "services.ecommerce_management.title",
+    description: "projects.peak_performance.description",
+    imageUrl: "https://images.unsplash.com/photo-1501555088652-021faa106b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    rating: 5,
+    completionTime: 'projects.peak_performance.completion_time',
+    technologies: ['tech.shopify_flow', 'tech.stocky', 'tech.klaviyo', 'tech.asana'],
+    client: 'projects.peak_performance.client',
+    results: [
+      'projects.peak_performance.results.0',
+      'projects.peak_performance.results.1',
+      'projects.peak_performance.results.2'
+    ],
+    growthMetrics: 'projects.peak_performance.results.1'
+  },
+  {
+    title: "projects.luxe_estate.title",
+    category: "services.ui_ux_design_full.title",
+    description: "projects.luxe_estate.description",
+    imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1600&auto=format&fit=crop",
+    rating: 5,
+    completionTime: 'projects.luxe_estate.completion_time',
+    technologies: ['tech.figma', 'tech.protopie', 'tech.nextjs', 'tech.threejs'],
+    client: 'projects.luxe_estate.client',
+    results: [
+      'projects.luxe_estate.results.0',
+      'projects.luxe_estate.results.1',
+      'projects.luxe_estate.results.2'
+    ],
+    growthMetrics: 'projects.luxe_estate.results.0',
+    beforeImage: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    afterImage: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1600&auto=format&fit=crop"
+  },
+  {
+    title: "projects.flowbank_app.title",
+    category: "services.ui_ux_design_full.title",
+    description: "projects.flowbank_app.description",
+    imageUrl: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800",
+    rating: 5,
+    completionTime: 'projects.flowbank_app.completion_time',
+    technologies: ['tech.figma', 'tech.useberry', 'tech.flutter', 'tech.design_systems'],
+    client: 'projects.flowbank_app.client',
+    results: [
+      'projects.flowbank_app.results.0',
+      'projects.flowbank_app.results.1',
+      'projects.flowbank_app.results.2'
+    ],
+    growthMetrics: 'projects.flowbank_app.results.0',
+    beforeImage: "https://images.unsplash.com/photo-1616077168712-fc6c788da4af?auto=format&fit=crop&q=80&w=800",
+    afterImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    title: "projects.saravia_gems.title",
+    category: "services.web_shopify_dev.title",
+    description: "projects.saravia_gems.description",
     imageUrl: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
     rating: 5,
-    completionTime: '8 weeks',
-    technologies: ['Shopify Plus', '3D Modeling', 'Google Ads', 'Email Marketing'],
-    client: 'Saravia Gems',
-    results: ['Top 1% Shopify Store', '40% Conversion Rate', 'Zero Downtime'],
-    growthMetrics: 'Top 1% Shopify Store',
+    completionTime: 'projects.saravia_gems.completion_time',
+    technologies: ['tech.shopify_plus', 'tech.3d_modeling', 'tech.google_ads', 'tech.email_marketing'],
+    client: 'projects.saravia_gems.client',
+    results: [
+      'projects.saravia_gems.results.0',
+      'projects.saravia_gems.results.1',
+      'projects.saravia_gems.results.2'
+    ],
+    growthMetrics: 'projects.saravia_gems.results.0',
     beforeImage: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
     afterImage: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max"
   },
+  {
+    title: "projects.neonfin_dashboard.title",
+    category: "services.web_shopify_dev.title",
+    description: "projects.neonfin_dashboard.description",
+    imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    rating: 5,
+    completionTime: 'projects.neonfin_dashboard.completion_time',
+    technologies: ['tech.react', 'tech.nodejs', 'tech.aws', 'tech.websockets'],
+    client: 'projects.neonfin_dashboard.client',
+    results: [
+      'projects.neonfin_dashboard.results.0',
+      'projects.neonfin_dashboard.results.1',
+      'projects.neonfin_dashboard.results.2'
+    ],
+    growthMetrics: 'projects.neonfin_dashboard.results.0',
+    beforeImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
+    afterImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max"
+  }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: "GrowBrandi transformed our digital presence completely. Their data-driven approach to web development and intelligent design strategy resulted in a 300% increase in leads and a stunning website that our customers love.",
+    quote: "testimonials.sarah_johnson.quote",
     author: "Sarah Johnson",
-    company: "CEO at TechFlow Solutions",
+    company: "testimonials.sarah_johnson.role",
     rating: 5,
     image: "/testimonials/sarah-johnson.jpg"
   },
   {
-    quote: "The team at GrowBrandi is exceptional. They delivered a beautiful, responsive website that perfectly captures our brand essence. The SEO optimization has dramatically improved our search rankings.",
+    quote: "testimonials.michael_chen.quote",
     author: "Michael Chen",
-    company: "Founder of EcoVibe",
+    company: "testimonials.michael_chen.role",
     rating: 5,
     image: "/testimonials/michael-chen.jpg"
   },
   {
-    quote: "Working with GrowBrandi was a game-changer for our fashion brand. Their UI/UX design expertise and attention to detail created an e-commerce platform that converts visitors into customers.",
+    quote: "testimonials.emily_rodriguez.quote",
     author: "Emily Rodriguez",
-    company: "Marketing Director at StyleHub",
+    company: "testimonials.emily_rodriguez.role",
     rating: 5,
     image: "/testimonials/emily-rodriguez.jpg"
   },
   {
-    quote: "GrowBrandi's development team is top-notch. They built us a complex SaaS platform that scales beautifully. Their modern tech stack and clean code practices are impressive.",
+    quote: "testimonials.david_thompson.quote",
     author: "David Thompson",
-    company: "CTO at DataDrive",
+    company: "testimonials.david_thompson.role",
     rating: 4.9,
     image: "/testimonials/david-thompson.jpg"
   }
@@ -193,18 +359,18 @@ export const TESTIMONIALS: Testimonial[] = [
 export const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Shuvo Mallick",
-    role: "CEO & Founder",
+    role: "team.roles.ceo_founder",
     slug: "shuvo-mallick",
-    description: "Visionary leader with a passion for driving business growth through innovative digital strategies.",
-    bio: "Shuvo Mallick is the visionary architect behind GrowBrandi. With over a decade of high-stakes experience in digital transformation and brand strategy, he has successfully guided over 50 businesses from early-stage startups to market-dominating enterprises. His unique 'Growth Engine' methodology combines creative storytelling with rigorous data analytics, ensuring that every campaign delivers measurable, scalable results. Shuvo is a sought-after speaker at industry conferences and a mentor to emerging tech entrepreneurs.",
+    description: "team.shuvo.description",
+    bio: "team.shuvo.bio",
     achievements: [
-      "Scaled 50+ businesses to 7-figure annual revenue",
-      "Pioneered GrowBrandi's proprietary 'Growth Engine' methodology",
-      "Keynote speaker at the 2024 Digital Growth Summit",
-      "Awarded 'Digital Innovator of the Year' by TechWeekly"
+      "team.shuvo.achievements.0",
+      "team.shuvo.achievements.1",
+      "team.shuvo.achievements.2",
+      "team.shuvo.achievements.3"
     ],
     image: "/team/shuvo-mallick.png",
-    specialties: ["Business Strategy", "Executive Leadership", "Growth Hacking", "Brand Architecture"],
+    specialties: ["team.specialties.business_strategy", "team.specialties.executive_leadership", "team.specialties.growth_hacking", "team.specialties.brand_architecture"],
     social: {
       linkedin: "#",
       twitter: "#",
@@ -213,18 +379,18 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Binita Biswas",
-    role: "GrowBrandi Solutions Architect",
+    role: "team.roles.solutions_architect",
     slug: "binita-biswas",
-    description: "Expert in designing scalable solutions and integrating intelligent technologies for maximum efficiency.",
-    bio: "Binita is a master of systems thinking. As our Solutions Architect, she specializes in translating complex business requirements into elegant, scalable technical ecosystems. Her expertise spans cloud infrastructure, AI integration, and enterprise software architecture. Binita ensures that GrowBrandi's clients don't just get a website, but a robust digital foundation capable of supporting exponential growth. She is passionate about automation and efficiency, constantly finding ways to streamline operations.",
+    description: "team.binita.description",
+    bio: "team.binita.bio",
     achievements: [
-      "Architected enterprise-grade solutions for Fortune 500 clients",
-      "Reduced client operational costs by an average of 40% through automation",
-      "Led the development of GrowBrandi's AI Business Advisor tool",
-      "Certified AWS Solutions Architect Professional"
+      "team.binita.achievements.0",
+      "team.binita.achievements.1",
+      "team.binita.achievements.2",
+      "team.binita.achievements.3"
     ],
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["Solutions Architecture", "System Integration", "Cloud Infrastructure", "AI Implementation"],
+    specialties: ["team.specialties.solutions_architecture", "team.specialties.system_integration", "team.specialties.cloud_infrastructure", "team.specialties.ai_implementation"],
     social: {
       linkedin: "#",
       twitter: "#",
@@ -233,18 +399,18 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Ovejit Das",
-    role: "Head of Development",
+    role: "team.roles.head_of_development",
     slug: "ovejit-das",
-    description: "Leading the engineering team to build robust, high-performance applications with cutting-edge tech.",
-    bio: "Ovejit is the technical backbone of GrowBrandi. Leading our engineering team with a focus on code quality, performance, and security, he ensures that every digital product we build is a masterpiece of modern engineering. A full-stack expert with a deep love for clean code, Ovejit stays ahead of the curve on emerging technologies, from Web3 to edge computing. His leadership style fosters a culture of continuous learning and technical excellence within the development team.",
+    description: "team.ovejit.description",
+    bio: "team.ovejit.bio",
     achievements: [
-      "Oversees a high-performing team of 15+ developers",
-      "Maintains 99.99% uptime across all client applications",
-      "Spearheaded the migration to a serverless architecture, reducing costs by 30%",
-      "Contributor to major open-source React libraries"
+      "team.ovejit.achievements.0",
+      "team.ovejit.achievements.1",
+      "team.ovejit.achievements.2",
+      "team.ovejit.achievements.3"
     ],
     image: "/team/ovejit.jpg",
-    specialties: ["Full Stack Development", "Cloud Architecture", "Team Leadership", "Cybersecurity"],
+    specialties: ["team.specialties.full_stack_development", "team.specialties.cloud_architecture", "team.specialties.team_leadership", "team.specialties.cybersecurity"],
     social: {
       linkedin: "https://www.linkedin.com/in/ovejit-das-826987354/",
       github: "https://github.com/Coder69-ops",
@@ -253,18 +419,18 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Nijhum Nur",
-    role: "Digital Marketing Strategist",
+    role: "team.roles.digital_marketing_strategist",
     slug: "nijhum-nur",
-    description: "Data-driven marketer specializing in paid advertising and conversion rate optimization.",
-    bio: "Nijhum lives at the intersection of psychology and data. As our lead strategist, she crafts high-ROI campaigns that turn casual browsers into loyal brand advocates. Her deep understanding of consumer behavior and platform algorithms allows her to uncover hidden opportunities for growth. Nijhum manages substantial ad budgets across Meta, Google, and TikTok, consistently delivering ROAS that exceeds industry benchmarks. She believes that every click tells a story.",
+    description: "team.nijhum.description",
+    bio: "team.nijhum.bio",
     achievements: [
-      "Managed over $2M in ad spend with a 5x average ROAS",
-      "Increased client conversion rates by an average of 150% in 2024",
-      "Certified Google Ads and Meta Blueprint Professional",
-      "Developed a proprietary audience targeting framework"
+      "team.nijhum.achievements.0",
+      "team.nijhum.achievements.1",
+      "team.nijhum.achievements.2",
+      "team.nijhum.achievements.3"
     ],
     image: "/team/nijhum.jpeg",
-    specialties: ["PPC Advertising", "Social Media Strategy", "Conversion Rate Optimization", "Data Analytics"],
+    specialties: ["team.specialties.ppc_advertising", "team.specialties.social_media_strategy", "team.specialties.conversion_rate_optimization", "team.specialties.data_analytics"],
     social: {
       linkedin: "#",
       instagram: "#",
@@ -273,18 +439,18 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Sabrina Jui",
-    role: "UI/UX Designer",
+    role: "team.roles.ui_ux_designer",
     slug: "sabrina-jui",
-    description: "Creative designer crafting intuitive and visually stunning user experiences.",
-    bio: "Jinia believes that great design is invisible—it just works. She creates intuitive, user-centric interfaces that delight users and drive engagement. Her designs balance aesthetic beauty with functional clarity, creating memorable digital experiences that reinforce brand identity. Jinia's process involves deep user research, rapid prototyping, and iterative testing to ensure that every pixel serves a purpose. She is an expert in creating cohesive design systems that scale.",
+    description: "team.sabrina.description",
+    bio: "team.sabrina.bio",
     achievements: [
-      "Winner of the 2023 Awwwards 'Site of the Day'",
-      "Redesigned major e-commerce flows resulting in 30% less cart abandonment",
-      "Created the comprehensive 'Prism' design system used across all internal projects",
-      "Featured in 'Best of Behance' for Interaction Design"
+      "team.sabrina.achievements.0",
+      "team.sabrina.achievements.1",
+      "team.sabrina.achievements.2",
+      "team.sabrina.achievements.3"
     ],
     image: "/team/sabrina-jui.jpg",
-    specialties: ["UI/UX Design", "Interaction Design", "User Research", "Prototyping"],
+    specialties: ["team.specialties.ui_ux_design", "team.specialties.interaction_design", "team.specialties.user_research", "team.specialties.prototyping"],
     social: {
       linkedin: "#",
       dribbble: "#",
@@ -293,18 +459,18 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     name: "Riaz Shahriar",
-    role: "Project Manager",
+    role: "team.roles.project_manager",
     slug: "riaz-shahriar",
-    description: "Ensuring projects are delivered on time and within budget with seamless communication.",
-    bio: "Riaz is the glue that holds our projects together. With his meticulous attention to detail and proactive communication style, he ensures that every project is delivered on time, within budget, and exceeds client expectations. Riaz is a master of Agile methodologies, capable of adapting to changing requirements while keeping the team focused and motivated. He believes that transparency and trust are the cornerstones of successful project management.",
+    description: "team.riaz.description",
+    bio: "team.riaz.bio",
     achievements: [
-      "Successfully delivered 100+ projects on schedule and under budget",
-      "Maintains a perfect 100% client satisfaction rating",
-      "Certified Scrum Master (CSM) and PMP",
-      "Implemented a new project tracking system that improved team velocity by 20%"
+      "team.riaz.achievements.0",
+      "team.riaz.achievements.1",
+      "team.riaz.achievements.2",
+      "team.riaz.achievements.3"
     ],
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=800&fit=max",
-    specialties: ["Agile Project Management", "Client Relations", "Resource Planning", "Risk Management"],
+    specialties: ["team.specialties.agile_project_management", "team.specialties.client_relations", "team.specialties.resource_planning", "team.specialties.risk_management"],
     social: {
       linkedin: "#",
       twitter: "#",

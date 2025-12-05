@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { FaQuoteLeft, FaCommentDots, FaChevronLeft, FaChevronRight, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { TESTIMONIALS } from '../constants';
@@ -24,6 +25,7 @@ const itemVariants = {
 };
 
 const TestimonialsSlider: React.FC = () => {
+    const { t } = useTranslation();
     const [activeIndex, setActiveIndex] = useState(0);
     const touchStartX = useRef(0);
 
@@ -65,10 +67,10 @@ const TestimonialsSlider: React.FC = () => {
 
             <div className="container mx-auto max-w-6xl text-center relative z-10">
                 <SectionHeading
-                    badge="Client Testimonials"
-                    title="What Our"
-                    highlight="Amazing Clients Say"
-                    description="Don't just take our word for it. Hear from the businesses we've helped transform their digital presence and achieve remarkable success."
+                    badge={t('section_headers.testimonials.badge')}
+                    title={t('section_headers.testimonials.title')}
+                    highlight={t('section_headers.testimonials.highlight')}
+                    description={t('section_headers.testimonials.description')}
                 />
 
                 <motion.div
@@ -81,14 +83,14 @@ const TestimonialsSlider: React.FC = () => {
                     <button
                         onClick={handlePrev}
                         className="absolute left-0 md:-left-12 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-3 rounded-full shadow-lg hover:bg-white dark:hover:bg-slate-700 transition-all duration-300 group border border-slate-200 dark:border-white/10"
-                        aria-label="Previous testimonial"
+                        aria-label={t('section_headers.testimonials.aria.prev')}
                     >
                         <FaChevronLeft className="w-5 h-5 text-slate-600 dark:text-zinc-400 group-hover:text-blue-500 dark:group-hover:text-blue-400" />
                     </button>
                     <button
                         onClick={handleNext}
                         className="absolute right-0 md:-right-12 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md p-3 rounded-full shadow-lg hover:bg-white dark:hover:bg-slate-700 transition-all duration-300 group border border-slate-200 dark:border-white/10"
-                        aria-label="Next testimonial"
+                        aria-label={t('section_headers.testimonials.aria.next')}
                     >
                         <FaChevronRight className="w-5 h-5 text-slate-600 dark:text-zinc-400 group-hover:text-blue-500 dark:group-hover:text-blue-400" />
                     </button>
@@ -125,7 +127,7 @@ const TestimonialsSlider: React.FC = () => {
 
                                         {/* Testimonial Content */}
                                         <blockquote className="text-xl md:text-2xl text-slate-800 dark:text-zinc-100 font-medium leading-relaxed mb-8 relative z-10 flex-grow font-heading">
-                                            "{testimonial.quote}"
+                                            "{t(testimonial.quote)}"
                                         </blockquote>
 
                                         {/* Enhanced Author Section */}
@@ -142,9 +144,13 @@ const TestimonialsSlider: React.FC = () => {
                                                 <div className="font-bold text-slate-900 dark:text-white text-lg md:text-xl mb-0.5">{testimonial.author}</div>
                                                 <div className="text-blue-600 dark:text-blue-400 font-medium text-sm md:text-base">{testimonial.company}</div>
                                             </div>
-                                            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-                                                <FaCheckCircle className="w-4 h-4 text-green-500" />
-                                                <span className="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-wide">Verified</span>
+                                            <div className="hidden sm:flex items-center gap-3 px-4 py-1.5 bg-white/50 dark:bg-black/20 rounded-lg border border-slate-200 dark:border-white/5">
+                                                <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-6 w-auto object-contain" />
+                                                <div className="w-px h-4 bg-slate-300 dark:bg-zinc-700" />
+                                                <div className="flex items-center gap-1.5">
+                                                    <FaCheckCircle className="w-4 h-4 text-[#00b67a]" />
+                                                    <span className="text-xs font-bold text-slate-600 dark:text-zinc-400 uppercase tracking-wide">{t('common.verified')}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </GlassCard>
@@ -158,7 +164,7 @@ const TestimonialsSlider: React.FC = () => {
                         {/* Progress Bar */}
                         <div className="w-full max-w-md px-4">
                             <div className="flex justify-between text-xs font-medium text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">
-                                <span>Testimonial {activeIndex + 1} / {TESTIMONIALS.length}</span>
+                                <span>{t('section_headers.testimonials.pager_text', { current: activeIndex + 1, total: TESTIMONIALS.length })}</span>
                             </div>
                             <div className="h-1.5 bg-slate-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                                 <motion.div
@@ -180,7 +186,7 @@ const TestimonialsSlider: React.FC = () => {
                                         ? 'bg-blue-500 w-8'
                                         : 'bg-slate-300 dark:bg-zinc-700 hover:bg-slate-400 dark:hover:bg-zinc-600 w-2'
                                         }`}
-                                    aria-label={`Go to testimonial ${index + 1}`}
+                                    aria-label={t('section_headers.testimonials.aria.go_to', { number: index + 1 })}
                                 />
                             ))}
                         </div>

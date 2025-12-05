@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
@@ -6,6 +7,7 @@ import { APP_NAME, APP_TAGLINE, CONTACT_INFO, SERVICES } from '../constants';
 
 // --- Enhanced Footer Component ---
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState('');
@@ -60,14 +62,17 @@ const Footer: React.FC = () => {
               />
             </Link>
             <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
-              {APP_TAGLINE}. We combine data-driven insights with creative excellence to deliver measurable results.
+              {t('app.tagline')}. {t('footer.tagline_desc')}
             </p>
 
-            <div className="flex items-center gap-2 text-yellow-500 text-sm font-medium">
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map(i => <FaStar key={i} className="w-4 h-4" />)}
+            <div className="flex flex-col items-start gap-2 mt-2">
+              <div className="flex items-center gap-2 text-yellow-500 text-sm font-medium">
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map(i => <FaStar key={i} className="w-3.5 h-3.5" />)}
+                </div>
+                <span className="text-slate-500 dark:text-zinc-400 text-xs font-semibold">{t('footer.rated_clients')}</span>
               </div>
-              <span className="text-slate-500 dark:text-zinc-400 ml-2">Rated 5/5 by 50+ Clients</span>
+              <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-7 w-auto object-contain opacity-100" />
             </div>
 
             {/* Social Links */}
@@ -90,7 +95,7 @@ const Footer: React.FC = () => {
 
           {/* Services - Spans 1 col on mobile/tablet, 3 cols on desktop */}
           <div className="lg:col-span-3">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Services</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">{t('footer.services')}</h3>
             <ul className="space-y-2 md:space-y-3">
               {SERVICES.slice(0, 6).map((service) => (
                 <li key={service.title}>
@@ -98,7 +103,7 @@ const Footer: React.FC = () => {
                     to={`/services`}
                     className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
-                    {service.title}
+                    {t(service.title)}
                   </Link>
                 </li>
               ))}
@@ -107,16 +112,16 @@ const Footer: React.FC = () => {
 
           {/* Company - Spans 1 col on mobile/tablet, 2 cols on desktop */}
           <div className="lg:col-span-2">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Company</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">{t('footer.company')}</h3>
             <ul className="space-y-2 md:space-y-3">
               {[
-                { name: 'About', path: '/about' },
-                { name: 'Process', path: '/process' },
-                { name: 'Work', path: '/case-studies' },
-                { name: 'Team', path: '/team' },
-                { name: 'Blog', path: '/blog' },
-                { name: 'Careers', path: '/careers' },
-                { name: 'Contact', path: '/contact' },
+                { name: t('footer.menu.about'), path: '/about' },
+                { name: t('footer.menu.process'), path: '/process' },
+                { name: t('footer.menu.work'), path: '/case-studies' },
+                { name: t('footer.menu.team'), path: '/team' },
+                { name: t('footer.menu.blog'), path: '/blog' },
+                { name: t('footer.menu.careers'), path: '/careers' },
+                { name: t('footer.menu.contact'), path: '/contact' },
               ].map((link) => (
                 <li key={link.name}>
                   <Link
@@ -132,7 +137,7 @@ const Footer: React.FC = () => {
 
           {/* Contact - Spans full width on mobile, 3 cols on desktop */}
           <div className="sm:col-span-2 lg:col-span-3">
-            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">Contact</h3>
+            <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">{t('footer.contact')}</h3>
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaMapMarkerAlt className="w-4 h-4 text-slate-900 dark:text-white mt-0.5 shrink-0" />
@@ -157,12 +162,12 @@ const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="border-t border-slate-200 dark:border-white/5 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <p className="text-slate-500 dark:text-zinc-500 text-sm">
-            &copy; {currentYear} {APP_NAME}. All rights reserved.
+            {t('footer.copyright', { year: currentYear })}
           </p>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500 dark:text-zinc-400 font-light">
-            <Link to="/legal/privacy-policy" className="hover:text-slate-900 dark:hover:text-white transition-colors">Privacy</Link>
-            <Link to="/legal/terms-of-service" className="hover:text-slate-900 dark:hover:text-white transition-colors">Terms</Link>
-            <Link to="/sitemap" className="hover:text-slate-900 dark:hover:text-white transition-colors">Sitemap</Link>
+            <Link to="/legal/privacy-policy" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.privacy')}</Link>
+            <Link to="/legal/terms-of-service" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.terms')}</Link>
+            <Link to="/sitemap" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.sitemap')}</Link>
           </div>
         </div>
       </div>

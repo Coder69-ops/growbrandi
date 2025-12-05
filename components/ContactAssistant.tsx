@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaCheck, FaPaperPlane } from 'react-icons/fa';
 import {
@@ -28,6 +29,7 @@ interface FormData {
 }
 
 const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -75,15 +77,15 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
   }, [step, formData, aiInsights, showThankYou]);
 
   const goalOptions = [
-    'Increase Sales', 'Build Brand Awareness', 'Generate Leads',
-    'Improve User Experience', 'Expand Market Reach', 'Launch New Products',
-    'Optimize Operations', 'Enhance Customer Support'
+    'increase_sales', 'brand_awareness', 'generate_leads',
+    'improve_ux', 'expand_market', 'launch_products',
+    'optimize_ops', 'enhance_support'
   ];
 
   const challengeOptions = [
-    'Low Website Traffic', 'Poor Conversion Rates', 'Weak Brand Identity',
-    'Lack of Online Presence', 'Technical Issues', 'Mobile Responsiveness',
-    'Slow Loading Speed', 'Ineffective Marketing', 'Budget Constraints'
+    'low_traffic', 'poor_conversion', 'weak_brand',
+    'no_presence', 'tech_issues', 'mobile_response',
+    'slow_speed', 'ineffective_marketing', 'budget_constraints'
   ];
 
   const toggleMultiSelect = (option: string, field: 'goals' | 'challenges') => {
@@ -101,8 +103,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
       // Get service recommendations
       const serviceRecs = await recommendServices({
         industry: formData.industry,
-        currentChallenges: formData.challenges,
-        goals: formData.goals,
+        currentChallenges: formData.challenges.map(c => t(`contact_assistant.options.challenges.${c}`)),
+        goals: formData.goals.map(g => t(`contact_assistant.options.goals.${g}`)),
         budget: formData.budget,
         timeline: formData.timeline
       });
@@ -110,7 +112,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
       // Get consultation plan
       const consultationPlan = await generateConsultationPlan({
         businessType: formData.industry,
-        specificNeeds: formData.goals,
+        specificNeeds: formData.goals.map(g => t(`contact_assistant.options.goals.${g}`)),
         urgency: formData.timeline.includes('Immediate') ? 'Immediate' :
           formData.timeline.includes('1-2') ? 'High' : 'Medium',
         experience: 'Intermediate' // Default value
@@ -165,7 +167,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'normal');
     const dateStr = new Date().toLocaleDateString();
-    doc.text('AI Consultation Summary', pageWidth - margin - 45, yPos + 4);
+    doc.text(t('contact_assistant.pdf.title'), pageWidth - margin - 45, yPos + 4);
     doc.text(dateStr, pageWidth - margin - doc.getTextWidth(dateStr), yPos + 9);
 
     yPos += 20;
@@ -186,31 +188,31 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Client Details', leftColX, yPos);
+    doc.text(t('contact_assistant.pdf.client_details'), leftColX, yPos);
     yPos += 6;
 
     doc.setFontSize(9);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Name: ${formData.name}`, leftColX, yPos); yPos += 5;
-    doc.text(`Email: ${formData.email}`, leftColX, yPos); yPos += 5;
-    doc.text(`Company: ${formData.company || 'N/A'}`, leftColX, yPos); yPos += 5;
-    doc.text(`Industry: ${formData.industry}`, leftColX, yPos);
+    doc.text(`${t('contact_assistant.form.name')}: ${formData.name}`, leftColX, yPos); yPos += 5;
+    doc.text(`${t('contact_assistant.form.email')}: ${formData.email}`, leftColX, yPos); yPos += 5;
+    doc.text(`${t('contact_assistant.form.company')}: ${formData.company || 'N/A'}`, leftColX, yPos); yPos += 5;
+    doc.text(`${t('contact_assistant.form.industry')}: ${formData.industry}`, leftColX, yPos);
 
     // Right Column: Project Overview
     let rightY = startY;
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Project Overview', rightColX, rightY);
+    doc.text(t('contact_assistant.pdf.project_overview'), rightColX, rightY);
     rightY += 6;
 
     doc.setFontSize(9);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
     doc.text(`Type: ${formData.projectType}`, rightColX, rightY); rightY += 5;
-    doc.text(`Budget: ${formData.budget}`, rightColX, rightY); rightY += 5;
-    doc.text(`Timeline: ${formData.timeline}`, rightColX, rightY);
+    doc.text(`${t('contact_assistant.form.budget')}: ${formData.budget}`, rightColX, rightY); rightY += 5;
+    doc.text(`${t('contact_assistant.form.timeline')}: ${formData.timeline}`, rightColX, rightY);
 
     yPos = Math.max(yPos, rightY) + 10;
 
@@ -222,20 +224,24 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Goals:', margin + 5, boxY);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${t('contact_assistant.pdf.goals')}:`, margin + 5, boxY);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(60, 60, 60);
-    doc.text(formData.goals.join(', '), margin + 20, boxY);
+    doc.text(formData.goals.map(g => t(`contact_assistant.options.goals.${g}`)).join(', '), margin + 20, boxY);
 
     boxY += 8;
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Challenges:', margin + 5, boxY);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${t('contact_assistant.pdf.challenges')}:`, margin + 5, boxY);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(60, 60, 60);
     // Handle wrapping for challenges if long
-    const challengesText = formData.challenges.join(', ');
+    const challengesText = formData.challenges.map(c => t(`contact_assistant.options.challenges.${c}`)).join(', ');
     const splitChallenges = doc.splitTextToSize(challengesText, pageWidth - (margin * 2) - 30);
     doc.text(splitChallenges, margin + 28, boxY);
 
@@ -246,14 +252,15 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
       doc.setFontSize(14);
       doc.setTextColor(0, 102, 204);
       doc.setFont('helvetica', 'bold');
-      doc.text('AI Strategic Recommendations', margin, yPos);
+      doc.setFont('helvetica', 'bold');
+      doc.text(t('contact_assistant.pdf.recommendations'), margin, yPos);
       yPos += 8;
 
       // Recommended Services
       if (aiInsights.services?.priorityServices) {
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
-        doc.text('Recommended Services', margin, yPos);
+        doc.text(t('contact_assistant.pdf.recommended_services'), margin, yPos);
         yPos += 6;
 
         aiInsights.services.priorityServices.slice(0, 3).forEach((service: any) => {
@@ -278,7 +285,10 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
         doc.setFont('helvetica', 'bold');
-        doc.text('Strategic Action Plan', margin, yPos);
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 0);
+        doc.setFont('helvetica', 'bold');
+        doc.text(t('contact_assistant.pdf.action_plan'), margin, yPos);
         yPos += 6;
 
         doc.setFontSize(9);
@@ -307,12 +317,14 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     doc.setFontSize(10);
     doc.setTextColor(0, 102, 204);
     doc.setFont('helvetica', 'bold');
-    doc.text('Ready to execute this plan?', margin + 5, ctaY + 6);
+    doc.setTextColor(0, 102, 204);
+    doc.setFont('helvetica', 'bold');
+    doc.text(t('contact_assistant.pdf.cta_title'), margin + 5, ctaY + 6);
 
     doc.setFontSize(9);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
-    doc.text('Contact us for a detailed actionable plan tailored to your business.', margin + 5, ctaY + 11);
+    doc.text(t('contact_assistant.pdf.cta_text'), margin + 5, ctaY + 11);
 
     // --- Footer ---
     const footerY = pageHeight - 15;
@@ -321,7 +333,9 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text('Generated by GrowBrandi AI Assistant', margin, footerY);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(t('contact_assistant.pdf.generated_by'), margin, footerY);
     doc.text('www.growbrandi.com', pageWidth - margin - doc.getTextWidth('www.growbrandi.com'), footerY);
 
     doc.save(`growbrandi-consultation-${new Date().toISOString().split('T')[0]}.pdf`);
@@ -371,7 +385,6 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
       console.error('❌ Failed to send email:', error);
       // Continue to show success screen even if email fails (fallback)
     }
-
     // Generate and download PDF
     try {
       await generatePDF();
@@ -419,8 +432,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
         {/* Header */}
         <div className="p-6 border-b border-slate-200 dark:border-zinc-700 flex justify-between items-center flex-shrink-0">
           <div>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">AI-Powered Contact Assistant</h3>
-            <p className="text-slate-500 dark:text-zinc-400 text-sm">Get personalized recommendations as you go</p>
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{t('contact_assistant.title')}</h3>
+            <p className="text-slate-500 dark:text-zinc-400 text-sm">{t('contact_assistant.subtitle')}</p>
           </div>
           <button
             onClick={onClose}
@@ -440,7 +453,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
               transition={{ duration: 0.5 }}
             />
           </div>
-          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-2">Step {Math.min(step, 5)} of 5</p>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-2">{t('contact_assistant.steps.step_x_of_y', { current: Math.min(step, 5), total: 5 })}</p>
         </div>
 
         {/* Content */}
@@ -457,13 +470,13 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <FaCheck className="w-10 h-10 text-green-600 dark:text-green-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Request Received!</h3>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t('contact_assistant.success.title')}</h3>
                 <p className="text-slate-600 dark:text-zinc-300 mb-6 max-w-md mx-auto">
-                  We've captured your project details and AI insights. A GrowBrandi expert will review them and contact you shortly.
+                  {t('contact_assistant.success.message')}
                 </p>
                 <div className="p-4 bg-slate-100 dark:bg-zinc-800/50 rounded-lg border border-slate-200 dark:border-zinc-700 max-w-sm mx-auto">
-                  <p className="text-sm text-slate-600 dark:text-zinc-400 mb-2">A summary of your consultation has been downloaded automatically.</p>
-                  <p className="text-xs text-slate-500 dark:text-zinc-500">Check your downloads folder for the PDF file.</p>
+                  <p className="text-sm text-slate-600 dark:text-zinc-400 mb-2">{t('contact_assistant.success.pdf_summary')}</p>
+                  <p className="text-xs text-slate-500 dark:text-zinc-500">{t('contact_assistant.success.check_downloads')}</p>
                 </div>
               </motion.div>
             ) : (
@@ -477,49 +490,49 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 {/* Step 1: Basic Information */}
                 {step === 1 && (
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Let's get to know you</h4>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{t('contact_assistant.steps.1')}</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Name *</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.name')} *</label>
                         <input
                           type="text"
                           value={formData.name}
                           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                           className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
-                          placeholder="Your full name"
+                          placeholder={t('contact_assistant.form.name_placeholder')}
                           required
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Email *</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.email')} *</label>
                         <input
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                           className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
-                          placeholder="your@email.com"
+                          placeholder={t('contact_assistant.form.email_placeholder')}
                           required
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Company</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.company')}</label>
                       <input
                         type="text"
                         value={formData.company}
                         onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
                         className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
-                        placeholder="Your company name"
+                        placeholder={t('contact_assistant.form.company_placeholder')}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Industry *</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.industry')} *</label>
                       <input
                         type="text"
                         value={formData.industry}
                         onChange={(e) => setFormData(prev => ({ ...prev, industry: e.target.value }))}
                         className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-blue-500"
-                        placeholder="e.g., Healthcare, E-commerce, SaaS"
+                        placeholder={t('contact_assistant.form.industry_placeholder')}
                         required
                       />
                     </div>
@@ -529,52 +542,52 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 {/* Step 2: Project Details */}
                 {step === 2 && (
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Tell us about your project</h4>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{t('contact_assistant.steps.2')}</h4>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Project Type *</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.project_type')} *</label>
                       <select
                         value={formData.projectType}
                         onChange={(e) => setFormData(prev => ({ ...prev, projectType: e.target.value }))}
                         className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                         required
                       >
-                        <option value="">Select project type</option>
+                        <option value="">{t('contact_assistant.form.select_project_type')}</option>
                         {SERVICES.map((service) => (
                           <option key={service.title} value={service.title}>
-                            {service.title}
+                            {t(`services.${service.id}.title`)}
                           </option>
                         ))}
-                        <option value="Other">Other</option>
+                        <option value="Other">{t('contact_assistant.form.other')}</option>
                       </select>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Budget Range *</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.budget')} *</label>
                         <select
                           value={formData.budget}
                           onChange={(e) => setFormData(prev => ({ ...prev, budget: e.target.value }))}
                           className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                           required
                         >
-                          <option value="">Select budget</option>
-                          <option value="Starter ($299 - $999)">Starter ($299 - $999)</option>
-                          <option value="Professional ($1,000 - $5,000)">Professional ($1,000 - $5,000)</option>
-                          <option value="Enterprise ($5,000+)">Enterprise ($5,000+)</option>
+                          <option value="">{t('contact_assistant.form.select_budget')}</option>
+                          <option value="Starter ($299 - $999)">{t('contact_assistant.options.budget.starter')}</option>
+                          <option value="Professional ($1,000 - $5,000)">{t('contact_assistant.options.budget.professional')}</option>
+                          <option value="Enterprise ($5,000+)">{t('contact_assistant.options.budget.enterprise')}</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Timeline *</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.form.timeline')} *</label>
                         <select
                           value={formData.timeline}
                           onChange={(e) => setFormData(prev => ({ ...prev, timeline: e.target.value }))}
                           className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                           required
                         >
-                          <option value="">Select timeline</option>
-                          <option value="Immediate (1-2 weeks)">Immediate (1-2 weeks)</option>
-                          <option value="Short-term (1-2 months)">Short-term (1-2 months)</option>
-                          <option value="Medium-term (3-6 months)">Medium-term (3-6 months)</option>
-                          <option value="Long-term (6+ months)">Long-term (6+ months)</option>
+                          <option value="">{t('contact_assistant.form.select_timeline')}</option>
+                          <option value="Immediate (1-2 weeks)">{t('contact_assistant.options.timeline.immediate')}</option>
+                          <option value="Short-term (1-2 months)">{t('contact_assistant.options.timeline.short_term')}</option>
+                          <option value="Medium-term (3-6 months)">{t('contact_assistant.options.timeline.medium_term')}</option>
+                          <option value="Long-term (6+ months)">{t('contact_assistant.options.timeline.long_term')}</option>
                         </select>
                       </div>
                     </div>
@@ -584,8 +597,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 {/* Step 3: Goals */}
                 {step === 3 && (
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">What are your goals?</h4>
-                    <p className="text-slate-500 dark:text-zinc-400 text-sm mb-4">Select all that apply</p>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{t('contact_assistant.steps.3')}</h4>
+                    <p className="text-slate-500 dark:text-zinc-400 text-sm mb-4">{t('contact_assistant.steps.select_all')}</p>
                     <div className="grid grid-cols-2 gap-3">
                       {goalOptions.map(goal => (
                         <button
@@ -597,7 +610,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                             : 'bg-slate-100 dark:bg-zinc-700 text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-600'
                             }`}
                         >
-                          {goal}
+                          {t(`contact_assistant.options.goals.${goal}`)}
                         </button>
                       ))}
                     </div>
@@ -607,8 +620,8 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 {/* Step 4: Challenges */}
                 {step === 4 && (
                   <div className="space-y-4">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">What challenges are you facing?</h4>
-                    <p className="text-slate-500 dark:text-zinc-400 text-sm mb-4">Select all that apply</p>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{t('contact_assistant.steps.4')}</h4>
+                    <p className="text-slate-500 dark:text-zinc-400 text-sm mb-4">{t('contact_assistant.steps.select_all')}</p>
                     <div className="grid grid-cols-2 gap-3">
                       {challengeOptions.map(challenge => (
                         <button
@@ -620,17 +633,17 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                             : 'bg-slate-100 dark:bg-zinc-700 text-slate-700 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-600'
                             }`}
                         >
-                          {challenge}
+                          {t(`contact_assistant.options.challenges.${challenge}`)}
                         </button>
                       ))}
                     </div>
                     <div className="mt-6">
-                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">Additional Message</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300 mb-2">{t('contact_assistant.steps.additional_message')}</label>
                       <textarea
                         value={formData.message}
                         onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                         className="w-full bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-600 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:ring-2 focus:ring-blue-500 h-24 resize-none"
-                        placeholder="Tell us more about your project..."
+                        placeholder={t('contact_assistant.form.message_placeholder')}
                       />
                     </div>
                   </div>
@@ -639,11 +652,11 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 {/* Step 5: AI Insights */}
                 {step === 5 && (
                   <div className="space-y-6">
-                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">AI-Powered Recommendations</h4>
+                    <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">{t('contact_assistant.steps.5')}</h4>
                     {isAnalyzing ? (
                       <div className="text-center py-8">
                         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-4"></div>
-                        <p className="text-slate-600 dark:text-zinc-300">Analyzing your requirements...</p>
+                        <p className="text-slate-600 dark:text-zinc-300">{t('contact_assistant.ai.analyzing')}</p>
                       </div>
                     ) : aiInsights ? (
                       <div className="space-y-6">
@@ -651,7 +664,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         {aiInsights.services?.priorityServices && (
                           <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-6 border border-slate-200 dark:border-zinc-700">
                             <h5 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2">
-                              <span className="text-blue-600 dark:text-blue-400">★</span> Recommended Services
+                              <span className="text-blue-600 dark:text-blue-400">★</span> {t('contact_assistant.ai.recommended_services')}
                             </h5>
                             <div className="space-y-3">
                               {aiInsights.services.priorityServices.slice(0, 3).map((service: any, idx: number) => (
@@ -675,13 +688,13 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         {aiInsights.consultation && (
                           <div className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-6 border border-slate-200 dark:border-zinc-700">
                             <h5 className="text-slate-900 dark:text-white font-semibold mb-4 flex items-center gap-2">
-                              <span className="text-green-600 dark:text-green-400">📋</span> Action Plan
+                              <span className="text-green-600 dark:text-green-400">📋</span> {t('contact_assistant.ai.action_plan')}
                             </h5>
                             <div className="space-y-3">
                               <p className="text-slate-600 dark:text-zinc-300 text-sm leading-relaxed italic">"{aiInsights.consultation.summary}"</p>
                               {aiInsights.consultation.keyPoints && (
                                 <div className="mt-4 pt-4 border-t border-slate-200 dark:border-zinc-700">
-                                  <p className="text-xs text-slate-500 dark:text-zinc-500 uppercase tracking-wider mb-2">Key Focus Areas</p>
+                                  <p className="text-xs text-slate-500 dark:text-zinc-500 uppercase tracking-wider mb-2">{t('contact_assistant.ai.key_focus_areas')}</p>
                                   <ul className="grid grid-cols-1 gap-2">
                                     {aiInsights.consultation.keyPoints.map((point: string, idx: number) => (
                                       <li key={idx} className="text-slate-600 dark:text-zinc-400 text-sm flex items-start gap-2">
@@ -712,7 +725,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
               disabled={step === 1}
               className="px-6 py-2 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Back
+              {t('contact_assistant.buttons.back')}
             </button>
 
             {step < 5 ? (
@@ -726,7 +739,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 }
                 className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/20"
               >
-                {step === 4 ? 'Get AI Insights' : 'Next'}
+                {step === 4 ? t('contact_assistant.buttons.get_insights') : t('contact_assistant.buttons.next')}
               </button>
             ) : (
               <button
@@ -734,7 +747,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                 disabled={isAnalyzing}
                 className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all disabled:opacity-50 shadow-lg shadow-green-500/20 flex items-center gap-2"
               >
-                <span>Submit Request</span>
+                <span>{t('contact_assistant.buttons.submit')}</span>
                 <FaPaperPlane className="w-4 h-4" />
               </button>
             )}

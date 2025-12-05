@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaBriefcase, FaWhatsapp, FaCheckCircle } from 'react-icons/fa';
@@ -25,6 +26,7 @@ const itemVariants = {
 };
 
 const TeamSection: React.FC = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [hoveredMember, setHoveredMember] = useState<number | null>(null);
 
@@ -40,10 +42,10 @@ const TeamSection: React.FC = () => {
 
             <div className="container mx-auto max-w-7xl relative z-10">
                 <SectionHeading
-                    badge="Our Expert Team"
-                    title="Meet the"
-                    highlight="Creative Minds"
-                    description="Our diverse team of experts brings together decades of experience in design, development, AI, and marketing to deliver exceptional results that exceed expectations."
+                    badge={t('section_headers.team.badge')}
+                    title={t('section_headers.team.title')}
+                    highlight={t('section_headers.team.highlight') || "Creative Minds"}
+                    description={t('section_headers.team.description')}
                 />
 
                 {/* Team Grid */}
@@ -109,10 +111,10 @@ const TeamSection: React.FC = () => {
                                                 <FaCheckCircle className="w-4 h-4 text-blue-500" title="Verified Expert" />
                                             </h3>
                                             <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 font-semibold text-lg mb-4">
-                                                {member.role}
+                                                {t(member.role)}
                                             </div>
                                             <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-3">
-                                                {member.description}
+                                                {t(member.description)}
                                             </p>
                                         </div>
                                     </Link>
@@ -125,7 +127,7 @@ const TeamSection: React.FC = () => {
                                                     key={specialty}
                                                     className="px-3 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-300 text-xs font-medium rounded-full border border-slate-200 dark:border-white/10"
                                                 >
-                                                    {specialty}
+                                                    {t(specialty)}
                                                 </span>
                                             ))}
                                         </div>
@@ -167,11 +169,10 @@ const TeamSection: React.FC = () => {
                 <motion.div variants={itemVariants} className="text-center">
                     <GlassCard className="p-8 md:p-12 max-w-4xl mx-auto bg-gradient-to-br from-slate-900 to-slate-800 dark:from-white/5 dark:to-white/5 border-none text-white">
                         <h3 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                            Ready to Work with <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Our Amazing Team?</span>
+                            {t('section_headers.team.cta_title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{t('section_headers.team.cta_title_highlight')}</span>
                         </h3>
                         <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                            Let's discuss your project and see how our expert team can help you achieve
-                            your digital transformation goals.
+                            {t('section_headers.team.cta_desc')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <motion.button
@@ -181,7 +182,7 @@ const TeamSection: React.FC = () => {
                                 whileTap={{ scale: 0.98 }}
                             >
                                 <FaWhatsapp className="w-5 h-5" />
-                                Chat on WhatsApp
+                                {t('section_headers.team.cta_whatsapp')}
                             </motion.button>
                             <motion.button
                                 onClick={() => navigate('/portfolio')}
@@ -190,7 +191,7 @@ const TeamSection: React.FC = () => {
                                 whileTap={{ scale: 0.98 }}
                             >
                                 <FaBriefcase className="w-5 h-5" />
-                                View Our Portfolio
+                                {t('section_headers.team.cta_portfolio')}
                             </motion.button>
                         </div>
                     </GlassCard>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaMagic, FaBolt, FaCopy } from 'react-icons/fa';
 import { generateSlogan } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
@@ -22,6 +23,7 @@ const itemVariants = {
 };
 
 const SloganGenerator: React.FC = () => {
+    const { t } = useTranslation();
     const [keywords, setKeywords] = useState('');
     const [slogans, setSlogans] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +31,7 @@ const SloganGenerator: React.FC = () => {
 
     const handleGenerate = async () => {
         if (!keywords.trim()) {
-            setError('Please enter some keywords.');
+            setError(t('slogan_generator.error_empty'));
             return;
         }
         setIsLoading(true);
@@ -63,14 +65,13 @@ const SloganGenerator: React.FC = () => {
                 <motion.div variants={itemVariants} className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
                         <FaMagic className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">GROWBRANDI SMART TOOL</span>
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{t('slogan_generator.badge')}</span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0 text-slate-900 dark:text-white">
-                        Try Our <span className="text-gradient">AI Slogan Generator</span>
+                        {t('slogan_generator.title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">{t('slogan_generator.title_highlight')}</span>
                     </h2>
                     <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-                        Experience the power of AI in action! Enter a few keywords about your business
-                        and watch our intelligent system craft compelling slogans tailored to your brand.
+                        {t('slogan_generator.description')}
                     </p>
                 </motion.div>
 
@@ -81,14 +82,14 @@ const SloganGenerator: React.FC = () => {
                     <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
                         <div className="flex-1">
                             <label className="block text-sm font-semibold text-slate-700 dark:text-zinc-300 mb-3">
-                                Enter Keywords
+                                {t('slogan_generator.input_label')}
                             </label>
                             <input
                                 type="text"
                                 value={keywords}
                                 onChange={(e) => setKeywords(e.target.value)}
-                                placeholder="e.g., sustainable, innovative, coffee, community, growth"
-                                className="w-full bg-white dark:bg-zinc-800/50 border border-slate-300 dark:border-zinc-600 rounded-2xl px-6 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                                placeholder={t('slogan_generator.input_placeholder')}
+                                className="w-full bg-white dark:bg-zinc-800/50 border border-slate-300 dark:border-zinc-600 rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                                 onKeyPress={(e) => e.key === 'Enter' && handleGenerate()}
                             />
                         </div>
@@ -103,12 +104,12 @@ const SloganGenerator: React.FC = () => {
                                 {isLoading ? (
                                     <>
                                         <LoadingSpinner />
-                                        <span>Generating...</span>
+                                        <span>{t('slogan_generator.generating')}</span>
                                     </>
                                 ) : (
                                     <>
                                         <FaBolt className="w-5 h-5" />
-                                        <span>Generate Slogans</span>
+                                        <span>{t('slogan_generator.generate_button')}</span>
                                     </>
                                 )}
                             </motion.button>

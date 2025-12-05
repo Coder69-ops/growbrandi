@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
 import { TEAM_MEMBERS } from '../constants';
@@ -7,6 +8,7 @@ import { TEAM_MEMBERS } from '../constants';
 const TeamMemberProfile: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [isImageExpanded, setIsImageExpanded] = useState(false);
 
     const member = TEAM_MEMBERS.find((m) => m.slug === slug);
@@ -90,7 +92,7 @@ const TeamMemberProfile: React.FC = () => {
                         <div className="w-10 h-10 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-all duration-300 backdrop-blur-md">
                             <FaArrowLeft className="w-4 h-4 group-hover:text-white" />
                         </div>
-                        <span className="font-medium hidden sm:inline">Back to Team</span>
+                        <span className="font-medium hidden sm:inline">{t('team.ui.back_to_team')}</span>
                     </Link>
                 </div>
             </div>
@@ -121,7 +123,7 @@ const TeamMemberProfile: React.FC = () => {
                                             className="w-full h-full object-cover rounded-full shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]"
                                         />
                                     </div>
-                                    <div className="absolute bottom-4 right-4 w-6 h-6 bg-emerald-500 border-4 border-slate-50 dark:border-zinc-900 rounded-full z-10" title="Available for work" />
+                                    <div className="absolute bottom-4 right-4 w-6 h-6 bg-emerald-500 border-4 border-slate-50 dark:border-zinc-900 rounded-full z-10" title={t('team.ui.available_work')} />
 
                                     {/* Overlay hint */}
                                     <div className="absolute inset-0 rounded-full bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
@@ -130,7 +132,7 @@ const TeamMemberProfile: React.FC = () => {
                                 </div>
 
                                 <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white mb-2 font-heading tracking-tight">{member.name}</h1>
-                                <p className="text-blue-600 dark:text-blue-400 font-bold text-lg mb-8 uppercase tracking-wide">{member.role}</p>
+                                <p className="text-blue-600 dark:text-blue-400 font-bold text-lg mb-8 uppercase tracking-wide">{t(member.role)}</p>
 
                                 <div className="flex flex-wrap justify-center gap-3 mb-8">
                                     {member.social.linkedin && (
@@ -175,7 +177,7 @@ const TeamMemberProfile: React.FC = () => {
                                     onClick={handleContactClick}
                                     className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:shadow-[0_0_30px_rgba(37,99,235,0.4)] transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
                                 >
-                                    <span>{member.bookingUrl ? 'Book a Call' : 'Work with Me'}</span>
+                                    <span>{member.bookingUrl ? t('team.ui.book_call') : t('team.ui.work_with_me')}</span>
                                     {member.bookingUrl ? <FaCalendarCheck className="w-5 h-5" /> : <FaBriefcase className="w-5 h-5" />}
                                 </button>
                             </div>
@@ -190,10 +192,10 @@ const TeamMemberProfile: React.FC = () => {
                                 <div className="p-2 bg-blue-500/10 rounded-lg">
                                     <FaUser className="text-blue-600 dark:text-blue-400 w-5 h-5" />
                                 </div>
-                                About {member.name.split(' ')[0]}
+                                {t('team.ui.about_prefix')} {member.name.split(' ')[0]}
                             </h2>
                             <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg font-light">
-                                {member.bio}
+                                {t(member.bio)}
                             </p>
                         </motion.div>
 
@@ -203,7 +205,7 @@ const TeamMemberProfile: React.FC = () => {
                                 <div className="p-2 bg-purple-500/10 rounded-lg">
                                     <FaMedal className="text-purple-600 dark:text-purple-400 w-5 h-5" />
                                 </div>
-                                Key Achievements
+                                {t('team.ui.achievements_title')}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {member.achievements.map((achievement, index) => (
@@ -211,7 +213,7 @@ const TeamMemberProfile: React.FC = () => {
                                         <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
                                             <FaMedal className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                                         </div>
-                                        <p className="text-slate-600 dark:text-zinc-300 font-medium leading-relaxed">{achievement}</p>
+                                        <p className="text-slate-600 dark:text-zinc-300 font-medium leading-relaxed">{t(achievement)}</p>
                                     </div>
                                 ))}
                             </div>
@@ -223,7 +225,7 @@ const TeamMemberProfile: React.FC = () => {
                                 <div className="p-2 bg-emerald-500/10 rounded-lg">
                                     <FaLightbulb className="text-emerald-600 dark:text-emerald-400 w-5 h-5" />
                                 </div>
-                                Expertise
+                                {t('team.ui.expertise_title')}
                             </h2>
                             <div className="flex flex-wrap gap-3">
                                 {member.specialties.map((specialty, index) => (
@@ -232,7 +234,7 @@ const TeamMemberProfile: React.FC = () => {
                                         className="px-5 py-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-slate-600 dark:text-zinc-300 font-medium hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-300 cursor-default flex items-center gap-2"
                                     >
                                         <FaCheckCircle className="w-4 h-4 text-emerald-500/50" />
-                                        {specialty}
+                                        {t(specialty)}
                                     </span>
                                 ))}
                             </div>

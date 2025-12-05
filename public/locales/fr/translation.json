@@ -1,0 +1,1754 @@
+{
+    "common": {
+        "get_started": "Commencer",
+        "learn_more": "En savoir plus",
+        "view_project": "Voir le projet",
+        "verified": "Vérifié"
+    },
+    "app": {
+        "name": "GrowBrandi",
+        "tagline": "GrowBrandi - Agence de Croissance Numérique Full-Stack",
+        "subtitle": "Nous construisons des empires numériques. Croissance, Contenu & Tech."
+    },
+    "nav": {
+        "home": "Accueil",
+        "services": "Services",
+        "company": "Entreprise",
+        "portfolio": "Portfolio",
+        "contact": "Contact",
+        "services_overview": "Aperçu des Services"
+    },
+    "tech": {
+        "shopify": "Shopify",
+        "liquid": "Liquid",
+        "klaviyo": "Klaviyo",
+        "meta_ads": "Meta Ads",
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "capcut": "CapCut",
+        "sprout_social": "Sprout Social",
+        "google_ads": "Google Ads",
+        "ga4": "GA4",
+        "supermetrics": "Supermetrics",
+        "wordpress": "WordPress",
+        "elementor": "Elementor",
+        "seo": "SEO",
+        "google_analytics": "Google Analytics",
+        "after_effects": "After Effects",
+        "cinema_4d": "Cinema 4D",
+        "premiere_pro": "Premiere Pro",
+        "blender": "Blender",
+        "shopify_flow": "Shopify Flow",
+        "stocky": "Stocky",
+        "asana": "Asana",
+        "figma": "Figma",
+        "protopie": "Protopie",
+        "nextjs": "Next.js",
+        "threejs": "Three.js",
+        "useberry": "Useberry",
+        "flutter": "Flutter",
+        "design_systems": "Systèmes de Design",
+        "shopify_plus": "Shopify Plus",
+        "3d_modeling": "Modélisation 3D",
+        "email_marketing": "Email Marketing",
+        "react": "React",
+        "nodejs": "Node.js",
+        "aws": "AWS",
+        "websockets": "WebSockets"
+    },
+    "portfolio": {
+        "params": {
+            "rated": "Noté",
+            "on": "sur",
+            "powered_by": "Propulsé par",
+            "view_case_study": "Voir l'étude de cas",
+            "want_site_like_this": "Je veux un site comme celui-ci",
+            "key_impact": "Impact Clé",
+            "transformation": "Transformation",
+            "before": "Avant",
+            "after_our_magic": "Après Notre Magie",
+            "tech_stack": "Stack Technique",
+            "project_metadata": "Métadonnées du Projet",
+            "client": "Client",
+            "timeline": "Chronologie",
+            "verified_review": "Avis Vérifié",
+            "ready_for_results": "Prêt pour des résultats similaires ?",
+            "chat_whatsapp": "Discuter sur WhatsApp",
+            "book_consultation": "Réserver une consultation"
+        },
+        "no_projects": {
+            "title": "Aucun projet trouvé",
+            "description": "Essayez de sélectionner une catégorie différente."
+        }
+    },
+    "stats": {
+        "projects_completed": "Projets Terminés",
+        "happy_clients": "Clients Satisfaits",
+        "years_experience": "Années d'Expérience",
+        "support_available": "Support Disponible"
+    },
+    "hero": {
+        "badge": "Écosystème de Croissance v2.0",
+        "title_prefix": "Faites évoluer votre marque avec",
+        "title_highlight": "Design Intelligent",
+        "description": "GrowBrandi combine des analyses IA avancées avec une stratégie créative à fort impact pour transformer votre présence numérique et stimuler une croissance commerciale mesurable.",
+        "cta_consultation": "Obtenez votre consultation gratuite",
+        "cta_showreel": "Voir la démo",
+        "trusted_by": "Fait confiance par les leaders de l'industrie :",
+        "tech_stack": "Notre Stack Tech & Intégrations",
+        "trustpilot_on": "sur",
+        "mock_viral_campaign": "Campagne Virale",
+        "mock_follow": "Suivre",
+        "mock_views": "Vues",
+        "mock_likes": "J'aime",
+        "mock_ctr": "CTR"
+    },
+    "footer": {
+        "ready_to_scale": "Prêt à grandir ?",
+        "cta_desc": "Construisons quelque chose d'extraordinaire ensemble.",
+        "start_project": "Démarrer un projet",
+        "services": "Services",
+        "company": "Entreprise",
+        "legal": "Légal",
+        "contact": "Contact",
+        "socials": "Réseaux Sociaux",
+        "privacy": "Confidentialité",
+        "terms": "Conditions",
+        "sitemap": "Plan du site",
+        "copyright": "© {{year}} GrowBrandi. Tous droits réservés.",
+        "tagline_desc": "Nous combinons des informations basées sur les données avec l'excellence créative pour fournir des résultats mesurables.",
+        "rated_clients": "Noté 5/5 par 50+ Clients",
+        "menu": {
+            "about": "À propos",
+            "process": "Processus",
+            "work": "Travail",
+            "team": "Équipe",
+            "blog": "Blog",
+            "careers": "Carrières",
+            "contact": "Contact"
+        }
+    },
+    "projects_preview": {
+        "badge": "Travaux Sélectionnés",
+        "title": "Excellence Numérique",
+        "description": "Explorez notre portfolio de projets primés qui démontrent notre engagement envers l'innovation et les résultats.",
+        "view_case_study": "Voir l'étude de cas",
+        "view_all": "Voir tous les projets",
+        "filter_all": "Tous",
+        "no_projects": "Aucun projet trouvé",
+        "no_projects_desc": "Nous n'avons trouvé aucun projet dans cette catégorie.",
+        "cta_title_prefix": "Prêt à créer",
+        "cta_title_highlight": "Votre Histoire de Réussite ?",
+        "cta_description": "Rejoignez notre portfolio de projets réussis. Discutons de la façon dont nous pouvons donner vie à votre vision avec des solutions innovantes et des résultats exceptionnels.",
+        "cta_portfolio": "Voir le portfolio complet",
+        "cta_whatsapp": "Discuter sur WhatsApp"
+    },
+    "contact_page": {
+        "badge": "Contactez-nous",
+        "title": "Commençons une conversation",
+        "description": "Prêt à transformer votre présence numérique ? Nous sommes là pour vous aider à grandir.",
+        "form": {
+            "name": "Nom",
+            "email": "Email",
+            "subject": "Sujet",
+            "message": "Message",
+            "service": "Intérêt de Service",
+            "budget": "Fourchette budgétaire",
+            "submit": "Envoyer le message",
+            "sending": "Envoi...",
+            "success": "Message envoyé !",
+            "error": "Échec de l'envoi."
+        },
+        "info": {
+            "title": "Informations de contact",
+            "visit": "Visitez-nous",
+            "call": "Appelez-nous",
+            "email": "Envoyez-nous un email",
+            "office_hours": "Heures de bureau",
+            "response_time": "Nous vous répondrons dans les 24 heures.",
+            "hq_desc": "Agence Digital-First"
+        },
+        "assistant_prompt": "Vous ne savez pas par où commencer ?",
+        "assistant_button": "Essayez notre assistant projet IA"
+    },
+    "section_headers": {
+        "testimonials": {
+            "badge": "Histoires de Clients",
+            "title": "Ce que disent nos clients",
+            "description": "Ne nous croyez pas sur parole. Écoutez les leaders visionnaires avec lesquels nous avons eu le privilège de travailler.",
+            "highlight": "Amazing Clients Say",
+            "pager_text": "Testimonial {{current}} / {{total}}",
+            "aria": {
+                "prev": "Previous testimonial",
+                "next": "Next testimonial",
+                "go_to": "Go to testimonial {{number}}"
+            }
+        },
+        "faq": {
+            "badge": "FAQ",
+            "title": "Questions Fréquemment Posées",
+            "description": "Trouvez des réponses aux questions courantes sur nos services et processus.",
+            "cta_title": "Encore des questions ?",
+            "cta_desc": "Vous ne trouvez pas la réponse que vous cherchez ? Notre équipe est là pour vous aider avec toute demande spécifique.",
+            "cta_button": "Contactez notre équipe"
+        },
+        "team": {
+            "badge": "Notre Équipe",
+            "title": "Rencontrez les Experts",
+            "description": "Une équipe diversifiée de stratèges, designers et développeurs unis par une passion pour la croissance.",
+            "cta_title_prefix": "Prêt à travailler avec",
+            "cta_title_highlight": "Notre Équipe Incroyable ?",
+            "cta_desc": "Discutons de votre projet et voyons comment notre équipe d'experts peut vous aider à atteindre vos objectifs de transformation numérique.",
+            "cta_whatsapp": "Discuter sur WhatsApp",
+            "cta_portfolio": "Voir Notre Portfolio"
+        }
+    },
+    "slogan_generator": {
+        "badge": "OUTIL INTELLIGENT GROWBRANDI",
+        "title_prefix": "Essayez Notre",
+        "title_highlight": "Générateur de Slogans IA",
+        "description": "Découvrez la puissance de l'IA en action ! Entrez quelques mots-clés sur votre entreprise et regardez notre système intelligent créer des slogans convaincants adaptés à votre marque.",
+        "input_label": "Entrer des mots-clés",
+        "input_placeholder": "ex : durable, innovant, café, communauté, croissance",
+        "generate_button": "Générer des slogans",
+        "generating": "Génération...",
+        "results_title": "Idées de Slogans",
+        "copy_button": "Copier",
+        "copied_button": "Copié !",
+        "error_empty": "Veuillez entrer quelques mots-clés."
+    },
+    "services": {
+        "brand_growth": {
+            "title": "Croissance de la Marque",
+            "description": "Évoluez avec des publicités performantes sur TikTok, Meta & Google",
+            "features": {
+                "meta_ads": "Publicités Meta",
+                "audience_targeting": "Ciblage d'audience",
+                "ab_testing": "Tests A/B",
+                "roi_tracking": "Suivi du ROI"
+            },
+            "price": "À partir de 599 $ | Pro 1 999 $",
+            "process": {
+                "step1": {
+                    "title": "Découverte",
+                    "desc": "Audit de marque et étude de marché",
+                    "duration": "1-2 semaines"
+                },
+                "step2": {
+                    "title": "Stratégie",
+                    "desc": "Positionnement de la marque",
+                    "duration": "1 semaine"
+                },
+                "step3": {
+                    "title": "Design",
+                    "desc": "Développement de l'identité visuelle",
+                    "duration": "2-3 semaines"
+                },
+                "step4": {
+                    "title": "Mise en œuvre",
+                    "desc": "Charte graphique et déploiement",
+                    "duration": "1 semaine"
+                }
+            }
+        },
+        "social_media_content": {
+            "title": "Contenu Réseaux Sociaux",
+            "description": "Montage vidéo engageant et création de posts",
+            "features": {
+                "video_creation": "Création de contenu vidéo",
+                "background_music": "Musique de fond",
+                "motion_graphics": "Motion Graphics",
+                "content_strategy": "Stratégie de contenu"
+            },
+            "price": "À partir de 499 $ | Pro 1 499 $"
+        },
+        "ui_ux_design": {
+            "title": "Design UI/UX",
+            "description": "Design centré sur l'utilisateur qui stimule l'engagement",
+            "features": {
+                "user_research": "Recherche utilisateur",
+                "wireframing": "Wireframing",
+                "prototyping": "Prototypage",
+                "design_systems": "Systèmes de design"
+            },
+            "price": "À partir de 799 $ | Pro 1 999 $",
+            "process": {
+                "step1": {
+                    "title": "Recherche",
+                    "desc": "Recherche utilisateur et analyse",
+                    "duration": "1 semaine"
+                },
+                "step2": {
+                    "title": "Wireframing",
+                    "desc": "Architecture de l'information",
+                    "duration": "1-2 semaines"
+                },
+                "step3": {
+                    "title": "Design",
+                    "desc": "Design visuel et prototypage",
+                    "duration": "2-3 semaines"
+                },
+                "step4": {
+                    "title": "Tests",
+                    "desc": "Tests utilisateurs et affinement",
+                    "duration": "1 semaine"
+                }
+            }
+        },
+        "web_development": {
+            "title": "Développement Web",
+            "description": "Solutions web personnalisées utilisant des technologies de pointe",
+            "features": {
+                "shopify_dev": "Développement Shopify",
+                "wordpress_solutions": "Solutions WordPress",
+                "custom_theme_dev": "Développement de thèmes perso",
+                "store_optimization": "Optimisation de boutique"
+            },
+            "price": "À partir de 999 $ | Pro 2 999 $",
+            "process": {
+                "step1": {
+                    "title": "Planification",
+                    "desc": "Architecture technique",
+                    "duration": "1 semaine"
+                },
+                "step2": {
+                    "title": "Développement",
+                    "desc": "Codage frontend et backend",
+                    "duration": "4-6 semaines"
+                },
+                "step3": {
+                    "title": "Tests",
+                    "desc": "Assurance qualité",
+                    "duration": "1 semaine"
+                },
+                "step4": {
+                    "title": "Lancement",
+                    "desc": "Déploiement et mise en ligne",
+                    "duration": "1 semaine"
+                }
+            }
+        },
+        "virtual_assistance": {
+            "title": "Assistance Virtuelle",
+            "description": "Support professionnel pour l'administration et les opérations",
+            "features": {
+                "business_operations": "Opérations commerciales",
+                "inventory_management": "Gestion des stocks",
+                "order_processing": "Traitement des commandes",
+                "growth_strategy": "Stratégie de croissance"
+            },
+            "price": "À partir de 499 $/mois | Pro 1 499 $/mois"
+        },
+        "customer_support": {
+            "title": "Support Client",
+            "description": "Support 24/7 pour assurer la satisfaction client",
+            "features": {
+                "schedule_posts": "Planifier les posts",
+                "community_management": "Gestion de communauté",
+                "profile_optimization": "Optimisation de profil",
+                "engagement_strategy": "Stratégie d'engagement"
+            },
+            "price": "À partir de 399 $/mois | Pro 999 $/mois"
+        },
+        "ecommerce_management": {
+            "title": "Gestion E-commerce",
+            "description": "Gestion complète de votre boutique en ligne.",
+            "features": {
+                "business_operations": "Opérations commerciales",
+                "inventory_management": "Gestion des stocks",
+                "order_processing": "Traitement des commandes",
+                "growth_strategy": "Stratégie de croissance"
+            },
+            "price": "À partir de 499 $/mois | Pro 1 499 $/mois"
+        },
+        "social_media_management": {
+            "title": "Gestion Réseaux Sociaux",
+            "description": "Gestion complète des réseaux sociaux.",
+            "features": {
+                "schedule_posts": "Planifier les posts",
+                "community_management": "Gestion de communauté",
+                "profile_optimization": "Optimisation de profil",
+                "engagement_strategy": "Stratégie d'engagement"
+            },
+            "price": "À partir de 399 $/mois | Pro 999 $/mois"
+        },
+        "performance_marketing": {
+            "title": "Marketing à la Performance",
+            "description": "Campagnes Meta Ads (Facebook/Instagram) basées sur les données.",
+            "features": {
+                "meta_ads": "Publicités Meta",
+                "audience_targeting": "Ciblage d'audience",
+                "ab_testing": "Tests A/B",
+                "roi_tracking": "Suivi du ROI"
+            },
+            "price": "À partir de 599 $ | Pro 1 999 $"
+        },
+        "creative_studio": {
+            "title": "Studio Créatif",
+            "description": "Création de contenu à fort impact.",
+            "features": {
+                "video_content_creation": "Création de contenu vidéo",
+                "background_music": "Musique de fond",
+                "motion_graphics": "Motion Graphics",
+                "content_strategy": "Stratégie de contenu"
+            },
+            "price": "À partir de 499 $ | Pro 1 499 $"
+        },
+        "web_shopify_dev": {
+            "title": "Dev Web & Shopify",
+            "description": "Développement Shopify et WordPress sur mesure.",
+            "features": {
+                "shopify_development": "Développement Shopify",
+                "wordpress_solutions": "Solutions WordPress",
+                "custom_theme_dev": "Développement de thèmes perso",
+                "store_optimization": "Optimisation de boutique"
+            },
+            "price": "À partir de 999 $ | Pro 2 999 $"
+        },
+        "ui_ux_design_full": {
+            "title": "Design UI/UX",
+            "description": "Design d'interface primé.",
+            "features": {
+                "user_research": "Recherche utilisateur",
+                "wireframing": "Wireframing",
+                "prototyping": "Prototypage",
+                "design_systems": "Systèmes de design"
+            },
+            "price": "À partir de 799 $ | Pro 1 999 $"
+        },
+        "preview": {
+            "badge": "Services Premium GrowBrandi",
+            "title": "Solutions Numériques Complètes",
+            "highlight": "Pour Votre Entreprise",
+            "description": "Transformez votre entreprise avec les services primés de GrowBrandi.",
+            "process_title": "Notre Processus Éprouvé",
+            "process_desc": "Chaque projet suit notre méthodologie rationalisée.",
+            "cta_title": "Prêt à transformer votre entreprise ?",
+            "cta_desc": "Choisissez parmi nos offres de services complètes.",
+            "cta_button": "Commencez Votre Projet Maintenant",
+            "process_steps": {
+                "discovery": {
+                    "title": "Découverte",
+                    "desc": "Comprendre les objectifs"
+                },
+                "strategy": {
+                    "title": "Stratégie",
+                    "desc": "Concevoir des solutions"
+                },
+                "execution": {
+                    "title": "Exécution",
+                    "desc": "Livraison précise"
+                },
+                "optimization": {
+                    "title": "Optimisation",
+                    "desc": "Croissance continue"
+                }
+            }
+        },
+        "process": {
+            "default": {
+                "step1": {
+                    "title": "Consultation",
+                    "desc": "Comprendre vos besoins",
+                    "duration": "1 semaine"
+                },
+                "step2": {
+                    "title": "Stratégie",
+                    "desc": "Planification et approche",
+                    "duration": "1-2 semaines"
+                },
+                "step3": {
+                    "title": "Exécution",
+                    "desc": "Mise en œuvre et livraison",
+                    "duration": "2-4 semaines"
+                },
+                "step4": {
+                    "title": "Optimisation",
+                    "desc": "Tests et affinement",
+                    "duration": "1 semaine"
+                }
+            }
+        }
+    },
+    "company": {
+        "about_us": {
+            "title": "À Propos",
+            "description": "En savoir plus sur nous",
+            "hero": {
+                "badge": "Who We Are",
+                "title": "About",
+                "highlight": "GrowBrandi",
+                "description": "We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age. Founded on the principle that every business deserves exceptional digital experiences."
+            },
+            "story": {
+                "title": "Our",
+                "title_highlight": "Story",
+                "p1": "Founded in 2020, GrowBrandi emerged from a simple belief: every business, regardless of size, deserves access to world-class digital solutions. What started as a small team of developers and designers has grown into a full-service digital agency serving clients worldwide.",
+                "p2": "Our journey began when we noticed a gap in the market - businesses struggling to find partners who truly understood both technology and business strategy. We set out to bridge that gap by combining technical expertise with deep business acumen."
+            },
+            "stats": {
+                "projects": "Projects Completed",
+                "clients": "Happy Clients"
+            },
+            "values": {
+                "innovation": {
+                    "title": "Innovation First",
+                    "desc": "We stay ahead of industry trends and emerging technologies to deliver cutting-edge solutions that give you a competitive advantage."
+                },
+                "client": {
+                    "title": "Client-Centric",
+                    "desc": "Your success is our success. We build long-term partnerships based on trust, transparency, and measurable results."
+                },
+                "quality": {
+                    "title": "Quality Driven",
+                    "desc": "We maintain the highest standards of quality in every project, from concept to completion, ensuring pixel-perfect delivery."
+                }
+            },
+            "team": {
+                "badge": "Our Team",
+                "title": "Meet the",
+                "highlight": "Experts",
+                "description": "The brilliant minds behind GrowBrandi's success, dedicated to delivering excellence in every project.",
+                "view_full": "View Full Team"
+            }
+        },
+        "process": {
+            "title": "Notre Processus",
+            "description": "Découvrez notre méthodologie",
+            "heading": {
+                "title": "Our",
+                "highlight": "Process",
+                "description": "A proven methodology that ensures project success from initial concept to final delivery. Our systematic approach combines industry best practices with innovative thinking.",
+                "badge": "Methodology"
+            },
+            "steps": [
+                {
+                    "step": "01",
+                    "title": "Discovery & Strategy",
+                    "description": "We start by understanding your business, goals, and challenges through comprehensive research and stakeholder interviews.",
+                    "details": [
+                        "Business Analysis & Requirements Gathering",
+                        "Market Research & Competitive Analysis",
+                        "User Research & Persona Development",
+                        "Technical Architecture Planning",
+                        "Project Roadmap Creation"
+                    ]
+                },
+                {
+                    "step": "02",
+                    "title": "Design & Prototyping",
+                    "description": "Creating user-centric designs and interactive prototypes that visualize the final product before development begins.",
+                    "details": [
+                        "Information Architecture Design",
+                        "Wireframing & User Flow Mapping",
+                        "Visual Design & Brand Integration",
+                        "Interactive Prototype Development",
+                        "Usability Testing & Validation"
+                    ]
+                },
+                {
+                    "step": "03",
+                    "title": "Development & Integration",
+                    "description": "Building your solution using modern technologies with clean, maintainable code and industry best practices.",
+                    "details": [
+                        "Agile Development Methodology",
+                        "Clean Code & Documentation",
+                        "API Development & Integration",
+                        "Database Design & Optimization",
+                        "Performance & Security Implementation"
+                    ]
+                },
+                {
+                    "step": "04",
+                    "title": "Testing & Quality Assurance",
+                    "description": "Rigorous testing across all platforms and scenarios to ensure flawless functionality and user experience.",
+                    "details": [
+                        "Automated Testing Suite",
+                        "Cross-Browser & Device Testing",
+                        "Performance & Load Testing",
+                        "Security Vulnerability Testing",
+                        "User Acceptance Testing"
+                    ]
+                },
+                {
+                    "step": "05",
+                    "title": "Launch & Optimization",
+                    "description": "Seamless deployment with monitoring, analytics, and continuous optimization for peak performance.",
+                    "details": [
+                        "Production Deployment Strategy",
+                        "Performance Monitoring Setup",
+                        "Analytics & Tracking Implementation",
+                        "SEO Optimization",
+                        "Post-Launch Support & Maintenance"
+                    ]
+                }
+            ]
+        },
+        "case_studies": {
+            "title": "Études de Cas",
+            "description": "Histoires de réussite réelles",
+            "heading": {
+                "title": "Case",
+                "highlight": "Studies",
+                "description": "Real success stories from businesses that transformed their digital presence with GrowBrandi. See how we've helped companies achieve remarkable growth and success.",
+                "badge": "Success Stories"
+            },
+            "items": [
+                {
+                    "title": "E-commerce Revolution for TechStore",
+                    "category": "E-commerce Development",
+                    "results": "300% increase in online sales",
+                    "challenge": "TechStore needed a modern, scalable e-commerce platform to compete with industry giants.",
+                    "solution": "We built a custom React-based e-commerce platform with advanced search, AI recommendations, and seamless checkout.",
+                    "metrics": [
+                        "300% increase in sales",
+                        "50% reduction in cart abandonment",
+                        "85% improvement in page load speed"
+                    ]
+                },
+                {
+                    "title": "Brand Transformation for HealthPlus",
+                    "category": "Brand Strategy & Design",
+                    "results": "500% increase in brand recognition",
+                    "challenge": "HealthPlus needed to modernize their brand identity and digital presence to attract younger demographics.",
+                    "solution": "Complete brand overhaul including new visual identity, messaging framework, and digital-first marketing strategy.",
+                    "metrics": [
+                        "500% increase in brand recognition",
+                        "200% growth in social media following",
+                        "150% increase in lead generation"
+                    ]
+                },
+                {
+                    "title": "AI-Powered Analytics for DataCorp",
+                    "category": "AI Solutions",
+                    "results": "40% improvement in decision making",
+                    "challenge": "DataCorp needed intelligent automation to process vast amounts of customer data for better insights.",
+                    "solution": "Custom AI platform with machine learning algorithms for predictive analytics and automated reporting.",
+                    "metrics": [
+                        "40% improvement in decision making",
+                        "60% reduction in manual processing",
+                        "90% accuracy in predictions"
+                    ]
+                }
+            ],
+            "common": {
+                "view_details": "View Details",
+                "hide_details": "Hide Details",
+                "challenge": "Challenge",
+                "solution": "Solution",
+                "key_results": "Key Results"
+            }
+        },
+        "team": {
+            "title": "Notre Équipe",
+            "description": "Rencontrez les experts",
+            "heading": {
+                "title": "The Experts Behind",
+                "highlight": "Your Success",
+                "description": "Our diverse team of digital experts brings together decades of experience in development, design, marketing, and AI to deliver exceptional results for our clients.",
+                "badge": "Meet Our Team"
+            },
+            "cta": {
+                "title": "Ready to Work with",
+                "highlight": "Our Amazing Team?",
+                "description": "Let's discuss your project and see how our expert team can help you achieve your digital goals. We're here to turn your vision into reality.",
+                "start_project": "Start Your Project",
+                "learn_more": "Learn More"
+            }
+        },
+        "careers": {
+            "title": "Carrières",
+            "description": "Rejoignez notre équipe",
+            "heading": {
+                "title": "Join Our",
+                "highlight": "Team",
+                "description": "Be part of a passionate team that's shaping the future of digital experiences. We're always looking for talented individuals who share our vision of excellence.",
+                "badge": "Join Us"
+            },
+            "open_positions": {
+                "title": "Open",
+                "highlight": "Positions"
+            },
+            "openings": [
+                {
+                    "title": "Senior Full-Stack Developer",
+                    "department": "Engineering",
+                    "location": "San Francisco, CA / Remote",
+                    "type": "Full-time",
+                    "description": "We're looking for an experienced full-stack developer to join our growing team and help build amazing digital experiences."
+                },
+                {
+                    "title": "UI/UX Designer",
+                    "department": "Design",
+                    "location": "San Francisco, CA / Remote",
+                    "type": "Full-time",
+                    "description": "Join our creative team to design beautiful, intuitive user experiences that delight our clients and their customers."
+                },
+                {
+                    "title": "Digital Marketing Specialist",
+                    "department": "Marketing",
+                    "location": "Remote",
+                    "type": "Full-time",
+                    "description": "Help our clients grow their digital presence through strategic marketing campaigns and data-driven optimization."
+                }
+            ],
+            "apply_now": "Apply Now"
+        },
+        "blog": {
+            "title": "Blog",
+            "description": "Aperçus et expertise",
+            "heading": {
+                "title": "Latest",
+                "highlight": "Insights",
+                "description": "Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.",
+                "badge": "Our Blog"
+            },
+            "common": {
+                "read_more": "Read More"
+            },
+            "posts": [
+                {
+                    "title": "The Future of AI in Web Development",
+                    "excerpt": "Exploring how artificial intelligence is revolutionizing the way we build and maintain websites.",
+                    "date": "November 10, 2024",
+                    "category": "Technology",
+                    "readTime": "5 min read"
+                },
+                {
+                    "title": "Design Systems That Scale",
+                    "excerpt": "Best practices for creating design systems that grow with your business and maintain consistency.",
+                    "date": "November 5, 2024",
+                    "category": "Design",
+                    "readTime": "7 min read"
+                },
+                {
+                    "title": "Digital Marketing Trends for 2025",
+                    "excerpt": "Key trends and strategies that will dominate digital marketing in the coming year.",
+                    "date": "October 28, 2024",
+                    "category": "Marketing",
+                    "readTime": "6 min read"
+                }
+            ]
+        }
+    },
+    "faq": {
+        "q1": "Qu'est-ce qui différencie GrowBrandi ?",
+        "a1": "GrowBrandi combine des informations de données intelligentes avec une expertise créative.",
+        "q2": "Combien de temps dure un projet typique ?",
+        "a2": "Les délais varient. Sites simples 4-6 semaines, applications complexes 12-16 semaines.",
+        "q3": "Offrez-vous du support et de la maintenance ?",
+        "a3": "Oui ! Nous offrons des forfaits de support complets.",
+        "q4": "Avec quelles technologies travaillez-vous ?",
+        "a4": "Nous nous spécialisons dans React, Next.js, Node.js, TypeScript et l'automatisation intelligente.",
+        "q5": "Pouvez-vous aider avec des sites existants ?",
+        "a5": "Absolument ! Nous proposons des audits, de l'optimisation et des refontes."
+    },
+    "projects": {
+        "machain_store": {
+            "title": "Machain Store",
+            "client": "Machain Store",
+            "completion_time": "6 weeks",
+            "description": "Une boutique Shopify à haute conversion pour un détaillant de mode.",
+            "results": [
+                "300% Augmentation des Revenus",
+                "50% Panier Moyen Plus Élevé",
+                "25% Taux de Réachat"
+            ]
+        },
+        "velvet_vine": {
+            "title": "Velvet & Vine",
+            "client": "Velvet & Vine",
+            "completion_time": "Ongoing",
+            "description": "Stratégie de réseaux sociaux pour une marque durable.",
+            "results": [
+                "50k+ Nouveaux Abonnés",
+                "12% Taux d'Engagement",
+                "Notoriété de Marque Virale"
+            ],
+            "growth_metrics": "50k+ Abonnés"
+        },
+        "adscale_pro": {
+            "title": "AdScale Pro Campaign",
+            "client": "TechTrek",
+            "completion_time": "3 months",
+            "description": "Campagne Meta & Google Ads à haute vélocité.",
+            "results": [
+                "8x ROAS",
+                "100k $/mois de Dépenses",
+                "45% CPA Plus Bas"
+            ]
+        },
+        "mauvis_beauty": {
+            "title": "Mauvis Beauty",
+            "client": "Mauvis Beauty",
+            "completion_time": "4 weeks",
+            "description": "Un site web moderne pour une marque de beauté premium.",
+            "results": [
+                "10x ROI",
+                "200% Plus de Réservations",
+                "Top 3 Classement Recherche"
+            ]
+        },
+        "lumina_reveal": {
+            "title": "Lumina Product Reveal",
+            "client": "Lumina Gear",
+            "completion_time": "6 weeks",
+            "description": "Vidéo de lancement de produit cinématographique.",
+            "results": [
+                "1M+ Vues Vidéo",
+                "Meilleurs Effets Visuels",
+                "Rafraîchissement d'Identité"
+            ]
+        },
+        "peak_performance": {
+            "title": "Peak Performance",
+            "client": "Peak Gear",
+            "completion_time": "Ongoing",
+            "description": "Gestion complète d'un magasin d'équipement de plein air.",
+            "results": [
+                "99% Précision des Commandes",
+                "30% Augmentation de Marge",
+                "Opérations Rationalisées"
+            ]
+        },
+        "luxe_estate": {
+            "title": "Luxe Estate",
+            "client": "Luxe Estate Global",
+            "completion_time": "10 weeks",
+            "description": "Plateforme immobilière pour propriétés de luxe.",
+            "results": [
+                "1Mds $+ Valeur Immobilière",
+                "Cycles de Vente 50% Plus Rapides",
+                "Design Primé"
+            ]
+        },
+        "flowbank_app": {
+            "title": "FlowBank App",
+            "client": "NovaBank Corp",
+            "completion_time": "14 weeks",
+            "description": "Refonte complète d'une application bancaire.",
+            "results": [
+                "2M+ Téléchargements d'App",
+                "45% Rétention Utilisateurs",
+                "#1 Design d'App Finance"
+            ]
+        },
+        "saravia_gems": {
+            "title": "Saravia Gems",
+            "client": "Saravia Gems",
+            "completion_time": "8 weeks",
+            "description": "Plateforme e-commerce de bijoux de luxe.",
+            "results": [
+                "Boutique Shopify Top 1%",
+                "40% Taux de Conversion",
+                "Zéro Temps d'Arrêt"
+            ]
+        },
+        "neonfin_dashboard": {
+            "title": "NeonFin Dashboard",
+            "client": "NeonFin Tech",
+            "completion_time": "12 weeks",
+            "description": "Tableau de bord bancaire de nouvelle génération.",
+            "results": [
+                "2M+ Transactions Quotidiennes",
+                "99.99% Disponibilité",
+                "Croissance Utilisateurs +400%"
+            ]
+        }
+    },
+    "testimonials": {
+        "sarah_johnson": {
+            "quote": "GrowBrandi a complètement transformé notre présence numérique.",
+            "role": "PDG chez TechFlow Solutions"
+        },
+        "michael_chen": {
+            "quote": "L'équipe de GrowBrandi est exceptionnelle.",
+            "role": "Fondateur d'EcoVibe"
+        },
+        "emily_rodriguez": {
+            "quote": "Travailler avec GrowBrandi a changé la donne.",
+            "role": "Directrice Marketing chez StyleHub"
+        },
+        "david_thompson": {
+            "quote": "L'équipe de développement de GrowBrandi est de premier ordre.",
+            "role": "CTO chez DataDrive"
+        }
+    },
+    "team": {
+        "ui": {
+            "back_to_team": "Retour à l'équipe",
+            "book_call": "Réserver un appel",
+            "work_with_me": "Travailler avec moi",
+            "about_prefix": "À propos de",
+            "achievements_title": "Réalisations Clés",
+            "expertise_title": "Expertise",
+            "available_work": "Disponible pour le travail"
+        },
+        "shuvo": {
+            "description": "Leader visionnaire passionné par la croissance des entreprises.",
+            "bio": "Shuvo Mallick est l'architecte visionnaire derrière GrowBrandi.",
+            "achievements": [
+                "A fait évoluer 50+ entreprises",
+                "Pionnier du 'Moteur de Croissance'",
+                "Conférencier principal",
+                "Prix 'Innovateur Numérique'"
+            ],
+            "specialties": [
+                "Stratégie d'Entreprise",
+                "Leadership Exécutif",
+                "Growth Hacking",
+                "Architecture de Marque"
+            ]
+        },
+        "binita": {
+            "description": "Experte en conception de solutions évolutives.",
+            "bio": "Binita est une maître de la pensée systémique.",
+            "achievements": [
+                "Architecte pour clients Fortune 500",
+                "Réduction des coûts de 40%",
+                "A dirigé le développement IA",
+                "Certifiée AWS"
+            ],
+            "specialties": [
+                "Architecture de Solutions",
+                "Intégration de Systèmes",
+                "Infrastructure Cloud",
+                "Implémentation IA"
+            ]
+        },
+        "ovejit": {
+            "description": "Dirige l'équipe d'ingénierie.",
+            "bio": "Ovejit est la colonne vertébrale technique.",
+            "achievements": [
+                "Supervise 15+ développeurs",
+                "Maintient 99.99% de disponibilité",
+                "Migration serverless",
+                "Contributeur Open Source"
+            ],
+            "specialties": [
+                "Développement Full Stack",
+                "Architecture Cloud",
+                "Leadership d'Équipe",
+                "Cybersécurité"
+            ]
+        },
+        "nijhum": {
+            "description": "Marketeuse axée sur les données.",
+            "bio": "Nijhum vit à l'intersection de la psychologie et des données.",
+            "achievements": [
+                "Géré plus de 2M $ de dépenses pub",
+                "Augmenté les conversions de 150%",
+                "Certifiée Google/Meta"
+            ],
+            "specialties": [
+                "Publicité PPC",
+                "Stratégie Réseaux Sociaux",
+                "Optimisation Conversions",
+                "Analyse de Données"
+            ]
+        },
+        "sabrina": {
+            "description": "Designer créative.",
+            "bio": "Jinia croit que le grand design est invisible.",
+            "achievements": [
+                "Gagnante Awwwards",
+                "Refonte flux e-commerce",
+                "Système de design Prism"
+            ],
+            "specialties": [
+                "Design UI/UX",
+                "Design d'Interaction",
+                "Recherche Utilisateur",
+                "Prototypage"
+            ]
+        },
+        "riaz": {
+            "description": "Gestion de projets.",
+            "bio": "Riaz maintient nos projets ensemble.",
+            "achievements": [
+                "Livré 100+ projets avec succès",
+                "100% satisfaction client",
+                "Scrum Master / PMP"
+            ],
+            "specialties": [
+                "Gestion de Projet Agile",
+                "Relations Clients",
+                "Planification des Ressources",
+                "Gestion des Risques"
+            ]
+        },
+        "roles": {
+            "ceo_founder": "CEO & Fondateur",
+            "solutions_architect": "Architecte de Solutions",
+            "head_of_development": "Chef du Développement",
+            "digital_marketing_strategist": "Stratège Marketing Numérique",
+            "ui_ux_designer": "Designer UI/UX",
+            "project_manager": "Chef de Projet"
+        },
+        "specialties": {
+            "business_strategy": "Stratégie d'Entreprise",
+            "executive_leadership": "Leadership Exécutif",
+            "growth_hacking": "Growth Hacking",
+            "brand_architecture": "Architecture de Marque",
+            "solutions_architecture": "Architecture de Solutions",
+            "system_integration": "Intégration de Systèmes",
+            "cloud_infrastructure": "Infrastructure Cloud",
+            "ai_implementation": "Implémentation IA",
+            "full_stack_development": "Développement Full Stack",
+            "cloud_architecture": "Architecture Cloud",
+            "team_leadership": "Leadership d'Équipe",
+            "cybersecurity": "Cybersécurité",
+            "ppc_advertising": "Publicité PPC",
+            "social_media_strategy": "Stratégie Réseaux Sociaux",
+            "conversion_rate_optimization": "Optimisation des Conversions",
+            "data_analytics": "Analyse de Données",
+            "ui_ux_design": "Design UI/UX",
+            "interaction_design": "Design d'Interaction",
+            "user_research": "Recherche Utilisateur",
+            "prototyping": "Prototypage",
+            "agile_project_management": "Gestion de Projet Agile",
+            "client_relations": "Relations Clients",
+            "resource_planning": "Planification des Ressources",
+            "risk_management": "Gestion des Risques"
+        }
+    },
+    "contact_assistant": {
+        "title": "AI-Powered Contact Assistant",
+        "subtitle": "Get personalized recommendations as you go",
+        "steps": {
+            "1": "Let's get to know you",
+            "2": "Tell us about your project",
+            "3": "What are your goals?",
+            "4": "What challenges are you facing?",
+            "5": "AI-Powered Recommendations",
+            "select_all": "Select all that apply",
+            "additional_message": "Additional Message",
+            "step_x_of_y": "Step {{current}} of {{total}}"
+        },
+        "form": {
+            "name": "Name",
+            "name_placeholder": "Your full name",
+            "email": "Email",
+            "email_placeholder": "your@email.com",
+            "company": "Company",
+            "company_placeholder": "Your company name",
+            "industry": "Industry",
+            "industry_placeholder": "e.g., Healthcare, E-commerce, SaaS",
+            "project_type": "Project Type",
+            "select_project_type": "Select project type",
+            "other": "Other",
+            "budget": "Budget Range",
+            "select_budget": "Select budget",
+            "timeline": "Timeline",
+            "select_timeline": "Select timeline",
+            "message_placeholder": "Tell us more about your project..."
+        },
+        "options": {
+            "budget": {
+                "starter": "Starter ($299 - $999)",
+                "professional": "Professional ($1,000 - $5,000)",
+                "enterprise": "Enterprise ($5,000+)"
+            },
+            "timeline": {
+                "immediate": "Immediate (1-2 weeks)",
+                "short_term": "Short-term (1-2 months)",
+                "medium_term": "Medium-term (3-6 months)",
+                "long_term": "Long-term (6+ months)"
+            },
+            "goals": {
+                "increase_sales": "Increase Sales",
+                "brand_awareness": "Build Brand Awareness",
+                "generate_leads": "Generate Leads",
+                "improve_ux": "Improve User Experience",
+                "expand_market": "Expand Market Reach",
+                "launch_products": "Launch New Products",
+                "optimize_ops": "Optimize Operations",
+                "enhance_support": "Enhance Customer Support"
+            },
+            "challenges": {
+                "low_traffic": "Low Website Traffic",
+                "poor_conversion": "Poor Conversion Rates",
+                "weak_brand": "Weak Brand Identity",
+                "no_presence": "Lack of Online Presence",
+                "tech_issues": "Technical Issues",
+                "mobile_response": "Mobile Responsiveness",
+                "slow_speed": "Slow Loading Speed",
+                "ineffective_marketing": "Ineffective Marketing",
+                "budget_constraints": "Budget Constraints"
+            }
+        },
+        "buttons": {
+            "back": "Back",
+            "next": "Next",
+            "get_insights": "Get AI Insights",
+            "submit": "Submit Request"
+        },
+        "ai": {
+            "analyzing": "Analyzing your requirements...",
+            "recommended_services": "Recommended Services",
+            "action_plan": "Action Plan",
+            "key_focus_areas": "Key Focus Areas"
+        },
+        "success": {
+            "title": "Request Received!",
+            "message": "We've captured your project details and AI insights. A GrowBrandi expert will review them and contact you shortly.",
+            "pdf_summary": "A summary of your consultation has been downloaded automatically.",
+            "check_downloads": "Check your downloads folder for the PDF file."
+        },
+        "pdf": {
+            "title": "AI Consultation Summary",
+            "client_details": "Client Details",
+            "project_overview": "Project Overview",
+            "goals": "Goals",
+            "challenges": "Challenges",
+            "recommendations": "AI Strategic Recommendations",
+            "recommended_services": "Recommended Services",
+            "action_plan": "Strategic Action Plan",
+            "cta_title": "Ready to execute this plan?",
+            "cta_text": "Contact us for a detailed actionable plan tailored to your business.",
+            "generated_by": "Generated by GrowBrandi AI Assistant"
+        }
+    },
+    "legal": {
+        "common": {
+            "last_updated": "Last updated: December 01, 2025",
+            "contact_us": {
+                "title": "Contact Us",
+                "intro": "If you have questions or comments about this policy, you may email us at {{email}} or by post to:",
+                "phone": "Phone",
+                "email": "Email",
+                "address": "Address"
+            }
+        },
+        "privacy": {
+            "title": "Privacy",
+            "title_highlight": "Policy",
+            "intro": {
+                "title": "1. Introduction",
+                "text": "Welcome to {{appName}} (\"we,\" \"our,\" or \"us\"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage with our digital services, including Brand Growth, Web Development, and UI/UX Design."
+            },
+            "collect": {
+                "title": "2. Information We Collect",
+                "text": "We collect personal information that you voluntarily provide to us when you:",
+                "list": {
+                    "1": "Request a consultation or project quote",
+                    "2": "Subscribe to our newsletter or marketing communications",
+                    "3": "Engage with our \"Slogan Generator\" or \"Health Audit\" tools",
+                    "4": "Contact us via email or our contact forms"
+                },
+                "text_2": "The personal information we collect may include names, email addresses, phone numbers, job titles, and specific business requirements relevant to your project."
+            },
+            "use": {
+                "title": "3. How We Use Your Information",
+                "text": "We use personal information collected via our website for a variety of business purposes described below:",
+                "list": {
+                    "1": "To provide and deliver the services you request (e.g., delivering audit reports, project proposals)",
+                    "2": "To communicate with you about your projects, appointments, and account updates",
+                    "3": "To send you marketing and promotional communications regarding our latest services and offers",
+                    "4": "To improve our website performance and user experience through analytics",
+                    "5": "To protect our services and legal rights"
+                }
+            },
+            "sharing": {
+                "title": "4. Sharing Your Information",
+                "text": "We do not sell your personal information. We only share information with your consent, to comply with laws, to provide you with services (e.g., sharing data with third-party advertising platforms like Meta or Google for your ad campaigns), or to fulfill business obligations."
+            },
+            "security": {
+                "title": "5. Security of Your Information",
+                "text": "We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse."
+            },
+            "contact": {
+                "title": "6. Contact Us"
+            }
+        },
+        "terms": {
+            "title": "Terms of",
+            "title_highlight": "Service",
+            "agreement": {
+                "title": "1. Agreement to Terms",
+                "text": "These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity (\"you\") and {{appName}} (\"we,\" \"us\" or \"our\"), concerning your access to and use of the {{appName}} website and our digital agency services."
+            },
+            "ip": {
+                "title": "2. Intellectual Property Rights",
+                "text": "Unless otherwise indicated, the Site is our proprietary property. However, regarding client projects:",
+                "list": {
+                    "deliverables": "<strong>Client Deliverables:</strong> Upon full payment, all final deliverables (e.g., website code, design assets, ad creatives) created specifically for the Client shall become the property of the Client.",
+                    "tools": "<strong>Agency Tools:</strong> {{appName}} retains all rights to its background technology, frameworks, pre-existing code, and methodologies used to create the deliverables.",
+                    "portfolio": "<strong>Portfolio Rights:</strong> We reserve the right to display completed projects in our portfolio and marketing materials unless a Non-Disclosure Agreement (NDA) is signed."
+                }
+            },
+            "engagement": {
+                "title": "3. Service Engagement",
+                "text": "By engaging our services (Web Development, UI/UX Design, Marketing, etc.), you agree that:",
+                "list": {
+                    "1": "You will provide all necessary content, assets, and information required for the project in a timely manner.",
+                    "2": "Project timelines are estimates and may vary based on the scope of changes or delays in feedback.",
+                    "3": "Payment terms are defined in your specific project proposal or contract."
+                }
+            },
+            "prohibited": {
+                "title": "4. Prohibited Activities",
+                "text": "You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us."
+            },
+            "liability": {
+                "title": "5. Limitation of Liability",
+                "text": "In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site or our services, even if we have been advised of the possibility of such damages."
+            },
+            "governing": {
+                "title": "6. Governing Law",
+                "text": "These Terms shall be governed by and defined following the laws of Bangladesh. {{appName}} and yourself irrevocably consent that the courts of Khulna, Bangladesh shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms."
+            }
+        },
+        "cookies": {
+            "title": "Cookie",
+            "title_highlight": "Policy",
+            "what_are": {
+                "title": "1. What Are Cookies",
+                "text": "Cookies are small text files that are stored on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and to provide information to website owners."
+            },
+            "how_use": {
+                "title": "2. How We Use Cookies",
+                "text": "We use cookies for several purposes:",
+                "list": {
+                    "essential": "<strong>Essential Cookies:</strong> Required for the website to function properly",
+                    "analytics": "<strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website (e.g., Google Analytics)",
+                    "functional": "<strong>Functional Cookies:</strong> Remember your preferences and settings",
+                    "marketing": "<strong>Marketing Cookies:</strong> Used to track visitors and deliver personalized ads"
+                }
+            },
+            "types": {
+                "title": "3. Types of Cookies We Use",
+                "strict": {
+                    "title": "Strictly Necessary Cookies",
+                    "text": "These cookies are essential for the website to function and cannot be switched off. They are usually set in response to actions you take such as setting privacy preferences or filling in forms."
+                },
+                "performance": {
+                    "title": "Performance Cookies",
+                    "text": "These cookies collect information about how visitors use our website, such as which pages are visited most often. This data helps us improve how our website works."
+                },
+                "functionality": {
+                    "title": "Functionality Cookies",
+                    "text": "These cookies allow our website to remember choices you make and provide enhanced features and personal content."
+                },
+                "targeting": {
+                    "title": "Targeting Cookies",
+                    "text": "These cookies are used to deliver advertisements that are relevant to you and your interests. They may be used to limit the number of times you see an advertisement."
+                }
+            },
+            "managing": {
+                "title": "4. Managing Your Cookie Preferences",
+                "text": "You can control and manage cookies in several ways:",
+                "list": {
+                    "browser": "Use your browser settings to accept or reject cookies",
+                    "delete": "Delete existing cookies from your browser",
+                    "notify": "Set your browser to notify you when cookies are being sent"
+                },
+                "text_2": "Please note that disabling certain cookies may affect the functionality of our website."
+            },
+            "contact": {
+                "title": "5. Contact Us",
+                "text": "If you have any questions about our use of cookies, please contact us at:"
+            }
+        }
+    },
+    "process": {
+        "default": {
+            "step1": {
+                "title": "Consultation",
+                "desc": "Comprendre vos besoins",
+                "duration": "1 semaine"
+            },
+            "step2": {
+                "title": "Stratégie",
+                "desc": "Planification et approche",
+                "duration": "1-2 semaines"
+            },
+            "step3": {
+                "title": "Exécution",
+                "desc": "Mise en œuvre et livraison",
+                "duration": "2-4 semaines"
+            },
+            "step4": {
+                "title": "Optimisation",
+                "desc": "Tests et affinement",
+                "duration": "1 semaine"
+            }
+        }
+    },
+    "service_pages": {
+        "brand_growth": {
+            "title": "Brand Growth",
+            "description": "Scale your business with high-performance ad campaigns on TikTok, Meta, and Google. We focus on measurable ROI and rapid growth.",
+            "features": [
+                "TikTok Ads Management",
+                "Meta Ads (Facebook/Instagram)",
+                "Google Ads Campaigns",
+                "Performance Analytics",
+                "Audience Targeting",
+                "Creative Strategy",
+                "Conversion Tracking",
+                "Retargeting Campaigns",
+                "A/B Testing"
+            ],
+            "benefits": [
+                "Rapid Revenue Growth",
+                "High ROAS (Return on Ad Spend)",
+                "Targeted Lead Generation",
+                "Scalable Campaigns",
+                "Data-Driven Decisions",
+                "Brand Visibility",
+                "Customer Acquisition",
+                "Market Domination"
+            ],
+            "technologies": [
+                "TikTok Ads Manager",
+                "Meta Business Suite",
+                "Google Ads",
+                "Google Analytics 4",
+                "Pixel Tracking",
+                "Looker Studio",
+                "Canva",
+                "CapCut",
+                "Zapier"
+            ],
+            "process": [
+                "Audit & Strategy - We analyze your current performance and market position to build a winning growth strategy.",
+                "Creative Development - Designing high-converting ad creatives (video/static) that stop the scroll.",
+                "Campaign Setup - Precision targeting and technical setup across ad platforms.",
+                "Launch & Optimize - Going live and continuously tweaking for lower CPA and higher ROI.",
+                "Scale - Increasing budget on winning campaigns to maximize revenue.",
+                "Reporting - Transparent weekly reports showing exactly where your money is going and what it's returning."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$399",
+                    "features": [
+                        "1 Ad Platform",
+                        "Campaign Setup",
+                        "Basic Creative",
+                        "Weekly Reporting",
+                        "Audience Targeting",
+                        "Standard Support"
+                    ]
+                },
+                "professional": {
+                    "price": "$1,199",
+                    "features": [
+                        "3 Ad Platforms",
+                        "Advanced Creative Suite",
+                        "Retargeting Setup",
+                        "A/B Testing",
+                        "Daily Optimization",
+                        "Priority Support"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Omnichannel Strategy",
+                        "Dedicated Growth Team",
+                        "Custom Reporting Dashboard",
+                        "Unlimited Scale",
+                        "24/7 Support",
+                        "Strategy Workshops"
+                    ]
+                }
+            }
+        },
+        "social_media_content": {
+            "title": "Social Media Content",
+            "description": "Engage your audience with professional video editing and post creation. We create content that stops the scroll and drives action.",
+            "features": [
+                "Short-Form Video Editing (Reels/TikTok)",
+                "Social Media Post Design",
+                "Content Strategy",
+                "Trend Analysis",
+                "Caption Writing",
+                "Hashtag Strategy",
+                "Thumbnail Design",
+                "Content Calendar",
+                "Brand Storytelling"
+            ],
+            "benefits": [
+                "Increased Engagement",
+                "Viral Potential",
+                "Consistent Brand Voice",
+                "Time Saving",
+                "Professional Aesthetic",
+                "Community Growth",
+                "Higher Retention",
+                "Algorithm Favorability"
+            ],
+            "technologies": [
+                "Adobe Premiere Pro",
+                "After Effects",
+                "CapCut",
+                "Canva Pro",
+                "Photoshop",
+                "Illustrator",
+                "Notion",
+                "Later",
+                "Buffer"
+            ],
+            "process": [
+                "Content Strategy - Defining your content pillars, tone of voice, and visual style.",
+                "Ideation & Scripting - Generating viral ideas and writing compelling scripts.",
+                "Production/Editing - Professional editing with hooks, captions, and effects.",
+                "Review & Approval - You review the content and we make necessary revisions.",
+                "Scheduling & Posting - Optimizing posting times for maximum reach.",
+                "Performance Review - Analyzing metrics to improve future content."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$599/mo",
+                    "features": [
+                        "8 Short-Form Videos",
+                        "4 Static Posts",
+                        "Basic Editing",
+                        "Content Calendar",
+                        "1 Revision Round",
+                        "Monthly Call"
+                    ]
+                },
+                "professional": {
+                    "price": "$2,999/mo",
+                    "features": [
+                        "20 Short-Form Videos",
+                        "10 Static Posts",
+                        "Advanced Editing & VFX",
+                        "Strategy & Scripting",
+                        "Unlimited Revisions",
+                        "Trend Jacking"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Daily Content Production",
+                        "On-Location Shoots",
+                        "Dedicated Editor",
+                        "Full Channel Management",
+                        "Influencer Collabs",
+                        "Priority Turnaround"
+                    ]
+                }
+            }
+        },
+        "ui_ux_design": {
+            "title": "UI/UX Design",
+            "description": "Create stunning, user-friendly interfaces that enhance user experience and boost conversion rates with modern design principles.",
+            "features": [
+                "User Research",
+                "Wireframing",
+                "Prototyping",
+                "Design Systems",
+                "Mobile App Design",
+                "Web Design",
+                "Interaction Design",
+                "Usability Testing",
+                "Accessibility Compliance"
+            ],
+            "benefits": [
+                "Higher Conversion Rates",
+                "Improved User Retention",
+                "Reduced Dev Costs",
+                "Brand Consistency",
+                "Competitive Advantage",
+                "Customer Satisfaction",
+                "Intuitive Navigation",
+                "Modern Aesthetic"
+            ],
+            "technologies": [
+                "Figma",
+                "Adobe XD",
+                "Sketch",
+                "Principle",
+                "Framer",
+                "Miro",
+                "UserTesting",
+                "Maze",
+                "Zeplin"
+            ],
+            "process": [
+                "Discovery - Understanding user needs and business goals.",
+                "Research - Competitor analysis and user personas.",
+                "Wireframing - Structuring the layout and flow.",
+                "Visual Design - Applying branding and high-fidelity styling.",
+                "Prototyping - Creating interactive mockups for testing.",
+                "Handoff - Delivering pixel-perfect assets to developers."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$799",
+                    "features": [
+                        "5 Page Design",
+                        "Basic Wireframes",
+                        "Mobile Responsive",
+                        "Style Guide",
+                        "2 Revisions",
+                        "Source Files"
+                    ]
+                },
+                "professional": {
+                    "price": "$1,999",
+                    "features": [
+                        "Full Website/App Design",
+                        "Interactive Prototype",
+                        "Design System",
+                        "User Research",
+                        "Unlimited Revisions",
+                        "Developer Handoff"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Complex SaaS Design",
+                        "Advanced Micro-interactions",
+                        "Usability Testing Labs",
+                        "Accessibility Audit",
+                        "Dedicated Design Team",
+                        "Long-term Support"
+                    ]
+                }
+            }
+        },
+        "web_development": {
+            "title": "Web Development",
+            "description": "Develop fast, secure, and scalable websites using Shopify and WordPress. We build platforms that sell.",
+            "features": [
+                "Shopify Development",
+                "WordPress Solutions",
+                "Custom Web Apps",
+                "E-commerce Optimization",
+                "Speed Optimization",
+                "Security Implementation",
+                "API Integrations",
+                "Responsive Design",
+                "SEO-Friendly Structure"
+            ],
+            "benefits": [
+                "Lightning Fast Speed",
+                "Secure Transactions",
+                "Mobile Optimized",
+                "Easy Content Management",
+                "Scalable Architecture",
+                "SEO Ready",
+                "High Reliability",
+                "Custom Functionality"
+            ],
+            "technologies": [
+                "React",
+                "Next.js",
+                "Shopify Liquid",
+                "WordPress/PHP",
+                "Node.js",
+                "Tailwind CSS",
+                "PostgreSQL",
+                "Vercel",
+                "AWS"
+            ],
+            "process": [
+                "Planning - Technical architecture and roadmap.",
+                "Design - UI/UX approval (if needed).",
+                "Development - Coding the frontend and backend.",
+                "Testing - QA for bugs, speed, and responsiveness.",
+                "Launch - Deployment to live server.",
+                "Support - Post-launch maintenance and updates."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$999",
+                    "features": [
+                        "5-Page Website",
+                        "CMS Integration",
+                        "Contact Forms",
+                        "Basic SEO",
+                        "Mobile Responsive",
+                        "1 Month Support"
+                    ]
+                },
+                "professional": {
+                    "price": "$2,999",
+                    "features": [
+                        "E-commerce Store",
+                        "Payment Gateway",
+                        "Product Management",
+                        "Advanced SEO",
+                        "Speed Optimization",
+                        "3 Months Support"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Custom Web App",
+                        "Complex Database",
+                        "API Development",
+                        "High Traffic Scaling",
+                        "Security Audit",
+                        "12 Months Support"
+                    ]
+                }
+            }
+        },
+        "virtual_assistance": {
+            "title": "Virtual Assistance",
+            "description": "Delegate time-consuming tasks to our professional virtual assistants. Focus on growing your business while we handle the rest.",
+            "features": [
+                "Administrative Support",
+                "Data Entry & Management",
+                "Market Research",
+                "Calendar Management",
+                "Email Management",
+                "Travel Planning",
+                "CRM Management",
+                "Lead Generation",
+                "Social Media Scheduling"
+            ],
+            "benefits": [
+                "Save 20+ Hours/Week",
+                "Reduce Overhead Costs",
+                "Increase Productivity",
+                "Focus on Core Business",
+                "Flexible Scalability",
+                "No Training Required",
+                "24/7 Availability",
+                "Professional Representation"
+            ],
+            "technologies": [
+                "Google Workspace",
+                "Microsoft 365",
+                "Slack",
+                "Trello/Asana",
+                "Zoom",
+                "Salesforce",
+                "HubSpot",
+                "Calendly",
+                "LastPass"
+            ],
+            "process": [
+                "Onboarding - We learn your processes and preferences.",
+                "Task Delegation - You assign tasks via email or project management tool.",
+                "Execution - Your dedicated VA completes tasks efficiently.",
+                "Review - Regular check-ins to ensure quality and alignment.",
+                "Optimization - We suggest process improvements.",
+                "Scaling - Add more hours or VAs as needed."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$299/mo",
+                    "features": [
+                        "20 Hours/Month",
+                        "Dedicated VA",
+                        "Email & Chat Support",
+                        "Weekly Report",
+                        "General Admin Tasks",
+                        "Business Hours"
+                    ]
+                },
+                "professional": {
+                    "price": "$999/mo",
+                    "features": [
+                        "80 Hours/Month",
+                        "Senior VA",
+                        "Project Management",
+                        "Daily Reports",
+                        "Specialized Tasks",
+                        "Priority Support"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Full-Time Team",
+                        "Team Lead Included",
+                        "24/7 Coverage",
+                        "Custom Workflows",
+                        "SOP Creation",
+                        "Dedicated Slack Channel"
+                    ]
+                }
+            }
+        },
+        "customer_support": {
+            "title": "Customer Support",
+            "description": "Provide exceptional 24/7 support to your customers. Our trained team ensures high satisfaction and retention.",
+            "features": [
+                "Live Chat Support",
+                "Email Ticket Support",
+                "Phone Support",
+                "Social Media Moderation",
+                "Order Management",
+                "Refund Processing",
+                "Technical Troubleshooting",
+                "FAQ Management",
+                "Customer Success"
+            ],
+            "benefits": [
+                "24/7 Coverage",
+                "Higher CSAT Scores",
+                "Faster Response Times",
+                "Customer Retention",
+                "Brand Loyalty",
+                "Scalable Team",
+                "Multi-Language Support",
+                "Cost Efficiency"
+            ],
+            "technologies": [
+                "Zendesk",
+                "Intercom",
+                "Freshdesk",
+                "Salesforce Service Cloud",
+                "LiveChat",
+                "Slack",
+                "Shopify",
+                "Jira",
+                "Help Scout"
+            ],
+            "process": [
+                "Knowledge Transfer - We learn your product, policies, and tone.",
+                "Setup - Configuring support channels and tools.",
+                "Go Live - Team starts handling inquiries.",
+                "Quality Assurance - Monitoring responses for accuracy and empathy.",
+                "Reporting - Weekly insights on ticket volume and issues.",
+                "Feedback Loop - Suggesting product improvements based on user feedback."
+            ],
+            "pricing": {
+                "starter": {
+                    "price": "$299/mo",
+                    "features": [
+                        "Email Support",
+                        "8/5 Coverage",
+                        "24h Response Time",
+                        "Weekly Reporting",
+                        "1 Dedicated Agent",
+                        "Basic Training"
+                    ]
+                },
+                "professional": {
+                    "price": "$1,199/mo",
+                    "features": [
+                        "Live Chat + Email",
+                        "24/7 Coverage",
+                        "1h Response Time",
+                        "Daily Reporting",
+                        "3 Dedicated Agents",
+                        "Advanced Training"
+                    ]
+                },
+                "enterprise": {
+                    "price": "Custom",
+                    "features": [
+                        "Omnichannel Support",
+                        "Phone Support",
+                        "Dedicated Team Lead",
+                        "Custom SLAs",
+                        "Multi-Language",
+                        "QA Specialist"
+                    ]
+                }
+            }
+        }
+    }
+}

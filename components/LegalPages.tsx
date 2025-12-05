@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { APP_NAME, CONTACT_INFO } from '../constants';
 
 // Privacy Policy Page
 export const PrivacyPolicyPage: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       {/* Hero Section */}
@@ -17,10 +19,10 @@ export const PrivacyPolicyPage: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-              Privacy <span className="text-gradient">Policy</span>
+              {t('legal.privacy.title')} <span className="text-gradient">{t('legal.privacy.title_highlight')}</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: December 01, 2025
+              {t('legal.common.last_updated')}
             </p>
           </motion.div>
 
@@ -32,63 +34,62 @@ export const PrivacyPolicyPage: React.FC = () => {
           >
             <div className="space-y-8 text-slate-600 dark:text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">1. Introduction</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.intro.title')}</h2>
                 <p>
-                  Welcome to {APP_NAME} ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy.
-                  This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage with our digital services, including Brand Growth, Web Development, and UI/UX Design.
+                  <Trans i18nKey="legal.privacy.intro.text" values={{ appName: APP_NAME }} />
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">2. Information We Collect</h2>
-                <p className="mb-4">We collect personal information that you voluntarily provide to us when you:</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.collect.title')}</h2>
+                <p className="mb-4">{t('legal.privacy.collect.text')}</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Request a consultation or project quote</li>
-                  <li>Subscribe to our newsletter or marketing communications</li>
-                  <li>Engage with our "Slogan Generator" or "Health Audit" tools</li>
-                  <li>Contact us via email or our contact forms</li>
+                  <li>{t('legal.privacy.collect.list.1')}</li>
+                  <li>{t('legal.privacy.collect.list.2')}</li>
+                  <li>{t('legal.privacy.collect.list.3')}</li>
+                  <li>{t('legal.privacy.collect.list.4')}</li>
                 </ul>
                 <p className="mt-4">
-                  The personal information we collect may include names, email addresses, phone numbers, job titles, and specific business requirements relevant to your project.
+                  {t('legal.privacy.collect.text_2')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">3. How We Use Your Information</h2>
-                <p className="mb-4">We use personal information collected via our website for a variety of business purposes described below:</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.use.title')}</h2>
+                <p className="mb-4">{t('legal.privacy.use.text')}</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>To provide and deliver the services you request (e.g., delivering audit reports, project proposals)</li>
-                  <li>To communicate with you about your projects, appointments, and account updates</li>
-                  <li>To send you marketing and promotional communications regarding our latest services and offers</li>
-                  <li>To improve our website performance and user experience through analytics</li>
-                  <li>To protect our services and legal rights</li>
+                  <li>{t('legal.privacy.use.list.1')}</li>
+                  <li>{t('legal.privacy.use.list.2')}</li>
+                  <li>{t('legal.privacy.use.list.3')}</li>
+                  <li>{t('legal.privacy.use.list.4')}</li>
+                  <li>{t('legal.privacy.use.list.5')}</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">4. Sharing Your Information</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.sharing.title')}</h2>
                 <p>
-                  We do not sell your personal information. We only share information with your consent, to comply with laws, to provide you with services (e.g., sharing data with third-party advertising platforms like Meta or Google for your ad campaigns), or to fulfill business obligations.
+                  {t('legal.privacy.sharing.text')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">5. Security of Your Information</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.security.title')}</h2>
                 <p>
-                  We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.
+                  {t('legal.privacy.security.text')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">6. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.contact.title')}</h2>
                 <p>
-                  If you have questions or comments about this policy, you may email us at {CONTACT_INFO.email} or by post to:
+                  <Trans i18nKey="legal.common.contact_us.intro" values={{ email: CONTACT_INFO.email }} />
                 </p>
                 <div className="mt-4 p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
                   <p className="font-bold text-slate-900 dark:text-white">{APP_NAME}</p>
-                  <p>{CONTACT_INFO.address}</p>
-                  <p>Phone: {CONTACT_INFO.phone}</p>
-                  <p>Email: {CONTACT_INFO.email}</p>
+                  <p>{t('legal.common.contact_us.address')}: {CONTACT_INFO.address}</p>
+                  <p>{t('legal.common.contact_us.phone')}: {CONTACT_INFO.phone}</p>
+                  <p>{t('legal.common.contact_us.email')}: {CONTACT_INFO.email}</p>
                 </div>
               </section>
             </div>
@@ -100,7 +101,9 @@ export const PrivacyPolicyPage: React.FC = () => {
 };
 
 // Terms of Service Page
+// Terms of Service Page
 export const TermsOfServicePage: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       {/* Hero Section */}
@@ -114,10 +117,10 @@ export const TermsOfServicePage: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-              Terms of <span className="text-gradient">Service</span>
+              {t('legal.terms.title')} <span className="text-gradient">{t('legal.terms.title_highlight')}</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: December 01, 2025
+              {t('legal.common.last_updated')}
             </p>
           </motion.div>
 
@@ -129,54 +132,54 @@ export const TermsOfServicePage: React.FC = () => {
           >
             <div className="space-y-8 text-slate-600 dark:text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">1. Agreement to Terms</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.agreement.title')}</h2>
                 <p>
-                  These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and {APP_NAME} ("we," "us" or "our"), concerning your access to and use of the {APP_NAME} website and our digital agency services.
+                  <Trans i18nKey="legal.terms.agreement.text" values={{ appName: APP_NAME }} />
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">2. Intellectual Property Rights</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.ip.title')}</h2>
                 <p className="mb-4">
-                  Unless otherwise indicated, the Site is our proprietary property. However, regarding client projects:
+                  {t('legal.terms.ip.text')}
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Client Deliverables:</strong> Upon full payment, all final deliverables (e.g., website code, design assets, ad creatives) created specifically for the Client shall become the property of the Client.</li>
-                  <li><strong>Agency Tools:</strong> {APP_NAME} retains all rights to its background technology, frameworks, pre-existing code, and methodologies used to create the deliverables.</li>
-                  <li><strong>Portfolio Rights:</strong> We reserve the right to display completed projects in our portfolio and marketing materials unless a Non-Disclosure Agreement (NDA) is signed.</li>
+                  <li><Trans i18nKey="legal.terms.ip.list.deliverables" /></li>
+                  <li><Trans i18nKey="legal.terms.ip.list.tools" values={{ appName: APP_NAME }} /></li>
+                  <li><Trans i18nKey="legal.terms.ip.list.portfolio" /></li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">3. Service Engagement</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.engagement.title')}</h2>
                 <p className="mb-4">
-                  By engaging our services (Web Development, UI/UX Design, Marketing, etc.), you agree that:
+                  {t('legal.terms.engagement.text')}
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>You will provide all necessary content, assets, and information required for the project in a timely manner.</li>
-                  <li>Project timelines are estimates and may vary based on the scope of changes or delays in feedback.</li>
-                  <li>Payment terms are defined in your specific project proposal or contract.</li>
+                  <li>{t('legal.terms.engagement.list.1')}</li>
+                  <li>{t('legal.terms.engagement.list.2')}</li>
+                  <li>{t('legal.terms.engagement.list.3')}</li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">4. Prohibited Activities</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.prohibited.title')}</h2>
                 <p>
-                  You may not access or use the Site for any purpose other than that for which we make the Site available. The Site may not be used in connection with any commercial endeavors except those that are specifically endorsed or approved by us.
+                  {t('legal.terms.prohibited.text')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">5. Limitation of Liability</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.liability.title')}</h2>
                 <p>
-                  In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the site or our services, even if we have been advised of the possibility of such damages.
+                  {t('legal.terms.liability.text')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">6. Governing Law</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.governing.title')}</h2>
                 <p>
-                  These Terms shall be governed by and defined following the laws of Bangladesh. {APP_NAME} and yourself irrevocably consent that the courts of Khulna, Bangladesh shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.
+                  <Trans i18nKey="legal.terms.governing.text" values={{ appName: APP_NAME }} />
                 </p>
               </section>
             </div>
@@ -189,6 +192,7 @@ export const TermsOfServicePage: React.FC = () => {
 
 // Cookie Policy Page
 export const CookiePolicyPage: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       {/* Hero Section */}
@@ -202,10 +206,10 @@ export const CookiePolicyPage: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-              Cookie <span className="text-gradient">Policy</span>
+              {t('legal.cookies.title')} <span className="text-gradient">{t('legal.cookies.title_highlight')}</span>
             </h1>
             <p className="text-xl text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto font-light">
-              Last updated: December 01, 2025
+              {t('legal.common.last_updated')}
             </p>
           </motion.div>
 
@@ -217,72 +221,71 @@ export const CookiePolicyPage: React.FC = () => {
           >
             <div className="space-y-8 text-slate-600 dark:text-zinc-400 leading-relaxed font-light">
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">1. What Are Cookies</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.cookies.what_are.title')}</h2>
                 <p>
-                  Cookies are small text files that are stored on your computer or mobile device when you visit a website.
-                  They are widely used to make websites work more efficiently and to provide information to website owners.
+                  {t('legal.cookies.what_are.text')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">2. How We Use Cookies</h2>
-                <p className="mb-4">We use cookies for several purposes:</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.cookies.how_use.title')}</h2>
+                <p className="mb-4">{t('legal.cookies.how_use.text')}</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
-                  <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website (e.g., Google Analytics)</li>
-                  <li><strong>Functional Cookies:</strong> Remember your preferences and settings</li>
-                  <li><strong>Marketing Cookies:</strong> Used to track visitors and deliver personalized ads</li>
+                  <li><Trans i18nKey="legal.cookies.how_use.list.essential" /></li>
+                  <li><Trans i18nKey="legal.cookies.how_use.list.analytics" /></li>
+                  <li><Trans i18nKey="legal.cookies.how_use.list.functional" /></li>
+                  <li><Trans i18nKey="legal.cookies.how_use.list.marketing" /></li>
                 </ul>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">3. Types of Cookies We Use</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.cookies.types.title')}</h2>
 
                 <div className="space-y-6">
                   <div className="p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">Strictly Necessary Cookies</h3>
-                    <p>These cookies are essential for the website to function and cannot be switched off. They are usually set in response to actions you take such as setting privacy preferences or filling in forms.</p>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">{t('legal.cookies.types.strict.title')}</h3>
+                    <p>{t('legal.cookies.types.strict.text')}</p>
                   </div>
 
                   <div className="p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">Performance Cookies</h3>
-                    <p>These cookies collect information about how visitors use our website, such as which pages are visited most often. This data helps us improve how our website works.</p>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">{t('legal.cookies.types.performance.title')}</h3>
+                    <p>{t('legal.cookies.types.performance.text')}</p>
                   </div>
 
                   <div className="p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">Functionality Cookies</h3>
-                    <p>These cookies allow our website to remember choices you make and provide enhanced features and personal content.</p>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">{t('legal.cookies.types.functionality.title')}</h3>
+                    <p>{t('legal.cookies.types.functionality.text')}</p>
                   </div>
 
                   <div className="p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">Targeting Cookies</h3>
-                    <p>These cookies are used to deliver advertisements that are relevant to you and your interests. They may be used to limit the number of times you see an advertisement.</p>
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 font-heading">{t('legal.cookies.types.targeting.title')}</h3>
+                    <p>{t('legal.cookies.types.targeting.text')}</p>
                   </div>
                 </div>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">4. Managing Your Cookie Preferences</h2>
-                <p className="mb-4">You can control and manage cookies in several ways:</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.cookies.managing.title')}</h2>
+                <p className="mb-4">{t('legal.cookies.managing.text')}</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li>Use your browser settings to accept or reject cookies</li>
-                  <li>Delete existing cookies from your browser</li>
-                  <li>Set your browser to notify you when cookies are being sent</li>
+                  <li>{t('legal.cookies.managing.list.browser')}</li>
+                  <li>{t('legal.cookies.managing.list.delete')}</li>
+                  <li>{t('legal.cookies.managing.list.notify')}</li>
                 </ul>
                 <p className="mt-4">
-                  Please note that disabling certain cookies may affect the functionality of our website.
+                  {t('legal.cookies.managing.text_2')}
                 </p>
               </section>
 
               <section>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">5. Contact Us</h2>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.cookies.contact.title')}</h2>
                 <p>
-                  If you have any questions about our use of cookies, please contact us at:
+                  {t('legal.cookies.contact.text')}
                 </p>
                 <div className="mt-4 p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                  <p><strong>Email:</strong> {CONTACT_INFO.email}</p>
-                  <p><strong>Address:</strong> {CONTACT_INFO.address}</p>
-                  <p><strong>Phone:</strong> {CONTACT_INFO.phone}</p>
+                  <p><strong>{t('legal.common.contact_us.email')}:</strong> {CONTACT_INFO.email}</p>
+                  <p><strong>{t('legal.common.contact_us.address')}:</strong> {CONTACT_INFO.address}</p>
+                  <p><strong>{t('legal.common.contact_us.phone')}:</strong> {CONTACT_INFO.phone}</p>
                 </div>
               </section>
             </div>

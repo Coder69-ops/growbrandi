@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaLock, FaCheckCircle, FaHeadset, FaStar, FaClipboardList, FaWhatsapp, FaPlay } from 'react-icons/fa';
@@ -36,35 +37,36 @@ interface ServiceModalProps {
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
     if (!isOpen || !service) return null;
 
-    const processSteps = {
-        'Brand Strategy': [
-            { step: 'Discovery', description: 'Brand audit and market research', duration: '1-2 weeks' },
-            { step: 'Strategy', description: 'Brand positioning and messaging', duration: '1 week' },
-            { step: 'Design', description: 'Visual identity development', duration: '2-3 weeks' },
-            { step: 'Implementation', description: 'Brand guidelines and rollout', duration: '1 week' }
-        ],
-        'UI/UX Design': [
-            { step: 'Research', description: 'User research and analysis', duration: '1 week' },
-            { step: 'Wireframing', description: 'Information architecture', duration: '1-2 weeks' },
-            { step: 'Design', description: 'Visual design and prototyping', duration: '2-3 weeks' },
-            { step: 'Testing', description: 'User testing and refinement', duration: '1 week' }
-        ],
-        'Web Development': [
-            { step: 'Planning', description: 'Technical architecture and setup', duration: '1 week' },
-            { step: 'Development', description: 'Frontend and backend coding', duration: '4-6 weeks' },
-            { step: 'Testing', description: 'Quality assurance and debugging', duration: '1 week' },
-            { step: 'Launch', description: 'Deployment and go-live', duration: '1 week' }
-        ]
-    };
+    const { t } = useTranslation();
 
-    const defaultSteps = [
-        { step: 'Consultation', description: 'Understanding your requirements', duration: '1 week' },
-        { step: 'Strategy', description: 'Planning and approach', duration: '1-2 weeks' },
-        { step: 'Execution', description: 'Implementation and delivery', duration: '2-4 weeks' },
-        { step: 'Optimization', description: 'Testing and refinement', duration: '1 week' }
-    ];
+    // Dynamically retrieve process steps from translation file based on service title key
+    // service.title is now a key like 'services.brand_growth.title'
+    // We strip '.title' to get 'services.brand_growth'
+    const serviceRootKey = service.title.replace('.title', '');
 
-    const steps = processSteps[service.title as keyof typeof processSteps] || defaultSteps;
+    // Try to get process steps from translation, fallback to default if not found
+    const processStepsData = t(`${serviceRootKey}.process`, { returnObjects: true });
+
+    // Check if processStepsData is an object and has keys (not just the key string returned if missing)
+    let steps: any[] = [];
+
+    if (processStepsData && typeof processStepsData === 'object' && !Array.isArray(processStepsData)) {
+        steps = Object.values(processStepsData).map((step: any) => ({
+            step: step.title,
+            description: step.desc,
+            duration: step.duration
+        }));
+    } else {
+        // Fallback to default process if specific one not found
+        const defaultProcess = t('services.process.default', { returnObjects: true });
+        if (defaultProcess && typeof defaultProcess === 'object') {
+            steps = Object.values(defaultProcess).map((step: any) => ({
+                step: step.title,
+                description: step.desc,
+                duration: step.duration
+            }));
+        }
+    }
 
     return (
         <motion.div
@@ -102,13 +104,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 {service.icon}
                             </div>
                             <div>
-                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h2>
-                                <p className="text-blue-600 dark:text-blue-400 font-semibold text-lg">{service.price}</p>
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">{t(service.title)}</h2>
+                                <p className="text-blue-600 dark:text-blue-400 font-semibold text-lg">{t(service.price)}</p>
                             </div>
                         </div>
 
                         {/* Description */}
-                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
+                        <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(service.description)}</p>
 
                         {/* Features */}
                         <div>
@@ -117,7 +119,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                                 {service.features?.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3 bg-slate-50 dark:bg-white/5 p-3 rounded-xl border border-slate-100 dark:border-white/5">
                                         <FaCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
-                                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{feature}</span>
+                                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{t(feature)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -176,7 +178,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         {/* AI Widget in Modal */}
                         <div className="mt-8 pt-8 border-t border-slate-200 dark:border-white/10">
                             <h3 className="text-slate-900 dark:text-white font-semibold text-xl mb-4">Get an Instant Estimate</h3>
-                            <ServiceAIWidget serviceTitle={service.title} compact={true} />
+                            <ServiceAIWidget serviceTitle={t(service.title)} compact={true} />
                         </div>
 
                         {/* Trust Indicators */}
@@ -207,13 +209,15 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => {
-    // Check service types for specific visuals
-    const isSocialMedia = service.title === 'Creative Studio';
-    const isBrandGrowth = service.title === 'Performance Marketing';
-    const isUIUX = service.title === 'UI/UX Design';
-    const isWebDev = service.title === 'Web & Shopify Dev';
-    const isVA = service.title === 'E-commerce Management';
-    const isSupport = service.title === 'Social Media Management';
+    const { t } = useTranslation();
+
+    // Check service types for specific visuals based on keys
+    const isSocialMedia = service.title === 'services.creative_studio.title';
+    const isBrandGrowth = service.title === 'services.performance_marketing.title';
+    const isUIUX = service.title === 'services.ui_ux_design.title';
+    const isWebDev = service.title === 'services.web_shopify_dev.title';
+    const isVA = service.title === 'services.ecommerce_management.title';
+    const isSupport = service.title === 'services.social_media_management.title';
 
     return (
         <GlassCard
@@ -246,10 +250,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 
                 {/* Service Content */}
                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                    {service.title}
+                    {t(service.title)}
                 </h3>
                 <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm">
-                    {service.description}
+                    {t(service.description)}
                 </p>
 
                 {/* Priority 1: Social Media Visual Artifact */}
@@ -510,7 +514,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     {service.features?.slice(0, 4).map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
                             <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full flex-shrink-0" />
-                            <span className="truncate">{feature}</span>
+                            <span className="truncate">{t(feature)}</span>
                         </div>
                     ))}
                 </div>
@@ -518,7 +522,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                 {/* Price */}
                 <div className="mb-6 pt-4 border-t border-slate-100 dark:border-white/5">
                     <div className={`text-xl font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>
-                        {service.price}
+                        {t(service.price)}
                     </div>
                     <div className="text-slate-400 dark:text-zinc-500 text-xs mt-1">No hidden fees</div>
                 </div>
@@ -531,14 +535,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
-                        Learn More
+                        {t('common.learn_more')}
                     </motion.button>
                     <button
                         onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
                         className="w-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 py-2.5 px-6 rounded-xl text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2"
                     >
                         <FaWhatsapp className="w-4 h-4 text-green-500" />
-                        Chat on WhatsApp
+                        {t('common.chat_whatsapp')}
                     </button>
                 </div>
             </div>
@@ -549,6 +553,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 // --- Enhanced Services Preview Section ---
 const ServicesPreview: React.FC = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -564,10 +569,10 @@ const ServicesPreview: React.FC = () => {
 
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <SectionHeading
-                        badge="GrowBrandi Premium Services"
-                        title="Comprehensive Digital Solutions"
-                        highlight="For Your Business"
-                        description="Transform your business with GrowBrandi's award-winning services that combine intelligent technology with data-driven strategies."
+                        badge={t('services.preview.badge')}
+                        title={t('services.preview.title')}
+                        highlight={t('services.preview.highlight')}
+                        description={t('services.preview.description')}
                     />
 
                     {/* Enhanced Services Grid */}
@@ -584,7 +589,7 @@ const ServicesPreview: React.FC = () => {
                                 service={service}
                                 index={index}
                                 onLearnMore={() => handleLearnMore(service)}
-                                featured={service.title === 'UI/UX Design'}
+                                featured={service.title === 'services.ui_ux_design.title'}
                             />
                         ))}
                     </motion.div>
@@ -599,19 +604,19 @@ const ServicesPreview: React.FC = () => {
                     >
                         <div className="text-center mb-12">
                             <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-4">
-                                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">Proven Process</span>
+                                {t('services.preview.process_title')}
                             </h3>
                             <p className="text-slate-600 dark:text-zinc-400 max-w-2xl mx-auto">
-                                Every project follows our streamlined methodology for consistent, high-quality results.
+                                {t('services.preview.process_desc')}
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                             {[
-                                { icon: <FaSearch />, title: 'Discovery', desc: 'Understanding goals' },
-                                { icon: <FaLightbulb />, title: 'Strategy', desc: 'Crafting solutions' },
-                                { icon: <FaRocket />, title: 'Execution', desc: 'Precision delivery' },
-                                { icon: <FaChartLine />, title: 'Optimization', desc: 'Continuous growth' }
+                                { icon: <FaSearch />, title: t('services.preview.process_steps.discovery.title'), desc: t('services.preview.process_steps.discovery.desc') },
+                                { icon: <FaLightbulb />, title: t('services.preview.process_steps.strategy.title'), desc: t('services.preview.process_steps.strategy.desc') },
+                                { icon: <FaRocket />, title: t('services.preview.process_steps.execution.title'), desc: t('services.preview.process_steps.execution.desc') },
+                                { icon: <FaChartLine />, title: t('services.preview.process_steps.optimization.title'), desc: t('services.preview.process_steps.optimization.desc') }
                             ].map((step, index) => (
                                 <GlassCard
                                     key={index}
@@ -638,20 +643,20 @@ const ServicesPreview: React.FC = () => {
                     >
                         <GlassCard className="p-8 md:p-12 max-w-4xl mx-auto bg-gradient-to-br from-slate-900 to-slate-800 dark:from-white/10 dark:to-white/5 border-none text-white">
                             <h3 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                                Ready to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Transform Your Business?</span>
+                                {t('services.preview.cta_title')}
                             </h3>
                             <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                                Choose from our comprehensive service offerings or let us create a custom solution tailored specifically to your unique business needs.
+                                {t('services.preview.cta_desc')}
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <motion.button
-                                    onClick={() => navigate('/services')}
-                                    className="inline-flex items-center justify-center gap-3 bg-blue-500 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg shadow-blue-500/25 hover:bg-blue-600 transition-all"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => navigate('/contact')}
+                                    className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:shadow-[0_0_30px_rgba(59,130,246,0.7)] hover:scale-105 transition-all duration-300"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
-                                    <FaClipboardList className="w-5 h-5" />
-                                    Explore All Services
+                                    <FaRocket className="w-5 h-5" />
+                                    {t('services.preview.cta_button')}
                                     <FaArrowRight className="w-4 h-4" />
                                 </motion.button>
                                 <motion.button
@@ -661,23 +666,27 @@ const ServicesPreview: React.FC = () => {
                                     whileTap={{ scale: 0.98 }}
                                 >
                                     <FaWhatsapp className="w-5 h-5" />
-                                    Chat on WhatsApp
+                                    {t('common.chat_whatsapp')}
                                 </motion.button>
                             </div>
 
                             {/* Trust Indicators */}
                             <div className="flex flex-wrap items-center justify-center gap-6 mt-8 pt-8 border-t border-white/10">
                                 <div className="flex items-center gap-2">
-                                    <FaLock className="w-4 h-4 text-blue-400" />
-                                    <span className="text-slate-300 text-sm">SSL Secured</span>
+                                    <FaLock className="w-4 h-4 text-emerald-400" />
+                                    <span className="text-slate-300 text-sm font-medium">{t('common.secure_payments')}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaCheckCircle className="w-4 h-4 text-blue-400" />
-                                    <span className="text-slate-300 text-sm">Money Back Guarantee</span>
+                                    <FaCheckCircle className="w-4 h-4 text-emerald-400" />
+                                    <span className="text-slate-300 text-sm font-medium">{t('common.satisfaction_guarantee')}</span>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <FaHeadset className="w-4 h-4 text-blue-400" />
-                                    <span className="text-slate-300 text-sm">24/7 Support</span>
+                                    <FaHeadset className="w-4 h-4 text-emerald-400" />
+                                    <span className="text-slate-300 text-sm font-medium">{t('common.support_team')}</span>
+                                </div>
+                                <div className="hidden sm:flex items-center gap-2">
+                                    <FaStar className="w-4 h-4 text-yellow-400" />
+                                    <span className="text-slate-300 text-sm font-medium">{t('common.rated_agency')}</span>
                                 </div>
                             </div>
                         </GlassCard>

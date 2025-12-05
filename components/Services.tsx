@@ -1,5 +1,6 @@
 import React, { useRef, useState, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { FaTimes, FaCheck, FaCircle, FaStar, FaShieldAlt, FaLayerGroup, FaGem, FaCommentDots, FaChartPie, FaLock, FaCheckCircle, FaHeadset, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { SERVICES } from '../constants';
@@ -34,53 +35,26 @@ interface ServiceModalProps {
 
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  // Get process steps from translation.json using service id
+  // Fallback to default process if specific process not found
+  const stepsData = service ? t(`services.${service.id}.process`, { returnObjects: true }) : null;
+  const defaultSteps = t('services.process.default', { returnObjects: true });
+
+  let steps: any[] = [];
+  if (stepsData && Array.isArray(stepsData)) {
+    steps = stepsData;
+  } else if (defaultSteps) {
+    // If defaultSteps is an object (step1, step2...), convert to array
+    steps = Object.values(defaultSteps);
+  }
+
+  // Get why choose benefits from translation
+  const benefitsData = t('services.ui.benefits', { returnObjects: true });
+  const benefits = Array.isArray(benefitsData) ? benefitsData : [];
+
   if (!isOpen || !service) return null;
-
-  const processSteps = {
-    'Brand Strategy': [
-      { step: 'Discovery', description: 'Brand audit and market research', duration: '1-2 weeks' },
-      { step: 'Strategy', description: 'Brand positioning and messaging', duration: '1 week' },
-      { step: 'Design', description: 'Visual identity development', duration: '2-3 weeks' },
-      { step: 'Implementation', description: 'Brand guidelines and rollout', duration: '1 week' }
-    ],
-    'UI/UX Design': [
-      { step: 'Research', description: 'User research and analysis', duration: '1 week' },
-      { step: 'Wireframing', description: 'Information architecture', duration: '1-2 weeks' },
-      { step: 'Design', description: 'Visual design and prototyping', duration: '2-3 weeks' },
-      { step: 'Testing', description: 'User testing and refinement', duration: '1 week' }
-    ],
-    'Web Development': [
-      { step: 'Planning', description: 'Technical architecture and setup', duration: '1 week' },
-      { step: 'Development', description: 'Frontend and backend coding', duration: '4-6 weeks' },
-      { step: 'Testing', description: 'Quality assurance and debugging', duration: '1 week' },
-      { step: 'Launch', description: 'Deployment and go-live', duration: '1 week' }
-    ],
-    'Content Creation': [
-      { step: 'Strategy', description: 'Content planning and research', duration: '1 week' },
-      { step: 'Creation', description: 'Content development and writing', duration: '2-3 weeks' },
-      { step: 'Review', description: 'Quality assurance and editing', duration: '1 week' },
-      { step: 'Optimization', description: 'SEO and performance tuning', duration: '1 week' }
-    ],
-    'SEO Optimization': [
-      { step: 'Audit', description: 'Website and competitor analysis', duration: '1 week' },
-      { step: 'Strategy', description: 'Keyword research and planning', duration: '1 week' },
-      { step: 'Implementation', description: 'On-page and technical SEO', duration: '2-3 weeks' },
-      { step: 'Monitoring', description: 'Performance tracking and optimization', duration: 'Ongoing' }
-    ],
-    'Digital Marketing': [
-      { step: 'Analysis', description: 'Market research and audience analysis', duration: '1 week' },
-      { step: 'Strategy', description: 'Campaign planning and setup', duration: '1 week' },
-      { step: 'Execution', description: 'Campaign launch and management', duration: '2-4 weeks' },
-      { step: 'Optimization', description: 'Performance analysis and improvement', duration: 'Ongoing' }
-    ]
-  };
-
-  const steps = processSteps[service.title as keyof typeof processSteps] || [
-    { step: 'Consultation', description: 'Understanding your requirements', duration: '1 week' },
-    { step: 'Strategy', description: 'Planning and approach', duration: '1-2 weeks' },
-    { step: 'Execution', description: 'Implementation and delivery', duration: '2-4 weeks' },
-    { step: 'Optimization', description: 'Testing and refinement', duration: '1 week' }
-  ];
 
   return (
     <AnimatePresence>
@@ -119,8 +93,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                   {service.icon}
                 </div>
                 <div className="text-white mb-1">
-                  <h2 className="text-3xl md:text-4xl font-bold">{service.title}</h2>
-                  <p className="text-white/80 font-medium text-lg">{service.price}</p>
+                  <h2 className="text-3xl md:text-4xl font-bold">{t(service.title)}</h2>
+                  <p className="text-white/80 font-medium text-lg">{t(service.price)}</p>
                 </div>
               </div>
             </div>
@@ -129,19 +103,19 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               {/* Left Column */}
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Overview</h3>
-                  <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{service.description}</p>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('services.ui.overview')}</h3>
+                  <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(service.description)}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Complete Package Includes</h3>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">{t('services.ui.package_includes')}</h3>
                   <div className="grid grid-cols-1 gap-3">
                     {service.features?.map((feature, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm">
                         <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
                           <FaCheck className="w-3 h-3 text-green-500" />
                         </div>
-                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{feature}</span>
+                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{t(feature)}</span>
                       </div>
                     ))}
                   </div>
@@ -150,16 +124,10 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 <div className="p-6 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-500/10">
                   <h3 className="text-blue-900 dark:text-blue-100 font-bold mb-4 flex items-center gap-2">
                     <FaShieldAlt className="w-5 h-5" />
-                    Why Choose This Service?
+                    {t('services.ui.why_choose')}
                   </h3>
                   <div className="space-y-3">
-                    {[
-                      'Dedicated project manager assigned',
-                      '24/7 priority customer support',
-                      'Unlimited revisions until satisfied',
-                      '30-day money-back guarantee',
-                      'Post-launch support included'
-                    ].map((benefit, index) => (
+                    {benefits.map((benefit: string, index: number) => (
                       <div key={index} className="flex items-center gap-3">
                         <FaCircle className="w-2 h-2 text-blue-500" />
                         <span className="text-slate-700 dark:text-blue-200/80 text-sm">{benefit}</span>
@@ -174,7 +142,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Our Proven Process</h3>
                   <div className="space-y-6">
-                    {steps.map((step, index) => (
+                    {steps.map((step: any, index: number) => (
                       <div key={index} className="relative pl-8 border-l-2 border-slate-200 dark:border-white/10 last:border-0">
                         <div className={`absolute -left-[9px] top-0 w-4 h-4 rounded-full border-2 border-white dark:border-zinc-900 ${index === 0 ? 'bg-blue-500' : 'bg-slate-300 dark:bg-zinc-700'}`} />
 
@@ -197,18 +165,18 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                     onClick={() => navigate('/contact', { state: { service: service.title } })}
                     className={`w-full bg-gradient-to-r ${service.color} text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2`}
                   >
-                    Start Your Project Now <FaArrowRight className="w-4 h-4" />
+                    {t('services.ui.start_project')} <FaArrowRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => navigate('/contact')}
                     className="w-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white py-4 px-8 rounded-xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-300"
                   >
-                    Schedule Free Consultation
+                    {t('services.ui.schedule_consultation')}
                   </button>
 
                   <div className="flex items-center justify-center gap-2 mt-4 text-sm text-slate-500 dark:text-zinc-500">
                     <FaLock className="w-3 h-3" />
-                    <span>Secure payment & money-back guarantee</span>
+                    <span>{t('services.ui.secure_payment')}</span>
                   </div>
                 </div>
               </div>
@@ -228,6 +196,7 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, featured = false }) => {
+  const { t } = useTranslation();
   return (
     <GlassCard
       className={`h-full flex flex-col p-0 overflow-hidden ${featured ? 'ring-2 ring-blue-500/50 dark:ring-blue-400/50' : ''}`}
@@ -236,7 +205,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
       {featured && (
         <div className="absolute top-4 right-4 z-20">
           <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-            POPULAR
+            {t('services.ui.popular')}
           </div>
         </div>
       )}
@@ -251,18 +220,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{service.title}</h3>
-        <p className={`text-lg font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>{service.price}</p>
+        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t(service.title)}</h3>
+        <p className={`text-lg font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>{t(service.price)}</p>
       </div>
 
       <div className="p-8 pt-4 flex-grow flex flex-col">
-        <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{service.description}</p>
+        <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{t(service.description)}</p>
 
         <div className="space-y-3 mb-8">
           {service.features?.slice(0, 3).map((feature, index) => (
             <div key={index} className="flex items-center text-sm text-slate-600 dark:text-zinc-400">
               <FaCheckCircle className="w-4 h-4 text-blue-500 mr-3 flex-shrink-0" />
-              {feature}
+              {t(feature)}
             </div>
           ))}
         </div>
@@ -271,7 +240,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
           onClick={onLearnMore}
           className="w-full py-3 rounded-xl font-bold text-sm bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white hover:bg-blue-500 hover:text-white dark:hover:bg-blue-500 transition-all duration-300 border border-slate-200 dark:border-white/10"
         >
-          View Details
+          {t('services.ui.view_details')}
         </button>
       </div>
     </GlassCard>

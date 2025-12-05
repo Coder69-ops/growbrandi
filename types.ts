@@ -7,6 +7,7 @@ export interface ChatMessage {
 }
 
 export interface Service {
+  id: string;
   title: string;
   description: string;
   icon: React.ReactElement;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaQuestionCircle, FaEnvelope } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +14,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
   isOpen,
   onClick
 }) => {
+  const { t } = useTranslation();
   return (
     <GlassCard
       className="overflow-hidden p-0"
@@ -29,7 +31,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             <FaQuestionCircle className="w-4 h-4" />
           </div>
           <h3 className={`text-lg md:text-xl font-bold transition-colors duration-300 ${isOpen ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
-            {question}
+            {t(question)}
           </h3>
         </div>
         <motion.div
@@ -50,7 +52,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
             className="overflow-hidden bg-slate-50/50 dark:bg-white/5"
           >
             <div className="px-8 pb-8 pt-2 pl-[4.5rem]">
-              <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{answer}</p>
+              <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(answer)}</p>
             </div>
           </motion.div>
         )}
@@ -60,6 +62,7 @@ const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onC
 };
 
 const FAQ: React.FC = () => {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const navigate = useNavigate();
 
@@ -73,10 +76,10 @@ const FAQ: React.FC = () => {
 
       <div className="container mx-auto max-w-4xl relative z-10">
         <SectionHeading
-          badge="Common Questions"
-          title="Frequently Asked"
+          badge={t('section_headers.faq.badge')}
+          title={t('section_headers.faq.title')}
           highlight="Questions"
-          description="Get answers to common questions about our services, process, and how we can help transform your business with our AI-powered digital solutions."
+          description={t('section_headers.faq.description')}
         />
 
         <motion.div
@@ -120,10 +123,10 @@ const FAQ: React.FC = () => {
         >
           <GlassCard className="p-8 md:p-10 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-              Still have questions?
+              {t('section_headers.faq.cta_title')}
             </h3>
             <p className="text-slate-600 dark:text-zinc-300 mb-8 max-w-xl mx-auto">
-              Can't find the answer you're looking for? Our team is here to help you with any specific inquiries you may have.
+              {t('section_headers.faq.cta_desc')}
             </p>
             <motion.button
               onClick={() => navigate('/contact')}
@@ -132,7 +135,7 @@ const FAQ: React.FC = () => {
               whileTap={{ scale: 0.98 }}
             >
               <FaEnvelope className="w-4 h-4" />
-              Contact Our Team
+              {t('section_headers.faq.cta_button')}
             </motion.button>
           </GlassCard>
         </motion.div>

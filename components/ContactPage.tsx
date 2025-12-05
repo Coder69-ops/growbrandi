@@ -1,4 +1,5 @@
 import React, { useState, FormEvent, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone } from 'react-icons/fa';
@@ -15,6 +16,7 @@ import { SectionHeading } from './ui/SectionHeading';
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ContactPage: React.FC = () => {
+    const { t } = useTranslation();
     const location = useLocation();
     const [formData, setFormData] = useState({
         name: '',
@@ -197,10 +199,10 @@ I would like to book this consultation.`;
                     className="flex flex-col justify-center"
                 >
                     <SectionHeading
-                        badge="Get in Touch"
-                        title="Let's Build"
+                        badge={t('contact_page.badge')}
+                        title={t('contact_page.title')}
                         highlight="Something Epic"
-                        description="Ready to transform your digital presence? We're here to help you scale, innovate, and dominate your market with AI-driven solutions."
+                        description={t('contact_page.description')}
                         align="left"
                     />
 
@@ -213,8 +215,8 @@ I would like to book this consultation.`;
                                 <FaMagic className="w-4 h-4" />
                             </div>
                             <div className="text-left">
-                                <p className="text-sm text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider">Not sure where to start?</p>
-                                <p className="text-slate-900 dark:text-white font-semibold">Try our AI Project Assistant</p>
+                                <p className="text-sm text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider">{t('contact_page.assistant_prompt')}</p>
+                                <p className="text-slate-900 dark:text-white font-semibold">{t('contact_page.assistant_button')}</p>
                             </div>
                         </button>
                     </div>
@@ -225,9 +227,9 @@ I would like to book this consultation.`;
                                 <FaEnvelope className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Email Us</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.email')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.email}</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">Response within 24 hours</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{t('contact_page.info.response_time')}</p>
                             </div>
                         </GlassCard>
 
@@ -236,7 +238,7 @@ I would like to book this consultation.`;
                                 <FaPhone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Phone & WhatsApp</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.call')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.phone}</p>
                                 <a
                                     href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
@@ -244,7 +246,7 @@ I would like to book this consultation.`;
                                     rel="noopener noreferrer"
                                     className="text-green-600 dark:text-green-400 text-sm font-medium hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
                                 >
-                                    Chat on WhatsApp <FaArrowRight className="w-3 h-3" />
+                                    {t('projects_preview.cta_whatsapp')} <FaArrowRight className="w-3 h-3" />
                                 </a>
                             </div>
                         </GlassCard>
@@ -254,9 +256,9 @@ I would like to book this consultation.`;
                                 <FaMapMarkerAlt className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Global HQ</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.visit')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.address}</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">Digital-first agency</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{t('contact_page.info.hq_desc')}</p>
                             </div>
                         </GlassCard>
                     </div>
@@ -329,7 +331,7 @@ I would like to book this consultation.`;
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="name" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Name</label>
+                                            <label htmlFor="name" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">{t('contact_page.form.name')}</label>
                                             <input
                                                 type="text"
                                                 id="name"
@@ -344,7 +346,7 @@ I would like to book this consultation.`;
                                             />
                                         </div>
                                         <div>
-                                            <label htmlFor="email" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Email</label>
+                                            <label htmlFor="email" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">{t('contact_page.form.email')}</label>
                                             <input
                                                 type="email"
                                                 id="email"
@@ -362,7 +364,7 @@ I would like to book this consultation.`;
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label htmlFor="service" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Service Interest</label>
+                                            <label htmlFor="service" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">{t('contact_page.form.service')}</label>
                                             <select
                                                 id="service"
                                                 name="service"
@@ -374,11 +376,11 @@ I would like to book this consultation.`;
                                                 required
                                             >
                                                 <option value="" disabled>Select a service</option>
-                                                {serviceOptions.map(s => <option key={s} value={s} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">{s}</option>)}
+                                                {serviceOptions.map(s => <option key={s} value={t(s)} className="bg-white dark:bg-zinc-900 text-slate-900 dark:text-white">{t(s)}</option>)}
                                             </select>
                                         </div>
                                         <div>
-                                            <label htmlFor="subject" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">Subject</label>
+                                            <label htmlFor="subject" className="block text-xs font-bold text-slate-500 dark:text-zinc-400 mb-2 uppercase tracking-wider">{t('contact_page.form.subject')}</label>
                                             <input
                                                 type="text"
                                                 id="subject"
@@ -441,9 +443,24 @@ I would like to book this consultation.`;
                                         {formStatus === 'submitting' ? (
                                             <LoadingSpinner />
                                         ) : (
-                                            <>Send Message <FaPaperPlane /></>
+                                            <>{t('contact_page.form.submit')} <FaPaperPlane /></>
                                         )}
                                     </motion.button>
+
+                                    <div className="flex items-center gap-4 my-2">
+                                        <div className="h-px bg-slate-200 dark:bg-white/10 flex-1" />
+                                        <span className="text-xs text-slate-400 font-medium uppercase">or</span>
+                                        <div className="h-px bg-slate-200 dark:bg-white/10 flex-1" />
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                        className="w-full py-4 rounded-xl font-bold text-lg border-2 border-green-500/20 hover:border-green-500/50 text-slate-700 dark:text-white hover:bg-green-50 dark:hover:bg-green-500/10 transition-all duration-300 flex items-center justify-center gap-2 group"
+                                    >
+                                        <FaWhatsapp className="w-6 h-6 text-green-500 group-hover:scale-110 transition-transform" />
+                                        {t('projects_preview.cta_whatsapp')}
+                                    </button>
 
                                     <AnimatePresence>
                                         {formStatus === 'error' && (
@@ -464,6 +481,6 @@ I would like to book this consultation.`;
                 </motion.div>
             </div>
             <ContactAssistant isOpen={isAssistantOpen} onClose={() => setIsAssistantOpen(false)} />
-        </section>
+        </section >
     );
 };
