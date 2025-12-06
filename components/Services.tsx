@@ -10,6 +10,7 @@ import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { getIcon } from '../src/utils/icons';
 import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,7 +38,10 @@ interface ServiceModalProps {
 
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  // Helper to get text safely
+  const txt = (field: any) => t(getLocalizedField(field, i18n.language));
 
   // Get process steps from translation.json using service id
   // Fallback to default process if specific process not found
@@ -95,8 +99,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                   {getIcon(service.icon, "w-8 h-8")}
                 </div>
                 <div className="text-white mb-1">
-                  <h2 className="text-3xl md:text-4xl font-bold">{t(service.title)}</h2>
-                  <p className="text-white/80 font-medium text-lg">{t(service.price)}</p>
+                  <h2 className="text-3xl md:text-4xl font-bold">{txt(service.title)}</h2>
+                  <p className="text-white/80 font-medium text-lg">{txt(service.price)}</p>
                 </div>
               </div>
             </div>
@@ -106,7 +110,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
               <div className="space-y-8">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">{t('services.ui.overview')}</h3>
-                  <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{t(service.description)}</p>
+                  <p className="text-slate-600 dark:text-zinc-300 leading-relaxed text-lg">{txt(service.description)}</p>
                 </div>
 
                 <div>
@@ -117,7 +121,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                         <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
                           <FaCheck className="w-3 h-3 text-green-500" />
                         </div>
-                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{t(feature)}</span>
+                        <span className="text-slate-700 dark:text-zinc-300 font-medium">{txt(feature)}</span>
                       </div>
                     ))}
                   </div>
@@ -164,7 +168,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                 <div className="sticky top-0 space-y-4 pt-4">
                   <button
-                    onClick={() => navigate('/contact', { state: { service: service.title } })}
+                    onClick={() => navigate('/contact', { state: { service: txt(service.title) } })}
                     className={`w-full bg-gradient-to-r ${service.color} text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2`}
                   >
                     {t('services.ui.start_project')} <FaArrowRight className="w-4 h-4" />
@@ -198,7 +202,9 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, featured = false }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const txt = (field: any) => t(getLocalizedField(field, i18n.language));
+
   return (
     <GlassCard
       className={`h-full flex flex-col p-0 overflow-hidden ${featured ? 'ring-2 ring-blue-500/50 dark:ring-blue-400/50' : ''}`}
@@ -222,18 +228,18 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t(service.title)}</h3>
-        <p className={`text-lg font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>{t(service.price)}</p>
+        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{txt(service.title)}</h3>
+        <p className={`text-lg font-bold bg-gradient-to-r ${service.color} bg-clip-text text-transparent`}>{txt(service.price)}</p>
       </div>
 
       <div className="p-8 pt-4 flex-grow flex flex-col">
-        <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{t(service.description)}</p>
+        <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{txt(service.description)}</p>
 
         <div className="space-y-3 mb-8">
           {service.features?.slice(0, 3).map((feature, index) => (
             <div key={index} className="flex items-center text-sm text-slate-600 dark:text-zinc-400">
               <FaCheckCircle className="w-4 h-4 text-blue-500 mr-3 flex-shrink-0" />
-              {t(feature)}
+              {txt(feature)}
             </div>
           ))}
         </div>
@@ -257,25 +263,43 @@ export const ServicesPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (services) {
-      setDisplayedServices(services);
-      // Re-apply filter if needed when data updates
-      if (activeFilter !== 'All') {
-        const categoryServices = serviceCategories[activeFilter as keyof typeof serviceCategories] || [];
-        setDisplayedServices(services.filter(service => categoryServices.includes(service.title)));
-      }
+      // Optimized filtering which respects both data IDs and English titles
+      const filterServices = () => {
+        if (activeFilter === 'All') return services;
+
+        const categoryIds = serviceCategories[activeFilter as keyof typeof serviceCategories] || [];
+        return services.filter(service => {
+          // Check exact ID match or contained in ID
+          const idMatch = categoryIds.some(cat => service.id.includes(cat) || (service as any).serviceId?.includes(cat));
+          // Check title match (safely get EN title)
+          const title = getLocalizedField(service.title, 'en');
+          const titleMatch = categoryIds.some(cat => title.includes(cat));
+
+          return idMatch || titleMatch;
+        });
+      };
+
+      setDisplayedServices(filterServices());
     }
   }, [services, activeFilter]);
 
   const categories = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
 
   const serviceCategories = {
-    'Design': ['UI/UX Design', 'Brand Strategy', 'ui_ux_design'],
-    'Development': ['Web Development', 'web_development'],
-    'Marketing': ['SEO Optimization', 'Digital Marketing', 'Content Creation', 'performance_marketing'],
-    'Strategy': ['Brand Strategy', 'Digital Marketing', 'creative_studio']
+    'Design': ['UI/UX Design', 'Brand Strategy', 'ui_ux_design', 'creative_studio'],
+    'Development': ['Web Development', 'web_shopify_dev', 'web_development'],
+    'Marketing': ['SEO Optimization', 'Digital Marketing', 'Content Creation', 'performance_marketing', 'social_media_management'],
+    'Strategy': ['Brand Strategy', 'Digital Marketing', 'creative_studio', 'ecommerce_management']
+  };
+
+  // Helper for title checking
+  const getIsFeatured = (title: any) => {
+    const t = getLocalizedField(title, 'en');
+    return t === 'UI/UX Design' || t.includes('UI/UX');
   };
 
   const handleLearnMore = (service: Service) => {
@@ -285,7 +309,6 @@ export const ServicesPage: React.FC = () => {
 
   const handleFilterChange = (category: string) => {
     setActiveFilter(category);
-    // useEffect will handle the actual filtering
   };
 
   return (
@@ -330,7 +353,7 @@ export const ServicesPage: React.FC = () => {
             <AnimatePresence mode='popLayout'>
               {displayedServices.map((service, index) => (
                 <motion.div
-                  key={service.title}
+                  key={service.id || index}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -340,7 +363,7 @@ export const ServicesPage: React.FC = () => {
                   <ServiceCard
                     service={service}
                     onLearnMore={() => handleLearnMore(service)}
-                    featured={service.title === 'UI/UX Design'}
+                    featured={getIsFeatured(service.title)}
                   />
                 </motion.div>
               ))}

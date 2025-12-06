@@ -12,11 +12,17 @@ import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 
+import { useContent } from '../src/hooks/useContent';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
+import { SupportedLanguage } from '../src/utils/localization';
+
 // --- ContactPage Component ---
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ContactPage: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const { getText } = useSiteContentData();
+    const lang = i18n.language as SupportedLanguage;
     const location = useLocation();
     const [formData, setFormData] = useState({
         name: '',
@@ -199,10 +205,10 @@ I would like to book this consultation.`;
                     className="flex flex-col justify-center"
                 >
                     <SectionHeading
-                        badge={t('contact_page.badge')}
-                        title={t('contact_page.title')}
-                        highlight="Something Epic"
-                        description={t('contact_page.description')}
+                        badge={getText('contact.hero.badge', lang) || t('contact_page.badge')}
+                        title={getText('contact.hero.title', lang) || t('contact_page.title')}
+                        highlight={getText('contact.hero.highlight', lang) || "Something Epic"}
+                        description={getText('contact.hero.description', lang) || t('contact_page.description')}
                         align="left"
                     />
 
@@ -215,8 +221,8 @@ I would like to book this consultation.`;
                                 <FaMagic className="w-4 h-4" />
                             </div>
                             <div className="text-left">
-                                <p className="text-sm text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider">{t('contact_page.assistant_prompt')}</p>
-                                <p className="text-slate-900 dark:text-white font-semibold">{t('contact_page.assistant_button')}</p>
+                                <p className="text-sm text-blue-500 dark:text-blue-400 font-bold uppercase tracking-wider">{getText('contact.assistant.prompt', lang) || t('contact_page.assistant_prompt')}</p>
+                                <p className="text-slate-900 dark:text-white font-semibold">{getText('contact.assistant.button', lang) || t('contact_page.assistant_button')}</p>
                             </div>
                         </button>
                     </div>
@@ -227,9 +233,9 @@ I would like to book this consultation.`;
                                 <FaEnvelope className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.email')}</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.email', lang) || t('contact_page.info.email')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.email}</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{t('contact_page.info.response_time')}</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.response_time', lang) || t('contact_page.info.response_time')}</p>
                             </div>
                         </GlassCard>
 
@@ -238,7 +244,7 @@ I would like to book this consultation.`;
                                 <FaPhone className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.call')}</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.call', lang) || t('contact_page.info.call')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.phone}</p>
                                 <a
                                     href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
@@ -256,9 +262,9 @@ I would like to book this consultation.`;
                                 <FaMapMarkerAlt className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{t('contact_page.info.visit')}</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.visit', lang) || t('contact_page.info.visit')}</h3>
                                 <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.address}</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{t('contact_page.info.hq_desc')}</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.hq_description', lang) || t('contact_page.info.hq_desc')}</p>
                             </div>
                         </GlassCard>
                     </div>

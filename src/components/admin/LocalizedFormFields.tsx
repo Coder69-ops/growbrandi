@@ -91,6 +91,10 @@ export const LocalizedInput: React.FC<LocalizedInputProps> = ({
     );
 };
 
+export const LocalizedTextArea: React.FC<LocalizedInputProps> = (props) => (
+    <LocalizedInput {...props} type="textarea" />
+);
+
 // Array field editor for localized arrays (like results, achievements)
 interface LocalizedArrayInputProps {
     label: string;

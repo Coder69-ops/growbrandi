@@ -1,21 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, setDoc, writeBatch, query, orderBy } from 'firebase/firestore';
-import { Database, Trash2, RefreshCw, Check, AlertCircle, Globe, Activity, Server, Shield, Wrench, ArrowRight } from 'lucide-react';
+import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, setDoc, writeBatch, query, orderBy, limit } from 'firebase/firestore';
+import { Database, Trash2, RefreshCw, Check, AlertCircle, Globe, Activity, Server, Shield, Wrench, ArrowRight, Wifi, WifiOff, BarChart2, FileText, Clock, AlertTriangle } from 'lucide-react';
 import { PROJECTS, TEAM_MEMBERS, TESTIMONIALS, SERVICES, FAQ_DATA, CONTACT_INFO } from '../../../constants';
 
 // Languages supported
 const LANGUAGES = ['en', 'de', 'es', 'fr', 'nl'];
 
 // Tabs Interface
-type Tab = 'seeding' | 'diagnostics' | 'system';
+// Tabs Interface
+type Tab = 'seeding' | 'diagnostics' | 'monitor' | 'activity';
 
 interface DiagnosticIssue {
     id: string;
     collection: string;
     docId: string;
-    issue: string; // 'missing_order' | 'invalid_type'
+    issue: string; // 'missing_order' | 'invalid_type' | 'integrity_error' | 'empty_field' | 'duplicate_order'
     details: string;
+    severity: 'critical' | 'warning';
+}
+
+interface LogEntry {
+    id: string;
+    action: string;
+    status: 'success' | 'error' | 'info';
+    timestamp: Date;
+    details?: string;
+}
+
+interface NetworkStats {
+    rtt: number | null;
+    status: 'online' | 'offline' | 'degraded';
+    lastChecked: Date | null;
 }
 
 const AdminSeedData = () => {
@@ -46,6 +62,44 @@ const AdminSeedData = () => {
     const [isScanning, setIsScanning] = useState(false);
     const [issues, setIssues] = useState<DiagnosticIssue[]>([]);
     const [fixStatus, setFixStatus] = useState<'idle' | 'fixing' | 'success' | 'error'>('idle');
+
+    // Advanced Monitoring State
+    const [networkStats, setNetworkStats] = useState<NetworkStats>({ rtt: null, status: 'online', lastChecked: null });
+    const [activityLog, setActivityLog] = useState<LogEntry[]>([]);
+
+    const logAction = (action: string, status: 'success' | 'error' | 'info' = 'info', details?: string) => {
+        setActivityLog(prev => [{
+            id: Math.random().toString(36).substr(2, 9),
+            action,
+            status,
+            timestamp: new Date(),
+            details
+        }, ...prev]);
+    };
+
+    const checkNetwork = async () => {
+        const start = Date.now();
+        try {
+            await getDocs(query(collection(db, 'projects'), limit(1))); // Light query
+            const end = Date.now();
+            const rtt = end - start;
+            setNetworkStats({
+                rtt,
+                status: rtt > 500 ? 'degraded' : 'online',
+                lastChecked: new Date()
+            });
+            // logAction('Network Check', 'info', `RTT: ${rtt}ms`); // Optional: don't spam log
+        } catch (err) {
+            setNetworkStats({ rtt: null, status: 'offline', lastChecked: new Date() });
+            logAction('Network Check', 'error', 'Connection failed');
+        }
+    };
+
+    useEffect(() => {
+        const interval = setInterval(checkNetwork, 30000); // Check every 30s
+        checkNetwork(); // Initial check
+        return () => clearInterval(interval);
+    }, []);
 
     // Fetch translations
     useEffect(() => {
@@ -96,13 +150,27 @@ const AdminSeedData = () => {
     };
 
     // --- Dynamic Data Generators ---
-    const generateProjects = () => PROJECTS.map((p, index) => ({
-        ...p, order: index + 1, title: resolve(p.title), description: resolve(p.description), client: resolve(p.client), completionTime: resolve(p.completionTime), results: p.results.map(r => resolve(r)), growthMetrics: resolve(p.growthMetrics as string),
-    }));
-    const generateServices = () => SERVICES.map((s, index) => {
-        const { id, ...rest } = s;
+    const generateProjects = () => PROJECTS.map((p, index) => {
+        // Find matching service ID from the title key match in SERVICES constant
+        const matchedService = SERVICES.find(s => s.title === p.category);
+        const categoryId = matchedService ? matchedService.id : (p.category.includes('.') ? 'web_shopify_dev' : p.category);
+
         return {
-            ...rest, serviceId: id, order: index + 1, title: resolve(s.title), description: resolve(s.description), price: resolve(s.price), features: s.features.map(f => resolve(f))
+            ...p,
+            order: index + 1,
+            title: resolve(p.title),
+            description: resolve(p.description),
+            client: resolve(p.client),
+            completionTime: resolve(p.completionTime),
+            category: categoryId, // Use ID, not localized object
+            results: p.results.map(r => resolve(r)),
+            growthMetrics: resolve(p.growthMetrics as string),
+        };
+    });
+    const generateServices = () => SERVICES.map((s, index) => {
+        // Keep ID as serviceId for seeding deterministic doc IDs
+        return {
+            ...s, serviceId: s.id, order: index + 1, title: resolve(s.title), description: resolve(s.description), price: resolve(s.price), features: s.features.map(f => resolve(f))
         };
     });
     const generateTeam = () => TEAM_MEMBERS.map((m, index) => ({
@@ -112,12 +180,178 @@ const AdminSeedData = () => {
     const generateFAQs = () => FAQ_DATA.map(f => ({ question: resolve(f.question), answer: resolve(f.answer) }));
 
     // (Simplified generators for site_content and contact_settings for brevity, assuming same structure)
+    // Updated schema matching AdminSiteContent.tsx and Hero.tsx/Footer.tsx
     const generateSiteContent = () => {
-        const hero = { badge: resolve('hero.badge'), title_prefix: resolve('hero.title_prefix'), title_highlight: resolve('hero.title_highlight'), description: resolve('hero.description'), cta_consultation: resolve('hero.cta_consultation'), cta_showreel: resolve('hero.cta_showreel'), trusted_by: resolve('hero.trusted_by'), tech_stack: resolve('hero.tech_stack'), trustpilot_on: resolve('hero.trustpilot_on'), mock_viral_campaign: resolve('hero.mock_viral_campaign'), mock_follow: resolve('hero.mock_follow'), mock_views: resolve('hero.mock_views'), mock_likes: resolve('hero.mock_likes'), mock_ctr: resolve('hero.mock_ctr') };
-        const footer = { ready_to_scale: resolve('footer.ready_to_scale'), cta_desc: resolve('footer.cta_desc'), start_project: resolve('footer.start_project'), tagline_desc: resolve('footer.tagline_desc'), rated_clients: resolve('footer.rated_clients'), services_label: resolve('footer.services'), company_label: resolve('footer.company'), legal_label: resolve('footer.legal'), contact_label: resolve('footer.contact'), socials_label: resolve('footer.socials'), privacy: resolve('footer.privacy'), terms: resolve('footer.terms'), sitemap: resolve('footer.sitemap'), copyright: resolve('footer.copyright'), menu: { about: resolve('footer.menu.about'), process: resolve('footer.menu.process'), work: resolve('footer.menu.work'), team: resolve('footer.menu.team'), blog: resolve('footer.menu.blog'), careers: resolve('footer.menu.careers'), contact: resolve('footer.menu.contact') } };
-        const navigation = { home: resolve('nav.home'), services: resolve('nav.services'), company: resolve('nav.company'), portfolio: resolve('nav.portfolio'), contact: resolve('nav.contact') };
-        const section_headers = { testimonials: { badge: resolve('section_headers.testimonials.badge'), title: resolve('section_headers.testimonials.title'), highlight: resolve('section_headers.testimonials.highlight'), description: resolve('section_headers.testimonials.description') }, faq: { badge: resolve('section_headers.faq.badge'), title: resolve('section_headers.faq.title'), description: resolve('section_headers.faq.description') }, team: { badge: resolve('section_headers.team.badge'), title: resolve('section_headers.team.title'), highlight: resolve('section_headers.team.highlight'), description: resolve('section_headers.team.description') }, projects: { badge: resolve('projects_preview.badge'), title: resolve('projects_preview.title'), description: resolve('projects_preview.description') } };
-        return { hero, footer, navigation, section_headers };
+        const hero = {
+            badge: resolve('hero.badge'),
+            title_prefix: resolve('hero.title_prefix'),
+            title_highlight: resolve('hero.title_highlight'),
+            description: resolve('hero.description'),
+            cta_consultation: resolve('hero.cta_consultation'),
+            cta_showreel: resolve('hero.cta_showreel'),
+            trustpilot_on: resolve('hero.trustpilot_on'),
+            trusted_by: resolve('hero.trusted_by'),
+            // Mocks
+            mock_viral_campaign: resolve('hero.mock_viral_campaign'),
+            mock_follow: resolve('hero.mock_follow'),
+            mock_views: resolve('hero.mock_views'),
+            mock_likes: resolve('hero.mock_likes'),
+            mock_ctr: resolve('hero.mock_ctr')
+        };
+        const footer = {
+            tagline_desc: resolve('footer.tagline_desc'),
+            rated_clients: resolve('footer.rated_clients'),
+            copyright: resolve('footer.copyright'),
+            // Note: Services, Company, Contact menus are static/localized in Footer.tsx and not seeded here.
+        };
+        const section_headers = {
+            testimonials: {
+                badge: resolve('section_headers.testimonials.badge'),
+                title: resolve('section_headers.testimonials.title'),
+                highlight: resolve('section_headers.testimonials.highlight'),
+                description: resolve('section_headers.testimonials.description')
+            },
+            faq: {
+                badge: resolve('section_headers.faq.badge'),
+                title: resolve('section_headers.faq.title'),
+                description: resolve('section_headers.faq.description')
+            },
+            team: {
+                badge: resolve('section_headers.team.badge'),
+                title: resolve('section_headers.team.title'),
+                highlight: resolve('section_headers.team.highlight'),
+                description: resolve('section_headers.team.description')
+            },
+            projects: {
+                badge: resolve('projects_preview.badge'),
+                title: resolve('projects_preview.title'),
+                description: resolve('projects_preview.description')
+            }
+        };
+        // Removed 'navigation' as it is handled statically in Header.tsx
+
+        // --- Expanded Sections ---
+        // About Use Page
+        const about = {
+            hero: {
+                badge: resolve('company.about_us.hero.badge'),
+                title: resolve('company.about_us.hero.title'),
+                highlight: resolve('company.about_us.hero.highlight'),
+                description: resolve('company.about_us.hero.description')
+            },
+            story: {
+                title: resolve('company.about_us.story.title'),
+                title_highlight: resolve('company.about_us.story.title_highlight'),
+                p1: resolve('company.about_us.story.p1'),
+                p2: resolve('company.about_us.story.p2')
+            },
+            stats: {
+                projects: resolve('company.about_us.stats.projects'),
+                clients: resolve('company.about_us.stats.clients')
+            },
+            values: {
+                innovation: { title: resolve('company.about_us.values.innovation.title'), desc: resolve('company.about_us.values.innovation.desc') },
+                client: { title: resolve('company.about_us.values.client.title'), desc: resolve('company.about_us.values.client.desc') },
+                quality: { title: resolve('company.about_us.values.quality.title'), desc: resolve('company.about_us.values.quality.desc') }
+            },
+            team_preview: {
+                badge: resolve('company.about_us.team.badge'),
+                title: resolve('company.about_us.team.title'),
+                highlight: resolve('company.about_us.team.highlight'),
+                description: resolve('company.about_us.team.description'),
+                view_full: resolve('company.about_us.team.view_full')
+            }
+        };
+
+        // Process Page
+        const process = {
+            hero: {
+                badge: resolve('company.process.heading.badge'),
+                title: resolve('company.process.heading.title'),
+                highlight: resolve('company.process.heading.highlight'),
+                description: resolve('company.process.heading.description')
+            },
+            steps: [
+                {
+                    step: '01',
+                    title: resolve('company.process.steps.0.title'),
+                    description: resolve('company.process.steps.0.description'),
+                    details: [resolve('company.process.steps.0.details.0'), resolve('company.process.steps.0.details.1'), resolve('company.process.steps.0.details.2'), resolve('company.process.steps.0.details.3')]
+                },
+                {
+                    step: '02',
+                    title: resolve('company.process.steps.1.title'),
+                    description: resolve('company.process.steps.1.description'),
+                    details: [resolve('company.process.steps.1.details.0'), resolve('company.process.steps.1.details.1'), resolve('company.process.steps.1.details.2'), resolve('company.process.steps.1.details.3')]
+                },
+                {
+                    step: '03',
+                    title: resolve('company.process.steps.2.title'),
+                    description: resolve('company.process.steps.2.description'),
+                    details: [resolve('company.process.steps.2.details.0'), resolve('company.process.steps.2.details.1'), resolve('company.process.steps.2.details.2'), resolve('company.process.steps.2.details.3')]
+                },
+                {
+                    step: '04',
+                    title: resolve('company.process.steps.3.title'),
+                    description: resolve('company.process.steps.3.description'),
+                    details: [resolve('company.process.steps.3.details.0'), resolve('company.process.steps.3.details.1'), resolve('company.process.steps.3.details.2'), resolve('company.process.steps.3.details.3')]
+                }
+            ]
+        };
+
+        // Careers Page
+        const careers = {
+            hero: {
+                badge: resolve('company.careers.heading.badge'),
+                title: resolve('company.careers.heading.title'),
+                highlight: resolve('company.careers.heading.highlight'),
+                description: resolve('company.careers.heading.description')
+            },
+            open_positions: {
+                title: resolve('company.careers.open_positions.title'),
+                highlight: resolve('company.careers.open_positions.highlight'),
+            }
+        };
+
+        // Team Page (General)
+        const team_page = {
+            hero: {
+                badge: resolve('company.team.heading.badge'),
+                title: resolve('company.team.heading.title'),
+                highlight: resolve('company.team.heading.highlight'),
+                description: resolve('company.team.heading.description')
+            },
+            cta: {
+                title: resolve('company.team.cta.title'),
+                highlight: resolve('company.team.cta.highlight'),
+                description: resolve('company.team.cta.description'),
+                start_project: resolve('company.team.cta.start_project'),
+                learn_more: resolve('company.team.cta.learn_more')
+            }
+        };
+
+        // Contact Page Content (Text only, settings are separate)
+        const contact = {
+            hero: {
+                badge: resolve('contact_page.badge'),
+                title: resolve('contact_page.title'),
+                highlight: "Something Epic", // Hardcoded in original component, making dynamic
+                description: resolve('contact_page.description')
+            },
+            assistant: {
+                prompt: resolve('contact_page.assistant_prompt'),
+                button: resolve('contact_page.assistant_button')
+            },
+            info_labels: {
+                email: resolve('contact_page.info.email'),
+                call: resolve('contact_page.info.call'),
+                visit: resolve('contact_page.info.visit'),
+                response_time: resolve('contact_page.info.response_time'),
+                hq_desc: resolve('contact_page.info.hq_desc')
+            }
+        };
+
+        return { hero, footer, section_headers, about, process, careers, team_page, contact };
     };
     const generateContactSettings = () => {
         return { page_text: { badge: resolve('contact_page.badge'), title: resolve('contact_page.title'), description: resolve('contact_page.description') }, form_labels: { name: resolve('contact_page.form.name'), email: resolve('contact_page.form.email'), subject: resolve('contact_page.form.subject'), message: resolve('contact_page.form.message'), service: resolve('contact_page.form.service'), budget: resolve('contact_page.form.budget'), submit: resolve('contact_page.form.submit'), sending: resolve('contact_page.form.sending'), success: resolve('contact_page.form.success'), error: resolve('contact_page.form.error') }, contact_info: { ...CONTACT_INFO, office_hours: resolve('contact_page.info.office_hours'), response_time: resolve('contact_page.info.response_time') }, social_links: CONTACT_INFO.social };
@@ -125,15 +359,20 @@ const AdminSeedData = () => {
 
 
     // --- Seeding Logic ---
-    const seedCollection = async (collectionName: string, data: any[], key: string) => {
+    const seedCollection = async (collectionName: string, data: any[], key: string, idField?: string) => {
         setStatus(prev => ({ ...prev, [key]: 'loading' }));
         try {
             const batch = writeBatch(db);
-            // Delete existing documents first to avoid duplicates/ghosts on "Seed" (Optional but cleaner)
-            // For now, we overwrite or add.
             for (let i = 0; i < data.length; i++) {
-                const docRef = doc(collection(db, collectionName));
-                batch.set(docRef, { ...data[i], createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+                const item = data[i];
+                // Use specified ID field if available, otherwise generate new ID
+                const docId = idField && item[idField] ? item[idField] : doc(collection(db, collectionName)).id;
+                const docRef = doc(db, collectionName, docId);
+
+                // Remove the ID field from data if we used it as doc ID (optional, keeping for safety)
+                // const { [idField]: _, ...rest } = item; 
+
+                batch.set(docRef, { ...item, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
             }
             await batch.commit();
             setStatus(prev => ({ ...prev, [key]: 'success' }));
@@ -186,13 +425,20 @@ const AdminSeedData = () => {
     const seedAll = async () => {
         if (!translationsLoaded) { alert("Translations not loaded yet."); return; }
         setLoading(true);
-        await seedCollection('projects', generateProjects(), 'projects');
-        await seedCollection('team_members', generateTeam(), 'team');
-        await seedCollection('testimonials', generateTestimonials(), 'testimonials');
-        await seedCollection('faqs', generateFAQs(), 'faqs');
-        await seedCollection('services', generateServices(), 'services');
-        await seedSingleDoc('site_content', 'main', generateSiteContent(), 'site_content');
-        await seedSingleDoc('contact_settings', 'main', generateContactSettings(), 'contact_settings');
+        logAction('Seed All', 'info', 'Started seeding all collections...');
+        try {
+            await seedCollection('projects', generateProjects(), 'projects');
+            await seedCollection('team_members', generateTeam(), 'team');
+            await seedCollection('testimonials', generateTestimonials(), 'testimonials');
+            await seedCollection('faqs', generateFAQs(), 'faqs');
+            // Use 'serviceId' as the document ID for services to ensure integrity
+            await seedCollection('services', generateServices(), 'services', 'serviceId');
+            await seedSingleDoc('site_content', 'main', generateSiteContent(), 'site_content');
+            await seedSingleDoc('contact_settings', 'main', generateContactSettings(), 'contact_settings');
+            logAction('Seed All', 'success', 'All collections seeded successfully.');
+        } catch (e) {
+            logAction('Seed All', 'error', 'Failed to seed some collections.');
+        }
         setLoading(false);
     };
 
@@ -201,6 +447,7 @@ const AdminSeedData = () => {
         if (!window.confirm("Final Confirmation: This specific action cannot be undone. Proceed?")) return;
 
         setLoading(true);
+        logAction('Clear All', 'info', 'Started clearing database...');
         try {
             for (const item of collectionsList) {
                 if (item.isSingle) {
@@ -215,10 +462,12 @@ const AdminSeedData = () => {
             await fetchCounts();
             setLoading(false);
             alert("Database cleared successfully.");
+            logAction('Clear All', 'success', 'Database cleared.');
         } catch (error) {
             console.error(error);
             setLoading(false);
             alert("Error clearing database. Check console.");
+            logAction('Clear All', 'error', 'Failed to clear database.');
         }
     };
 
@@ -229,25 +478,59 @@ const AdminSeedData = () => {
         const newIssues: DiagnosticIssue[] = [];
         const checkCols = ['projects', 'services', 'team_members'];
 
+        logAction('Diagnostics', 'info', 'Running deep scan...');
+
+        // 1. Standard Checks (Order & Types)
         for (const colName of checkCols) {
             const snapshot = await getDocs(collection(db, colName));
             snapshot.docs.forEach(doc => {
                 const data = doc.data();
                 if (typeof data.order !== 'number') {
-                    newIssues.push({ id: Math.random().toString(), collection: colName, docId: doc.id, issue: 'missing_order', details: 'Item is missing "order" field.' });
+                    newIssues.push({ id: Math.random().toString(), collection: colName, docId: doc.id, issue: 'missing_order', details: 'Item is missing "order" field.', severity: 'critical' });
                 }
-                // Check if title is a localized object (should be object) or string (bad)
                 if (typeof data.title === 'string' && data.title.includes('[object Object]')) {
-                    newIssues.push({ id: Math.random().toString(), collection: colName, docId: doc.id, issue: 'corrupt_data', details: 'Title contains "[object Object]".' });
+                    newIssues.push({ id: Math.random().toString(), collection: colName, docId: doc.id, issue: 'corrupt_data', details: 'Title contains "[object Object]".', severity: 'critical' });
                 }
             });
         }
+
+        // 2. Deep Scan: Cross-Reference (Projects -> Category = Service ID)
+        try {
+            const servicesSnap = await getDocs(collection(db, 'services'));
+            // Helper to get English title safely
+            const getServiceId = (d: any) => d.serviceId || d.id || '';
+            const validServices = new Set(servicesSnap.docs.map(d => getServiceId(d.data())));
+
+            const projectsSnap = await getDocs(collection(db, 'projects'));
+            projectsSnap.docs.forEach(doc => {
+                const data = doc.data();
+                const cat = data.category; // Now should be a string (Service ID)
+                if (cat && typeof cat === 'string' && !validServices.has(cat) && !cat.includes('[object')) {
+                    // Ignore if valid ID or if it's the broken object (which causes react error but handled by format checker)
+                    newIssues.push({ id: Math.random().toString(), collection: 'projects', docId: doc.id, issue: 'integrity_error', details: `Category ID "${cat}" not found in Services.`, severity: 'warning' });
+                } else if (typeof cat === 'object') {
+                    newIssues.push({ id: Math.random().toString(), collection: 'projects', docId: doc.id, issue: 'invalid_type', details: `Category is Object (Localized), expected String ID.`, severity: 'critical' });
+                }
+                if (!data.imageUrl && !data.image) {
+                    newIssues.push({ id: Math.random().toString(), collection: 'projects', docId: doc.id, issue: 'empty_field', details: 'Missing image URL', severity: 'warning' });
+                }
+            });
+        } catch (e) {
+            console.error("Deep scan error", e);
+        }
+
         setIssues(newIssues);
         setIsScanning(false);
+        if (newIssues.length > 0) {
+            logAction('Diagnostics', 'error', `Scan found ${newIssues.length} issues.`);
+        } else {
+            logAction('Diagnostics', 'success', 'System clean. No issues found.');
+        }
     };
 
     const fixOrderIssues = async () => {
         setFixStatus('fixing');
+        logAction('Auto-Fix', 'info', 'Attempting to fix order issues...');
         try {
             const batch = writeBatch(db);
             const colsToFix = [...new Set(issues.filter(i => i.issue === 'missing_order').map(i => i.collection))];
@@ -260,17 +543,19 @@ const AdminSeedData = () => {
             }
             await batch.commit();
             setFixStatus('success');
+            logAction('Auto-Fix', 'success', 'Order issues fixed successfully.');
             runDiagnostics(); // Re-scan
         } catch (error) {
             console.error(error);
             setFixStatus('error');
+            logAction('Auto-Fix', 'error', 'Failed to fix order issues.');
         }
     };
 
     // --- Render ---
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 max-w-7xl mx-auto pb-20">
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
@@ -278,21 +563,22 @@ const AdminSeedData = () => {
                     System Health Dashboard
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mt-2 text-lg">
-                    Manage database seeding, verify data integrity, and check system status.
+                    Advanced monitoring, database seeding, and system diagnostics control center.
                 </p>
             </div>
 
             {/* Custom Tabs */}
-            <div className="bg-white dark:bg-slate-800 rounded-xl p-1.5 inline-flex gap-1 border border-slate-200 dark:border-white/5">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-1.5 inline-flex gap-1 border border-slate-200 dark:border-white/5 overflow-x-auto max-w-full">
                 {[
                     { id: 'seeding', icon: Database, label: 'Data Seeding' },
                     { id: 'diagnostics', icon: Wrench, label: 'Diagnostics' },
-                    { id: 'system', icon: Server, label: 'System Info' }
+                    { id: 'monitor', icon: Activity, label: 'System Monitor' },
+                    { id: 'activity', icon: FileText, label: 'Activity Log' }
                 ].map(tab => (
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id as Tab)}
-                        className={`px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-all ${activeTab === tab.id
+                        className={`px-4 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-all whitespace-nowrap ${activeTab === tab.id
                             ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 shadow-sm'
                             : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-white/5'
                             }`}
@@ -322,7 +608,7 @@ const AdminSeedData = () => {
                             </div>
                         </div>
 
-                        <div className="grid gap-4">
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
                             {collectionsList.map(({ key, name, collection: col, count, isSingle, docId }) => (
                                 <div key={key} className="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700/50 flex items-center justify-between shadow-sm hover:border-blue-200 dark:hover:border-blue-500/30 transition-all">
                                     <div className="flex items-center gap-4">
@@ -333,7 +619,9 @@ const AdminSeedData = () => {
                                             <h3 className="font-semibold text-slate-900 dark:text-white text-lg">{name}</h3>
                                             <div className="flex items-center gap-3 mt-1">
                                                 <span className="text-xs font-mono bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded text-slate-500">{col}</span>
-                                                <span className="text-sm text-slate-500">{isSingle ? (counts[col] ? 'Created' : 'Missing') : `${counts[col] || 0} items`}</span>
+                                                <span className={`text-sm ${!isSingle && (!counts[col] || counts[col] === 0) ? 'text-red-500 font-medium' : 'text-slate-500'}`}>
+                                                    {isSingle ? (counts[col] ? 'Created' : 'Missing') : `${counts[col] || 0} items`}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -348,7 +636,7 @@ const AdminSeedData = () => {
                                             else if (key === 'team') seedCollection(col, generateTeam(), key);
                                             else if (key === 'testimonials') seedCollection(col, generateTestimonials(), key);
                                             else if (key === 'faqs') seedCollection(col, generateFAQs(), key);
-                                            else if (key === 'services') seedCollection(col, generateServices(), key);
+                                            else if (key === 'services') seedCollection(col, generateServices(), key, 'serviceId');
                                         }} className="px-4 py-2 bg-slate-900 dark:bg-slate-700 text-white hover:bg-slate-800 rounded-lg text-sm font-medium flex items-center gap-2">
                                             <RefreshCw size={14} /> Sync
                                         </button>
@@ -365,10 +653,10 @@ const AdminSeedData = () => {
                             <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <Shield size={32} />
                             </div>
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">System Integrity Check</h2>
-                            <p className="text-gray-500 mb-6 max-w-md mx-auto">Scan your Firestore collections for common data issues like missing DnD order fields or corrupted translation strings.</p>
+                            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Deep System Diagnostics</h2>
+                            <p className="text-gray-500 mb-6 max-w-md mx-auto">Performs a deep scan of all collections, verifying referential integrity (e.g., Projects linked to valid Services) and data field completeness.</p>
                             <button onClick={runDiagnostics} disabled={isScanning} className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-medium shadow-lg shadow-blue-500/20 flex items-center gap-2 mx-auto disabled:opacity-50">
-                                {isScanning ? <RefreshCw className="animate-spin" /> : <Activity />} {isScanning ? 'Scanning Database...' : 'Run Diagnostics Scan'}
+                                {isScanning ? <RefreshCw className="animate-spin" /> : <Activity />} {isScanning ? 'Running Deep Scan...' : 'Start Diagnostic Scan'}
                             </button>
                         </div>
 
@@ -376,7 +664,7 @@ const AdminSeedData = () => {
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                     <h3 className="font-bold text-lg flex items-center gap-2 text-red-500">
-                                        <AlertCircle /> {issues.length} Issues Found
+                                        <AlertTriangle className="text-red-500" /> {issues.length} Issues Found
                                     </h3>
                                     {issues.some(i => i.issue === 'missing_order') && (
                                         <button onClick={fixOrderIssues} disabled={fixStatus === 'fixing'} className="text-sm bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
@@ -386,12 +674,19 @@ const AdminSeedData = () => {
                                     )}
                                 </div>
                                 {issues.map(issue => (
-                                    <div key={issue.id} className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-900/30 p-4 rounded-xl flex items-start gap-4">
-                                        <AlertCircle className="text-red-500 mt-1 shrink-0" size={20} />
+                                    <div key={issue.id} className={`border p-4 rounded-xl flex items-start gap-4 ${issue.severity === 'critical'
+                                        ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30'
+                                        : 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-900/30'
+                                        }`}>
+                                        <AlertCircle className={issue.severity === 'critical' ? 'text-red-500' : 'text-yellow-500'} size={20} />
                                         <div>
-                                            <h4 className="font-bold text-slate-900 dark:text-white capitalize">{issue.issue.replace('_', ' ')}</h4>
+                                            <div className="flex items-center gap-2">
+                                                <h4 className="font-bold text-slate-900 dark:text-white capitalize">{issue.issue.replace('_', ' ')}</h4>
+                                                <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded ${issue.severity === 'critical' ? 'bg-red-200 text-red-800' : 'bg-yellow-200 text-yellow-800'
+                                                    }`}>{issue.severity}</span>
+                                            </div>
                                             <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">{issue.details}</p>
-                                            <div className="mt-2 text-xs font-mono bg-white dark:bg-black/20 inline-block px-2 py-1 rounded border border-red-100 dark:border-red-900/20">
+                                            <div className="mt-2 text-xs font-mono bg-white dark:bg-black/20 inline-block px-2 py-1 rounded border border-black/5 dark:border-white/10">
                                                 Collection: {issue.collection} • Doc ID: {issue.docId}
                                             </div>
                                         </div>
@@ -399,49 +694,124 @@ const AdminSeedData = () => {
                                 ))}
                             </div>
                         ) : (
-                            !isScanning && <div className="text-center p-8 text-slate-400">No issues detected. Your system is healthy!</div>
+                            !isScanning && <div className="text-center p-8 bg-green-50 dark:bg-green-900/10 rounded-xl border border-green-100 dark:border-green-900/20 text-green-700 dark:text-green-400 font-medium">System Integrity Verified: No Issues Found</div>
                         )}
                     </div>
                 )}
 
-                {activeTab === 'system' && (
+                {activeTab === 'monitor' && (
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-white/5">
-                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Globe size={20} /> Environment</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Environment</span>
-                                        <span className="font-mono text-sm">Production / Dev</span>
+                            {/* Network Panel */}
+                            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-white/5 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                                    <button onClick={() => checkNetwork()} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full"><RefreshCw size={16} /></button>
+                                </div>
+                                <h3 className="font-bold text-lg mb-6 flex items-center gap-2"><Wifi size={20} /> Network Status</h3>
+                                <div className="flex items-center gap-6">
+                                    <div className={`w-20 h-20 rounded-full flex items-center justify-center ${networkStats.status === 'online' ? 'bg-green-100 text-green-600' : networkStats.status === 'degraded' ? 'bg-yellow-100 text-yellow-600' : 'bg-red-100 text-red-600'}`}>
+                                        {networkStats.status === 'online' ? <Wifi size={40} /> : <WifiOff size={40} />}
                                     </div>
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Browser</span>
-                                        <span className="font-mono text-sm">{navigator.userAgent.split('(')[0]}</span>
-                                    </div>
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Screen Resolution</span>
-                                        <span className="font-mono text-sm">{window.innerWidth}x{window.innerHeight}</span>
+                                    <div>
+                                        <div className="text-4xl font-bold font-mono tracking-tight text-slate-900 dark:text-white">
+                                            {networkStats.rtt ? `${networkStats.rtt}ms` : '--'}
+                                        </div>
+                                        <div className={`text-sm font-medium mt-1 uppercase tracking-wide ${networkStats.status === 'online' ? 'text-green-500' : 'text-red-500'}`}>
+                                            {networkStats.status}
+                                        </div>
+                                        <div className="text-xs text-slate-400 mt-2 flex items-center gap-1">
+                                            <Clock size={12} /> Last checked: {networkStats.lastChecked ? networkStats.lastChecked.toLocaleTimeString() : 'Never'}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
+                            {/* Storage Visuals */}
                             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-white/5">
-                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Database size={20} /> Database Connection</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Status</span>
-                                        <span className="font-bold text-green-500 flex items-center gap-1"><Check size={14} /> Connected</span>
+                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><BarChart2 size={20} /> Storage Distribution</h3>
+                                <div className="space-y-4">
+                                    {collectionsList.filter(c => !c.isSingle).map(c => (
+                                        <div key={c.key}>
+                                            <div className="flex justify-between text-sm mb-1.5">
+                                                <span className="font-medium text-slate-700 dark:text-slate-300">{c.name}</span>
+                                                <span className="font-mono text-slate-500">{counts[c.collection] || 0} docs</span>
+                                            </div>
+                                            <div className="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                                                    style={{ width: `${Math.min(((counts[c.collection] || 0) / 20) * 100, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Environment Info */}
+                            <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-white/5 md:col-span-2">
+                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><Globe size={20} /> Environment</h3>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        <div className="text-xs text-slate-500 uppercase font-bold mb-1">Context</div>
+                                        <div className="font-mono text-slate-900 dark:text-white">Production</div>
                                     </div>
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Project ID</span>
-                                        <span className="font-mono text-sm">growbrandi (implied)</span>
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        <div className="text-xs text-slate-500 uppercase font-bold mb-1">Browser</div>
+                                        <div className="font-mono text-slate-900 dark:text-white truncate" title={navigator.userAgent}>{navigator.userAgent.split('(')[0]}</div>
                                     </div>
-                                    <div className="flex justify-between py-2 border-b border-slate-100 dark:border-white/5">
-                                        <span className="text-slate-500">Active Collections</span>
-                                        <span className="font-mono text-sm">{collectionsList.length}</span>
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        <div className="text-xs text-slate-500 uppercase font-bold mb-1">Resolution</div>
+                                        <div className="font-mono text-slate-900 dark:text-white">{window.innerWidth} x {window.innerHeight}</div>
+                                    </div>
+                                    <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        <div className="text-xs text-slate-500 uppercase font-bold mb-1">Connection</div>
+                                        <div className="font-bold text-green-500 flex items-center gap-1"><Check size={14} /> Active</div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'activity' && (
+                    <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-white/5 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+                        <div className="p-4 border-b border-slate-200 dark:border-slate-700/50 bg-slate-50 dark:bg-slate-900/50 flex justify-between items-center">
+                            <h3 className="font-bold text-slate-700 dark:text-slate-200">Session Activity Log</h3>
+                            <button onClick={() => setActivityLog([])} className="text-xs text-red-500 hover:underline">Clear Log</button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="bg-slate-50 dark:bg-slate-900/50 text-slate-500">
+                                    <tr>
+                                        <th className="p-4 font-medium text-sm">Time</th>
+                                        <th className="p-4 font-medium text-sm">Action</th>
+                                        <th className="p-4 font-medium text-sm">Status</th>
+                                        <th className="p-4 font-medium text-sm">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                                    {activityLog.length === 0 ? (
+                                        <tr><td colSpan={4} className="p-12 text-center text-slate-400">No activity recorded this session.</td></tr>
+                                    ) : (
+                                        activityLog.map(log => (
+                                            <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                                                <td className="p-4 font-mono text-sm text-slate-500 whitespace-nowrap">{log.timestamp.toLocaleTimeString()}</td>
+                                                <td className="p-4 font-medium text-slate-900 dark:text-white">{log.action}</td>
+                                                <td className="p-4">
+                                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${log.status === 'success' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                                        log.status === 'error' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                                                            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                                        }`}>
+                                                        {log.status === 'success' ? <Check size={12} /> : log.status === 'error' ? <AlertTriangle size={12} /> : <Activity size={12} />}
+                                                        {log.status}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4 text-sm text-slate-600 dark:text-slate-300 max-w-xs md:max-w-md truncate" title={log.details}>{log.details}</td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 )}

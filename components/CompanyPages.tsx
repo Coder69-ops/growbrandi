@@ -12,18 +12,21 @@ import { SectionHeading } from './ui/SectionHeading';
 // About Us Page
 // Hook Import
 import { useContent } from '../src/hooks/useContent';
-import { getLocalizedField } from '../src/utils/localization';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
+import { getLocalizedField, SupportedLanguage } from '../src/utils/localization';
 
 // About Us Page
 export const AboutUsPage: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(); // Keep for legacy fallbacks or strict hardcoded UI strings
   const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+  const { getText, content } = useSiteContentData();
+  const lang = i18n.language as SupportedLanguage;
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
-  const getText = (field: any) => {
+  const getLegacyText = (field: any) => {
     if (!field) return '';
     if (typeof field === 'string') return t(field);
-    return getLocalizedField(field, i18n.language);
+    return getLocalizedField(field, lang);
   };
 
   return (
@@ -38,10 +41,10 @@ export const AboutUsPage: React.FC = () => {
 
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
-            badge={t('company.about_us.hero.badge')}
-            title={t('company.about_us.hero.title')}
-            highlight={t('company.about_us.hero.highlight')}
-            description={t('company.about_us.hero.description')}
+            badge={getText('about.hero.badge', lang) || t('company.about_us.hero.badge')}
+            title={getText('about.hero.title', lang) || t('company.about_us.hero.title')}
+            highlight={getText('about.hero.highlight', lang) || t('company.about_us.hero.highlight')}
+            description={getText('about.hero.description', lang) || t('company.about_us.hero.description')}
           />
         </div>
       </section>
@@ -56,26 +59,27 @@ export const AboutUsPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
+
               <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-                {t('company.about_us.story.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">{t('company.about_us.story.title_highlight')}</span>
+                {getText('about.story.title', lang) || t('company.about_us.story.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">{getText('about.story.title_highlight', lang) || t('company.about_us.story.title_highlight')}</span>
               </h2>
               <div className="space-y-6 text-lg text-slate-600 dark:text-zinc-400 font-light leading-relaxed">
                 <p>
-                  {t('company.about_us.story.p1')}
+                  {getText('about.story.p1', lang) || t('company.about_us.story.p1')}
                 </p>
                 <p>
-                  {t('company.about_us.story.p2')}
+                  {getText('about.story.p2', lang) || t('company.about_us.story.p2')}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-8 mt-10">
                 <GlassCard className="text-center p-6" hoverEffect={true}>
                   <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">200+</div>
-                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{t('company.about_us.stats.projects')}</div>
+                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.projects', lang) || t('company.about_us.stats.projects')}</div>
                 </GlassCard>
                 <GlassCard className="text-center p-6" hoverEffect={true}>
                   <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">50+</div>
-                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{t('company.about_us.stats.clients')}</div>
+                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.clients', lang) || t('company.about_us.stats.clients')}</div>
                 </GlassCard>
               </div>
             </motion.div>
@@ -95,8 +99,8 @@ export const AboutUsPage: React.FC = () => {
                       <FaLightbulb className="w-7 h-7 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{t('company.about_us.values.innovation.title')}</h3>
-                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{t('company.about_us.values.innovation.desc')}</p>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{getText('about.values.innovation.title', lang) || t('company.about_us.values.innovation.title')}</h3>
+                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{getText('about.values.innovation.desc', lang) || t('company.about_us.values.innovation.desc')}</p>
                     </div>
                   </div>
 
@@ -105,8 +109,8 @@ export const AboutUsPage: React.FC = () => {
                       <FaUsers className="w-7 h-7 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{t('company.about_us.values.client.title')}</h3>
-                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{t('company.about_us.values.client.desc')}</p>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{getText('about.values.client.title', lang) || t('company.about_us.values.client.title')}</h3>
+                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{getText('about.values.client.desc', lang) || t('company.about_us.values.client.desc')}</p>
                     </div>
                   </div>
 
@@ -115,8 +119,8 @@ export const AboutUsPage: React.FC = () => {
                       <FaCheckCircle className="w-7 h-7 text-pink-600 dark:text-pink-400" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">{t('company.about_us.values.quality.title')}</h3>
-                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{t('company.about_us.values.quality.desc')}</p>
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">{getText('about.values.quality.title', lang) || t('company.about_us.values.quality.title')}</h3>
+                      <p className="text-slate-600 dark:text-zinc-400 font-light leading-relaxed">{getText('about.values.quality.desc', lang) || t('company.about_us.values.quality.desc')}</p>
                     </div>
                   </div>
                 </div>
@@ -131,10 +135,10 @@ export const AboutUsPage: React.FC = () => {
         <BackgroundEffects />
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
-            badge={t('company.about_us.team.badge')}
-            title={t('company.about_us.team.title')}
-            highlight={t('company.about_us.team.highlight')}
-            description={t('company.about_us.team.description')}
+            badge={getText('about.team_preview.badge', lang) || t('company.about_us.team.badge')}
+            title={getText('about.team_preview.title', lang) || t('company.about_us.team.title')}
+            highlight={getText('about.team_preview.highlight', lang) || t('company.about_us.team.highlight')}
+            description={getText('about.team_preview.description', lang) || t('company.about_us.team.description')}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -153,8 +157,8 @@ export const AboutUsPage: React.FC = () => {
 
                   <div className="relative z-10">
                     <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{member.name}</h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4 text-sm uppercase tracking-wider">{getText(member.role)}</p>
-                    <p className="text-slate-600 dark:text-zinc-400 font-light text-sm mb-6 line-clamp-3 leading-relaxed">{getText(member.description)}</p>
+                    <p className="text-blue-600 dark:text-blue-400 font-semibold mb-4 text-sm uppercase tracking-wider">{getLegacyText(member.role)}</p>
+                    <p className="text-slate-600 dark:text-zinc-400 font-light text-sm mb-6 line-clamp-3 leading-relaxed">{getLegacyText(member.description)}</p>
 
                     <div className="flex justify-center gap-4">
                       {member.social.linkedin && (
@@ -176,7 +180,7 @@ export const AboutUsPage: React.FC = () => {
           <div className="text-center mt-12">
             <Link to="/team">
               <button className="px-8 py-3 rounded-full border border-slate-300 dark:border-white/20 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all font-semibold">
-                {t('company.about_us.team.view_full')}
+                {getText('about.team_preview.view_full', lang) || t('company.about_us.team.view_full')}
               </button>
             </Link>
           </div>
@@ -188,8 +192,11 @@ export const AboutUsPage: React.FC = () => {
 
 // Our Process Page
 export const ProcessPage: React.FC = () => {
-  const { t } = useTranslation();
-  const processSteps = t('company.process.steps', { returnObjects: true }) as any[];
+  const { t, i18n } = useTranslation();
+  const { getText, content } = useSiteContentData();
+  const lang = i18n.language as SupportedLanguage;
+  const legacyProcessSteps = t('company.process.steps', { returnObjects: true }) as any[];
+  const processSteps = content?.process?.steps || legacyProcessSteps;
 
   return (
     <>
@@ -202,10 +209,10 @@ export const ProcessPage: React.FC = () => {
         <BackgroundEffects />
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
-            badge={t('company.process.heading.badge')}
-            title={t('company.process.heading.title')}
-            highlight={t('company.process.heading.highlight')}
-            description={t('company.process.heading.description')}
+            badge={getText('process.hero.badge', lang) || t('company.process.heading.badge')}
+            title={getText('process.hero.title', lang) || t('company.process.heading.title')}
+            highlight={getText('process.hero.highlight', lang) || t('company.process.heading.highlight')}
+            description={getText('process.hero.description', lang) || t('company.process.heading.description')}
           />
         </div>
       </section>
@@ -224,17 +231,17 @@ export const ProcessPage: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
                 <div className="lg:w-1/3">
-                  <div className="text-6xl font-black text-slate-200 dark:text-white/10 mb-4">{processStep.step}</div>
-                  <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-4 font-heading">{processStep.title}</h3>
-                  <p className="text-lg text-slate-600 dark:text-zinc-400 leading-relaxed font-light">{processStep.description}</p>
+                  <div className="text-6xl font-black text-slate-200 dark:text-white/10 mb-4">{processStep.step || `0${index + 1}`}</div>
+                  <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-4 font-heading">{getLocalizedField(processStep.title, lang)}</h3>
+                  <p className="text-lg text-slate-600 dark:text-zinc-400 leading-relaxed font-light">{getLocalizedField(processStep.description, lang)}</p>
                 </div>
                 <div className="lg:w-2/3">
                   <GlassCard className="p-8" hoverEffect={true}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {processStep.details.map((detail: string, detailIndex: number) => (
+                      {processStep.details?.map((detail: any, detailIndex: number) => (
                         <div key={detailIndex} className="flex items-center gap-3">
                           <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full shrink-0"></div>
-                          <span className="text-slate-600 dark:text-zinc-300 font-light">{detail}</span>
+                          <span className="text-slate-600 dark:text-zinc-300 font-light">{getLocalizedField(detail, lang)}</span>
                         </div>
                       ))}
                     </div>
@@ -361,7 +368,9 @@ export const CaseStudiesPage: React.FC = () => {
 
 // CareersPage
 export const CareersPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { getText } = useSiteContentData();
+  const lang = i18n.language as SupportedLanguage;
   const jobOpenings = t('company.careers.openings', { returnObjects: true }) as any[];
 
   return (
@@ -375,10 +384,10 @@ export const CareersPage: React.FC = () => {
         <BackgroundEffects />
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
-            badge={t('company.careers.heading.badge')}
-            title={t('company.careers.heading.title')}
-            highlight={t('company.careers.heading.highlight')}
-            description={t('company.careers.heading.description')}
+            badge={getText('careers.hero.badge', lang) || t('company.careers.heading.badge')}
+            title={getText('careers.hero.title', lang) || t('company.careers.heading.title')}
+            highlight={getText('careers.hero.highlight', lang) || t('company.careers.heading.highlight')}
+            description={getText('careers.hero.description', lang) || t('company.careers.heading.description')}
           />
         </div>
       </section>
@@ -394,7 +403,7 @@ export const CareersPage: React.FC = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 font-heading tracking-tight">
-              {t('company.careers.open_positions.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">{t('company.careers.open_positions.highlight')}</span>
+              {getText('careers.open_positions.title', lang) || t('company.careers.open_positions.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">{getText('careers.open_positions.highlight', lang) || t('company.careers.open_positions.highlight')}</span>
             </h2>
           </motion.div>
 
@@ -441,9 +450,11 @@ export const TeamPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+  const { getText } = useSiteContentData();
+  const lang = i18n.language as SupportedLanguage;
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
-  const getText = (field: any) => {
+  const getLegacyText = (field: any) => {
     if (!field) return '';
     if (typeof field === 'string') return t(field);
     return getLocalizedField(field, i18n.language);
@@ -460,10 +471,10 @@ export const TeamPage: React.FC = () => {
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
           <SectionHeading
-            badge={t('company.team.heading.badge')}
-            title={t('company.team.heading.title')}
-            highlight={t('company.team.heading.highlight')}
-            description={t('company.team.heading.description')}
+            badge={getText('team_page.hero.badge', lang) || t('company.team.heading.badge')}
+            title={getText('team_page.hero.title', lang) || t('company.team.heading.title')}
+            highlight={getText('team_page.hero.highlight', lang) || t('company.team.heading.highlight')}
+            description={getText('team_page.hero.description', lang) || t('company.team.heading.description')}
           />
 
           {/* Team Grid */}
@@ -521,10 +532,10 @@ export const TeamPage: React.FC = () => {
                           {member.name}
                         </h3>
                         <div className="text-slate-500 dark:text-zinc-400 font-medium text-sm uppercase tracking-wider mb-4 group-hover:text-slate-900 dark:group-hover:text-white transition-colors duration-300">
-                          {getText(member.role)}
+                          {getLegacyText(member.role)}
                         </div>
                         <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed font-light line-clamp-3 group-hover:text-slate-700 dark:group-hover:text-zinc-400 transition-colors duration-300">
-                          {getText(member.description)}
+                          {getLegacyText(member.description)}
                         </p>
                       </div>
                     </Link>
@@ -537,7 +548,7 @@ export const TeamPage: React.FC = () => {
                             key={idx}
                             className="px-3 py-1 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 text-xs font-medium rounded-full border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-all duration-300"
                           >
-                            {getText(specialty)}
+                            {getLegacyText(specialty)}
                           </span>
                         ))}
                       </div>
@@ -590,10 +601,10 @@ export const TeamPage: React.FC = () => {
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
 
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6 font-heading tracking-tight">
-                {t('company.team.cta.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{t('company.team.cta.highlight')}</span>
+                {getText('team_page.cta.title', lang) || t('company.team.cta.title')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">{getText('team_page.cta.highlight', lang) || t('company.team.cta.highlight')}</span>
               </h2>
               <p className="text-slate-300 text-xl mb-10 max-w-2xl mx-auto font-light">
-                {t('company.team.cta.description')}
+                {getText('team_page.cta.description', lang) || t('company.team.cta.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link to="/contact">
@@ -602,7 +613,7 @@ export const TeamPage: React.FC = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {t('company.team.cta.start_project')}
+                    {getText('team_page.cta.start_project', lang) || t('company.team.cta.start_project')}
                   </motion.button>
                 </Link>
                 <Link to="/about">
@@ -611,7 +622,7 @@ export const TeamPage: React.FC = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    {t('company.team.cta.learn_more')}
+                    {getText('team_page.cta.learn_more', lang) || t('company.team.cta.learn_more')}
                   </motion.button>
                 </Link>
               </div>

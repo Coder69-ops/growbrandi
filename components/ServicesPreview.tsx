@@ -46,7 +46,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
     const localized = (field: any) => getLocalizedField(field, i18n.language);
 
     // Dynamically retrieve process steps from translation file based on service ID
-    const serviceRootKey = `services.${service.id}`;
+    const serviceId = (service as any).serviceId || service.id;
+    const serviceRootKey = `services.${serviceId}`;
 
     // Try to get process steps from translation, fallback to default if not found
     const processStepsData = t(`${serviceRootKey}.process`, { returnObjects: true });
@@ -218,12 +219,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
     const localized = (field: any) => getLocalizedField(field, i18n.language);
 
     // Check service types for specific visuals based on IDs
-    const isSocialMedia = service.id === 'creative_studio';
-    const isBrandGrowth = service.id === 'performance_marketing';
-    const isUIUX = service.id === 'ui_ux_design_full';
-    const isWebDev = service.id === 'web_shopify_dev';
-    const isVA = service.id === 'ecommerce_management';
-    const isSupport = service.id === 'social_media_management';
+    // Support both static ID (id) and seeded ID (serviceId)
+    const serviceId = (service as any).serviceId || service.id;
+
+    const isSocialMedia = serviceId === 'creative_studio';
+    const isBrandGrowth = serviceId === 'performance_marketing';
+    const isUIUX = serviceId === 'ui_ux_design_full';
+    const isWebDev = serviceId === 'web_shopify_dev';
+    const isVA = serviceId === 'ecommerce_management';
+    const isSupport = serviceId === 'social_media_management';
 
     return (
         <GlassCard
@@ -597,7 +601,7 @@ const ServicesPreview: React.FC = () => {
                                 service={service}
                                 index={index}
                                 onLearnMore={() => handleLearnMore(service)}
-                                featured={service.id === 'ui_ux_design_full'}
+                                featured={((service as any).serviceId || service.id) === 'ui_ux_design_full'}
                             />
                         ))}
                     </motion.div>
