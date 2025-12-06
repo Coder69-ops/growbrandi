@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { PROJECTS } from '../../../constants';
 import { Plus, Edit2, Trash2, Save, X, ChevronDown, CheckCircle2, TrendingUp, Settings, Image, FolderKanban, ArrowLeft, FileText } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, createEmptyLocalizedString, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
+import { Reorder } from 'framer-motion';
+import { SortableItem } from '../../components/admin/SortableItem';
 
 const CATEGORIES = [
     { id: 'web_shopify_dev', label: 'Web & Shopify Dev' },
@@ -31,7 +33,7 @@ const AdminProjects = () => {
             const projectsData = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }));
+            })).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
             setProjects(projectsData);
         } catch (error) {
             console.error("Error fetching projects:", error);
@@ -43,8 +45,6 @@ const AdminProjects = () => {
     useEffect(() => {
         fetchProjects();
     }, []);
-
-
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this project?")) return;
@@ -70,6 +70,8 @@ const AdminProjects = () => {
                 await updateDoc(doc(db, 'projects', id), data);
             } else {
                 projectData.createdAt = serverTimestamp();
+                // Add order for new project (last)
+                projectData.order = projects.length + 1;
                 await addDoc(collection(db, 'projects'), projectData);
             }
             setIsEditing(false);
@@ -79,6 +81,23 @@ const AdminProjects = () => {
             alert("Failed to save project.");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleReorder = async (newOrder: any[]) => {
+        setProjects(newOrder); // Optimistic update
+
+        const batch = writeBatch(db);
+        newOrder.forEach((project, index) => {
+            const docRef = doc(db, 'projects', project.id);
+            batch.update(docRef, { order: index + 1 });
+        });
+
+        try {
+            await batch.commit();
+        } catch (error) {
+            console.error("Error updating order:", error);
+            fetchProjects(); // Revert on error
         }
     };
 
@@ -114,7 +133,6 @@ const AdminProjects = () => {
             description="Manage your portfolio showcase items"
             actions={
                 <div className="flex gap-3">
-
                     <button
                         onClick={() => openEdit()}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
@@ -310,62 +328,67 @@ const AdminProjects = () => {
                     </form>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <Reorder.Group axis="y" values={projects} onReorder={handleReorder} className="flex flex-col gap-4">
                     {projects.map((project) => (
-                        <div key={project.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-md hover:border-blue-500/30 transition-all group">
-                            <div className="relative h-48 bg-slate-100 dark:bg-slate-900">
-                                {project.imageUrl ? (
-                                    <img src={project.imageUrl} alt={getLocalizedField(project.title, 'en')} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-slate-400">
-                                        <FolderKanban size={48} />
-                                    </div>
-                                )}
-                                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        onClick={() => openEdit(project)}
-                                        className="p-2 bg-white/90 backdrop-blur-sm text-blue-600 rounded-lg hover:bg-white shadow-sm"
-                                    >
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(project.id)}
-                                        className="p-2 bg-white/90 backdrop-blur-sm text-red-600 rounded-lg hover:bg-white shadow-sm"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                <div className="flex justify-between items-start mb-2">
-                                    <div>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                                            {CATEGORIES.find(c => c.id === project.category)?.label || project.category}
-                                        </span>
-                                        <h3 className="font-bold text-lg text-slate-900 dark:text-white mt-1 line-clamp-1">
-                                            {getLocalizedField(project.title, 'en')}
-                                        </h3>
-                                    </div>
-                                    <div className="flex items-center gap-1 text-xs font-bold bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-md">
-                                        ★ {project.rating}
-                                    </div>
-                                </div>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4">
-                                    {getLocalizedField(project.description, 'en')}
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                    {project.technologies?.slice(0, 3).map((tech: string) => (
-                                        <span key={tech} className="text-xs px-2 py-1 rounded bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400">
-                                            {tech}
-                                        </span>
-                                    ))}
-                                    {project.technologies?.length > 3 && (
-                                        <span className="text-xs px-2 py-1 rounded text-slate-400">+{project.technologies.length - 3}</span>
+                        <SortableItem key={project.id} item={project}>
+                            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col sm:flex-row h-full sm:h-32 hover:border-blue-500/30 transition-all pl-8 group">
+                                {/* Drag Handle Area Visual Cue - The handle is in SortableItem, we just make space */}
+
+                                <div className="w-full sm:w-48 h-32 sm:h-full bg-slate-100 dark:bg-slate-900 shrink-0">
+                                    {project.imageUrl ? (
+                                        <img src={project.imageUrl} alt={getLocalizedField(project.title, 'en')} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                            <FolderKanban size={32} />
+                                        </div>
                                     )}
                                 </div>
+
+                                <div className="flex-1 p-4 flex flex-col justify-center min-w-0">
+                                    <div className="flex justify-between items-start mb-1 gap-4">
+                                        <div className="min-w-0">
+                                            <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                                                {CATEGORIES.find(c => c.id === project.category)?.label || project.category}
+                                            </span>
+                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white truncate mt-0.5">
+                                                {getLocalizedField(project.title, 'en')}
+                                            </h3>
+                                        </div>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                            <div className="flex items-center gap-1 text-xs font-bold bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-md">
+                                                ★ {project.rating}
+                                            </div>
+                                            <div className="flex gap-1">
+                                                <button
+                                                    onClick={() => openEdit(project)}
+                                                    className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(project.id)}
+                                                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+                                        {getLocalizedField(project.description, 'en')}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 mt-auto">
+                                        {project.technologies?.slice(0, 4).map((tech: string) => (
+                                            <span key={tech} className="text-[10px] px-2 py-0.5 rounded bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </SortableItem>
                     ))}
+
 
                     {projects.length === 0 && (
                         <div className="col-span-full py-12 text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
@@ -380,12 +403,10 @@ const AdminProjects = () => {
                             </button>
                         </div>
                     )}
-                </div>
+                </Reorder.Group>
             )}
         </AdminPageLayout>
     );
 };
-
-
 
 export default AdminProjects;

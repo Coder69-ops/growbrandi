@@ -1,4 +1,4 @@
-import React, { useRef, useState, MouseEvent } from 'react';
+import React, { useRef, useState, MouseEvent, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaTimes, FaCheck, FaCircle, FaStar, FaShieldAlt, FaLayerGroup, FaGem, FaCommentDots, FaChartPie, FaLock, FaCheckCircle, FaHeadset, FaArrowRight } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { getIcon } from '../src/utils/icons';
+import { useContent } from '../src/hooks/useContent';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -252,17 +253,29 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
 export const ServicesPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data: services, loading } = useContent('services', SERVICES);
   const [activeFilter, setActiveFilter] = useState<string>('All');
-  const [displayedServices, setDisplayedServices] = useState(SERVICES);
+  const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (services) {
+      setDisplayedServices(services);
+      // Re-apply filter if needed when data updates
+      if (activeFilter !== 'All') {
+        const categoryServices = serviceCategories[activeFilter as keyof typeof serviceCategories] || [];
+        setDisplayedServices(services.filter(service => categoryServices.includes(service.title)));
+      }
+    }
+  }, [services, activeFilter]);
 
   const categories = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
 
   const serviceCategories = {
-    'Design': ['UI/UX Design', 'Brand Strategy'],
-    'Development': ['Web Development'],
-    'Marketing': ['SEO Optimization', 'Digital Marketing', 'Content Creation'],
-    'Strategy': ['Brand Strategy', 'Digital Marketing']
+    'Design': ['UI/UX Design', 'Brand Strategy', 'ui_ux_design'],
+    'Development': ['Web Development', 'web_development'],
+    'Marketing': ['SEO Optimization', 'Digital Marketing', 'Content Creation', 'performance_marketing'],
+    'Strategy': ['Brand Strategy', 'Digital Marketing', 'creative_studio']
   };
 
   const handleLearnMore = (service: Service) => {
@@ -272,12 +285,7 @@ export const ServicesPage: React.FC = () => {
 
   const handleFilterChange = (category: string) => {
     setActiveFilter(category);
-    if (category === 'All') {
-      setDisplayedServices(SERVICES);
-    } else {
-      const categoryServices = serviceCategories[category as keyof typeof serviceCategories] || [];
-      setDisplayedServices(SERVICES.filter(service => categoryServices.includes(service.title)));
-    }
+    // useEffect will handle the actual filtering
   };
 
   return (

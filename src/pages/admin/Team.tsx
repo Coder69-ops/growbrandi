@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { TEAM_MEMBERS } from '../../../constants';
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, User, Linkedin, Twitter, Github, Mail, Trophy, Star } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
+import { Reorder } from 'framer-motion';
+import { SortableItem } from '../../components/admin/SortableItem';
 
 const AdminTeam = () => {
     const [team, setTeam] = useState<any[]>([]);
@@ -22,7 +24,7 @@ const AdminTeam = () => {
             const teamData = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            }));
+            })).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
             setTeam(teamData);
         } catch (error) {
             console.error("Error fetching team:", error);
@@ -35,14 +37,33 @@ const AdminTeam = () => {
         fetchTeam();
     }, []);
 
+    const handleReorder = async (newOrder: any[]) => {
+        setTeam(newOrder); // Optimistic update
+
+        const batch = writeBatch(db);
+        newOrder.forEach((member, index) => {
+            const docRef = doc(db, 'team_members', member.id);
+            batch.update(docRef, { order: index + 1 });
+        });
+
+        try {
+            await batch.commit();
+        } catch (error) {
+            console.error("Error updating order:", error);
+            fetchTeam(); // Revert on error
+        }
+    };
+
     const handleSeedData = async () => {
         if (!window.confirm("This will add all team members from constants.ts to Firestore with multi-language structure. Continue?")) return;
         setLoading(true);
         try {
+            let index = 1;
             for (const member of TEAM_MEMBERS) {
                 const multiLangMember = {
                     name: member.name,
                     slug: member.slug,
+                    order: index++,
                     image: member.image,
                     social: member.social || {},
                     role: { en: member.role },
@@ -90,6 +111,7 @@ const AdminTeam = () => {
                 await updateDoc(doc(db, 'team_members', id), data);
             } else {
                 memberData.createdAt = serverTimestamp();
+                memberData.order = team.length + 1; // Add order
                 await addDoc(collection(db, 'team_members'), memberData);
             }
             setIsEditing(false);
@@ -331,75 +353,78 @@ const AdminTeam = () => {
                     </form>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <Reorder.Group axis="y" values={team} onReorder={handleReorder} className="flex flex-col gap-4">
                     {team.map((member) => (
-                        <div key={member.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col items-center hover:shadow-md transition-all group">
-                            <div className="relative w-full h-32 bg-gradient-to-br from-blue-500 to-purple-600">
-                                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button
-                                        onClick={() => openEdit(member)}
-                                        className="p-1.5 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded text-white"
-                                    >
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(member.id)}
-                                        className="p-1.5 bg-white/20 hover:bg-red-500/80 backdrop-blur-md rounded text-white"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </div>
+                        <SortableItem key={member.id} item={member}>
+                            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col sm:flex-row h-full sm:h-32 hover:border-blue-500/30 transition-all pl-8 group">
 
-                            <div className="px-6 pb-6 flex flex-col items-center -mt-12 w-full">
-                                <div className="w-24 h-24 rounded-full overflow-hidden bg-white dark:bg-slate-800 p-1 mb-3 shadow-md relative z-10">
+                                {/* Image Section */}
+                                <div className="w-full sm:w-32 h-32 sm:h-full bg-slate-100 dark:bg-slate-900 shrink-0 relative">
                                     {member.image ? (
-                                        <img src={member.image} alt={member.name} className="w-full h-full object-cover rounded-full" />
+                                        <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-400">
+                                        <div className="w-full h-full flex items-center justify-center text-slate-400">
                                             <User size={32} />
                                         </div>
                                     )}
                                 </div>
 
-                                <h3 className="font-bold text-lg text-slate-900 dark:text-white text-center">
-                                    {member.name}
-                                </h3>
-                                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-3 text-center">
-                                    {getLocalizedField(member.role, 'en')}
-                                </p>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 text-center line-clamp-2 mb-4">
-                                    {getLocalizedField(member.description, 'en')}
-                                </p>
+                                {/* Content Section */}
+                                <div className="flex-1 p-4 flex flex-col justify-center min-w-0">
+                                    <div className="flex justify-between items-start mb-1 gap-4">
+                                        <div>
+                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white truncate">
+                                                {member.name}
+                                            </h3>
+                                            <span className="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400 truncate block">
+                                                {getLocalizedField(member.role, 'en')}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1 shrink-0">
+                                            <button
+                                                onClick={() => openEdit(member)}
+                                                className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(member.id)}
+                                                className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+                                        {getLocalizedField(member.description, 'en')}
+                                    </p>
 
-                                <div className="w-full pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-center gap-4">
-                                    {member.social?.linkedin && <Linkedin size={16} className="text-slate-400 hover:text-blue-600 cursor-pointer transition-colors" />}
-                                    {member.social?.twitter && <Twitter size={16} className="text-slate-400 hover:text-blue-400 cursor-pointer transition-colors" />}
-                                    {member.social?.github && <Github size={16} className="text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer transition-colors" />}
-                                    {member.social?.email && <Mail size={16} className="text-slate-400 hover:text-red-500 cursor-pointer transition-colors" />}
+                                    {/* Social Icons Mini */}
+                                    <div className="flex gap-3 mt-auto opacity-60">
+                                        {member.social?.linkedin && <Linkedin size={14} className="text-slate-500" />}
+                                        {member.social?.twitter && <Twitter size={14} className="text-slate-500" />}
+                                        {member.social?.github && <Github size={14} className="text-slate-500" />}
+                                        {member.social?.email && <Mail size={14} className="text-slate-500" />}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </SortableItem>
                     ))}
 
                     {team.length === 0 && (
-                        <div className="col-span-full py-16 text-center">
-                            <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400">
-                                <User size={32} />
-                            </div>
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Team Members</h3>
-                            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
-                                Add your team members to showcase the talent behind your brand.
-                            </p>
+                        <div className="col-span-full py-12 text-center text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+                            <User size={48} className="mx-auto mb-4 opacity-50" />
+                            <p className="font-medium text-lg">No team members found</p>
+                            <p className="text-sm mt-1">Add your first team member.</p>
                             <button
                                 onClick={() => openEdit()}
-                                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 font-medium"
+                                className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
-                                Add Team Member
+                                Add Member
                             </button>
                         </div>
                     )}
-                </div>
+                </Reorder.Group>
             )}
         </AdminPageLayout>
     );

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { SERVICES } from '../../../constants';
-import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Tag, DollarSign, List, Briefcase } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Tag, DollarSign, List, Briefcase, GripVertical } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
+import { Reorder } from 'framer-motion';
+import { SortableItem } from '../../components/admin/SortableItem';
 
 const AdminServices = () => {
     const [services, setServices] = useState<any[]>([]);
@@ -18,10 +20,14 @@ const AdminServices = () => {
         setLoading(true);
         try {
             const querySnapshot = await getDocs(collection(db, 'services'));
-            const servicesData = querySnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const servicesData = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    ...data,
+                    id: doc.id,
+                    serviceId: data.serviceId || data.id // Handle both data structures (legacy/new)
+                };
+            }).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
             setServices(servicesData);
         } catch (error) {
             console.error("Error fetching services:", error);
@@ -34,13 +40,24 @@ const AdminServices = () => {
         fetchServices();
     }, []);
 
+    const handleReorder = (newOrder: any[]) => {
+        setServices(newOrder);
+        const batch = writeBatch(db);
+        newOrder.forEach((service, index) => {
+            const ref = doc(db, 'services', service.id);
+            batch.update(ref, { order: index + 1 });
+        });
+        batch.commit().catch(console.error);
+    };
+
     const handleSeedData = async () => {
         if (!window.confirm("This will add all services from constants.ts to Firestore. Continue?")) return;
         setLoading(true);
         try {
-            for (const service of SERVICES) {
+            for (const [index, service] of SERVICES.entries()) {
                 const multiLangService = {
                     serviceId: service.id,
+                    order: index + 1,
                     color: service.color || 'from-blue-500 to-cyan-500',
                     title: { en: service.title },
                     description: { en: service.description },
@@ -75,7 +92,7 @@ const AdminServices = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const serviceData = {
+            const serviceData: any = {
                 ...currentService,
                 updatedAt: serverTimestamp(),
             };
@@ -85,6 +102,8 @@ const AdminServices = () => {
                 await updateDoc(doc(db, 'services', id), data);
             } else {
                 serviceData.createdAt = serverTimestamp();
+                // Assign new service to end of list
+                serviceData.order = services.length + 1;
                 await addDoc(collection(db, 'services'), serviceData);
             }
             setIsEditing(false);
@@ -264,44 +283,53 @@ const AdminServices = () => {
                     </form>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <Reorder.Group axis="y" values={services} onReorder={handleReorder} className="flex flex-col gap-4">
                     {services.map((service) => (
-                        <div key={service.id} className="relative group overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1">
-                            {/* Card Background Gradient */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${service.color || 'from-blue-500 to-cyan-500'} opacity-100 group-hover:scale-105 transition-transform duration-500`}></div>
-
-                            {/* Content */}
-                            <div className="relative p-8 h-full flex flex-col text-white">
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="p-3 bg-white/20 backdrop-blur-md rounded-xl">
-                                        <Briefcase size={24} className="text-white" />
-                                    </div>
-                                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 translate-y-2 group-hover:translate-y-0">
-                                        <button
-                                            onClick={() => openEdit(service)}
-                                            className="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg transition-colors"
-                                        >
-                                            <Edit2 size={16} />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(service.id)}
-                                            className="p-2 bg-white/20 hover:bg-red-500/80 backdrop-blur-md rounded-lg transition-colors"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
+                        <SortableItem key={service.id} item={service}>
+                            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col sm:flex-row h-full sm:h-32 hover:border-blue-500/30 transition-all group pl-8">
+                                {/* Visual Color Stripe/Icon Area */}
+                                <div className={`w-full sm:w-24 h-32 sm:h-full bg-gradient-to-br ${service.color || 'from-blue-500 to-cyan-500'} shrink-0 flex items-center justify-center`}>
+                                    <Briefcase className="text-white opacity-80" size={32} />
                                 </div>
 
-                                <h3 className="text-2xl font-bold mb-2 tracking-tight">{getLocalizedField(service.title, 'en')}</h3>
-                                <p className="text-white/80 mb-6 line-clamp-2 leading-relaxed text-sm flex-1">
-                                    {getLocalizedField(service.description, 'en')}
-                                </p>
-
-                                <div className="pt-6 border-t border-white/20">
-                                    <p className="font-bold text-lg">{getLocalizedField(service.price, 'en')}</p>
+                                <div className="flex-1 p-4 flex flex-col justify-center min-w-0">
+                                    <div className="flex justify-between items-start mb-1 gap-4">
+                                        <div>
+                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white truncate">
+                                                {getLocalizedField(service.title, 'en')}
+                                            </h3>
+                                            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                                                {getLocalizedField(service.price, 'en')}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1 shrink-0">
+                                            <button
+                                                onClick={() => openEdit(service)}
+                                                className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(service.id)}
+                                                className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+                                        {getLocalizedField(service.description, 'en')}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 mt-auto">
+                                        {service.features?.slice(0, 3).map((f: any, i: number) => (
+                                            <span key={i} className="text-[10px] px-2 py-0.5 rounded bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+                                                {getLocalizedField(f, 'en')}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </SortableItem>
                     ))}
 
                     {services.length === 0 && (
@@ -321,9 +349,8 @@ const AdminServices = () => {
                             </button>
                         </div>
                     )}
-                </div>
-            )}
-        </AdminPageLayout>
+                </Reorder.Group>
+            )}        </AdminPageLayout>
     );
 };
 

@@ -8,6 +8,7 @@ export interface ChatMessage {
 
 export interface Service {
   id: string;
+  order?: number;
   title: string;
   description: string;
   icon: string;
@@ -18,6 +19,7 @@ export interface Service {
 
 export interface Project {
   id?: string;
+  order?: number;
   title: string;
   category: string;
   description: string;
@@ -53,6 +55,7 @@ export interface FAQItem {
 
 export interface TeamMember {
   id?: string;
+  order?: number;
   name: string;
   role: string;
   description: string;

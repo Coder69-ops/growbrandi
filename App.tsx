@@ -24,7 +24,6 @@ const TeamMemberProfile = React.lazy(() => import('./components/TeamMemberProfil
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
 
 // Service Pages
-// Service Pages
 const BrandGrowthPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.BrandGrowthPage })));
 const SocialMediaContentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.SocialMediaContentPage })));
 const UIUXDesignPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.UIUXDesignPage })));
@@ -101,6 +100,7 @@ function AppContent() {
   const [chatInstance, setChatInstance] = useState<any>(null);
 
   const breadcrumbs = routeConfig[currentRoute]?.breadcrumb || ['Home'];
+  const isAdminRoute = currentPath.startsWith('/admin');
 
   // Preload chat on app startup
   useEffect(() => {
@@ -263,10 +263,10 @@ ${servicesDetails}
       </Suspense>
 
       <div className="text-slate-100 w-full relative z-10" style={{ minHeight: '100vh' }}>
-        <Header />
+        {!isAdminRoute && <Header />}
 
         {/* Breadcrumb Navigation */}
-        {breadcrumbs.length > 1 && currentRoute !== 'home' && (
+        {breadcrumbs.length > 1 && currentRoute !== 'home' && !isAdminRoute && (
           <nav className="bg-white/80 dark:bg-luxury-black/80 backdrop-blur-md border-b border-slate-200 dark:border-white/5 py-3 px-4 sm:px-6 lg:px-8 relative z-20 transition-colors duration-300">
             <div className="container mx-auto">
               <ol className="flex items-center space-x-2 text-sm font-sans">
@@ -324,7 +324,6 @@ ${servicesDetails}
                 <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
 
                 {/* 404 */}
-                {/* 404 */}
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
 
                 {/* Admin Routes */}
@@ -350,15 +349,17 @@ ${servicesDetails}
         </main>
 
         {/* Global Footer */}
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
 
       {/* Enhanced Floating Action Buttons */}
-      <FloatingActionButtons
-        onChatOpen={() => setIsChatOpen(true)}
-        onContactOpen={() => setIsContactAssistantOpen(true)}
-        isChatPreloaded={isChatPreloaded}
-      />
+      {!isAdminRoute && (
+        <FloatingActionButtons
+          onChatOpen={() => setIsChatOpen(true)}
+          onContactOpen={() => setIsContactAssistantOpen(true)}
+          isChatPreloaded={isChatPreloaded}
+        />
+      )}
 
       {/* AI Interfaces */}
       <AnimatePresence>

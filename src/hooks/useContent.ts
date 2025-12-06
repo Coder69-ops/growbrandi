@@ -43,7 +43,7 @@ export const useContent = <T extends Record<string, any>>(
                             id: doc.id,
                             ...docData
                         } as unknown as T;
-                    });
+                    }).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
                     setData(fetchedData);
                 }
             } catch (err) {
