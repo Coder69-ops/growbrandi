@@ -110,8 +110,8 @@ const TestimonialsSlider: React.FC = () => {
                                             <div className="relative mb-6">
                                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
                                                 <img
-                                                    src={testimonials[currentIndex].image}
-                                                    alt={testimonials[currentIndex].author}
+                                                    src={testimonials[currentIndex]?.image}
+                                                    alt={testimonials[currentIndex]?.author}
                                                     className="w-20 h-20 rounded-full object-cover border-2 border-white dark:border-white/10 shadow-xl relative z-10"
                                                     onError={(e) => {
                                                         e.currentTarget.style.display = 'none';
@@ -123,7 +123,7 @@ const TestimonialsSlider: React.FC = () => {
                                                     id={`fallback-${currentIndex}`}
                                                     className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-xl relative z-10 hidden"
                                                 >
-                                                    {testimonials[currentIndex].author.charAt(0)}
+                                                    {testimonials[currentIndex]?.author?.charAt(0)}
                                                 </div>
                                             </div>
 
@@ -134,15 +134,15 @@ const TestimonialsSlider: React.FC = () => {
                                             </div>
 
                                             <p className="text-xl md:text-2xl text-slate-700 dark:text-zinc-300 font-medium leading-relaxed mb-8 italic">
-                                                "{localized(testimonials[currentIndex].quote)}"
+                                                "{localized(testimonials[currentIndex]?.quote)}"
                                             </p>
 
                                             <div>
                                                 <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                                                    {testimonials[currentIndex].author}
+                                                    {testimonials[currentIndex]?.author}
                                                 </h4>
                                                 <p className="text-blue-600 dark:text-blue-400 font-medium">
-                                                    {localized(testimonials[currentIndex].company)}
+                                                    {localized(testimonials[currentIndex]?.company)}
                                                 </p>
                                             </div>
                                         </div>

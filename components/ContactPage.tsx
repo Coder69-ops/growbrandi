@@ -110,38 +110,38 @@ I would like to book this consultation.`;
 
                 if (autoSend && userInfo?.name && userInfo?.email && !hasSentRef.current) {
                     hasSentRef.current = true;
-                    handleAutoSend(newFormData);
+
+                    const autoSendEmail = async () => {
+                        setFormStatus('submitting');
+                        try {
+                            await sendEmailData(
+                                EMAILJS_SERVICE_ID,
+                                EMAILJS_TEMPLATE_ID,
+                                newFormData,
+                                EMAILJS_PUBLIC_KEY
+                            );
+
+                            // Save to Firestore
+                            await addDoc(collection(db, 'messages'), {
+                                ...newFormData,
+                                createdAt: serverTimestamp(),
+                                read: false,
+                                source: 'auto-send' // Track source
+                            });
+                            setFormStatus('success');
+                            setAiContext(null);
+                            // Reset success status after 8 seconds
+                            setTimeout(() => setFormStatus('idle'), 8000);
+                        } catch (error) {
+                            console.error("Auto-submission failed:", error);
+                            setFormStatus('error');
+                        }
+                    };
+                    autoSendEmail();
                 }
             }
         }
     }, [location.state]);
-
-    const handleAutoSend = async (data: any) => {
-        setFormStatus('submitting');
-        try {
-            await sendEmailData(
-                EMAILJS_SERVICE_ID,
-                EMAILJS_TEMPLATE_ID,
-                data,
-                EMAILJS_PUBLIC_KEY
-            );
-
-            // Save to Firestore
-            await addDoc(collection(db, 'messages'), {
-                ...data,
-                createdAt: serverTimestamp(),
-                read: false,
-                source: 'auto-send' // Track source
-            });
-            setFormStatus('success');
-            setAiContext(null);
-            // Reset success status after 8 seconds
-            setTimeout(() => setFormStatus('idle'), 8000);
-        } catch (error) {
-            console.error("Auto-submission failed:", error);
-            setFormStatus('error');
-        }
-    };
 
     const generateBrief = async () => {
         if (!formData.service || !formData.subject) {

@@ -30,6 +30,18 @@ interface FormData {
   message: string;
 }
 
+const goalOptions = [
+  'increase_sales', 'brand_awareness', 'generate_leads',
+  'improve_ux', 'expand_market', 'launch_products',
+  'optimize_ops', 'enhance_support'
+];
+
+const challengeOptions = [
+  'low_traffic', 'poor_conversion', 'weak_brand',
+  'no_presence', 'tech_issues', 'mobile_response',
+  'slow_speed', 'ineffective_marketing', 'budget_constraints'
+];
+
 const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) => {
   const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
@@ -81,17 +93,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
     sessionStorage.setItem('GROWBRANDI_CONTACT_STATE', JSON.stringify(stateToSave));
   }, [step, formData, aiInsights, showThankYou]);
 
-  const goalOptions = [
-    'increase_sales', 'brand_awareness', 'generate_leads',
-    'improve_ux', 'expand_market', 'launch_products',
-    'optimize_ops', 'enhance_support'
-  ];
 
-  const challengeOptions = [
-    'low_traffic', 'poor_conversion', 'weak_brand',
-    'no_presence', 'tech_issues', 'mobile_response',
-    'slow_speed', 'ineffective_marketing', 'budget_constraints'
-  ];
 
   const toggleMultiSelect = (option: string, field: 'goals' | 'challenges') => {
     setFormData(prev => ({

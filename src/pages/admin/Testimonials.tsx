@@ -76,7 +76,7 @@ const AdminTestimonials = () => {
             setIsEditing(false);
         } catch (error) {
             console.error("Error saving testimonial:", error);
-            alert("Failed to save testimonial.");
+            showError('Save Failed', "Failed to save testimonial.");
         } finally {
             setLoading(false);
         }
