@@ -148,31 +148,31 @@ const ProjectsPreview: React.FC = () => {
 
                     {/* Enhanced Call to Action */}
                     <motion.div variants={itemVariants} className="text-center">
-                        <GlassCard className="p-12 lg:p-20 bg-zinc-900/50 backdrop-blur-xl border border-white/10">
-                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-500/10 to-purple-500/10" />
-                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
-                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/20 rounded-full blur-[80px]" />
+                        <GlassCard className="p-12 lg:p-20 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-slate-200/50 dark:border-white/10">
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-blue-500/5 to-purple-500/5 dark:from-blue-500/10 dark:via-blue-500/10 dark:to-purple-500/10" />
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px]" />
+                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px]" />
 
                             <div className="relative z-10 max-w-4xl mx-auto">
-                                <h3 className="text-4xl md:text-5xl font-black text-white mb-6 font-heading">
-                                    {t('projects_preview.cta_title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">{t('projects_preview.cta_title_highlight')}</span>
+                                <h3 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-6 font-heading">
+                                    {t('projects_preview.cta_title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-500">{t('projects_preview.cta_title_highlight')}</span>
                                 </h3>
-                                <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                                <p className="text-xl text-slate-600 dark:text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
                                     {t('projects_preview.cta_description')}
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                     <button
                                         onClick={(e) => { e.preventDefault(); navigate('/portfolio'); }}
-                                        className="group inline-flex items-center justify-center gap-3 bg-white text-black font-bold py-4 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:bg-zinc-100 transition-all duration-300"
+                                        className="group inline-flex items-center justify-center gap-3 bg-slate-900 text-white dark:bg-white dark:text-black font-bold py-4 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 transition-all duration-300"
                                     >
                                         <FaBriefcase className="w-5 h-5" />
                                         {t('projects_preview.cta_portfolio')}
                                     </button>
                                     <button
                                         onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
-                                        className="group inline-flex items-center justify-center gap-3 bg-transparent border border-white/20 text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-white/10 transition-all duration-300"
+                                        className="group inline-flex items-center justify-center gap-3 bg-transparent border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
                                     >
-                                        <FaWhatsapp className="w-5 h-5" />
+                                        <FaWhatsapp className="w-5 h-5 text-green-600 dark:text-green-500" />
                                         {t('projects_preview.cta_whatsapp')}
                                     </button>
                                 </div>
