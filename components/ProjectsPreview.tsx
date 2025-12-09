@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaFolderOpen, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
 import { Project } from '../types';
 import { useContent } from '../src/hooks/useContent';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 // import { CONTACT_INFO } from '../constants'; // Removed
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
@@ -38,6 +39,7 @@ const itemVariants = {
 const ProjectsPreview: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { getLocalizedPath } = useLocalizedPath();
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string>('All');
@@ -188,7 +190,7 @@ const ProjectsPreview: React.FC = () => {
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                                     <button
-                                        onClick={(e) => { e.preventDefault(); navigate('/portfolio'); }}
+                                        onClick={(e) => { e.preventDefault(); navigate(getLocalizedPath('/portfolio')); }}
                                         className="group inline-flex items-center justify-center gap-3 bg-slate-900 text-white dark:bg-white dark:text-black font-bold py-4 px-10 rounded-full text-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-105 transition-all duration-300"
                                     >
                                         <FaBriefcase className="w-5 h-5" />

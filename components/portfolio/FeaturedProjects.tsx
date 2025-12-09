@@ -15,6 +15,7 @@ import { Project } from '../../types';
 import { ProjectModal } from './ProjectModal';
 import { getLocalizedField } from '../../src/utils/localization';
 import { Skeleton } from '../ui/Skeleton';
+import { useLocalizedPath } from '../../src/hooks/useLocalizedPath';
 
 // Helper to get logo for technology
 const getTechLogo = (tech: string) => {
@@ -55,6 +56,7 @@ const ShowcaseItem: React.FC<{
     onClick: () => void;
 }> = ({ project, index, onClick }) => {
     const { t, i18n } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
     const isEven = index % 2 === 0;
 
     // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
@@ -155,7 +157,7 @@ const ShowcaseItem: React.FC<{
                     >
                         {t('portfolio.params.view_case_study')} <FaArrowRight />
                     </button>
-                    <Link to="/contact">
+                    <Link to={getLocalizedPath('/contact')}>
                         <button className="px-8 py-4 rounded-full font-bold border border-slate-300 dark:border-white/20 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-white/5 transition-all">
                             {t('portfolio.params.want_site_like_this')}
                         </button>

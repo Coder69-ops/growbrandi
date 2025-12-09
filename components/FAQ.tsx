@@ -10,6 +10,7 @@ import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { Skeleton } from './ui/Skeleton';
 import { FAQItem as FAQItemType } from '../types';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 const FAQDisplayItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
   question,
@@ -67,6 +68,7 @@ const FAQ: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const { data: faqs, loading } = useContent<FAQItemType>('faqs');
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
@@ -159,7 +161,7 @@ const FAQ: React.FC = () => {
                 {t('section_headers.faq.cta_desc')}
               </p>
               <motion.button
-                onClick={() => navigate('/contact')}
+                onClick={() => navigate(getLocalizedPath('/contact'))}
                 className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}

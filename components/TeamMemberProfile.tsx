@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { TeamMember } from '../types';
 
 const TeamMemberProfile: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
     const [isImageExpanded, setIsImageExpanded] = useState(false);
 
     // Fetch team members from Firestore
@@ -24,7 +26,7 @@ const TeamMemberProfile: React.FC = () => {
 
     useEffect(() => {
         if (!loading && !member) {
-            navigate('/team', { replace: true });
+            navigate(getLocalizedPath('/team'), { replace: true });
         }
     }, [member, loading, navigate]);
 
@@ -44,7 +46,7 @@ const TeamMemberProfile: React.FC = () => {
         if (member.bookingUrl) {
             window.open(member.bookingUrl, '_blank');
         } else {
-            navigate('/contact');
+            navigate(getLocalizedPath('/contact'));
         }
     };
 
@@ -105,7 +107,7 @@ const TeamMemberProfile: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/50 dark:via-luxury-black/50 to-slate-50 dark:to-luxury-black" />
 
                 <div className="absolute top-24 left-4 lg:top-28 lg:left-8 z-20">
-                    <Link to="/team" className="flex items-center gap-2 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors group">
+                    <Link to={getLocalizedPath('/team')} className="flex items-center gap-2 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white transition-colors group">
                         <div className="w-10 h-10 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:border-blue-500 transition-all duration-300 backdrop-blur-md">
                             <FaArrowLeft className="w-4 h-4 group-hover:text-white" />
                         </div>

@@ -11,6 +11,7 @@ import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { getIcon } from '../src/utils/icons';
 import { Skeleton } from './ui/Skeleton';
 
@@ -566,6 +567,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 // --- Enhanced Services Preview Section ---
 const ServicesPreview: React.FC = () => {
     const navigate = useNavigate();
+    const { getLocalizedPath } = useLocalizedPath();
     const { t } = useTranslation();
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -681,7 +683,7 @@ const ServicesPreview: React.FC = () => {
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <motion.button
-                                    onClick={() => navigate('/contact')}
+                                    onClick={() => navigate(getLocalizedPath('/contact'))}
                                     className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:shadow-[0_0_30px_rgba(59,130,246,0.7)] hover:scale-105 transition-all duration-300"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

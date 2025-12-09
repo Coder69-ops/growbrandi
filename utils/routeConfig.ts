@@ -218,11 +218,19 @@ export const getRouteMetadata = (route: Route, pathname?: string) => {
 
 // Convert URL path to route
 export const getRouteFromPath = (path: string): Route => {
+    // Remove language prefix (e.g. /en/about -> /about)
+    // RegExp looks for ^/xx/, where xx is 2 chars. 
+    // This is simple but assumes 2-char codes.
+    const cleanPath = path.replace(/^\/[a-z]{2}(\/|$)/, '/');
+
     // Handle dynamic team routes
-    if (path.startsWith('/team/')) {
+    if (cleanPath.startsWith('/team/')) {
         return 'team';
     }
 
-    const routeEntry = Object.entries(routeConfig).find(([_, config]) => config.path === path);
+    // Normalize root path: /en -> /
+    const normalizedPath = cleanPath === '' ? '/' : cleanPath;
+
+    const routeEntry = Object.entries(routeConfig).find(([_, config]) => config.path === normalizedPath);
     return (routeEntry?.[0] as Route) || 'home';
 };

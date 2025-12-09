@@ -10,6 +10,7 @@ import { SectionHeading } from './ui/SectionHeading';
 import { getIcon } from '../src/utils/icons';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { Skeleton } from './ui/Skeleton';
 
 const containerVariants = {
@@ -38,6 +39,7 @@ interface ServiceModalProps {
 
 const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const { t, i18n } = useTranslation();
 
   // Helper to get text safely
@@ -168,13 +170,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                 <div className="sticky top-0 space-y-4 pt-4">
                   <button
-                    onClick={() => navigate('/contact', { state: { service: txt(service.title) } })}
+                    onClick={() => navigate(getLocalizedPath('/contact'), { state: { service: txt(service.title) } })}
                     className={`w-full bg-gradient-to-r ${service.color} text-white py-4 px-8 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2`}
                   >
                     {t('services.ui.start_project')} <FaArrowRight className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => navigate('/contact')}
+                    onClick={() => navigate(getLocalizedPath('/contact'))}
                     className="w-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white py-4 px-8 rounded-xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-300"
                   >
                     {t('services.ui.schedule_consultation')}
@@ -263,6 +265,7 @@ export const ServicesPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -440,7 +443,7 @@ export const ServicesPage: React.FC = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-6 justify-center mb-10">
                   <motion.button
-                    onClick={() => navigate('/contact')}
+                    onClick={() => navigate(getLocalizedPath('/contact'))}
                     className="inline-flex items-center justify-center gap-3 bg-white text-blue-600 font-bold py-4 px-8 rounded-xl text-lg shadow-xl hover:bg-blue-50 transition-all duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -449,7 +452,7 @@ export const ServicesPage: React.FC = () => {
                     Get Free Consultation
                   </motion.button>
                   <motion.button
-                    onClick={() => navigate('/portfolio')}
+                    onClick={() => navigate(getLocalizedPath('/portfolio'))}
                     className="inline-flex items-center justify-center gap-3 bg-blue-700/50 backdrop-blur-md text-white border border-white/20 font-bold py-4 px-8 rounded-xl text-lg hover:bg-blue-700/70 transition-all duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}

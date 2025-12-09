@@ -7,9 +7,11 @@ import { GlassCard } from './ui/GlassCard';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 export const PortfolioPage: React.FC = () => {
     const { t } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
 
     return (
         <>
@@ -48,7 +50,7 @@ export const PortfolioPage: React.FC = () => {
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                                <Link to="/contact">
+                                <Link to={getLocalizedPath('/contact')}>
                                     <button className="group relative px-10 py-5 bg-slate-900 dark:bg-white text-white dark:text-black font-bold text-lg rounded-full hover:bg-slate-800 dark:hover:bg-zinc-200 transition-all flex items-center gap-3 shadow-xl shadow-blue-500/20">
                                         {t('common.start_project', 'Start Your Project')}
                                         <FaArrowRight className="group-hover:translate-x-1 transition-transform" />

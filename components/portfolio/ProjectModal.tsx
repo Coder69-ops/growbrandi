@@ -16,6 +16,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Project } from '../../types';
 import { getLocalizedField } from '../../src/utils/localization';
+import { useLocalizedPath } from '../../src/hooks/useLocalizedPath';
 
 interface ProjectModalProps {
     project: Project | null;
@@ -57,6 +58,7 @@ const getTechLogo = (tech: string) => {
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose }) => {
     const { t, i18n } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
     if (!isOpen || !project) return null;
 
     // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
@@ -266,7 +268,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                         >
                                             <FaWhatsapp className="text-xl" /> {t('portfolio.params.chat_whatsapp')}
                                         </button>
-                                        <Link to="/contact" className="block">
+                                        <Link to={getLocalizedPath('/contact')} className="block">
                                             <button className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold border border-transparent hover:scale-[1.02] transition-transform">
                                                 {t('portfolio.params.book_consultation')}
                                             </button>

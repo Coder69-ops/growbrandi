@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import {
     FaCode, FaPalette, FaChartLine, FaBullhorn, FaVideo, FaHeadset, FaComments,
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
@@ -110,18 +111,25 @@ const megaMenuData: MegaMenuData = {
 
 const NavLink: React.FC<{
     route: string;
-    currentRoute: string;
+    currentRoute: string; // This expects the full path including lang
     navigate: (route: string) => void;
     children: React.ReactNode;
     onClick?: () => void;
     className?: string;
 }> = ({ route, currentRoute, navigate, children, onClick, className = "" }) => {
-    const isActive = currentRoute === route;
+    const { getLocalizedPath } = useLocalizedPath();
+    const localizedRoute = getLocalizedPath(route);
+
+    // Check active status: exact match or partial match if not home
+    // A simple check: does currentRoute equal localizedRoute?
+    // Or does currentRoute start with localizedRoute for sub-paths?
+    const isActive = currentRoute === localizedRoute || (route !== '/' && currentRoute.startsWith(localizedRoute));
+
     return (
         <button
             onClick={(e) => {
                 e.preventDefault();
-                navigate(route);
+                navigate(localizedRoute);
                 if (onClick) onClick();
             }}
             className={`relative px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 min-h-[44px] flex items-center ${isActive
@@ -148,41 +156,48 @@ const MegaMenuSection: React.FC<{
     closeMegaMenu: () => void;
 }> = ({ title, items, currentRoute, navigate, closeMegaMenu }) => {
     const { t } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
+
     return (
         <div>
             <h3 className="text-slate-900 dark:text-white font-bold text-lg mb-4 px-2">{title}</h3>
             <div className="space-y-1">
-                {items.map((item) => (
-                    <button
-                        key={item.route}
-                        onClick={() => {
-                            navigate(item.route);
-                            closeMegaMenu();
-                        }}
-                        className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${currentRoute === item.route
-                            ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
-                            : 'hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
-                            }`}
-                    >
-                        <div className="flex items-start gap-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${currentRoute === item.route
-                                ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                                : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
-                                }`}>
-                                <item.icon className={`w-5 h-5 ${currentRoute === item.route ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <h4 className={`font-semibold text-sm mb-1 ${currentRoute === item.route ? 'text-blue-600 dark:text-white' : 'text-slate-700 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
+                {items.map((item) => {
+                    const localizedRoute = getLocalizedPath(item.route);
+                    const isActive = currentRoute === localizedRoute;
+
+                    return (
+                        <button
+                            key={item.route}
+                            onClick={() => {
+                                navigate(localizedRoute);
+                                closeMegaMenu();
+                            }}
+                            className={`w-full text-left p-3 rounded-lg transition-all duration-200 group ${isActive
+                                ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
+                                : 'hover:bg-slate-100 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
+                                }`}
+                        >
+                            <div className="flex items-start gap-3">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isActive
+                                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                    : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
                                     }`}>
-                                    {t(item.title)}
-                                </h4>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
-                                    {t(item.description)}
-                                </p>
+                                    <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h4 className={`font-semibold text-sm mb-1 ${isActive ? 'text-blue-600 dark:text-white' : 'text-slate-700 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
+                                        }`}>
+                                        {t(item.title)}
+                                    </h4>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
+                                        {t(item.description)}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </button>
-                ))}
+                        </button>
+                    );
+                })}
             </div>
         </div >
     );
@@ -192,6 +207,7 @@ const Header: React.FC<HeaderProps> = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { t } = useTranslation();
+    const { getLocalizedPath } = useLocalizedPath();
     const currentRoute = location.pathname;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<'services' | 'company' | null>(null);
@@ -236,7 +252,7 @@ const Header: React.FC<HeaderProps> = () => {
                     <div className="flex justify-between items-center h-14 sm:h-16 lg:h-20">
                         {/* Enhanced Logo */}
                         <button
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate(getLocalizedPath('/'))}
                             className="flex items-center gap-3 group hover:opacity-90 transition-all duration-200"
                             aria-label="GrowBrandi Home"
                         >
@@ -302,7 +318,7 @@ const Header: React.FC<HeaderProps> = () => {
                             <ThemeToggle />
                             {/* Desktop CTA Button */}
                             <button
-                                onClick={() => navigate('/contact')}
+                                onClick={() => navigate(getLocalizedPath('/contact'))}
                                 className="hidden lg:flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-zinc-200 font-bold px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
                             >
                                 <FaPaperPlane className="w-4 h-4" />
@@ -345,10 +361,10 @@ const Header: React.FC<HeaderProps> = () => {
                                             <button
                                                 key={service.route}
                                                 onClick={() => {
-                                                    navigate(service.route);
+                                                    navigate(getLocalizedPath(service.route));
                                                     closeMegaMenu();
                                                 }}
-                                                className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === service.route
+                                                className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === getLocalizedPath(service.route)
                                                     ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
                                                     : 'hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
                                                     }`}
@@ -358,10 +374,10 @@ const Header: React.FC<HeaderProps> = () => {
                                                         ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
                                                         : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
                                                         }`}>
-                                                        <service.icon className={`w-6 h-6 ${currentRoute === service.route ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
+                                                        <service.icon className={`w-6 h-6 ${currentRoute === getLocalizedPath(service.route) ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
                                                     </div>
                                                     <div className="flex-1">
-                                                        <h4 className={`font-bold text-base mb-2 ${currentRoute === service.route ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
+                                                        <h4 className={`font-bold text-base mb-2 ${currentRoute === getLocalizedPath(service.route) ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
                                                             }`}>
                                                             {t(service.title)}
                                                         </h4>
@@ -381,23 +397,23 @@ const Header: React.FC<HeaderProps> = () => {
                                             <button
                                                 key={item.route}
                                                 onClick={() => {
-                                                    navigate(item.route);
+                                                    navigate(getLocalizedPath(item.route));
                                                     closeMegaMenu();
                                                 }}
-                                                className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === item.route
+                                                className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === getLocalizedPath(item.route)
                                                     ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
                                                     : 'hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
                                                     }`}
                                             >
                                                 <div className="flex items-start gap-4">
-                                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === item.route
+                                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === getLocalizedPath(item.route)
                                                         ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
                                                         : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
                                                         }`}>
-                                                        <item.icon className={`w-6 h-6 ${currentRoute === item.route ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
+                                                        <item.icon className={`w-6 h-6 ${currentRoute === getLocalizedPath(item.route) ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
                                                     </div>
                                                     <div className="flex-1">
-                                                        <h4 className={`font-bold text-base mb-2 ${currentRoute === item.route ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
+                                                        <h4 className={`font-bold text-base mb-2 ${currentRoute === getLocalizedPath(item.route) ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
                                                             }`}>
                                                             {t(item.title)}
                                                         </h4>
@@ -496,7 +512,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     {/* Mobile CTA */}
                                     <button
                                         onClick={() => {
-                                            navigate('/contact');
+                                            navigate(getLocalizedPath('/contact'));
                                             closeMegaMenu();
                                         }}
                                         className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg"

@@ -9,6 +9,7 @@ import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { TeamMember } from '../types';
 import { Skeleton } from './ui/Skeleton';
 
@@ -32,6 +33,7 @@ const itemVariants = {
 const TeamSection: React.FC = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const { getLocalizedPath } = useLocalizedPath();
     const [hoveredMember, setHoveredMember] = useState<number | null>(null);
     const { data: team, loading } = useContent<TeamMember>('team_members');
 
@@ -104,7 +106,7 @@ const TeamSection: React.FC = () => {
                                         }`} />
 
                                     <div className="relative z-10 flex flex-col h-full p-6 md:p-8">
-                                        <Link to={`/team/${member.slug}`} className="block flex-grow">
+                                        <Link to={getLocalizedPath(`/team/${member.slug}`)} className="block flex-grow">
                                             {/* Profile Image */}
                                             <div className="relative mb-6">
                                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl blur-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
@@ -222,7 +224,7 @@ const TeamSection: React.FC = () => {
                                 {t('section_headers.team.cta_whatsapp')}
                             </motion.button>
                             <motion.button
-                                onClick={() => navigate('/portfolio')}
+                                onClick={() => navigate(getLocalizedPath('/portfolio'))}
                                 className="bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2 border border-white/10"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}

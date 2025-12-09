@@ -15,7 +15,7 @@ import { db } from '../src/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import { useContent } from '../src/hooks/useContent';
-import { useSiteContentData } from '../src/hooks/useSiteContent';
+import { useSiteContentData, useContactSettings } from '../src/hooks/useSiteContent';
 import { SupportedLanguage } from '../src/utils/localization';
 import { Service } from '../types';
 
@@ -25,6 +25,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 export const ContactPage: React.FC = () => {
     const { t, i18n } = useTranslation();
     const { getText } = useSiteContentData();
+    const { content: contactContent, getText: getContactText } = useContactSettings();
     const lang = i18n.language as SupportedLanguage;
     const location = useLocation();
     const [formData, setFormData] = useState({
@@ -260,8 +261,10 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.email', lang) || t('contact_page.info.email')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">contact@growbrandi.com</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.response_time', lang) || t('contact_page.info.response_time')}</p>
+                                <p className="text-slate-600 dark:text-zinc-400">{contactContent?.contact_info?.email || 'contact@growbrandi.com'}</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">
+                                    {getContactText('contact_info.response_time', lang) || getText('contact.info_labels.response_time', lang) || t('contact_page.info.response_time')}
+                                </p>
                             </div>
                         </GlassCard>
 
@@ -271,15 +274,17 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.call', lang) || t('contact_page.info.call')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">+1 (555) 123-4567</p>
-                                <a
-                                    href="https://wa.me/15551234567"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-green-600 dark:text-green-400 text-sm font-medium hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
-                                >
-                                    {t('projects_preview.cta_whatsapp')} <FaArrowRight className="w-3 h-3" />
-                                </a>
+                                <p className="text-slate-600 dark:text-zinc-400">{contactContent?.contact_info?.phone || '+1 (555) 123-4567'}</p>
+                                {contactContent?.social_links?.whatsapp && (
+                                    <a
+                                        href={contactContent.social_links.whatsapp}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-green-600 dark:text-green-400 text-sm font-medium hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
+                                    >
+                                        {t('projects_preview.cta_whatsapp')} <FaArrowRight className="w-3 h-3" />
+                                    </a>
+                                )}
                             </div>
                         </GlassCard>
 
@@ -289,17 +294,20 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.visit', lang) || t('contact_page.info.visit')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">San Francisco, CA</p>
-                                <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.hq_description', lang) || t('contact_page.info.hq_desc')}</p>
+                                <p className="text-slate-600 dark:text-zinc-400">{contactContent?.contact_info?.address || 'San Francisco, CA'}</p>
+                                <p className="text-slate-400 dark:text-zinc-500 text-sm">
+                                    {getContactText('contact_info.office_hours', lang) || getText('contact.info_labels.hq_description', lang) || t('contact_page.info.hq_desc')}
+                                </p>
                             </div>
                         </GlassCard>
                     </div>
 
                     <div className="flex space-x-4">
-                        {Object.entries({ linkedin: '#', twitter: '#', instagram: '#', dribbble: '#' }).map(([platform, url], idx) => {
+                        {contactContent?.social_links && Object.entries(contactContent.social_links).map(([platform, url], idx) => {
+                            if (!url) return null;
                             const Icon = getSocialIcon(platform);
                             return (
-                                <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
+                                <a key={idx} href={url as string} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
                                     <Icon className="w-4 h-4" />
                                 </a>
                             );
@@ -485,14 +493,16 @@ I would like to book this consultation.`;
                                         <div className="h-px bg-slate-200 dark:bg-white/10 flex-1" />
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => window.open('https://wa.me/15551234567', '_blank')}
-                                        className="w-full py-4 rounded-xl font-bold text-lg border-2 border-green-500/20 hover:border-green-500/50 text-slate-700 dark:text-white hover:bg-green-50 dark:hover:bg-green-500/10 transition-all duration-300 flex items-center justify-center gap-2 group"
-                                    >
-                                        <FaWhatsapp className="w-6 h-6 text-green-500 group-hover:scale-110 transition-transform" />
-                                        {t('projects_preview.cta_whatsapp')}
-                                    </button>
+                                    {contactContent?.social_links?.whatsapp && (
+                                        <button
+                                            type="button"
+                                            onClick={() => window.open(contactContent.social_links.whatsapp, '_blank')}
+                                            className="w-full py-4 rounded-xl font-bold text-lg border-2 border-green-500/20 hover:border-green-500/50 text-slate-700 dark:text-white hover:bg-green-50 dark:hover:bg-green-500/10 transition-all duration-300 flex items-center justify-center gap-2 group"
+                                        >
+                                            <FaWhatsapp className="w-6 h-6 text-green-500 group-hover:scale-110 transition-transform" />
+                                            {t('projects_preview.cta_whatsapp')}
+                                        </button>
+                                    )}
 
                                     <AnimatePresence>
                                         {formStatus === 'error' && (

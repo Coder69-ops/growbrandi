@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const languages = [
     { code: 'en', name: 'English', flag: '/flags/us.svg' },
@@ -11,8 +12,12 @@ const languages = [
     { code: 'fr', name: 'Français', flag: '/flags/be.svg' }, // Using Belgium flag since specifically targeting Belgium for French
 ];
 
+
+
 export function LanguageSwitcher() {
     const { i18n } = useTranslation();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isOpen, setIsOpen] = React.useState(false);
     const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -30,7 +35,17 @@ export function LanguageSwitcher() {
     }, []);
 
     const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
+        const currentPath = location.pathname;
+        const parts = currentPath.split('/').filter(p => p);
+
+        // If the first part is a known language code, replace it
+        if (parts.length > 0 && languages.some(l => l.code === parts[0])) {
+            parts[0] = lng;
+            navigate(`/${parts.join('/')}`);
+        } else {
+            // Otherwise/Fallback: Navigate to the homepage of the selected language
+            navigate(`/${lng}`);
+        }
         setIsOpen(false);
     };
 

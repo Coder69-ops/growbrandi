@@ -63,6 +63,10 @@ import AdminSiteContent from './src/pages/admin/SiteContent';
 import AdminContactSettings from './src/pages/admin/ContactSettings';
 import AdminMessages from './src/pages/admin/Messages';
 
+import { LanguageWrapper } from './src/components/LanguageWrapper';
+import { RootRedirect } from './src/components/RootRedirect';
+import { useLocalizedPath } from './src/hooks/useLocalizedPath';
+
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
   in: { opacity: 1, y: 0 },
@@ -95,6 +99,7 @@ function AppContent() {
   const currentPath = location.pathname;
   const currentRoute = getRouteFromPath(currentPath);
   const metadata = getRouteMetadata(currentRoute, currentPath);
+  const { getLocalizedPath } = useLocalizedPath();
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
@@ -150,10 +155,10 @@ ${servicesList}
 • Address: San Francisco, CA
 
 **Key Pages**:
-• [Services](/services) - List of all services
-• [Portfolio](/portfolio) - Our past work
-• [Contact](/contact) - Get in touch
-• [About](/about) - Our story
+• [Services](${getLocalizedPath('/services')}) - List of all services
+• [Portfolio](${getLocalizedPath('/portfolio')}) - Our past work
+• [Contact](${getLocalizedPath('/contact')}) - Get in touch
+• [About](${getLocalizedPath('/about')}) - Our story
 
 GUIDELINES:
 • Use markdown links: [Link Text](URL).
@@ -161,7 +166,7 @@ GUIDELINES:
 • Focus on value and solutions.
 
 **EXAMPLE**:
-"We can definitely help with that! Our [Web Development](/services/web-development) team builds high-converting sites. You can see some examples in our [Portfolio](/portfolio)."
+"We can definitely help with that! Our [Web Development](${getLocalizedPath('/services/web-development')}) team builds high-converting sites. You can see some examples in our [Portfolio](${getLocalizedPath('/portfolio')})."
 
 **SUGGESTIONS**: At the end of your response, provide 3 relevant follow-up questions for the user to ask. Format them as a JSON array inside <SUGGESTIONS> tags. Example: <SUGGESTIONS>["Question 1", "Question 2", "Question 3"]</SUGGESTIONS>`;
 
@@ -203,25 +208,25 @@ GUIDELINES:
 ${servicesDetails}
 
 🔗 **USEFUL LINKS**:
-• [Home](/)
-• [Services](/services)
-• [Portfolio](/portfolio)
-• [Contact](/contact)
-• [About Us](/about)
-• [Team](/team)
-• [Blog](/blog)
-• [Brand Growth](/services/brand-growth)
-• [Social Media Content](/services/social-media-content)
-• [UI/UX Design](/services/ui-ux-design)
-• [Web Development](/services/web-development)
-• [Virtual Assistance](/services/virtual-assistance)
-• [Customer Support](/services/customer-support)
+• [Home](${getLocalizedPath('/')})
+• [Services](${getLocalizedPath('/services')})
+• [Portfolio](${getLocalizedPath('/portfolio')})
+• [Contact](${getLocalizedPath('/contact')})
+• [About Us](${getLocalizedPath('/about')})
+• [Team](${getLocalizedPath('/team')})
+• [Blog](${getLocalizedPath('/blog')})
+• [Brand Growth](${getLocalizedPath('/services/brand-growth')})
+• [Social Media Content](${getLocalizedPath('/services/social-media-content')})
+• [UI/UX Design](${getLocalizedPath('/services/ui-ux-design')})
+• [Web Development](${getLocalizedPath('/services/web-development')})
+• [Virtual Assistance](${getLocalizedPath('/services/virtual-assistance')})
+• [Customer Support](${getLocalizedPath('/services/customer-support')})
 
 🧠 **SMART SUGGESTIONS**:
-• Need more traffic? Suggest [Brand Growth](/services/brand-growth) or [SEO](/services/brand-growth).
-• Need a new website? Suggest [Web Development](/services/web-development).
-• Overwhelmed? Suggest [Virtual Assistance](/services/virtual-assistance).
-• Need design? Suggest [UI/UX Design](/services/ui-ux-design).
+• Need more traffic? Suggest [Brand Growth](${getLocalizedPath('/services/brand-growth')}) or [SEO](${getLocalizedPath('/services/brand-growth')}).
+• Need a new website? Suggest [Web Development](${getLocalizedPath('/services/web-development')}).
+• Overwhelmed? Suggest [Virtual Assistance](${getLocalizedPath('/services/virtual-assistance')}).
+• Need design? Suggest [UI/UX Design](${getLocalizedPath('/services/ui-ux-design')}).
 
 ✨ **RESPONSE STYLE**:
 • Use markdown links: [Link Text](URL).
@@ -229,7 +234,7 @@ ${servicesDetails}
 • Focus on value and solutions.
 
 **EXAMPLE**:
-"We can definitely help with that! Our [Web Development](/services/web-development) team builds high-converting sites. You can see some examples in our [Portfolio](/portfolio)."
+"We can definitely help with that! Our [Web Development](${getLocalizedPath('/services/web-development')}) team builds high-converting sites. You can see some examples in our [Portfolio](${getLocalizedPath('/portfolio')})."
 
 **SUGGESTIONS**: At the end of your response, provide 3 relevant follow-up questions for the user to ask. Format them as a JSON array inside <SUGGESTIONS> tags. Example: <SUGGESTIONS>["Question 1", "Question 2", "Question 3"]</SUGGESTIONS>`;
 
@@ -326,39 +331,43 @@ ${servicesDetails}
                     : currentPath
                 }
               >
-                {/* Home */}
-                <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
+                {/* Root Redirect */}
+                <Route path="/" element={<RootRedirect />} />
+
+                {/* Localized Public Routes */}
+                <Route path="/:lang" element={<LanguageWrapper><PageWrapper><HomePage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Services */}
-                <Route path="/services/brand-growth" element={<PageWrapper><BrandGrowthPage /></PageWrapper>} />
-                <Route path="/services/social-media-content" element={<PageWrapper><SocialMediaContentPage /></PageWrapper>} />
-                <Route path="/services/ui-ux-design" element={<PageWrapper><UIUXDesignPage /></PageWrapper>} />
-                <Route path="/services/web-development" element={<PageWrapper><WebDevelopmentPage /></PageWrapper>} />
-                <Route path="/services/virtual-assistance" element={<PageWrapper><VirtualAssistancePage /></PageWrapper>} />
-                <Route path="/services/customer-support" element={<PageWrapper><CustomerSupportPage /></PageWrapper>} />
+                <Route path="/:lang/services/brand-growth" element={<LanguageWrapper><PageWrapper><BrandGrowthPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/social-media-content" element={<LanguageWrapper><PageWrapper><SocialMediaContentPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/ui-ux-design" element={<LanguageWrapper><PageWrapper><UIUXDesignPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/web-development" element={<LanguageWrapper><PageWrapper><WebDevelopmentPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/virtual-assistance" element={<LanguageWrapper><PageWrapper><VirtualAssistancePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/customer-support" element={<LanguageWrapper><PageWrapper><CustomerSupportPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Company */}
-                <Route path="/about" element={<PageWrapper><AboutUsPage /></PageWrapper>} />
-                <Route path="/process" element={<PageWrapper><ProcessPage /></PageWrapper>} />
-                <Route path="/case-studies" element={<PageWrapper><CaseStudiesPage /></PageWrapper>} />
-                <Route path="/team" element={<PageWrapper><TeamPage /></PageWrapper>} />
-                <Route path="/team/:slug" element={<PageWrapper><TeamMemberProfile /></PageWrapper>} />
-                <Route path="/careers" element={<PageWrapper><CareersPage /></PageWrapper>} />
-                <Route path="/blog" element={<PageWrapper><BlogPage /></PageWrapper>} />
+                <Route path="/:lang/about" element={<LanguageWrapper><PageWrapper><AboutUsPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/process" element={<LanguageWrapper><PageWrapper><ProcessPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/case-studies" element={<LanguageWrapper><PageWrapper><CaseStudiesPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/team" element={<LanguageWrapper><PageWrapper><TeamPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/team/:slug" element={<LanguageWrapper><PageWrapper><TeamMemberProfile /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/careers" element={<LanguageWrapper><PageWrapper><CareersPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/blog" element={<LanguageWrapper><PageWrapper><BlogPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Legal */}
-                <Route path="/legal/privacy-policy" element={<PageWrapper><PrivacyPolicyPage /></PageWrapper>} />
-                <Route path="/legal/terms-of-service" element={<PageWrapper><TermsOfServicePage /></PageWrapper>} />
-                <Route path="/legal/cookie-policy" element={<PageWrapper><CookiePolicyPage /></PageWrapper>} />
+                <Route path="/:lang/legal/privacy-policy" element={<LanguageWrapper><PageWrapper><PrivacyPolicyPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/legal/terms-of-service" element={<LanguageWrapper><PageWrapper><TermsOfServicePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/legal/cookie-policy" element={<LanguageWrapper><PageWrapper><CookiePolicyPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Contact */}
-                <Route path="/contact" element={<PageWrapper><ContactPage /></PageWrapper>} />
+                <Route path="/:lang/contact" element={<LanguageWrapper><PageWrapper><ContactPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Legacy/Redirects/Other */}
-                <Route path="/services" element={<PageWrapper><ServicesPage /></PageWrapper>} />
-                <Route path="/portfolio" element={<PageWrapper><PortfolioPage /></PageWrapper>} />
+                <Route path="/:lang/services" element={<LanguageWrapper><PageWrapper><ServicesPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/portfolio" element={<LanguageWrapper><PageWrapper><PortfolioPage /></PageWrapper></LanguageWrapper>} />
 
-                {/* 404 */}
+                {/* 404 - Global catch-all should still work, but ideally we want localized 404 */}
+                <Route path="/:lang/*" element={<LanguageWrapper><PageWrapper><NotFoundPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
 
                 {/* Admin Routes */}

@@ -14,12 +14,14 @@ import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { getLocalizedField, SupportedLanguage } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 // About Us Page
 export const AboutUsPage: React.FC = () => {
   const { t, i18n } = useTranslation(); // Keep for legacy fallbacks or strict hardcoded UI strings
   const { data: teamMembers } = useContent('team_members');
   const { getText, content } = useSiteContentData();
+  const { getLocalizedPath } = useLocalizedPath();
   const lang = i18n.language as SupportedLanguage;
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
@@ -178,7 +180,7 @@ export const AboutUsPage: React.FC = () => {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link to="/team">
+            <Link to={getLocalizedPath('/team')}>
               <button className="px-8 py-3 rounded-full border border-slate-300 dark:border-white/20 text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-all font-semibold">
                 {getText('about.team_preview.view_full', lang) || t('company.about_us.team.view_full')}
               </button>
@@ -451,6 +453,7 @@ export const TeamPage: React.FC = () => {
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const { data: teamMembers } = useContent('team_members');
   const { getText } = useSiteContentData();
+  const { getLocalizedPath } = useLocalizedPath();
   const lang = i18n.language as SupportedLanguage;
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
@@ -498,7 +501,7 @@ export const TeamPage: React.FC = () => {
                     }`} />
 
                   <div className="relative z-10 flex flex-col h-full">
-                    <Link to={`/team/${member.slug}`} className="block flex-grow">
+                    <Link to={getLocalizedPath(`/team/${member.slug}`)} className="block flex-grow">
                       {/* Profile Image Container */}
                       <div className="relative mb-8 mx-auto w-40 h-40">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-2xl opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
@@ -607,7 +610,7 @@ export const TeamPage: React.FC = () => {
                 {getText('team_page.cta.description', lang) || t('company.team.cta.description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/contact">
+                <Link to={getLocalizedPath('/contact')}>
                   <motion.button
                     className="bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400 font-bold px-10 py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] text-lg"
                     whileHover={{ scale: 1.02 }}
@@ -616,7 +619,7 @@ export const TeamPage: React.FC = () => {
                     {getText('team_page.cta.start_project', lang) || t('company.team.cta.start_project')}
                   </motion.button>
                 </Link>
-                <Link to="/about">
+                <Link to={getLocalizedPath('/about')}>
                   <motion.button
                     className="bg-white/10 backdrop-blur-md text-white hover:bg-white/20 font-bold px-10 py-4 rounded-full transition-all duration-300 border border-white/10 hover:border-white/30 text-lg"
                     whileHover={{ scale: 1.02 }}

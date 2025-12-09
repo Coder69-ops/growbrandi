@@ -12,6 +12,7 @@ import AILoader from './AILoader';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 // --- Shared UI Components ---
 
@@ -77,6 +78,7 @@ const ResultCard = ({ title, children, color = "blue" }: any) => (
 
 const ProjectEstimator = () => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const [formData, setFormData] = useState({
     projectType: '',
     features: [] as string[],
@@ -289,7 +291,7 @@ const ProjectEstimator = () => {
             )}
 
             <button
-              onClick={() => navigate('/contact', {
+              onClick={() => navigate(getLocalizedPath('/contact'), {
                 state: {
                   source: 'estimator',
                   data: estimation,
@@ -311,6 +313,7 @@ const ProjectEstimator = () => {
 
 const ServiceRecommender = () => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const [formData, setFormData] = useState({
     industry: '',
     currentChallenges: [] as string[],
@@ -506,7 +509,7 @@ const ServiceRecommender = () => {
             )}
 
             <button
-              onClick={() => navigate('/contact', {
+              onClick={() => navigate(getLocalizedPath('/contact'), {
                 state: {
                   source: 'recommender',
                   data: recommendations,
@@ -528,6 +531,7 @@ const ServiceRecommender = () => {
 
 const BusinessGrowthAnalyzer = () => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const [formData, setFormData] = useState({
     currentRevenue: '',
     industry: '',
@@ -746,7 +750,7 @@ const BusinessGrowthAnalyzer = () => {
             )}
 
             <button
-              onClick={() => navigate('/contact', {
+              onClick={() => navigate(getLocalizedPath('/contact'), {
                 state: {
                   source: 'analyzer',
                   data: analysis,
@@ -768,6 +772,7 @@ const BusinessGrowthAnalyzer = () => {
 
 const ConsultationPlanner = () => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const [formData, setFormData] = useState({
     businessType: '',
     specificNeeds: [] as string[],
@@ -922,7 +927,7 @@ const ConsultationPlanner = () => {
             )}
 
             <button
-              onClick={() => navigate('/contact', {
+              onClick={() => navigate(getLocalizedPath('/contact'), {
                 state: {
                   source: 'planner',
                   data: plan,

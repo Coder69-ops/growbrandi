@@ -8,6 +8,8 @@ import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useContent } from '../src/hooks/useContent';
 import { Service } from '../types';
 import { getLocalizedField } from '../src/utils/localization';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import { useContactSettings } from '../src/hooks/useSiteContent';
 
 // --- Enhanced Footer Component ---
 const Footer: React.FC = () => {
@@ -18,6 +20,8 @@ const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const { getLocalizedPath } = useLocalizedPath();
+  const { content: contactContent } = useContactSettings();
 
   const { data: services } = useContent<Service>('services');
 
@@ -64,7 +68,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-12 mb-12 md:mb-16">
           {/* Brand Section - Spans full width on mobile, 4 cols on desktop */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-4 md:space-y-6">
-            <Link to="/" className="flex items-center gap-3 group">
+            <Link to={getLocalizedPath('/')} className="flex items-center gap-3 group">
               <img
                 src="/growbrandi-logo.png"
                 alt="GrowBrandi Logo"
@@ -90,19 +94,22 @@ const Footer: React.FC = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 pt-2">
-              {Object.entries({ linkedin: '#', twitter: '#', instagram: '#', dribbble: '#', whatsapp: '#' }).map(([platform, url]) => (
-                <a
-                  key={platform}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
-                  aria-label={platform}
-                >
-                  <span className="sr-only">{platform}</span>
-                  {getSocialIcon(platform)}
-                </a>
-              ))}
+              {contactContent?.social_links && Object.entries(contactContent.social_links).map(([platform, url]) => {
+                if (!url) return null;
+                return (
+                  <a
+                    key={platform}
+                    href={url as string}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-8 h-8 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
+                    aria-label={platform}
+                  >
+                    <span className="sr-only">{platform}</span>
+                    {getSocialIcon(platform)}
+                  </a>
+                )
+              })}
             </div>
           </div>
 
@@ -113,7 +120,7 @@ const Footer: React.FC = () => {
               {services.slice(0, 6).map((service) => (
                 <li key={service.id}>
                   <Link
-                    to={`/services`}
+                    to={getLocalizedPath(`/services`)}
                     className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {getLocalizedField(service.title, i18n.language) || 'Service'}
@@ -138,7 +145,7 @@ const Footer: React.FC = () => {
               ].map((link) => (
                 <li key={link.name}>
                   <Link
-                    to={link.path}
+                    to={getLocalizedPath(link.path)}
                     className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
                     {link.name}
@@ -154,18 +161,18 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaMapMarkerAlt className="w-4 h-4 text-slate-900 dark:text-white mt-0.5 shrink-0" />
-                <span>San Francisco, CA</span>
+                <span>{contactContent?.contact_info?.address || 'San Francisco, CA'}</span>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaEnvelope className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href="mailto:contact@growbrandi.com" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  contact@growbrandi.com
+                <a href={`mailto:${contactContent?.contact_info?.email || 'contact@growbrandi.com'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  {contactContent?.contact_info?.email || 'contact@growbrandi.com'}
                 </a>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaPhone className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href="tel:+15551234567" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  +1 (555) 123-4567
+                <a href={`tel:${contactContent?.contact_info?.phone || '+15551234567'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  {contactContent?.contact_info?.phone || '+1 (555) 123-4567'}
                 </a>
               </li>
             </ul>
@@ -178,9 +185,9 @@ const Footer: React.FC = () => {
             {t('footer.copyright', { year: currentYear })}
           </p>
           <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-sm text-slate-500 dark:text-zinc-400 font-light">
-            <Link to="/legal/privacy-policy" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.privacy')}</Link>
-            <Link to="/legal/terms-of-service" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.terms')}</Link>
-            <Link to="/sitemap" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.sitemap')}</Link>
+            <Link to={getLocalizedPath("/legal/privacy-policy")} className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.privacy')}</Link>
+            <Link to={getLocalizedPath("/legal/terms-of-service")} className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.terms')}</Link>
+            <Link to="/sitemap.xml" className="hover:text-slate-900 dark:hover:text-white transition-colors">{t('footer.sitemap')}</Link>
           </div>
         </div>
       </div>

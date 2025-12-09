@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaMagic, FaCalculator, FaChartLine, FaArrowRight, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import { estimateProject, analyzeBusinessGrowth } from '../services/geminiService';
 import AILoader from './AILoader';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 interface ServiceAIWidgetProps {
     serviceTitle: string;
@@ -12,6 +13,7 @@ interface ServiceAIWidgetProps {
 
 const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact = false }) => {
     const navigate = useNavigate();
+    const { getLocalizedPath } = useLocalizedPath();
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState<any>(null);
     const [step, setStep] = useState<'input' | 'result'>('input');
@@ -64,7 +66,7 @@ const ServiceAIWidget: React.FC<ServiceAIWidgetProps> = ({ serviceTitle, compact
     };
 
     const handleProceed = () => {
-        navigate('/contact', {
+        navigate(getLocalizedPath('/contact'), {
             state: {
                 source: widgetType,
                 data: result,

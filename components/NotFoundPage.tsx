@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 const NotFoundPage = () => {
   const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
 
   const helpfulLinks = [
     { label: 'Home', route: '/' },
@@ -59,7 +61,7 @@ const NotFoundPage = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
         >
           <motion.button
-            onClick={() => navigate('/')}
+            onClick={() => navigate(getLocalizedPath('/'))}
             className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-cyan-500 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-600 dark:hover:to-cyan-600 transition-all duration-300 shadow-lg shadow-blue-500/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -89,7 +91,7 @@ const NotFoundPage = () => {
             {helpfulLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => navigate(link.route)}
+                onClick={() => navigate(getLocalizedPath(link.route))}
                 className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium transition-colors"
               >
                 {link.label}

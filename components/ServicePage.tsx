@@ -7,6 +7,7 @@ import ServiceAIWidget from './ServiceAIWidget';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 interface ServicePageProps {
   title: string;
@@ -31,6 +32,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
   process = [],
   pricing
 }) => {
+  const { getLocalizedPath } = useLocalizedPath();
   return (
     <>
       <SEO title={title} description={description} />
@@ -54,7 +56,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <Link to="/contact">
+              <Link to={getLocalizedPath('/contact')}>
                 <motion.button
                   className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
                   whileHover={{ scale: 1.02, y: -2 }}
@@ -64,7 +66,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                   Get Started Today
                 </motion.button>
               </Link>
-              <Link to="/portfolio">
+              <Link to={getLocalizedPath('/portfolio')}>
                 <motion.button
                   className="bg-white/10 backdrop-blur-md text-slate-700 dark:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/20 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30"
                   whileHover={{ scale: 1.02 }}
@@ -259,7 +261,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                           </li>
                         ))}
                       </ul>
-                      <Link to="/contact" className="w-full block mt-auto">
+                      <Link to={getLocalizedPath('/contact')} className="w-full block mt-auto">
                         <motion.button
                           className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 ${planName === 'professional'
                             ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-600 hover:to-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.3)]'
@@ -315,7 +317,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                   Let's discuss your project and create something amazing together.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/contact">
+                  <Link to={getLocalizedPath('/contact')}>
                     <motion.button
                       className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-blue-500 hover:to-blue-400 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]"
                       whileHover={{ scale: 1.02, y: -2 }}
@@ -325,7 +327,7 @@ const ServicePage: React.FC<ServicePageProps> = ({
                       Start Your Project
                     </motion.button>
                   </Link>
-                  <Link to="/contact">
+                  <Link to={getLocalizedPath('/contact')}>
                     <motion.button
                       className="bg-white/10 backdrop-blur-md text-slate-700 dark:text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto hover:bg-white/20 border border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30"
                       whileHover={{ scale: 1.02, y: -2 }}
