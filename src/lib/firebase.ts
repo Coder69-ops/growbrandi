@@ -26,5 +26,5 @@ export const storage = getStorage(app);
 
 // Helper to log if config is missing (for developer sanity)
 if (!isConfigured) {
-    console.warn("Firebase config is missing in .env.local. Admin features will not work.");
+    // Firebase config is missing - admin features will not work
 }

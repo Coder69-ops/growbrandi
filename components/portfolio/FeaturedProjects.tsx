@@ -97,7 +97,7 @@ const ShowcaseItem: React.FC<{
                 <div className="flex flex-col h-full justify-center">
                     <div className="flex items-center gap-3 mb-6">
                         <span className="px-3 py-1 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full">
-                            {project.category.startsWith('services.') ? t(project.category) : t(`services.${project.category}.title`)}
+                            {formatCategoryLabel(project.category.startsWith('services.') ? t(project.category) : (getLocalizedField(project.category, i18n.language) || project.category))}
                         </span>
                         <div className="h-px flex-grow bg-slate-200 dark:bg-white/10" />
                         <span className="text-sm font-semibold text-slate-500 dark:text-zinc-500">{getText(project.client)}</span>
@@ -168,6 +168,15 @@ const ShowcaseItem: React.FC<{
     );
 };
 
+// Helper to format category label for display
+const formatCategoryLabel = (category: string): string => {
+    // Remove underscores and capitalize each word
+    return category
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+};
+
 export const FeaturedProjects: React.FC = () => {
     const { t, i18n } = useTranslation();
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -222,7 +231,7 @@ export const FeaturedProjects: React.FC = () => {
                                     : 'bg-white dark:bg-zinc-900 text-slate-500 border-slate-200 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-600 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                             >
-                                {category === 'All' ? t('portfolio.page.filter.all') : (category.startsWith('services.') ? t(category) : t(`services.${category}.title`))}
+                                {category === 'All' ? t('portfolio.page.filter.all') : formatCategoryLabel(category)}
                                 <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${activeFilter === category ? 'bg-white/20 text-white dark:text-black dark:bg-black/10' : 'bg-slate-100 dark:bg-zinc-800 text-slate-400'}`}>
                                     {category === 'All' ? projects.length : projects.filter((p: any) => getCategory(p) === category).length}
                                 </span>

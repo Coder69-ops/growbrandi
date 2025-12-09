@@ -385,7 +385,7 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
 
       await sendEmailData(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData, EMAILJS_PUBLIC_KEY);
 
-      console.log('✅ Email sent successfully via EmailJS');
+      // Email sent successfully
     } catch (error) {
       console.error('❌ Failed to send email:', error);
       // Continue to show success screen even if email fails (fallback)

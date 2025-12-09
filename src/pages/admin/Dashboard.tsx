@@ -35,8 +35,8 @@ const DashboardCard = ({ title, value, icon: Icon, color, trend, trendValue }: a
             </div>
             {trend && (
                 <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full border ${trend === 'up'
-                        ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
-                        : 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+                    ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                    : 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
                     }`}>
                     {trend === 'up' ? <TrendingUp size={12} strokeWidth={3} /> : <TrendingUp size={12} className="rotate-180" strokeWidth={3} />}
                     {trendValue}
@@ -127,7 +127,7 @@ const AdminDashboard = () => {
                         timestamp: doc.data().createdAt?.toDate() || new Date(0),
                         details: getLocalizedField(doc.data().description, 'en')
                     }));
-                } catch (e) { console.warn("Could not fetch ordered projects", e); }
+                } catch (e) { /* Silent fallback */ }
 
                 // Services
                 let recentServices: DashboardActivity[] = [];
@@ -141,7 +141,7 @@ const AdminDashboard = () => {
                         timestamp: doc.data().createdAt?.toDate() || new Date(0),
                         details: getLocalizedField(doc.data().description, 'en')
                     }));
-                } catch (e) { console.warn("Could not fetch ordered services", e); }
+                } catch (e) { /* Silent fallback */ }
 
 
                 // Combine and Sort
@@ -270,9 +270,9 @@ const AdminDashboard = () => {
                         activities.map((activity) => (
                             <div key={activity.id} className="group flex items-start gap-4 p-4 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200/50 dark:hover:border-white/5 transition-all duration-300">
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110 ${activity.type === 'project' ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300' :
-                                        activity.type === 'service' ? 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' :
-                                            activity.type === 'message' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300' :
-                                                'bg-slate-100 text-slate-600'
+                                    activity.type === 'service' ? 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' :
+                                        activity.type === 'message' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300' :
+                                            'bg-slate-100 text-slate-600'
                                     }`}>
                                     {activity.type === 'project' && <FolderKanban size={20} />}
                                     {activity.type === 'service' && <Briefcase size={20} />}
