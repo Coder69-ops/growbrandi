@@ -6,7 +6,6 @@ import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFo
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
 import { SupportedLanguage, createEmptyLocalizedString } from '../../utils/localization';
-import { CONTACT_INFO } from '../../../constants';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
@@ -34,13 +33,13 @@ const AdminContactSettings = () => {
             error: createEmptyLocalizedString(),
         },
         contact_info: {
-            email: CONTACT_INFO.email,
-            phone: CONTACT_INFO.phone,
-            address: CONTACT_INFO.address,
+            email: '',
+            phone: '',
+            address: '',
             office_hours: createEmptyLocalizedString(),
             response_time: createEmptyLocalizedString(),
         },
-        social_links: CONTACT_INFO.social,
+        social_links: { linkedin: '', twitter: '', instagram: '', whatsapp: '' },
     });
 
     const { showSuccess, showError, StatusModal } = useStatusModal();

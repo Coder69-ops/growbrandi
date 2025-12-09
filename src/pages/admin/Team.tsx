@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
-import { TEAM_MEMBERS } from '../../../constants';
+// import { TEAM_MEMBERS } from '../../../constants'; // Removed
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, User, Linkedin, Twitter, Github, Mail, Trophy, Star } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
@@ -61,35 +61,36 @@ const AdminTeam = () => {
     const { showSuccess, showError, StatusModal } = useStatusModal();
 
     const handleSeedData = async () => {
-        if (!window.confirm("This will add all team members from constants.ts to Firestore with multi-language structure. Continue?")) return;
-        setLoading(true);
-        try {
-            let index = 1;
-            for (const member of TEAM_MEMBERS) {
-                const multiLangMember = {
-                    name: member.name,
-                    slug: member.slug,
-                    order: index++,
-                    image: member.image,
-                    social: member.social || {},
-                    role: { en: member.role },
-                    description: { en: member.description },
-                    bio: { en: member.bio || '' },
-                    achievements: (member.achievements || []).map((a: string) => ({ en: a })),
-                    specialties: (member.specialties || []).map((s: string) => ({ en: s })),
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp(),
-                };
-                await addDoc(collection(db, 'team_members'), multiLangMember);
-            }
-            await fetchTeam();
-            showSuccess('Data Seeded', 'Team members seeded successfully!');
-        } catch (error) {
-            console.error("Error seeding data:", error);
-            showError('Seeding Failed', 'Failed to seed data. Please check the console for details.');
-        } finally {
-            setLoading(false);
-        }
+        alert("Seeding from static constants is no longer supported.");
+        // if (!window.confirm("This will add all team members from constants.ts to Firestore with multi-language structure. Continue?")) return;
+        // setLoading(true);
+        // try {
+        //     let index = 1;
+        //     for (const member of TEAM_MEMBERS) {
+        //         const multiLangMember = {
+        //             name: member.name,
+        //             slug: member.slug,
+        //             order: index++,
+        //             image: member.image,
+        //             social: member.social || {},
+        //             role: { en: member.role },
+        //             description: { en: member.description },
+        //             bio: { en: member.bio || '' },
+        //             achievements: (member.achievements || []).map((a: string) => ({ en: a })),
+        //             specialties: (member.specialties || []).map((s: string) => ({ en: s })),
+        //             createdAt: serverTimestamp(),
+        //             updatedAt: serverTimestamp(),
+        //         };
+        //         await addDoc(collection(db, 'team_members'), multiLangMember);
+        //     }
+        //     await fetchTeam();
+        //     showSuccess('Data Seeded', 'Team members seeded successfully!');
+        // } catch (error) {
+        //     console.error("Error seeding data:", error);
+        //     showError('Seeding Failed', 'Failed to seed data. Please check the console for details.');
+        // } finally {
+        //     setLoading(false);
+        // }
     };
 
     const handleDelete = async (id: string) => {

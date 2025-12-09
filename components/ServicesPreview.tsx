@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaCheck, FaSearch, FaLightbulb, FaRocket, FaChartLine, FaArrowRight, FaLock, FaCheckCircle, FaHeadset, FaStar, FaClipboardList, FaWhatsapp, FaPlay } from 'react-icons/fa';
-import { SERVICES, CONTACT_INFO } from '../constants';
+// import { CONTACT_INFO } from '../constants'; // Removed
 import ServiceAIWidget from './ServiceAIWidget';
 import { Service } from '../types';
 import { BackgroundEffects } from './ui/BackgroundEffects';
@@ -12,6 +12,7 @@ import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { getIcon } from '../src/utils/icons';
+import { Skeleton } from './ui/Skeleton';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,7 +44,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
     const { t, i18n } = useTranslation();
 
     // Helper to get localized text
-    const localized = (field: any) => t(getLocalizedField(field, i18n.language));
+    const localized = (field: any) => getLocalizedField(field, i18n.language);
 
     // Dynamically retrieve process steps from translation file based on service ID
     const serviceId = (service as any).serviceId || service.id;
@@ -216,7 +217,7 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => {
     const { t, i18n } = useTranslation();
-    const localized = (field: any) => t(getLocalizedField(field, i18n.language));
+    const localized = (field: any) => getLocalizedField(field, i18n.language);
 
     // Check service types for specific visuals based on IDs
     // Support both static ID (id) and seeded ID (serviceId)
@@ -521,7 +522,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 
                 {/* Features Grid */}
                 <div className="grid grid-cols-2 gap-2 mb-6">
-                    {service.features?.slice(0, 4).map((feature, idx) => (
+                    {Array.isArray(service.features) && service.features.slice(0, 4).map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-2 text-xs text-slate-500 dark:text-zinc-400">
                             <div className="w-1.5 h-1.5 bg-blue-500 dark:bg-blue-400 rounded-full flex-shrink-0" />
                             <span className="truncate">{localized(feature)}</span>
@@ -548,7 +549,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                         {t('common.learn_more')}
                     </motion.button>
                     <button
-                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                        onClick={() => window.open('https://wa.me/15551234567', '_blank')}
                         className="w-full border border-slate-200 dark:border-white/10 text-slate-600 dark:text-zinc-300 py-2.5 px-6 rounded-xl text-sm hover:bg-slate-50 dark:hover:bg-white/5 transition-all flex items-center justify-center gap-2"
                     >
                         <FaWhatsapp className="w-4 h-4 text-green-500" />
@@ -560,6 +561,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
     );
 };
 
+// ... (imports)
+
 // --- Enhanced Services Preview Section ---
 const ServicesPreview: React.FC = () => {
     const navigate = useNavigate();
@@ -567,7 +570,9 @@ const ServicesPreview: React.FC = () => {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { data: services, loading } = useContent('services', SERVICES);
+    const { data: services, loading } = useContent<Service>('services', {
+        localizedFields: ['title', 'description', 'features']
+    });
 
     const handleLearnMore = (service: Service) => {
         setSelectedService(service);
@@ -588,23 +593,37 @@ const ServicesPreview: React.FC = () => {
                     />
 
                     {/* Enhanced Services Grid */}
-                    <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20"
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, amount: 0.1 }}
-                    >
-                        {services.map((service, index) => (
-                            <ServiceCard
-                                key={service.id || index}
-                                service={service}
-                                index={index}
-                                onLearnMore={() => handleLearnMore(service)}
-                                featured={((service as any).serviceId || service.id) === 'ui_ux_design_full'}
-                            />
-                        ))}
-                    </motion.div>
+                    {loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20">
+                            {[...Array(3)].map((_, i) => (
+                                <div key={i} className="h-[400px] rounded-3xl bg-white/5 border border-white/10 p-8 space-y-6">
+                                    <Skeleton className="w-16 h-16 rounded-2xl" />
+                                    <Skeleton className="h-8 w-3/4" />
+                                    <Skeleton className="h-6 w-full" />
+                                    <Skeleton className="h-4 w-2/3" />
+                                    <Skeleton className="h-10 w-full mt-auto" />
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <motion.div
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-20"
+                            variants={containerVariants}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, amount: 0.1 }}
+                        >
+                            {services.map((service, index) => (
+                                <ServiceCard
+                                    key={service.id || index}
+                                    service={service}
+                                    index={index}
+                                    onLearnMore={() => handleLearnMore(service)}
+                                    featured={((service as any).serviceId || service.id) === 'ui_ux_design_full'}
+                                />
+                            ))}
+                        </motion.div>
+                    )}
 
                     {/* Process Overview */}
                     <motion.div
@@ -672,7 +691,7 @@ const ServicesPreview: React.FC = () => {
                                     <FaArrowRight className="w-4 h-4" />
                                 </motion.button>
                                 <motion.button
-                                    onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                    onClick={() => window.open('https://wa.me/15551234567', '_blank')}
                                     className="inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white font-bold py-4 px-8 rounded-xl text-lg hover:bg-white/20 transition-all border border-white/10"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
@@ -724,3 +743,5 @@ const ServicesPreview: React.FC = () => {
 };
 
 export default ServicesPreview;
+
+

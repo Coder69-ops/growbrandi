@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Project } from '../../types';
-import { CONTACT_INFO } from '../../constants';
+import { getLocalizedField } from '../../src/utils/localization';
 
 interface ProjectModalProps {
     project: Project | null;
@@ -56,8 +56,22 @@ const getTechLogo = (tech: string) => {
 };
 
 export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onClose }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     if (!isOpen || !project) return null;
+
+    // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
+    const getText = (field: any) => {
+        if (!field) return '';
+        if (typeof field === 'string') return t(field); // Legacy: translation key
+        return getLocalizedField(field, i18n.language); // New: multi-lang object
+    };
+
+    // Robust category helper
+    const getCategoryLabel = (category: any) => {
+        if (typeof category === 'string' && category.startsWith('services.')) return t(category);
+        if (typeof category === 'string') return t(`services.${category}.title`);
+        return getText(category);
+    };
 
     return (
         <motion.div
@@ -110,11 +124,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                             >
                                 <div className="flex items-center gap-4 mb-4">
                                     <span className="px-4 py-1.5 bg-blue-600 text-white rounded-full text-sm font-bold uppercase tracking-wider shadow-lg shadow-blue-600/20">
-                                        {t(project.category)}
+                                        {getCategoryLabel(project.category)}
                                     </span>
                                     {project.growthMetrics && (
                                         <span className="flex items-center gap-2 px-4 py-1.5 bg-emerald-500 text-white rounded-full text-sm font-bold shadow-lg shadow-emerald-500/20">
-                                            <FaChartLine /> {t(project.growthMetrics)}
+                                            <FaChartLine /> {getText(project.growthMetrics)}
                                         </span>
                                     )}
                                     <div className="flex items-center gap-3 px-4 py-2 bg-white/20 backdrop-blur-md rounded-xl border border-white/10">
@@ -122,8 +136,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                         <span className="text-white text-sm font-bold">5.0</span>
                                     </div>
                                 </div>
-                                <h2 className="text-4xl md:text-6xl font-black text-white mb-4 font-heading">{t(project.title)}</h2>
-                                <p className="text-lg md:text-xl text-slate-300 max-w-2xl font-light">{t(project.description)}</p>
+                                <h2 className="text-4xl md:text-6xl font-black text-white mb-4 font-heading">{getText(project.title)}</h2>
+                                <p className="text-lg md:text-xl text-slate-300 max-w-2xl font-light">{getText(project.description)}</p>
                             </motion.div>
                         </div>
                     </div>
@@ -148,7 +162,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                                         <FaCheck />
                                                     </div>
                                                     <div>
-                                                        <p className="font-semibold text-slate-700 dark:text-zinc-200 leading-relaxed">{t(result)}</p>
+                                                        <p className="font-semibold text-slate-700 dark:text-zinc-200 leading-relaxed">{getText(result)}</p>
                                                     </div>
                                                 </div>
                                             ))}
@@ -189,7 +203,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                         {project.technologies?.map((tech, i) => (
                                             <div key={i} className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-sm hover:border-blue-500/50 transition-colors">
                                                 <span className="flex-shrink-0">{getTechLogo(tech)}</span>
-                                                <span className="font-bold text-slate-700 dark:text-zinc-300">{tech}</span>
+                                                <span className="font-bold text-slate-700 dark:text-zinc-300">{t(tech)}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -205,11 +219,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                     <div className="space-y-6">
                                         <div>
                                             <p className="text-sm text-slate-500 dark:text-zinc-500 mb-1">{t('portfolio.params.client')}</p>
-                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{t(project.client)}</p>
+                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{getText(project.client)}</p>
                                         </div>
                                         <div>
                                             <p className="text-sm text-slate-500 dark:text-zinc-500 mb-1">{t('portfolio.params.timeline')}</p>
-                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{t(project.completionTime)}</p>
+                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{getText(project.completionTime)}</p>
                                         </div>
                                         <div>
                                             <p className="text-sm text-slate-500 dark:text-zinc-500 mb-2">{t('portfolio.params.verified_review')}</p>
@@ -230,7 +244,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                     <div className="space-y-3">
                                         <h4 className="font-bold text-slate-900 dark:text-white">{t('portfolio.params.ready_for_results')}</h4>
                                         <button
-                                            onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                            onClick={() => window.open('https://wa.me/15551234567', '_blank')}
                                             className="w-full py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg shadow-green-500/20"
                                         >
                                             <FaWhatsapp className="text-xl" /> {t('portfolio.params.chat_whatsapp')}

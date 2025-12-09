@@ -7,7 +7,7 @@ import { generateProjectBrief } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
 import ContactAssistant from './ContactAssistant';
-import { CONTACT_INFO, SERVICES } from '../constants';
+// import { CONTACT_INFO } from '../constants'; // Removed
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
@@ -17,6 +17,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useContent } from '../src/hooks/useContent';
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { SupportedLanguage } from '../src/utils/localization';
+import { Service } from '../types';
 
 // --- ContactPage Component ---
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
@@ -46,7 +47,14 @@ export const ContactPage: React.FC = () => {
     const EMAILJS_TEMPLATE_ID = 'template_wctqujg';
     const EMAILJS_PUBLIC_KEY = 'DETrhGT8sUUowOqIR';
 
-    const serviceOptions = SERVICES.map(s => s.title);
+    const { data: servicesData } = useContent<Service>('services');
+    const serviceOptions = servicesData.map(s => {
+        // Handle localized title if it's an object, otherwise use as string
+        if (typeof s.title === 'object' && s.title !== null) {
+            return (s.title as any)[i18n.language] || (s.title as any)['en'] || 'Service';
+        }
+        return s.title;
+    });
 
     useEffect(() => {
         if (location.state && location.state.data) {
@@ -252,7 +260,7 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.email', lang) || t('contact_page.info.email')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.email}</p>
+                                <p className="text-slate-600 dark:text-zinc-400">contact@growbrandi.com</p>
                                 <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.response_time', lang) || t('contact_page.info.response_time')}</p>
                             </div>
                         </GlassCard>
@@ -263,9 +271,9 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.call', lang) || t('contact_page.info.call')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.phone}</p>
+                                <p className="text-slate-600 dark:text-zinc-400">+1 (555) 123-4567</p>
                                 <a
-                                    href={`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`}
+                                    href="https://wa.me/15551234567"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-green-600 dark:text-green-400 text-sm font-medium hover:text-green-700 dark:hover:text-green-300 transition-colors inline-flex items-center gap-1 mt-1"
@@ -281,14 +289,14 @@ I would like to book this consultation.`;
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">{getText('contact.info_labels.visit', lang) || t('contact_page.info.visit')}</h3>
-                                <p className="text-slate-600 dark:text-zinc-400">{CONTACT_INFO.address}</p>
+                                <p className="text-slate-600 dark:text-zinc-400">San Francisco, CA</p>
                                 <p className="text-slate-400 dark:text-zinc-500 text-sm">{getText('contact.info_labels.hq_description', lang) || t('contact_page.info.hq_desc')}</p>
                             </div>
                         </GlassCard>
                     </div>
 
                     <div className="flex space-x-4">
-                        {Object.entries(CONTACT_INFO.social).map(([platform, url], idx) => {
+                        {Object.entries({ linkedin: '#', twitter: '#', instagram: '#', dribbble: '#' }).map(([platform, url], idx) => {
                             const Icon = getSocialIcon(platform);
                             return (
                                 <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
@@ -479,7 +487,7 @@ I would like to book this consultation.`;
 
                                     <button
                                         type="button"
-                                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                        onClick={() => window.open('https://wa.me/15551234567', '_blank')}
                                         className="w-full py-4 rounded-xl font-bold text-lg border-2 border-green-500/20 hover:border-green-500/50 text-slate-700 dark:text-white hover:bg-green-50 dark:hover:bg-green-500/10 transition-all duration-300 flex items-center justify-center gap-2 group"
                                     >
                                         <FaWhatsapp className="w-6 h-6 text-green-500 group-hover:scale-110 transition-transform" />

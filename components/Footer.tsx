@@ -3,8 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
-import { APP_NAME, APP_TAGLINE, CONTACT_INFO, SERVICES } from '../constants';
+// import { APP_NAME, APP_TAGLINE, CONTACT_INFO } from '../constants'; // Removed
 import { useSiteContentData } from '../src/hooks/useSiteContent';
+import { useContent } from '../src/hooks/useContent';
+import { Service } from '../types';
+import { getLocalizedField } from '../src/utils/localization';
 
 // --- Enhanced Footer Component ---
 const Footer: React.FC = () => {
@@ -15,6 +18,8 @@ const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const { data: services } = useContent<Service>('services');
 
   // Helper to get footer text with fallback
   const getFooterText = (field: string) => {
@@ -85,7 +90,7 @@ const Footer: React.FC = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 pt-2">
-              {Object.entries(CONTACT_INFO.social).map(([platform, url]) => (
+              {Object.entries({ linkedin: '#', twitter: '#', instagram: '#', dribbble: '#', whatsapp: '#' }).map(([platform, url]) => (
                 <a
                   key={platform}
                   href={url}
@@ -105,13 +110,13 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-3">
             <h3 className="font-semibold text-slate-900 dark:text-white mb-4 md:mb-6">{t('footer.services')}</h3>
             <ul className="space-y-2 md:space-y-3">
-              {SERVICES.slice(0, 6).map((service) => (
-                <li key={service.title}>
+              {services.slice(0, 6).map((service) => (
+                <li key={service.id}>
                   <Link
                     to={`/services`}
                     className="text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-white text-sm transition-colors duration-200 block font-light"
                   >
-                    {t(service.title)}
+                    {getLocalizedField(service.title, i18n.language) || 'Service'}
                   </Link>
                 </li>
               ))}
@@ -149,18 +154,18 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaMapMarkerAlt className="w-4 h-4 text-slate-900 dark:text-white mt-0.5 shrink-0" />
-                <span>{CONTACT_INFO.address}</span>
+                <span>San Francisco, CA</span>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaEnvelope className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href={`mailto:${CONTACT_INFO.email}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  {CONTACT_INFO.email}
+                <a href="mailto:contact@growbrandi.com" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  contact@growbrandi.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaPhone className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href={`tel:${CONTACT_INFO.phone}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  {CONTACT_INFO.phone}
+                <a href="tel:+15551234567" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  +1 (555) 123-4567
                 </a>
               </li>
             </ul>

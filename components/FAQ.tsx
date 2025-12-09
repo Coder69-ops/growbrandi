@@ -3,20 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronDown, FaQuestionCircle, FaEnvelope } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { FAQ_DATA } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { Skeleton } from './ui/Skeleton';
+import { FAQItem as FAQItemType } from '../types';
 
-const FAQItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
+const FAQDisplayItem: React.FC<{ question: string; answer: string; isOpen: boolean; onClick: () => void }> = ({
   question,
   answer,
   isOpen,
   onClick
 }) => {
-  const { t } = useTranslation();
   return (
     <GlassCard
       className="overflow-hidden p-0"
@@ -67,7 +67,7 @@ const FAQ: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const navigate = useNavigate();
-  const { data: faqs } = useContent('faqs', FAQ_DATA);
+  const { data: faqs, loading } = useContent<FAQItemType>('faqs');
 
   // Helper to get text: handles both legacy translation keys and new multi-lang objects
   const getText = (field: any) => {
@@ -92,63 +92,84 @@ const FAQ: React.FC = () => {
           description={t('section_headers.faq.description')}
         />
 
-        <motion.div
-          className="space-y-4"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.1 }
-            }
-          }}
-        >
-          {faqs.map((faq, index) => (
+        <div className="space-y-4">
+          {loading ? (
+            [...Array(5)].map((_, i) => (
+              <div key={i} className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden">
+                <div className="p-6 flex items-center justify-between">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="w-5 h-5 rounded-full" />
+                </div>
+              </div>
+            ))
+          ) : (
             <motion.div
-              key={index}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
               variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0 }
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.1 }
+                }
               }}
+              className="space-y-4"
             >
-              <FAQItem
-                question={getText(faq.question)}
-                answer={getText(faq.answer)}
-                isOpen={openIndex === index}
-                onClick={() => toggleFAQ(index)}
-              />
+              {faqs.length > 0 ? (
+                faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.id || index}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                  >
+                    <FAQDisplayItem
+                      question={getText(faq.question)}
+                      answer={getText(faq.answer)}
+                      isOpen={openIndex === index}
+                      onClick={() => toggleFAQ(index)}
+                    />
+                  </motion.div>
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-slate-500 dark:text-slate-400">No FAQs available at the moment.</p>
+                </div>
+              )}
             </motion.div>
-          ))}
-        </motion.div>
+          )}
+        </div>
 
         {/* Call to Action */}
-        <motion.div
-          className="text-center mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-        >
-          <GlassCard className="p-8 md:p-10 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20">
-            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-              {t('section_headers.faq.cta_title')}
-            </h3>
-            <p className="text-slate-600 dark:text-zinc-300 mb-8 max-w-xl mx-auto">
-              {t('section_headers.faq.cta_desc')}
-            </p>
-            <motion.button
-              onClick={() => navigate('/contact')}
-              className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <FaEnvelope className="w-4 h-4" />
-              {t('section_headers.faq.cta_button')}
-            </motion.button>
-          </GlassCard>
-        </motion.div>
+        {!loading && (
+          <motion.div
+            className="text-center mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+          >
+            <GlassCard className="p-8 md:p-10 bg-gradient-to-br from-blue-500/5 to-purple-500/5 border-blue-500/20">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+                {t('section_headers.faq.cta_title')}
+              </h3>
+              <p className="text-slate-600 dark:text-zinc-300 mb-8 max-w-xl mx-auto">
+                {t('section_headers.faq.cta_desc')}
+              </p>
+              <motion.button
+                onClick={() => navigate('/contact')}
+                className="inline-flex items-center gap-2 bg-blue-600 text-white font-bold py-3 px-8 rounded-xl hover:bg-blue-700 transition-all duration-300 shadow-lg shadow-blue-500/20"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <FaEnvelope className="w-4 h-4" />
+                {t('section_headers.faq.cta_button')}
+              </motion.button>
+            </GlassCard>
+          </motion.div>
+        )}
       </div>
     </section>
   );

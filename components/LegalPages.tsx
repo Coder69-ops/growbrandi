@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { APP_NAME, CONTACT_INFO } from '../constants';
+// import { APP_NAME, CONTACT_INFO } from '../constants'; // Removed
 
 // Privacy Policy Page
 export const PrivacyPolicyPage: React.FC = () => {
@@ -36,7 +36,7 @@ export const PrivacyPolicyPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.intro.title')}</h2>
                 <p>
-                  <Trans i18nKey="legal.privacy.intro.text" values={{ appName: APP_NAME }} />
+                  <Trans i18nKey="legal.privacy.intro.text" values={{ appName: "GrowBrandi" }} />
                 </p>
               </section>
 
@@ -83,13 +83,13 @@ export const PrivacyPolicyPage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.privacy.contact.title')}</h2>
                 <p>
-                  <Trans i18nKey="legal.common.contact_us.intro" values={{ email: CONTACT_INFO.email }} />
+                  <Trans i18nKey="legal.common.contact_us.intro" values={{ email: "contact@growbrandi.com" }} />
                 </p>
                 <div className="mt-4 p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                  <p className="font-bold text-slate-900 dark:text-white">{APP_NAME}</p>
-                  <p>{t('legal.common.contact_us.address')}: {CONTACT_INFO.address}</p>
-                  <p>{t('legal.common.contact_us.phone')}: {CONTACT_INFO.phone}</p>
-                  <p>{t('legal.common.contact_us.email')}: {CONTACT_INFO.email}</p>
+                  <p className="font-bold text-slate-900 dark:text-white">GrowBrandi</p>
+                  <p>{t('legal.common.contact_us.address')}: San Francisco, CA</p>
+                  <p>{t('legal.common.contact_us.phone')}: +1 (555) 123-4567</p>
+                  <p>{t('legal.common.contact_us.email')}: contact@growbrandi.com</p>
                 </div>
               </section>
             </div>
@@ -134,7 +134,7 @@ export const TermsOfServicePage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.agreement.title')}</h2>
                 <p>
-                  <Trans i18nKey="legal.terms.agreement.text" values={{ appName: APP_NAME }} />
+                  <Trans i18nKey="legal.terms.agreement.text" values={{ appName: "GrowBrandi" }} />
                 </p>
               </section>
 
@@ -145,7 +145,7 @@ export const TermsOfServicePage: React.FC = () => {
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li><Trans i18nKey="legal.terms.ip.list.deliverables" /></li>
-                  <li><Trans i18nKey="legal.terms.ip.list.tools" values={{ appName: APP_NAME }} /></li>
+                  <li><Trans i18nKey="legal.terms.ip.list.tools" values={{ appName: "GrowBrandi" }} /></li>
                   <li><Trans i18nKey="legal.terms.ip.list.portfolio" /></li>
                 </ul>
               </section>
@@ -179,7 +179,7 @@ export const TermsOfServicePage: React.FC = () => {
               <section>
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 font-heading">{t('legal.terms.governing.title')}</h2>
                 <p>
-                  <Trans i18nKey="legal.terms.governing.text" values={{ appName: APP_NAME }} />
+                  <Trans i18nKey="legal.terms.governing.text" values={{ appName: "GrowBrandi" }} />
                 </p>
               </section>
             </div>
@@ -283,9 +283,9 @@ export const CookiePolicyPage: React.FC = () => {
                   {t('legal.cookies.contact.text')}
                 </p>
                 <div className="mt-4 p-4 bg-slate-100 dark:bg-zinc-900/50 rounded-lg border border-slate-200 dark:border-white/5">
-                  <p><strong>{t('legal.common.contact_us.email')}:</strong> {CONTACT_INFO.email}</p>
-                  <p><strong>{t('legal.common.contact_us.address')}:</strong> {CONTACT_INFO.address}</p>
-                  <p><strong>{t('legal.common.contact_us.phone')}:</strong> {CONTACT_INFO.phone}</p>
+                  <p><strong>{t('legal.common.contact_us.email')}:</strong> contact@growbrandi.com</p>
+                  <p><strong>{t('legal.common.contact_us.address')}:</strong> San Francisco, CA</p>
+                  <p><strong>{t('legal.common.contact_us.phone')}:</strong> +1 (555) 123-4567</p>
                 </div>
               </section>
             </div>

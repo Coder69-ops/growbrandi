@@ -101,9 +101,9 @@ const AdminTestimonials = () => {
 
     const openEdit = (testimonial: any = {}) => {
         setCurrentTestimonial({
-            name: ensureLocalizedFormat(testimonial.name),
-            role: ensureLocalizedFormat(testimonial.role),
-            content: ensureLocalizedFormat(testimonial.content),
+            author: ensureLocalizedFormat(testimonial.author),
+            company: ensureLocalizedFormat(testimonial.company),
+            quote: ensureLocalizedFormat(testimonial.quote),
             image: testimonial.image || '',
             rating: testimonial.rating || 5,
             ...testimonial,
@@ -120,7 +120,7 @@ const AdminTestimonials = () => {
         currentTestimonial,
         setCurrentTestimonial,
         {
-            fields: ['name', 'role', 'content']
+            fields: ['author', 'company', 'quote']
         }
     );
 
@@ -202,23 +202,23 @@ const AdminTestimonials = () => {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <LocalizedInput
                                             label="Client Name"
-                                            value={currentTestimonial.name}
-                                            onChange={(v) => updateField('name', v)}
+                                            value={currentTestimonial.author}
+                                            onChange={(v) => updateField('author', v)}
                                             activeLanguage={activeLanguage}
                                             required
                                         />
                                         <LocalizedInput
                                             label="Role / Company"
-                                            value={currentTestimonial.role}
-                                            onChange={(v) => updateField('role', v)}
+                                            value={currentTestimonial.company}
+                                            onChange={(v) => updateField('company', v)}
                                             activeLanguage={activeLanguage}
                                         />
                                     </div>
 
                                     <LocalizedInput
                                         label="Review Content"
-                                        value={currentTestimonial.content}
-                                        onChange={(v) => updateField('content', v)}
+                                        value={currentTestimonial.quote}
+                                        onChange={(v) => updateField('quote', v)}
                                         activeLanguage={activeLanguage}
                                         type="textarea"
                                         rows={4}
@@ -278,7 +278,7 @@ const AdminTestimonials = () => {
                                         {testimonial.image ? (
                                             <img
                                                 src={testimonial.image}
-                                                alt={getLocalizedField(testimonial.name, 'en')}
+                                                alt={getLocalizedField(testimonial.author, 'en')}
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (
@@ -296,10 +296,10 @@ const AdminTestimonials = () => {
                                     <div className="flex justify-between items-start mb-2">
                                         <div>
                                             <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                                {getLocalizedField(testimonial.name, 'en')}
+                                                {getLocalizedField(testimonial.author, 'en')}
                                             </h3>
                                             <p className="text-sm text-slate-500 dark:text-slate-400">
-                                                {getLocalizedField(testimonial.role, 'en')}
+                                                {getLocalizedField(testimonial.company, 'en')}
                                             </p>
                                         </div>
                                         <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -320,7 +320,7 @@ const AdminTestimonials = () => {
                                     <div className="relative pl-4 border-l-2 border-slate-200 dark:border-slate-700">
                                         <Quote size={16} className="absolute -top-1 -left-[9px] bg-white dark:bg-slate-950 text-slate-300 dark:text-slate-600" />
                                         <p className="text-slate-600 dark:text-slate-300 italic line-clamp-2">
-                                            {getLocalizedField(testimonial.content, 'en')}
+                                            {getLocalizedField(testimonial.quote, 'en')}
                                         </p>
                                     </div>
                                 </div>

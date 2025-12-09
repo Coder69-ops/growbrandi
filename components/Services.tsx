@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaTimes, FaCheck, FaCircle, FaStar, FaShieldAlt, FaLayerGroup, FaGem, FaCommentDots, FaChartPie, FaLock, FaCheckCircle, FaHeadset, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { SERVICES } from '../constants';
 import { Service } from '../types';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
@@ -11,6 +10,7 @@ import { SectionHeading } from './ui/SectionHeading';
 import { getIcon } from '../src/utils/icons';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { Skeleton } from './ui/Skeleton';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,7 +41,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
   const { t, i18n } = useTranslation();
 
   // Helper to get text safely
-  const txt = (field: any) => t(getLocalizedField(field, i18n.language));
+  const txt = (field: any) => getLocalizedField(field, i18n.language);
 
   // Get process steps from translation.json using service id
   // Fallback to default process if specific process not found
@@ -203,7 +203,7 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, featured = false }) => {
   const { t, i18n } = useTranslation();
-  const txt = (field: any) => t(getLocalizedField(field, i18n.language));
+  const txt = (field: any) => getLocalizedField(field, i18n.language);
 
   return (
     <GlassCard
@@ -259,7 +259,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
 export const ServicesPage: React.FC = () => {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: services, loading } = useContent('services', SERVICES);
+  const { data: services, loading } = useContent<Service>('services');
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
   const navigate = useNavigate();
@@ -324,51 +324,73 @@ export const ServicesPage: React.FC = () => {
             description="Transform your business with our comprehensive suite of services. From cutting-edge design and development to data-driven marketing strategies."
           />
 
-          <motion.div className="flex justify-center mb-16">
-            <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/10 shadow-lg overflow-x-auto max-w-full">
-              {categories.map((category, index) => (
-                <motion.button
-                  key={category}
-                  onClick={() => handleFilterChange(category)}
-                  className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 whitespace-nowrap ${activeFilter === category
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
-                    }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {category}
-                </motion.button>
+          {!loading && (
+            <motion.div className="flex justify-center mb-16">
+              <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/10 shadow-lg overflow-x-auto max-w-full">
+                {categories.map((category, index) => (
+                  <motion.button
+                    key={category}
+                    onClick={() => handleFilterChange(category)}
+                    className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 whitespace-nowrap ${activeFilter === category
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                      }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {category}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-[400px] rounded-3xl bg-white/5 border border-white/10 p-8 space-y-6">
+                  <div className="flex justify-between items-start">
+                    <Skeleton className="w-16 h-16 rounded-2xl shadow-lg" />
+                  </div>
+                  <Skeleton className="h-8 w-3/4" />
+                  <Skeleton className="h-6 w-1/2" />
+                  <div className="space-y-3 pt-4">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
+                  </div>
+                  <Skeleton className="h-12 w-full rounded-xl mt-auto" />
+                </div>
               ))}
             </div>
-          </motion.div>
-
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            layout
-          >
-            <AnimatePresence mode='popLayout'>
-              {displayedServices.map((service, index) => (
-                <motion.div
-                  key={service.id || index}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ServiceCard
-                    service={service}
-                    onLearnMore={() => handleLearnMore(service)}
-                    featured={getIsFeatured(service.title)}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          ) : (
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              layout
+            >
+              <AnimatePresence mode='popLayout'>
+                {displayedServices.map((service, index) => (
+                  <motion.div
+                    key={service.id || index}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ServiceCard
+                      service={service}
+                      onLearnMore={() => handleLearnMore(service)}
+                      featured={getIsFeatured(service.title)}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
 
           {/* Stats Section */}
           <motion.div

@@ -6,11 +6,15 @@ export interface ChatMessage {
   parts: { text: string }[];
 }
 
+export type LocalizedString = {
+  [key: string]: string;
+};
+
 export interface Service {
   id: string;
   order?: number;
-  title: string;
-  description: string;
+  title: string | LocalizedString;
+  description: string | LocalizedString;
   icon: string;
   features: string[];
   price: string;
@@ -49,6 +53,7 @@ export interface CompanyStat {
 }
 
 export interface FAQItem {
+  id?: string;
   question: string;
   answer: string;
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, setDoc, writeBatch, query, orderBy, limit } from 'firebase/firestore';
 import { Database, Trash2, RefreshCw, Check, AlertCircle, Globe, Activity, Server, Shield, Wrench, ArrowRight, Wifi, WifiOff, BarChart2, FileText, Clock, AlertTriangle } from 'lucide-react';
-import { PROJECTS, TEAM_MEMBERS, TESTIMONIALS, SERVICES, FAQ_DATA, CONTACT_INFO } from '../../../constants';
+// import { PROJECTS, TEAM_MEMBERS, TESTIMONIALS, SERVICES, FAQ_DATA, CONTACT_INFO } from '../../../constants'; // Removed
 
 // Languages supported
 const LANGUAGES = ['en', 'de', 'es', 'fr', 'nl'];
@@ -45,11 +45,11 @@ const AdminSeedData = () => {
     const [counts, setCounts] = useState<{ [key: string]: number }>({});
 
     const collectionsList = [
-        { key: 'projects', name: 'Projects', collection: 'projects', count: PROJECTS.length },
-        { key: 'team', name: 'Team Members', collection: 'team_members', count: TEAM_MEMBERS.length },
-        { key: 'testimonials', name: 'Testimonials', collection: 'testimonials', count: TESTIMONIALS.length },
-        { key: 'faqs', name: 'FAQs', collection: 'faqs', count: FAQ_DATA.length },
-        { key: 'services', name: 'Services', collection: 'services', count: SERVICES.length },
+        { key: 'projects', name: 'Projects', collection: 'projects', count: 0 },
+        { key: 'team', name: 'Team Members', collection: 'team_members', count: 0 },
+        { key: 'testimonials', name: 'Testimonials', collection: 'testimonials', count: 0 },
+        { key: 'faqs', name: 'FAQs', collection: 'faqs', count: 0 },
+        { key: 'services', name: 'Services', collection: 'services', count: 0 },
         { key: 'site_content', name: 'Site Content', collection: 'site_content', isSingle: true, docId: 'main' },
         { key: 'contact_settings', name: 'Contact Settings', collection: 'contact_settings', isSingle: true, docId: 'main' }
     ];
@@ -150,212 +150,19 @@ const AdminSeedData = () => {
     };
 
     // --- Dynamic Data Generators ---
-    const generateProjects = () => PROJECTS.map((p, index) => {
-        // Find matching service ID from the title key match in SERVICES constant
-        const matchedService = SERVICES.find(s => s.title === p.category);
-        const categoryId = matchedService ? matchedService.id : (p.category.includes('.') ? 'web_shopify_dev' : p.category);
-
-        return {
-            ...p,
-            order: index + 1,
-            title: resolve(p.title),
-            description: resolve(p.description),
-            client: resolve(p.client),
-            completionTime: resolve(p.completionTime),
-            category: categoryId, // Use ID, not localized object
-            results: p.results.map(r => resolve(r)),
-            growthMetrics: resolve(p.growthMetrics as string),
-        };
-    });
-    const generateServices = () => SERVICES.map((s, index) => {
-        // Keep ID as serviceId for seeding deterministic doc IDs
-        return {
-            ...s, serviceId: s.id, order: index + 1, title: resolve(s.title), description: resolve(s.description), price: resolve(s.price), features: s.features.map(f => resolve(f))
-        };
-    });
-    const generateTeam = () => TEAM_MEMBERS.map((m, index) => ({
-        ...m, order: index + 1, role: resolve(m.role), description: resolve(m.description), bio: resolve(m.bio), achievements: m.achievements.map(a => resolve(a)), specialties: m.specialties.map(s => resolve(s))
-    }));
-    const generateTestimonials = () => TESTIMONIALS.map(t => ({ ...t, quote: resolve(t.quote), company: resolve(t.company) }));
-    const generateFAQs = () => FAQ_DATA.map(f => ({ question: resolve(f.question), answer: resolve(f.answer) }));
+    // Generators disabled as static constants are removed.
+    const generateProjects = () => [];
+    const generateServices = () => [];
+    const generateTeam = () => [];
+    const generateTestimonials = () => [];
+    const generateFAQs = () => [];
 
     // (Simplified generators for site_content and contact_settings for brevity, assuming same structure)
     // Updated schema matching AdminSiteContent.tsx and Hero.tsx/Footer.tsx
-    const generateSiteContent = () => {
-        const hero = {
-            badge: resolve('hero.badge'),
-            title_prefix: resolve('hero.title_prefix'),
-            title_highlight: resolve('hero.title_highlight'),
-            description: resolve('hero.description'),
-            cta_consultation: resolve('hero.cta_consultation'),
-            cta_showreel: resolve('hero.cta_showreel'),
-            trustpilot_on: resolve('hero.trustpilot_on'),
-            trusted_by: resolve('hero.trusted_by'),
-            // Mocks
-            mock_viral_campaign: resolve('hero.mock_viral_campaign'),
-            mock_follow: resolve('hero.mock_follow'),
-            mock_views: resolve('hero.mock_views'),
-            mock_likes: resolve('hero.mock_likes'),
-            mock_ctr: resolve('hero.mock_ctr')
-        };
-        const footer = {
-            tagline_desc: resolve('footer.tagline_desc'),
-            rated_clients: resolve('footer.rated_clients'),
-            copyright: resolve('footer.copyright'),
-            // Note: Services, Company, Contact menus are static/localized in Footer.tsx and not seeded here.
-        };
-        const section_headers = {
-            testimonials: {
-                badge: resolve('section_headers.testimonials.badge'),
-                title: resolve('section_headers.testimonials.title'),
-                highlight: resolve('section_headers.testimonials.highlight'),
-                description: resolve('section_headers.testimonials.description')
-            },
-            faq: {
-                badge: resolve('section_headers.faq.badge'),
-                title: resolve('section_headers.faq.title'),
-                description: resolve('section_headers.faq.description')
-            },
-            team: {
-                badge: resolve('section_headers.team.badge'),
-                title: resolve('section_headers.team.title'),
-                highlight: resolve('section_headers.team.highlight'),
-                description: resolve('section_headers.team.description')
-            },
-            projects: {
-                badge: resolve('projects_preview.badge'),
-                title: resolve('projects_preview.title'),
-                description: resolve('projects_preview.description')
-            }
-        };
-        // Removed 'navigation' as it is handled statically in Header.tsx
-
-        // --- Expanded Sections ---
-        // About Use Page
-        const about = {
-            hero: {
-                badge: resolve('company.about_us.hero.badge'),
-                title: resolve('company.about_us.hero.title'),
-                highlight: resolve('company.about_us.hero.highlight'),
-                description: resolve('company.about_us.hero.description')
-            },
-            story: {
-                title: resolve('company.about_us.story.title'),
-                title_highlight: resolve('company.about_us.story.title_highlight'),
-                p1: resolve('company.about_us.story.p1'),
-                p2: resolve('company.about_us.story.p2')
-            },
-            stats: {
-                projects: resolve('company.about_us.stats.projects'),
-                clients: resolve('company.about_us.stats.clients')
-            },
-            values: {
-                innovation: { title: resolve('company.about_us.values.innovation.title'), desc: resolve('company.about_us.values.innovation.desc') },
-                client: { title: resolve('company.about_us.values.client.title'), desc: resolve('company.about_us.values.client.desc') },
-                quality: { title: resolve('company.about_us.values.quality.title'), desc: resolve('company.about_us.values.quality.desc') }
-            },
-            team_preview: {
-                badge: resolve('company.about_us.team.badge'),
-                title: resolve('company.about_us.team.title'),
-                highlight: resolve('company.about_us.team.highlight'),
-                description: resolve('company.about_us.team.description'),
-                view_full: resolve('company.about_us.team.view_full')
-            }
-        };
-
-        // Process Page
-        const process = {
-            hero: {
-                badge: resolve('company.process.heading.badge'),
-                title: resolve('company.process.heading.title'),
-                highlight: resolve('company.process.heading.highlight'),
-                description: resolve('company.process.heading.description')
-            },
-            steps: [
-                {
-                    step: '01',
-                    title: resolve('company.process.steps.0.title'),
-                    description: resolve('company.process.steps.0.description'),
-                    details: [resolve('company.process.steps.0.details.0'), resolve('company.process.steps.0.details.1'), resolve('company.process.steps.0.details.2'), resolve('company.process.steps.0.details.3')]
-                },
-                {
-                    step: '02',
-                    title: resolve('company.process.steps.1.title'),
-                    description: resolve('company.process.steps.1.description'),
-                    details: [resolve('company.process.steps.1.details.0'), resolve('company.process.steps.1.details.1'), resolve('company.process.steps.1.details.2'), resolve('company.process.steps.1.details.3')]
-                },
-                {
-                    step: '03',
-                    title: resolve('company.process.steps.2.title'),
-                    description: resolve('company.process.steps.2.description'),
-                    details: [resolve('company.process.steps.2.details.0'), resolve('company.process.steps.2.details.1'), resolve('company.process.steps.2.details.2'), resolve('company.process.steps.2.details.3')]
-                },
-                {
-                    step: '04',
-                    title: resolve('company.process.steps.3.title'),
-                    description: resolve('company.process.steps.3.description'),
-                    details: [resolve('company.process.steps.3.details.0'), resolve('company.process.steps.3.details.1'), resolve('company.process.steps.3.details.2'), resolve('company.process.steps.3.details.3')]
-                }
-            ]
-        };
-
-        // Careers Page
-        const careers = {
-            hero: {
-                badge: resolve('company.careers.heading.badge'),
-                title: resolve('company.careers.heading.title'),
-                highlight: resolve('company.careers.heading.highlight'),
-                description: resolve('company.careers.heading.description')
-            },
-            open_positions: {
-                title: resolve('company.careers.open_positions.title'),
-                highlight: resolve('company.careers.open_positions.highlight'),
-            }
-        };
-
-        // Team Page (General)
-        const team_page = {
-            hero: {
-                badge: resolve('company.team.heading.badge'),
-                title: resolve('company.team.heading.title'),
-                highlight: resolve('company.team.heading.highlight'),
-                description: resolve('company.team.heading.description')
-            },
-            cta: {
-                title: resolve('company.team.cta.title'),
-                highlight: resolve('company.team.cta.highlight'),
-                description: resolve('company.team.cta.description'),
-                start_project: resolve('company.team.cta.start_project'),
-                learn_more: resolve('company.team.cta.learn_more')
-            }
-        };
-
-        // Contact Page Content (Text only, settings are separate)
-        const contact = {
-            hero: {
-                badge: resolve('contact_page.badge'),
-                title: resolve('contact_page.title'),
-                highlight: "Something Epic", // Hardcoded in original component, making dynamic
-                description: resolve('contact_page.description')
-            },
-            assistant: {
-                prompt: resolve('contact_page.assistant_prompt'),
-                button: resolve('contact_page.assistant_button')
-            },
-            info_labels: {
-                email: resolve('contact_page.info.email'),
-                call: resolve('contact_page.info.call'),
-                visit: resolve('contact_page.info.visit'),
-                response_time: resolve('contact_page.info.response_time'),
-                hq_desc: resolve('contact_page.info.hq_desc')
-            }
-        };
-
-        return { hero, footer, section_headers, about, process, careers, team_page, contact };
-    };
-    const generateContactSettings = () => {
-        return { page_text: { badge: resolve('contact_page.badge'), title: resolve('contact_page.title'), description: resolve('contact_page.description') }, form_labels: { name: resolve('contact_page.form.name'), email: resolve('contact_page.form.email'), subject: resolve('contact_page.form.subject'), message: resolve('contact_page.form.message'), service: resolve('contact_page.form.service'), budget: resolve('contact_page.form.budget'), submit: resolve('contact_page.form.submit'), sending: resolve('contact_page.form.sending'), success: resolve('contact_page.form.success'), error: resolve('contact_page.form.error') }, contact_info: { ...CONTACT_INFO, office_hours: resolve('contact_page.info.office_hours'), response_time: resolve('contact_page.info.response_time') }, social_links: CONTACT_INFO.social };
-    };
+    // generateSiteContent removed
+    // generateContactSettings removed
+    const generateSiteContent = () => ({});
+    const generateContactSettings = () => ({});
 
 
     // --- Seeding Logic ---
@@ -423,23 +230,8 @@ const AdminSeedData = () => {
     };
 
     const seedAll = async () => {
-        if (!translationsLoaded) { alert("Translations not loaded yet."); return; }
-        setLoading(true);
-        logAction('Seed All', 'info', 'Started seeding all collections...');
-        try {
-            await seedCollection('projects', generateProjects(), 'projects');
-            await seedCollection('team_members', generateTeam(), 'team');
-            await seedCollection('testimonials', generateTestimonials(), 'testimonials');
-            await seedCollection('faqs', generateFAQs(), 'faqs');
-            // Use 'serviceId' as the document ID for services to ensure integrity
-            await seedCollection('services', generateServices(), 'services', 'serviceId');
-            await seedSingleDoc('site_content', 'main', generateSiteContent(), 'site_content');
-            await seedSingleDoc('contact_settings', 'main', generateContactSettings(), 'contact_settings');
-            logAction('Seed All', 'success', 'All collections seeded successfully.');
-        } catch (e) {
-            logAction('Seed All', 'error', 'Failed to seed some collections.');
-        }
-        setLoading(false);
+        alert("Seeding from static constants is no longer supported.");
+        // Code removed
     };
 
     const clearAll = async () => {

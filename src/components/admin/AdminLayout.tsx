@@ -40,8 +40,10 @@ const AdminLayout = () => {
 
     const handleLogout = async () => {
         try {
+            // Set a flag in session storage so Login page knows we just logged out intentionally
+            sessionStorage.setItem('logoutMessage', 'Successfully logged out');
             await signOut(auth);
-            navigate('/admin/login');
+            // ProtectedRoute will handle the redirect to /admin/login when currentUser becomes null
         } catch (error) {
             console.error('Logout failed', error);
         }

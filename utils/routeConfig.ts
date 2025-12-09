@@ -188,10 +188,6 @@ export const routeConfig: Record<Route, {
     },
 };
 
-import { TEAM_MEMBERS } from '../constants';
-
-// ... existing imports and types ...
-
 // Helper functions for enhanced routing
 export const getRoutesByCategory = (category: string): Route[] => {
     return Object.entries(routeConfig)
@@ -206,20 +202,15 @@ export const isValidRoute = (route: string): route is Route => {
 export const getRouteMetadata = (route: Route, pathname?: string) => {
     const baseMetadata = routeConfig[route] || routeConfig.home;
 
-    // Handle dynamic team member routes
+    // Handle dynamic team member routes - Static data removed, falling back to generic metadata
+    // TODO: Implement async metadata fetching for dynamic routes
     if (route === 'team' && pathname && pathname.startsWith('/team/')) {
-        const slug = pathname.split('/').pop();
-        const member = TEAM_MEMBERS.find(m => m.slug === slug);
-
-        if (member) {
-            return {
-                ...baseMetadata,
-                title: `${member.name} - ${member.role}`,
-                description: member.description,
-                keywords: [...(baseMetadata.keywords || []), member.name, member.role, ...member.specialties],
-                path: pathname
-            };
-        }
+        return {
+            ...baseMetadata,
+            // Fallback for dynamic routes until async fetching is implemented
+            title: 'Team Member Profile',
+            path: pathname
+        };
     }
 
     return baseMetadata;

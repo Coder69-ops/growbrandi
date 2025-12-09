@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { CONTACT_INFO, COMPANY_STATS } from '../../../constants';
+// import { CONTACT_INFO, COMPANY_STATS } from '../../../constants'; // Removed
 import { Save, Globe, Phone, Mail, MapPin, Settings as SettingsIcon, BarChart3, Hash, Sticker, Loader2 } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { SupportedLanguage, ensureLocalizedFormat } from '../../utils/localization';
@@ -26,18 +26,20 @@ const AdminSettings = () => {
                 setSettings(docSnap.data());
             } else {
                 // Initialize with defaults from constants
+                // Initialize with defaults
                 setSettings({
                     contact: {
-                        email: CONTACT_INFO.email,
-                        phone: CONTACT_INFO.phone,
-                        address: CONTACT_INFO.address,
+                        email: '',
+                        phone: '',
+                        address: '',
                     },
-                    social: CONTACT_INFO.social,
-                    stats: COMPANY_STATS.map(s => ({
-                        number: s.number,
-                        icon: s.icon,
-                        label: ensureLocalizedFormat(s.label),
-                    })),
+                    social: { linkedin: '', twitter: '', instagram: '', dribbble: '', whatsapp: '' },
+                    stats: [
+                        { number: '150+', icon: '🚀', label: { en: 'Projects Completed' } },
+                        { number: '50+', icon: '🤝', label: { en: 'Happy Clients' } },
+                        { number: '5+', icon: '🌍', label: { en: 'Years Experience' } },
+                        { number: '24/7', icon: '🕑', label: { en: 'Support' } }
+                    ],
                 });
             }
         } catch (error) {

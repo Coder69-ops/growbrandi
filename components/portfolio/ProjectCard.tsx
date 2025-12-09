@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaArrowRight, FaChartLine } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Project } from '../../types';
+import { getLocalizedField } from '../../src/utils/localization';
 
 interface ProjectCardProps {
     project: Project;
@@ -20,7 +21,15 @@ const itemVariants = {
 };
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, className = "" }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+
+    // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
+    const getText = (field: any) => {
+        if (!field) return '';
+        if (typeof field === 'string') return t(field); // Legacy: translation key
+        return getLocalizedField(field, i18n.language); // New: multi-lang object
+    };
+
     return (
         <motion.div
             variants={itemVariants}
@@ -44,13 +53,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, clas
                 {/* Top Header: Tags & Metrics */}
                 <div className="flex justify-between items-start">
                     <span className="px-3 py-1 bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-full text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider shadow-sm">
-                        {t(project.category)}
+                        {getText(project.category)}
                     </span>
 
                     {project.growthMetrics && (
                         <div className="flex items-center gap-2 bg-emerald-500/90 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-sm transform group-hover:translate-y-[-2px] transition-transform">
                             <FaChartLine />
-                            {t(project.growthMetrics)}
+                            {getText(project.growthMetrics)}
                         </div>
                     )}
                 </div>
@@ -58,11 +67,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, clas
                 {/* Bottom Content */}
                 <div className="relative z-10 transform transition-transform duration-500 group-hover:-translate-y-2">
                     <h3 className="text-3xl md:text-4xl font-black text-white mb-2 leading-none font-heading opacity-100 group-hover:opacity-100 transition-opacity drop-shadow-lg">
-                        {t(project.title)}
+                        {getText(project.title)}
                     </h3>
 
                     <p className="text-slate-200 dark:text-zinc-300 text-sm md:text-base line-clamp-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-75 mb-6 font-medium">
-                        {t(project.description)}
+                        {getText(project.description)}
                     </p>
 
                     {/* Action Bar */}

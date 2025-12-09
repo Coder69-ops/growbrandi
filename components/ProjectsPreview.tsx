@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { FaFolderOpen, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
 import { Project } from '../types';
 import { useContent } from '../src/hooks/useContent';
-import { PROJECTS, CONTACT_INFO } from '../constants';
+// import { CONTACT_INFO } from '../constants'; // Removed
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { ProjectCard } from './portfolio/ProjectCard';
 import { ProjectModal } from './portfolio/ProjectModal';
+import { Skeleton } from './ui/Skeleton';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -42,13 +43,12 @@ const ProjectsPreview: React.FC = () => {
     const [activeFilter, setActiveFilter] = useState<string>('All');
 
     // Use dynamic content with fallback
-    const { data: projectsData } = useContent<Project>(
+    const { data: projectsData, loading } = useContent<Project>(
         'projects',
-        PROJECTS,
         { localizedFields: ['title', 'description', 'category'] }
     );
 
-    const contactSettings = CONTACT_INFO;
+    // const contactSettings = CONTACT_INFO; // Removed
 
     const categories = ['All', ...Array.from(new Set(projectsData.map(p => p.category)))];
 
@@ -80,68 +80,84 @@ const ProjectsPreview: React.FC = () => {
                     />
 
                     {/* Enhanced Filter Tabs - Added z-index */}
-                    <motion.div variants={itemVariants} className="flex justify-center mb-16 overflow-x-auto px-4 pb-4 relative z-20">
-                        <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/5 shadow-xl">
-                            {categories.map((category, index) => (
-                                <motion.button
-                                    key={category}
-                                    onClick={() => handleFilterChange(category)}
-                                    className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 relative overflow-hidden ${activeFilter === category
-                                        ? 'text-white shadow-lg'
-                                        : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
-                                        }`}
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                >
-                                    {activeFilter === category && (
-                                        <motion.div
-                                            className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-600"
-                                            layoutId="activeTab"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                        />
-                                    )}
-                                    <span className="relative z-10 flex items-center gap-2">
-                                        {category === 'All' ? t('projects_preview.filter_all') : t(category as any)}
-                                        <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'}`}>
-                                            {category === 'All' ? projectsData.length : projectsData.filter(p => p.category === category).length}
+                    {!loading && (
+                        <motion.div variants={itemVariants} className="flex justify-center mb-16 overflow-x-auto px-4 pb-4 relative z-20">
+                            <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl rounded-2xl p-2 inline-flex gap-2 border border-slate-200 dark:border-white/5 shadow-xl">
+                                {categories.map((category, index) => (
+                                    <motion.button
+                                        key={category}
+                                        onClick={() => handleFilterChange(category)}
+                                        className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 relative overflow-hidden ${activeFilter === category
+                                            ? 'text-white shadow-lg'
+                                            : 'text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5'
+                                            }`}
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                    >
+                                        {activeFilter === category && (
+                                            <motion.div
+                                                className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-blue-600"
+                                                layoutId="activeTab"
+                                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            />
+                                        )}
+                                        <span className="relative z-10 flex items-center gap-2">
+                                            {category === 'All' ? t('projects_preview.filter_all') : t(category as any)}
+                                            <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'}`}>
+                                                {category === 'All' ? projectsData.length : projectsData.filter(p => p.category === category).length}
+                                            </span>
                                         </span>
-                                    </span>
-                                </motion.button>
-                            ))}
-                        </div>
-                    </motion.div>
+                                    </motion.button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
 
                     {/* Enhanced Projects Grid */}
                     <div className="mb-24">
-                        <motion.div
-                            className={`grid gap-8 ${displayedProjects.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' :
-                                displayedProjects.length === 2 ? 'grid-cols-1 lg:grid-cols-2 max-w-5xl mx-auto' :
-                                    'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-                                }`}
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                        >
-                            <AnimatePresence mode="wait">
-                                {displayedProjects.map((project, index) => (
-                                    <motion.div
-                                        key={project.title}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 20 }}
-                                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    >
-                                        <ProjectCard
-                                            project={project}
-                                            onClick={() => handleProjectClick(project)}
-                                        />
-                                    </motion.div>
+                        {loading ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {[...Array(3)].map((_, i) => (
+                                    <div key={i} className="aspect-[4/3] rounded-3xl bg-white/5 border border-white/10 relative overflow-hidden">
+                                        <Skeleton className="w-full h-full absolute inset-0 rounded-none bg-slate-200/50 dark:bg-zinc-800/50" />
+                                        <div className="absolute top-6 left-6 right-6">
+                                            <Skeleton className="h-6 w-1/3 rounded-full mb-2" />
+                                            <Skeleton className="h-4 w-1/2 rounded-full" />
+                                        </div>
+                                    </div>
                                 ))}
-                            </AnimatePresence>
-                        </motion.div>
+                            </div>
+                        ) : (
+                            <motion.div
+                                className={`grid gap-8 ${displayedProjects.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' :
+                                    displayedProjects.length === 2 ? 'grid-cols-1 lg:grid-cols-2 max-w-5xl mx-auto' :
+                                        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                                    }`}
+                                initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }}
+                                viewport={{ once: true }}
+                            >
+                                <AnimatePresence mode="wait">
+                                    {displayedProjects.map((project, index) => (
+                                        <motion.div
+                                            key={project.title}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 20 }}
+                                            transition={{ duration: 0.3, delay: index * 0.05 }}
+                                        >
+                                            <ProjectCard
+                                                project={project}
+                                                onClick={() => handleProjectClick(project)}
+                                            />
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+                            </motion.div>
+                        )}
 
                         {/* No Projects Found */}
-                        {displayedProjects.length === 0 && (
+                        {!loading && displayedProjects.length === 0 && (
                             <motion.div
                                 className="text-center py-24 bg-slate-100 dark:bg-zinc-900/30 rounded-3xl border border-slate-200 dark:border-white/5 border-dashed"
                                 initial={{ opacity: 0 }}
@@ -179,7 +195,7 @@ const ProjectsPreview: React.FC = () => {
                                         {t('projects_preview.cta_portfolio')}
                                     </button>
                                     <button
-                                        onClick={() => window.open(`https://wa.me/${contactSettings?.phone?.replace(/[^0-9]/g, '')}`, '_blank')}
+                                        onClick={() => window.open(`https://wa.me/15551234567`, '_blank')}
                                         className="group inline-flex items-center justify-center gap-3 bg-transparent border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
                                     >
                                         <FaWhatsapp className="w-5 h-5 text-green-600 dark:text-green-500" />
@@ -210,3 +226,4 @@ const ProjectsPreview: React.FC = () => {
 };
 
 export default ProjectsPreview;
+

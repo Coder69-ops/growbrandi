@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaStar, FaExpand, FaInfoCircle, FaClock, FaUser, FaCode, FaChartLine, FaArrowRight, FaTimes, FaBriefcase } from 'react-icons/fa';
-import { PROJECTS } from '../constants';
+// import { PROJECTS } from '../constants'; // Removed
+import { useContent } from '../src/hooks/useContent';
 import { Project } from '../types';
+import { Skeleton } from './ui/Skeleton';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -336,13 +338,15 @@ export const ProjectsPage: React.FC = () => {
     const [filter, setFilter] = useState<string>('All');
     const [sortBy, setSortBy] = useState<string>('rating');
 
-    const categories = ['All', ...Array.from(new Set(PROJECTS.map(p => p.category)))];
+    // Use dynamic content
+    const { data: projectsData, loading } = useContent<Project>('projects');
+    const categories = ['All', ...Array.from(new Set(projectsData.map((p: any) => p.category)))];
 
-    const filteredProjects = PROJECTS
-        .filter(project => filter === 'All' || project.category === filter)
+    const filteredProjects = projectsData
+        .filter((project: any) => filter === 'All' || project.category === filter)
         .sort((a, b) => {
-            if (sortBy === 'rating') return b.rating - a.rating;
-            if (sortBy === 'title') return a.title.localeCompare(b.title);
+            if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+            if (sortBy === 'title') return (a.title || '').localeCompare(b.title || '');
             return 0;
         });
 
@@ -428,13 +432,31 @@ export const ProjectsPage: React.FC = () => {
                         animate="visible"
                     >
                         <AnimatePresence>
-                            {filteredProjects.map((project) => (
-                                <ProjectCard
-                                    key={project.title}
-                                    project={project}
-                                    onViewDetails={handleViewDetails}
-                                />
-                            ))}
+                            {loading ? (
+                                <div className="col-span-1 lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    {[...Array(4)].map((_, i) => (
+                                        <div key={i} className="rounded-3xl overflow-hidden border border-white/10 bg-white/5 space-y-4">
+                                            <Skeleton className="h-64 w-full" />
+                                            <div className="p-8 space-y-4">
+                                                <div className="flex justify-between">
+                                                    <Skeleton className="h-8 w-1/2" />
+                                                    <Skeleton className="h-6 w-12 rounded-full" />
+                                                </div>
+                                                <Skeleton className="h-20 w-full" />
+                                                <Skeleton className="h-10 w-full rounded-xl" />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                filteredProjects.map((project) => (
+                                    <ProjectCard
+                                        key={project.title}
+                                        project={project}
+                                        onViewDetails={handleViewDetails}
+                                    />
+                                ))
+                            )}
                         </AnimatePresence>
                     </motion.div>
 

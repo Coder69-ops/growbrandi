@@ -8,7 +8,9 @@ import PageLoader from './components/PageLoader';
 import FloatingActionButtons from './components/FloatingActionButtons';
 import Footer from './components/Footer';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
-import { SERVICES } from './constants';
+// import { CONTACT_INFO } from './constants'; // Removed
+import { db } from './src/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 import { ThemeProvider } from './components/ThemeContext';
 
 // Lazy load components
@@ -99,9 +101,24 @@ function AppContent() {
 
   const [isChatPreloaded, setIsChatPreloaded] = useState(false);
   const [chatInstance, setChatInstance] = useState<any>(null);
+  const [servicesData, setServicesData] = useState<any[]>([]);
 
   const breadcrumbs = routeConfig[currentRoute]?.breadcrumb || ['Home'];
   const isAdminRoute = currentPath.startsWith('/admin');
+
+  // Fetch services for AI context
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'services'));
+        const data = querySnapshot.docs.map(doc => doc.data());
+        setServicesData(data);
+      } catch (error) {
+        console.error("Failed to fetch services:", error);
+      }
+    };
+    fetchServices();
+  }, []);
 
   // Preload chat on app startup
   useEffect(() => {
@@ -109,33 +126,42 @@ function AppContent() {
       try {
         // Import chat service and initialize
         const { initializeChat } = await import('./services/geminiService');
-        const servicesList = SERVICES.map(s => `• ${s.title}: ${s.price}`).join('\n');
+
+        const servicesList = servicesData.length > 0
+          ? servicesData.map((s: any) => `• ${s.title?.en || s.title}: ${s.price?.en || s.price}`).join('\n')
+          : "Services details available upon request.";
+
         const baseInstruction = `You are 'BrandiBot', GrowBrandi's helpful AI assistant. Your goal is to help users understand our services and guide them towards working with us.
 
 🎯 **YOUR ROLE**:
 • Be helpful, friendly, and professional.
 • Answer questions clearly and concisely (max 2-3 sentences).
 • Guide users to the right pages using links.
-• Encourage them to book a consultation or get a quote.
+• If you don't know something, ask for their contact info so a human can help.
 
-💰 **OUR SERVICES**:
+🧠 **KNOWLEDGE BASE**:
+
+**Our Services**:
 ${servicesList}
 
-🔗 **NAVIGATION LINKS** (Use these in your responses):
-• [Home](/)
-• [Services](/services)
-• [Portfolio](/portfolio)
-• [Contact](/contact)
-• [About Us](/about)
-• [Team](/team)
-• [Blog](/blog)
+**Contact Info**:
+• Email: contact@growbrandi.com
+• Phone: +1 (555) 123-4567
+• Address: San Francisco, CA
 
-✨ **GUIDELINES**:
-• If they ask about a specific service, explain it briefly and link to it (e.g., "Check out our [Brand Growth](/services/brand-growth) service").
-• If they seem interested, suggest booking a [free consultation](/contact).
-• Use markdown for links: [Link Text](URL).
+**Key Pages**:
+• [Services](/services) - List of all services
+• [Portfolio](/portfolio) - Our past work
+• [Contact](/contact) - Get in touch
+• [About](/about) - Our story
 
-**TONE**: Professional, knowledgeable, inviting and conversion focused. Avoid being overly aggressive.
+GUIDELINES:
+• Use markdown links: [Link Text](URL).
+• Be encouraging and positive.
+• Focus on value and solutions.
+
+**EXAMPLE**:
+"We can definitely help with that! Our [Web Development](/services/web-development) team builds high-converting sites. You can see some examples in our [Portfolio](/portfolio)."
 
 **SUGGESTIONS**: At the end of your response, provide 3 relevant follow-up questions for the user to ask. Format them as a JSON array inside <SUGGESTIONS> tags. Example: <SUGGESTIONS>["Question 1", "Question 2", "Question 3"]</SUGGESTIONS>`;
 
@@ -149,10 +175,11 @@ ${servicesList}
       }
     };
 
-    // Preload after a short delay to not block initial render
-    const timer = setTimeout(preloadChat, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (servicesData.length > 0 || true) {
+      const timer = setTimeout(preloadChat, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [servicesData]);
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -160,9 +187,9 @@ ${servicesList}
   }, [currentPath]);
 
   const getSystemInstruction = useCallback(() => {
-    const servicesDetails = SERVICES.map(s =>
-      `• ${s.title} (${s.price}): ${s.description}`
-    ).join('\n');
+    const servicesDetails = servicesData.length > 0
+      ? servicesData.map((s: any) => `• ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}`).join('\n')
+      : "";
 
     const baseInstruction = `You are 'GrowBrandi AI', a helpful and knowledgeable business growth assistant.
 

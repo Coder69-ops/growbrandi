@@ -1,5 +1,7 @@
 import { GoogleGenAI, Chat, Type } from "@google/genai";
-import { SERVICES, COMPANY_STATS, TESTIMONIALS } from "../constants";
+import { db } from "../src/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+// import { SERVICES, COMPANY_STATS, TESTIMONIALS } from "../constants"; // Removed
 
 // Chat interface adapter to maintain compatibility  
 export class ChatAdapter {
@@ -113,15 +115,18 @@ export const estimateProject = async (requirements: {
     try {
         const ai = new GoogleGenAI({ apiKey });
 
-        // Create pricing context from constants
-        const pricingContext = SERVICES.map(s =>
-            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
+        // Fetch dynamic context
+        const servicesSnap = await getDocs(collection(db, "services"));
+        const servicesData = servicesSnap.docs.map(d => d.data());
+        const pricingContext = servicesData.map((s: any) =>
+            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
         ).join('\n');
 
-        // Create social proof context
+        const testimonialsSnap = await getDocs(collection(db, "testimonials"));
+        const testimonialsData = testimonialsSnap.docs.map(d => d.data());
         const socialProofContext = `
-        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
-        Key Testimonial: "${TESTIMONIALS[0].quote}" - ${TESTIMONIALS[0].author}
+        GrowBrandi has completed 150+ projects with 50+ happy clients.
+        Key Testimonial: "${testimonialsData[0]?.quote?.en || "Great service!"}" - ${testimonialsData[0]?.author || "Happy Client"}
         `;
 
         const response = await ai.models.generateContent({
@@ -217,23 +222,24 @@ export const recommendServices = async (businessInfo: {
     try {
         const ai = new GoogleGenAI({ apiKey });
 
-        // Create pricing context from constants
-        const pricingContext = SERVICES.map(s =>
-            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
+        // Fetch dynamic context
+        const servicesSnap = await getDocs(collection(db, "services"));
+        const servicesData = servicesSnap.docs.map(d => d.data());
+        const pricingContext = servicesData.map((s: any) =>
+            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
         ).join('\n');
 
-        // Create social proof context
         const socialProofContext = `
-        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
         `;
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: `Act as a strategic growth consultant for GrowBrandi. Recommend digital services for: 
             Industry: ${businessInfo.industry}, 
-            Challenges: ${businessInfo.currentChallenges.join(', ')}, 
-            Goals: ${businessInfo.goals.join(', ')}, 
-            Budget: ${businessInfo.budget}, 
+            Challenges: ${businessInfo.currentChallenges.join(', ')}
+            Goals: ${businessInfo.goals.join(', ')}
+            Budget: ${businessInfo.budget}
             Timeline: ${businessInfo.timeline}
 
             CONTEXT:
@@ -323,14 +329,15 @@ export const analyzeBusinessGrowth = async (businessData: {
     try {
         const ai = new GoogleGenAI({ apiKey });
 
-        // Create pricing context from constants
-        const pricingContext = SERVICES.map(s =>
-            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
+        // Fetch dynamic context
+        const servicesSnap = await getDocs(collection(db, "services"));
+        const servicesData = servicesSnap.docs.map(d => d.data());
+        const pricingContext = servicesData.map((s: any) =>
+            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
         ).join('\n');
 
-        // Create social proof context
         const socialProofContext = `
-        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
         `;
 
         const response = await ai.models.generateContent({
@@ -426,14 +433,15 @@ export const generateConsultationPlan = async (clientInfo: {
     try {
         const ai = new GoogleGenAI({ apiKey });
 
-        // Create pricing context from constants
-        const pricingContext = SERVICES.map(s =>
-            `- ${s.title} (${s.price}): ${s.description}. Features: ${s.features.join(', ')}`
+        // Fetch dynamic context
+        const servicesSnap = await getDocs(collection(db, "services"));
+        const servicesData = servicesSnap.docs.map(d => d.data());
+        const pricingContext = servicesData.map((s: any) =>
+            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
         ).join('\n');
 
-        // Create social proof context
         const socialProofContext = `
-        GrowBrandi Stats: ${COMPANY_STATS.map(s => `${s.number} ${s.label}`).join(', ')}
+        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
         `;
 
         const response = await ai.models.generateContent({

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
-import { SERVICES } from '../../../constants';
+// import { SERVICES } from '../../../constants'; (removed)
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Tag, DollarSign, List, Briefcase, GripVertical } from 'lucide-react';
+
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
@@ -55,22 +56,13 @@ const AdminServices = () => {
     };
 
     const handleSeedData = async () => {
+        alert("Seed data functionality has been disabled as constants.ts data was migrated.");
+        /*
         if (!window.confirm("This will add all services from constants.ts to Firestore. Continue?")) return;
         setLoading(true);
         try {
             for (const [index, service] of SERVICES.entries()) {
-                const multiLangService = {
-                    serviceId: service.id,
-                    order: index + 1,
-                    color: service.color || 'from-blue-500 to-cyan-500',
-                    title: { en: service.title },
-                    description: { en: service.description },
-                    price: { en: service.price },
-                    features: (service.features || []).map((f: string) => ({ en: f })),
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp(),
-                };
-                await addDoc(collection(db, 'services'), multiLangService);
+               // ...
             }
             await fetchServices();
             alert("Data seeded successfully!");
@@ -80,6 +72,7 @@ const AdminServices = () => {
         } finally {
             setLoading(false);
         }
+        */
     };
 
     const handleDelete = async (id: string) => {

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
-import { FAQ_DATA } from '../../../constants';
+// import { FAQ_DATA } from '../../../constants'; (removed)
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, ChevronDown, HelpCircle, MessageCircle, Sparkles, FileText } from 'lucide-react';
+
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -40,27 +41,21 @@ const AdminFAQs = () => {
     useEffect(() => { fetchFAQs(); }, []);
 
     const handleSeedData = async () => {
-        if (!window.confirm("Seed FAQ data?")) return;
-        setLoading(true);
-        try {
-            for (const faq of FAQ_DATA) {
-                await addDoc(collection(db, 'faqs'), {
-                    question: { en: faq.question },
-                    answer: { en: faq.answer },
-                    order: 0,
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp(),
-                });
-            }
-            await fetchFAQs();
-            await fetchFAQs();
-            showSuccess('Data Seeded', 'FAQ data seeded successfully!');
-        } catch (error) {
-            console.error(error);
-            showError('Seeding Failed', 'Failed to seed FAQ data.');
-        } finally {
-            setLoading(false);
-        }
+        alert("Seed data functionality has been disabled as constants.ts data was migrated.");
+        /*
+       if (!window.confirm("Seed FAQ data?")) return;
+       setLoading(true);
+       try {
+           for (const faq of FAQ_DATA) {
+              // ...
+           }
+           // ...
+       } catch (error) {
+           // ...
+       } finally {
+           setLoading(false);
+       }
+       */
     };
 
     const handleDelete = async (id: string) => {

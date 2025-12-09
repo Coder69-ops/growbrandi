@@ -3,9 +3,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
-import { TEAM_MEMBERS } from '../constants';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
+import { TeamMember } from '../types';
 
 const TeamMemberProfile: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -13,9 +13,8 @@ const TeamMemberProfile: React.FC = () => {
     const { t, i18n } = useTranslation();
     const [isImageExpanded, setIsImageExpanded] = useState(false);
 
-    // Fetch team members from Firestore with fallback to constants
-    // We request localized fields for top-level string properties
-    const { data: teamMembers, loading } = useContent('team_members', TEAM_MEMBERS, {
+    // Fetch team members from Firestore
+    const { data: teamMembers, loading } = useContent<TeamMember>('team_members', {
         localizedFields: ['role', 'description', 'bio']
     });
 
@@ -233,7 +232,7 @@ const TeamMemberProfile: React.FC = () => {
                                         </div>
                                         {/* Use getLocalizedField to safe-guard against object vs string formats, then t() for potential key-based translation */}
                                         <p className="text-slate-600 dark:text-zinc-300 font-medium leading-relaxed">
-                                            {t(getLocalizedField(achievement, i18n.language))}
+                                            {getLocalizedField(achievement, i18n.language)}
                                         </p>
                                     </div>
                                 ))}
@@ -255,7 +254,7 @@ const TeamMemberProfile: React.FC = () => {
                                         className="px-5 py-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-slate-600 dark:text-zinc-300 font-medium hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-300 cursor-default flex items-center gap-2"
                                     >
                                         <FaCheckCircle className="w-4 h-4 text-emerald-500/50" />
-                                        {t(getLocalizedField(specialty, i18n.language))}
+                                        {getLocalizedField(specialty, i18n.language)}
                                     </span>
                                 ))}
                             </div>

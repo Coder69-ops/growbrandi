@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { FaLightbulb, FaUsers, FaCheckCircle, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaArrowRight, FaBriefcase, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
-import { TEAM_MEMBERS } from '../constants';
+// import { TEAM_MEMBERS } from '../constants'; // Removed
 import SEO from './SEO';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
@@ -18,7 +18,7 @@ import { getLocalizedField, SupportedLanguage } from '../src/utils/localization'
 // About Us Page
 export const AboutUsPage: React.FC = () => {
   const { t, i18n } = useTranslation(); // Keep for legacy fallbacks or strict hardcoded UI strings
-  const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+  const { data: teamMembers } = useContent('team_members');
   const { getText, content } = useSiteContentData();
   const lang = i18n.language as SupportedLanguage;
 
@@ -449,7 +449,7 @@ export const CareersPage: React.FC = () => {
 export const TeamPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
-  const { data: teamMembers } = useContent('team_members', TEAM_MEMBERS);
+  const { data: teamMembers } = useContent('team_members');
   const { getText } = useSiteContentData();
   const lang = i18n.language as SupportedLanguage;
 

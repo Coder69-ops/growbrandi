@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import { useContent } from '../../src/hooks/useContent';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PROJECTS } from '../../constants';
-import { Project } from '../../types';
-import { ProjectModal } from './ProjectModal';
-import { getLocalizedField } from '../../src/utils/localization';
+import { Link } from 'react-router-dom';
 import {
     FaFolderOpen,
     FaArrowRight,
-    FaChartLine,
+    FaRocket,
     FaAws,
     FaMobileAlt,
-    FaCode,
-    FaRocket,
-    FaStar
+    FaCode
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { useContent } from '../../src/hooks/useContent';
+import { Project } from '../../types';
+import { ProjectModal } from './ProjectModal';
+import { getLocalizedField } from '../../src/utils/localization';
+import { Skeleton } from '../ui/Skeleton';
 
 // Helper to get logo for technology
 const getTechLogo = (tech: string) => {
@@ -89,8 +87,6 @@ const ShowcaseItem: React.FC<{
                         alt={project.title}
                         className="w-full h-auto object-cover aspect-[4/3]"
                     />
-
-
                 </div>
             </div>
 
@@ -176,7 +172,10 @@ export const FeaturedProjects: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string>('All');
 
-    const { data: projects, loading } = useContent('projects', PROJECTS);
+    const { data: projects, loading } = useContent<Project>(
+        'projects',
+        { localizedFields: ['title', 'description', 'category'] }
+    );
 
     // Reset filter when language changes to avoid mismatch
     React.useEffect(() => {
@@ -231,32 +230,42 @@ export const FeaturedProjects: React.FC = () => {
 
                     {/* Projects Showcase Stream */}
                     <div className="mb-24 px-4 lg:px-0">
-                        <AnimatePresence mode="wait">
-                            {displayedProjects.length > 0 ? (
-                                <div>
-                                    {displayedProjects.map((project, index) => (
-                                        <ShowcaseItem
-                                            key={project.title}
-                                            project={project}
-                                            index={index}
-                                            onClick={() => handleProjectClick(project)}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-center py-32 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-3xl"
-                                >
-                                    <div className="w-20 h-20 bg-slate-100 dark:bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <FaFolderOpen className="w-10 h-10 text-slate-400 dark:text-zinc-600" />
+                        {loading ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {[...Array(3)].map((_, i) => (
+                                    <div key={i} className="aspect-[4/3] rounded-3xl bg-slate-100 dark:bg-white/5 relative overflow-hidden">
+                                        <Skeleton className="w-full h-full absolute inset-0 rounded-none" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t('portfolio.no_projects.title')}</h3>
-                                    <p className="text-slate-500 dark:text-zinc-500">{t('portfolio.no_projects.description')}</p>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                ))}
+                            </div>
+                        ) : (
+                            <AnimatePresence mode="wait">
+                                {displayedProjects.length > 0 ? (
+                                    <div>
+                                        {displayedProjects.map((project, index) => (
+                                            <ShowcaseItem
+                                                key={project.title}
+                                                project={project}
+                                                index={index}
+                                                onClick={() => handleProjectClick(project)}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="text-center py-32 border-2 border-dashed border-slate-200 dark:border-zinc-800 rounded-3xl"
+                                    >
+                                        <div className="w-20 h-20 bg-slate-100 dark:bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <FaFolderOpen className="w-10 h-10 text-slate-400 dark:text-zinc-600" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">{t('portfolio.no_projects.title')}</h3>
+                                        <p className="text-slate-500 dark:text-zinc-500">{t('portfolio.no_projects.description')}</p>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        )}
                     </div>
 
                     {/* Bottom Lead Magnet / Trust Signifier */}

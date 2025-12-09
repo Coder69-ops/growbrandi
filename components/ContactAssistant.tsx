@@ -8,7 +8,9 @@ import {
 } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import { jsPDF } from 'jspdf';
-import { SERVICES } from '../constants';
+import { useContent } from '../src/hooks/useContent';
+import { Service } from '../types';
+import { getLocalizedField } from '../src/utils/localization';
 
 interface ContactAssistantProps {
   isOpen: boolean;
@@ -29,7 +31,7 @@ interface FormData {
 }
 
 const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -46,6 +48,9 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
   const [aiInsights, setAiInsights] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
+
+  // Fetch services for dropdown
+  const { data: servicesData } = useContent<Service>('services');
 
   // Load state from session storage on mount
   useEffect(() => {
@@ -552,9 +557,9 @@ const ContactAssistant: React.FC<ContactAssistantProps> = ({ isOpen, onClose }) 
                         required
                       >
                         <option value="">{t('contact_assistant.form.select_project_type')}</option>
-                        {SERVICES.map((service) => (
-                          <option key={service.title} value={service.title}>
-                            {t(`services.${service.id}.title`)}
+                        {servicesData.map((service) => (
+                          <option key={service.id || getLocalizedField(service.title, 'en')} value={getLocalizedField(service.title, 'en')}>
+                            {getLocalizedField(service.title, i18n.language) || 'Service'}
                           </option>
                         ))}
                         <option value="Other">{t('contact_assistant.form.other')}</option>

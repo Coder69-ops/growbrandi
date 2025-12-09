@@ -10,15 +10,14 @@ export interface UseContentOptions {
 }
 
 /**
- * Hook to fetch data from Firestore with fallback to local data.
+ * Hook to fetch data from Firestore.
  * Automatically handles localization of specified fields.
  */
 export const useContent = <T extends Record<string, any>>(
     collectionName: string,
-    fallbackData: T[],
     options?: UseContentOptions
 ): { data: T[]; loading: boolean; error: Error | null } => {
-    const [data, setData] = useState<T[]>(fallbackData);
+    const [data, setData] = useState<T[]>([]); // Start with empty array
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
     const { i18n } = useTranslation();
@@ -33,9 +32,12 @@ export const useContent = <T extends Record<string, any>>(
                         // Process localized fields if specified
                         if (options?.localizedFields) {
                             options.localizedFields.forEach(field => {
-                                if (docData[field] && typeof docData[field] === 'object') {
-                                    docData[`_raw_${field}`] = docData[field]; // Keep raw for editing
-                                    docData[field] = getLocalizedField(docData[field], i18n.language);
+                                const val = docData[field];
+                                // Only localise if it's an object AND NOT an array
+                                // (Arrays are technically objects, but we don't want to localize [ 'feature1', 'feature2' ])
+                                if (val && typeof val === 'object' && !Array.isArray(val)) {
+                                    docData[`_raw_${field}`] = val; // Keep raw for editing
+                                    docData[field] = getLocalizedField(val, i18n.language);
                                 }
                             });
                         }
@@ -45,11 +47,12 @@ export const useContent = <T extends Record<string, any>>(
                         } as unknown as T;
                     }).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
                     setData(fetchedData);
+                } else {
+                    setData([]); // Ensure it's empty if snapshot is empty
                 }
             } catch (err) {
                 console.error(`Error fetching ${collectionName}:`, err);
                 setError(err as Error);
-                // Keep fallback data on error
             } finally {
                 setLoading(false);
             }
@@ -66,9 +69,8 @@ export const useContent = <T extends Record<string, any>>(
  */
 export const useLocalizedContent = <T extends Record<string, any>>(
     collectionName: string,
-    fallbackData: T[],
     localizedFields: string[] = []
 ): { data: T[]; loading: boolean } => {
-    const { data, loading } = useContent(collectionName, fallbackData, { localizedFields });
+    const { data, loading } = useContent<T>(collectionName, { localizedFields });
     return { data, loading };
 };
