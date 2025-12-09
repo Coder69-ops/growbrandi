@@ -12,6 +12,7 @@ import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { Skeleton } from './ui/Skeleton';
+import SEO from './SEO';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -259,14 +260,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
 
 // --- Enhanced ServicesPage Component ---
 export const ServicesPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { getLocalizedPath } = useLocalizedPath();
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: services, loading } = useContent<Service>('services');
-  const [activeFilter, setActiveFilter] = useState<string>('All');
+  const [activeFilter, setActiveFilter] = useState('All');
   const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
-  const navigate = useNavigate();
-  const { getLocalizedPath } = useLocalizedPath();
-  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (services) {
@@ -316,7 +317,12 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <>
-      <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
+      <SEO
+        title={t('services.meta.title', 'Our Services | GrowBrandi')}
+        description={t('services.meta.description', 'Explore our comprehensive digital services including web development, UI/UX design, SEO optimization, brand strategy, and AI solutions.')}
+        keywords={['services', 'web development', 'design', 'SEO', 'digital marketing', 'AI solutions']}
+      />
+      <div className="min-h-screen bg-slate-50 dark:bg-black text-slate-900 dark:text-white transition-colors duration-300">
         <BackgroundEffects />
 
         <div className="container mx-auto max-w-7xl relative z-10">
@@ -480,7 +486,7 @@ export const ServicesPage: React.FC = () => {
             </GlassCard>
           </motion.div>
         </div>
-      </section>
+      </div>
 
       <ServiceModal
         service={selectedService}
