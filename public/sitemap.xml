@@ -201,6 +201,56 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/case-studies"/>
   </url>
   <url>
+    <loc>https://growbrandi.com/en/team</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+  </url>
+  <url>
+    <loc>https://growbrandi.com/nl/team</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+  </url>
+  <url>
+    <loc>https://growbrandi.com/de/team</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+  </url>
+  <url>
+    <loc>https://growbrandi.com/es/team</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+  </url>
+  <url>
+    <loc>https://growbrandi.com/fr/team</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+  </url>
+  <url>
     <loc>https://growbrandi.com/en/careers</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -401,154 +451,104 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/portfolio</loc>
+    <loc>https://growbrandi.com/en/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-growth"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/portfolio</loc>
+    <loc>https://growbrandi.com/nl/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-growth"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/portfolio</loc>
+    <loc>https://growbrandi.com/de/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-growth"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/portfolio</loc>
+    <loc>https://growbrandi.com/es/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-growth"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/portfolio</loc>
+    <loc>https://growbrandi.com/fr/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-growth"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-growth"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/team</loc>
+    <loc>https://growbrandi.com/en/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/social-media-content"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/team</loc>
+    <loc>https://growbrandi.com/nl/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/social-media-content"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/team</loc>
+    <loc>https://growbrandi.com/de/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/social-media-content"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/team</loc>
+    <loc>https://growbrandi.com/es/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/social-media-content"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/team</loc>
+    <loc>https://growbrandi.com/fr/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/team"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/team"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/team"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/team"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/team"/>
-  </url>
-  <url>
-    <loc>https://growbrandi.com/en/services/web-development</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
-  </url>
-  <url>
-    <loc>https://growbrandi.com/nl/services/web-development</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
-  </url>
-  <url>
-    <loc>https://growbrandi.com/de/services/web-development</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
-  </url>
-  <url>
-    <loc>https://growbrandi.com/es/services/web-development</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
-  </url>
-  <url>
-    <loc>https://growbrandi.com/fr/services/web-development</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/social-media-content"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/social-media-content"/>
   </url>
   <url>
     <loc>https://growbrandi.com/en/services/ui-ux-design</loc>
@@ -601,204 +601,204 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ui-ux-design"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/services/brand-strategy</loc>
+    <loc>https://growbrandi.com/en/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-strategy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/services/brand-strategy</loc>
+    <loc>https://growbrandi.com/nl/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-strategy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/services/brand-strategy</loc>
+    <loc>https://growbrandi.com/de/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-strategy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/services/brand-strategy</loc>
+    <loc>https://growbrandi.com/es/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-strategy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/services/brand-strategy</loc>
+    <loc>https://growbrandi.com/fr/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/brand-strategy"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/brand-strategy"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/web-development"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/web-development"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/services/seo-optimization</loc>
+    <loc>https://growbrandi.com/en/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/seo-optimization"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/virtual-assistance"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/services/seo-optimization</loc>
+    <loc>https://growbrandi.com/nl/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/seo-optimization"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/virtual-assistance"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/services/seo-optimization</loc>
+    <loc>https://growbrandi.com/de/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/seo-optimization"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/virtual-assistance"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/services/seo-optimization</loc>
+    <loc>https://growbrandi.com/es/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/seo-optimization"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/virtual-assistance"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/services/seo-optimization</loc>
+    <loc>https://growbrandi.com/fr/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/seo-optimization"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/seo-optimization"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/virtual-assistance"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/virtual-assistance"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/services/digital-marketing</loc>
+    <loc>https://growbrandi.com/en/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/customer-support"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/services/digital-marketing</loc>
+    <loc>https://growbrandi.com/nl/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/customer-support"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/services/digital-marketing</loc>
+    <loc>https://growbrandi.com/de/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/customer-support"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/services/digital-marketing</loc>
+    <loc>https://growbrandi.com/es/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/customer-support"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/services/digital-marketing</loc>
+    <loc>https://growbrandi.com/fr/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/digital-marketing"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/digital-marketing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/customer-support"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/customer-support"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/en/services/ai-solutions</loc>
+    <loc>https://growbrandi.com/en/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ai-solutions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/nl/services/ai-solutions</loc>
+    <loc>https://growbrandi.com/nl/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ai-solutions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/de/services/ai-solutions</loc>
+    <loc>https://growbrandi.com/de/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ai-solutions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/es/services/ai-solutions</loc>
+    <loc>https://growbrandi.com/es/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ai-solutions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
   </url>
   <url>
-    <loc>https://growbrandi.com/fr/services/ai-solutions</loc>
+    <loc>https://growbrandi.com/fr/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/services/ai-solutions"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/services/ai-solutions"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://growbrandi.com/en/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://growbrandi.com/nl/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://growbrandi.com/de/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://growbrandi.com/es/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://growbrandi.com/fr/portfolio"/>
   </url>
   <url>
     <loc>https://growbrandi.com/en/legal/privacy-policy</loc>
