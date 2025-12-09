@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { Save, Loader2, Layout, LayoutTemplate, Globe, Info, Users, Briefcase, Phone, FileText, List } from 'lucide-react';
+import { Save, Loader2, Layout, LayoutTemplate, Globe, Info, Users, Briefcase, Phone, FileText, List, Sparkles } from 'lucide-react';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { LanguageTabs, LocalizedInput, LocalizedTextArea, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import PreviewLayout from '../../components/admin/PreviewLayout';
@@ -18,6 +19,28 @@ const TABS = [
     { id: 'section_headers', label: 'Section Headers', icon: Info },
 ];
 
+const TRANSLATE_OPTIONS: Record<string, string[]> = {
+    hero: ['hero.badge', 'hero.title_prefix', 'hero.title_highlight', 'hero.description', 'hero.cta_consultation', 'hero.cta_showreel'],
+    footer: ['footer.tagline_desc', 'footer.copyright'],
+    about: [
+        'about.hero.badge', 'about.hero.title', 'about.hero.highlight', 'about.hero.description',
+        'about.story.title', 'about.story.title_highlight', 'about.story.p1', 'about.story.p2',
+        'about.values.innovation.title', 'about.values.innovation.desc',
+        'about.values.client.title', 'about.values.client.desc',
+        'about.values.quality.title', 'about.values.quality.desc'
+    ],
+    process: ['process.hero.badge', 'process.hero.title', 'process.hero.highlight', 'process.hero.description'],
+    careers: ['careers.hero.badge', 'careers.hero.title', 'careers.hero.highlight', 'careers.hero.description', 'careers.open_positions.title', 'careers.open_positions.highlight'],
+    team_page: ['team_page.hero.badge', 'team_page.hero.title', 'team_page.hero.highlight', 'team_page.hero.description', 'team_page.cta.title', 'team_page.cta.highlight', 'team_page.cta.description', 'team_page.cta.start_project', 'team_page.cta.learn_more'],
+    contact: ['contact.hero.badge', 'contact.hero.title', 'contact.hero.highlight', 'contact.hero.description', 'contact.info_labels.email', 'contact.info_labels.call', 'contact.info_labels.visit', 'contact.info_labels.response_time'],
+    section_headers: [
+        'section_headers.testimonials.badge', 'section_headers.testimonials.title', 'section_headers.testimonials.highlight', 'section_headers.testimonials.description',
+        'section_headers.team.badge', 'section_headers.team.title', 'section_headers.team.highlight', 'section_headers.team.description',
+        'section_headers.projects.badge', 'section_headers.projects.title', 'section_headers.projects.highlight', 'section_headers.projects.description',
+        'section_headers.faq.badge', 'section_headers.faq.title', 'section_headers.faq.highlight', 'section_headers.faq.description'
+    ]
+};
+
 const AdminSiteContent = () => {
     const [activeTab, setActiveTab] = useState('hero');
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
@@ -33,6 +56,14 @@ const AdminSiteContent = () => {
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        content,
+        setContent,
+        {
+            deepKeys: TRANSLATE_OPTIONS[activeTab] || []
+        }
+    );
 
     // Fetch Content
     useEffect(() => {
@@ -134,14 +165,26 @@ const AdminSiteContent = () => {
             title="Site Content"
             description="Manage global content for all static pages."
             actions={
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
-                >
-                    {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-                    Running Save...
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={handleAutoTranslate}
+                        disabled={saving || isTranslating}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                        title={`Auto-translate ${activeTab} section`}
+                    >
+                        <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                        {isTranslating ? 'Translating...' : 'Auto Translate'}
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                        Running Save...
+                    </button>
+                </div>
             }
         >
             <PreviewLayout previewData={content} section={activeTab} showPreview={false}>

@@ -8,6 +8,8 @@ import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
 import { SortableItem } from '../../components/admin/SortableItem';
+import { Sparkles } from 'lucide-react';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 
 const AdminServices = () => {
     const [services, setServices] = useState<any[]>([]);
@@ -134,6 +136,15 @@ const AdminServices = () => {
         setCurrentService({ ...currentService, [field]: value });
     };
 
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        currentService,
+        setCurrentService,
+        {
+            fields: ['title', 'description', 'price'],
+            arrayFields: ['features']
+        }
+    );
+
     if (loading && !isEditing) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading services...</div>;
 
     return (
@@ -175,6 +186,16 @@ const AdminServices = () => {
                             </h2>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={handleAutoTranslate}
+                                disabled={isTranslating}
+                                className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Auto-translate English text to all other languages"
+                            >
+                                <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                                {isTranslating ? 'Translating...' : 'Auto Translate'}
+                            </button>
                             <button
                                 onClick={() => setIsEditing(false)}
                                 className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"

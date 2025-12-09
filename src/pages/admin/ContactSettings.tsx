@@ -3,6 +3,8 @@ import { db } from '../../lib/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { Save, Mail, Phone, MapPin, Loader2, MessageSquare, FormInput, AtSign, Clock } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
+import { Sparkles } from 'lucide-react';
 import { SupportedLanguage, createEmptyLocalizedString } from '../../utils/localization';
 import { CONTACT_INFO } from '../../../constants';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -85,6 +87,30 @@ const AdminContactSettings = () => {
         }));
     };
 
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        settings,
+        setSettings,
+        {
+            deepKeys: [
+                'page_text.badge',
+                'page_text.title',
+                'page_text.description',
+                'form_labels.name',
+                'form_labels.email',
+                'form_labels.subject',
+                'form_labels.message',
+                'form_labels.service',
+                'form_labels.budget',
+                'form_labels.submit',
+                'form_labels.sending',
+                'form_labels.success',
+                'form_labels.error',
+                'contact_info.office_hours',
+                'contact_info.response_time'
+            ]
+        }
+    );
+
     if (loading) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading contact settings...</div>;
 
     return (
@@ -92,14 +118,25 @@ const AdminContactSettings = () => {
             title="Contact Settings"
             description="Configure your contact page and form"
             actions={
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50"
-                >
-                    {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-                    {saving ? 'Saving...' : 'Save Changes'}
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        type="button"
+                        onClick={handleAutoTranslate}
+                        disabled={saving || isTranslating}
+                        className="flex items-center gap-2 px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50"
+                    >
+                        <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                        {isTranslating ? 'Translating...' : 'Auto Translate'}
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
+                        {saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                </div>
             }
         >
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 animate-in slide-in-from-bottom-4 duration-500">

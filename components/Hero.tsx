@@ -425,9 +425,7 @@ export const HomePage: React.FC = () => {
                 <TestimonialsSlider />
             </LazySection>
 
-            <LazySection fallback={<div className="min-h-[600px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <TeamSection />
-            </LazySection>
+            <TeamSection />
 
             <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
                 <FAQ />

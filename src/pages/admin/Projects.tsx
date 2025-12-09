@@ -4,6 +4,8 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp
 import { PROJECTS } from '../../../constants';
 import { Plus, Edit2, Trash2, Save, X, ChevronDown, CheckCircle2, TrendingUp, Settings, Image, FolderKanban, ArrowLeft, FileText } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
+import { Sparkles } from 'lucide-react';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, createEmptyLocalizedString, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
@@ -125,6 +127,15 @@ const AdminProjects = () => {
         setCurrentProject({ ...currentProject, [field]: value });
     };
 
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        currentProject,
+        setCurrentProject,
+        {
+            fields: ['title', 'description', 'client', 'completionTime', 'growthMetrics'],
+            arrayFields: ['results']
+        }
+    );
+
     if (loading && !isEditing) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading projects...</div>;
 
     return (
@@ -158,6 +169,16 @@ const AdminProjects = () => {
                             </h2>
                         </div>
                         <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={handleAutoTranslate}
+                                disabled={isTranslating}
+                                className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Auto-translate English text to all other languages"
+                            >
+                                <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                                {isTranslating ? 'Translating...' : 'Auto Translate'}
+                            </button>
                             <button
                                 onClick={() => setIsEditing(false)}
                                 className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
