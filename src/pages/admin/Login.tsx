@@ -66,9 +66,7 @@ const AdminLogin = () => {
                 {/* Login Card */}
                 <div className="bg-luxury-zinc/50 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl overflow-hidden p-8">
                     <div className="mb-8 text-center">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-white/10 mb-4">
-                            <Lock className="w-6 h-6 text-white" />
-                        </div>
+                        <img src="/growbrandi-logo.png" alt="GrowBrandAI Logo" className="w-16 h-16 object-contain" />
                         <h2 className="text-3xl font-heading font-bold text-white mb-2">Admin Access</h2>
                         <p className="text-gray-400 text-sm">Enter your credentials to continue</p>
                     </div>
@@ -141,8 +139,8 @@ const AdminLogin = () => {
                             type="submit"
                             disabled={loading || success}
                             className={`w-full font-bold py-3.5 px-4 rounded-xl transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2 ${success
-                                    ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-                                    : 'bg-white text-luxury-black hover:bg-gray-100'
+                                ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                                : 'bg-white text-luxury-black hover:bg-gray-100'
                                 }`}
                         >
                             {success ? (
@@ -165,8 +163,8 @@ const AdminLogin = () => {
                 <p className="text-center text-gray-500 text-xs mt-8">
                     &copy; {new Date().getFullYear()} GrowBrandi. All rights reserved.
                 </p>
-            </motion.div>
-        </div>
+            </motion.div >
+        </div >
     );
 };
 

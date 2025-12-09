@@ -72,3 +72,35 @@ h6 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl;
+  }
+
+  .glass-sidebar {
+    @apply bg-white/80 dark:bg-[#0B1120]/90 backdrop-blur-xl border-r border-slate-200/50 dark:border-slate-800/50;
+  }
+
+  .glass-card {
+    @apply bg-white/60 dark:bg-slate-800/60 backdrop-blur-lg border border-white/50 dark:border-white/5 shadow-sm hover:shadow-lg transition-all duration-300;
+  }
+
+  .premium-gradient {
+    @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500;
+  }
+
+  .premium-gradient-text {
+    @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+
+  .custom-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

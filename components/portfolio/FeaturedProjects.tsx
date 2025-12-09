@@ -99,7 +99,7 @@ const ShowcaseItem: React.FC<{
                 <div className="flex flex-col h-full justify-center">
                     <div className="flex items-center gap-3 mb-6">
                         <span className="px-3 py-1 bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full">
-                            {getText(project.category)}
+                            {project.category.startsWith('services.') ? t(project.category) : t(`services.${project.category}.title`)}
                         </span>
                         <div className="h-px flex-grow bg-slate-200 dark:bg-white/10" />
                         <span className="text-sm font-semibold text-slate-500 dark:text-zinc-500">{getText(project.client)}</span>
@@ -221,7 +221,7 @@ export const FeaturedProjects: React.FC = () => {
                                     : 'bg-white dark:bg-zinc-900 text-slate-500 border-slate-200 dark:border-zinc-800 hover:border-slate-400 dark:hover:border-zinc-600 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                             >
-                                {t(category)}
+                                {category === 'All' ? t('portfolio.page.filter.all') : (category.startsWith('services.') ? t(category) : t(`services.${category}.title`))}
                                 <span className={`ml-2 text-[10px] px-1.5 py-0.5 rounded-full ${activeFilter === category ? 'bg-white/20 text-white dark:text-black dark:bg-black/10' : 'bg-slate-100 dark:bg-zinc-800 text-slate-400'}`}>
                                     {category === 'All' ? projects.length : projects.filter((p: any) => getCategory(p) === category).length}
                                 </span>

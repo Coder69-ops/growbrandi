@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     FolderKanban,
     Users,
@@ -7,33 +7,48 @@ import {
     ArrowRight,
     Activity,
     Clock,
-    CheckCircle2
+    CheckCircle2,
+    Mail
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SERVICES, PROJECTS, TEAM_MEMBERS } from '../../../constants';
+import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+import { formatDistanceToNow } from 'date-fns';
+import { getLocalizedField } from '../../utils/localization';
+
+interface DashboardActivity {
+    id: string;
+    type: 'project' | 'service' | 'message' | 'testimonial';
+    title: string;
+    timestamp: Date;
+    details?: string;
+}
 
 const DashboardCard = ({ title, value, icon: Icon, color, trend, trendValue }: any) => (
-    <div className="bg-white dark:bg-slate-800/50 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm transition-all hover:shadow-md hover:border-blue-500/30 group">
-        <div className="flex items-start justify-between mb-4">
-            <div className={`p-3 rounded-xl ${color} bg-opacity-10 dark:bg-opacity-20 group-hover:scale-110 transition-transform duration-300`}>
+    <div className="glass-card p-6 rounded-2xl group relative overflow-hidden">
+        {/* Decorative background glow */}
+        <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full ${color} opacity-10 group-hover:scale-150 transition-transform duration-500 blur-2xl`} />
+
+        <div className="flex items-start justify-between mb-4 relative z-10">
+            <div className={`p-3.5 rounded-xl ${color} bg-opacity-10 dark:bg-opacity-20 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                 <Icon className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />
             </div>
             {trend && (
-                <div className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${trend === 'up'
-                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                        : 'bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400'
+                <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full border ${trend === 'up'
+                        ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20'
+                        : 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
                     }`}>
-                    {trend === 'up' ? <TrendingUp size={12} /> : <TrendingUp size={12} className="rotate-180" />}
+                    {trend === 'up' ? <TrendingUp size={12} strokeWidth={3} /> : <TrendingUp size={12} className="rotate-180" strokeWidth={3} />}
                     {trendValue}
                 </div>
             )}
         </div>
 
-        <div>
-            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <div className="relative z-10">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-1 tracking-tight group-hover:translate-x-1 transition-transform duration-300">
                 {value}
             </h3>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 pl-0.5">{title}</p>
         </div>
     </div>
 );
@@ -41,101 +56,188 @@ const DashboardCard = ({ title, value, icon: Icon, color, trend, trendValue }: a
 const QuickAction = ({ title, description, to, icon: Icon }: any) => (
     <Link
         to={to}
-        className="flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-800/50 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10 transition-all group"
+        className="glass-card p-5 rounded-2xl flex items-center gap-5 group hover:border-blue-500/30 dark:hover:border-blue-500/30 transition-all duration-300"
     >
-        <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-700 group-hover:bg-blue-500 group-hover:text-white text-slate-600 dark:text-slate-300 transition-colors">
-            <Icon size={20} />
+        <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 group-hover:bg-blue-600 group-hover:text-white text-slate-500 dark:text-slate-400 transition-colors shadow-sm">
+            <Icon size={22} />
         </div>
         <div className="flex-1">
-            <h4 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <h4 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {title}
             </h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1">
+            <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5 font-medium">
                 {description}
             </p>
         </div>
-        <ArrowRight size={18} className="text-slate-400 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" />
+        <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 transition-all group-hover:translate-x-1">
+            <ArrowRight size={16} />
+        </div>
     </Link>
 );
 
 const AdminDashboard = () => {
+    const [counts, setCounts] = useState({
+        projects: 0,
+        services: 0,
+        team: 0,
+        testimonials: 0
+    });
+    const [activities, setActivities] = useState<DashboardActivity[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                // Fetch Counts
+                const [projectsSnap, servicesSnap, teamSnap, testimonialsSnap] = await Promise.all([
+                    getDocs(collection(db, 'projects')),
+                    getDocs(collection(db, 'services')),
+                    getDocs(collection(db, 'team_members')),
+                    getDocs(collection(db, 'testimonials'))
+                ]);
+
+                setCounts({
+                    projects: projectsSnap.size,
+                    services: servicesSnap.size,
+                    team: teamSnap.size,
+                    testimonials: testimonialsSnap.size
+                });
+
+                // Fetch Recent Activity
+                // Messages
+                const messagesQuery = query(collection(db, 'messages'), orderBy('createdAt', 'desc'), limit(5));
+                const messagesDocs = await getDocs(messagesQuery);
+                const recentMessages = messagesDocs.docs.map(doc => ({
+                    id: doc.id,
+                    type: 'message' as const,
+                    title: `New message from ${doc.data().name || 'Unknown'}`,
+                    timestamp: doc.data().createdAt?.toDate() || new Date(),
+                    details: doc.data().message
+                }));
+
+                // Projects
+                let recentProjects: DashboardActivity[] = [];
+                try {
+                    const projectsQuery = query(collection(db, 'projects'), orderBy('createdAt', 'desc'), limit(5));
+                    const projectsDocs = await getDocs(projectsQuery);
+                    recentProjects = projectsDocs.docs.map(doc => ({
+                        id: doc.id,
+                        type: 'project' as const,
+                        title: `Project Added: ${getLocalizedField(doc.data().title, 'en')}`,
+                        timestamp: doc.data().createdAt?.toDate() || new Date(0),
+                        details: getLocalizedField(doc.data().description, 'en')
+                    }));
+                } catch (e) { console.warn("Could not fetch ordered projects", e); }
+
+                // Services
+                let recentServices: DashboardActivity[] = [];
+                try {
+                    const servicesQuery = query(collection(db, 'services'), orderBy('createdAt', 'desc'), limit(5));
+                    const servicesDocs = await getDocs(servicesQuery);
+                    recentServices = servicesDocs.docs.map(doc => ({
+                        id: doc.id,
+                        type: 'service' as const,
+                        title: `Service Updated: ${getLocalizedField(doc.data().title, 'en')}`,
+                        timestamp: doc.data().createdAt?.toDate() || new Date(0),
+                        details: getLocalizedField(doc.data().description, 'en')
+                    }));
+                } catch (e) { console.warn("Could not fetch ordered services", e); }
+
+
+                // Combine and Sort
+                const allActivities = [...recentMessages, ...recentProjects, ...recentServices]
+                    .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+                    .slice(0, 10);
+
+                setActivities(allActivities);
+
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
     const stats = [
         {
             title: 'Total Projects',
-            value: PROJECTS.length,
+            value: loading ? '...' : counts.projects,
             icon: FolderKanban,
-            color: 'bg-blue-500',
+            color: 'bg-indigo-500',
             trend: 'up',
-            trendValue: '+12%'
+            trendValue: 'Live'
         },
         {
             title: 'Active Services',
-            value: SERVICES.length,
+            value: loading ? '...' : counts.services,
             icon: Briefcase,
             color: 'bg-violet-500',
             trend: 'up',
-            trendValue: '+5%'
+            trendValue: 'Live'
         },
         {
             title: 'Team Members',
-            value: TEAM_MEMBERS.length,
+            value: loading ? '...' : counts.team,
             icon: Users,
-            color: 'bg-pink-500',
+            color: 'bg-fuchsia-500',
             trend: 'up',
-            trendValue: '+2'
+            trendValue: 'Live'
         },
         {
-            title: 'Client Satisfaction',
-            value: '4.9/5',
+            title: 'Testimonials',
+            value: loading ? '...' : counts.testimonials,
             icon: Activity,
-            color: 'bg-emerald-500',
+            color: 'bg-pink-500',
             trend: 'up',
-            trendValue: '+0.2'
+            trendValue: 'Live'
         },
     ];
 
     const actions = [
         {
             title: 'Add New Project',
-            description: 'Showcase your latest work to the world',
+            description: 'Showcase your latest work',
             to: '/admin/projects',
             icon: FolderKanban
         },
         {
             title: 'Manage Team',
-            description: 'Update member profiles and roles',
+            description: 'Update member profiles',
             to: '/admin/team',
             icon: Users
         },
         {
             title: 'Update Services',
-            description: 'Modify pricing and service details',
+            description: 'Modify pricing details',
             to: '/admin/services',
             icon: Briefcase
         },
         {
             title: 'Site Content',
-            description: 'Edit homepage and global text',
+            description: 'Edit homepage text',
             to: '/admin/site-content',
             icon: Activity
         }
     ];
 
     return (
-        <div className="space-y-8 max-w-7xl mx-auto">
+        <div className="space-y-8 animate-fade-in relative z-10">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-                        Dashboard Overview
+                    <h1 className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight leading-tight">
+                        Overview
                     </h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-light text-lg">
                         Welcome back! Here's what's happening today.
                     </p>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
-                    <Clock size={16} />
-                    <span>Last updated: just now</span>
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-sm">
+                    <Clock size={14} />
+                    <span>Updated just now</span>
                 </div>
             </div>
 
@@ -147,35 +249,61 @@ const AdminDashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/50 p-8 backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Quick Actions</h2>
+            <div className="glass-panel p-8 rounded-3xl">
+                <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Quick Actions</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {actions.map((action, index) => (
                         <QuickAction key={index} {...action} />
                     ))}
                 </div>
             </div>
 
-            {/* Recent Activity Placeholder - Can be connected to real logs later */}
-            <div className="bg-white dark:bg-slate-800/50 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700/50 p-8 backdrop-blur-sm opacity-50 pointer-events-none">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white">Recent Activity</h2>
-                    <span className="text-xs font-medium px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">Coming Soon</span>
+            {/* Recent Activity Feed */}
+            <div className="glass-panel p-8 rounded-3xl">
+                <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Recent Activity</h2>
                 </div>
                 <div className="space-y-4">
-                    {[1, 2, 3].map((_, i) => (
-                        <div key={i} className="flex items-center gap-4 py-2 border-b border-slate-100 dark:border-slate-800/50 last:border-0">
-                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-400">
-                                <CheckCircle2 size={18} />
+                    {activities.length > 0 ? (
+                        activities.map((activity) => (
+                            <div key={activity.id} className="group flex items-start gap-4 p-4 rounded-2xl hover:bg-white/50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200/50 dark:hover:border-white/5 transition-all duration-300">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-110 ${activity.type === 'project' ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300' :
+                                        activity.type === 'service' ? 'bg-violet-100 text-violet-600 dark:bg-violet-500/20 dark:text-violet-300' :
+                                            activity.type === 'message' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300' :
+                                                'bg-slate-100 text-slate-600'
+                                    }`}>
+                                    {activity.type === 'project' && <FolderKanban size={20} />}
+                                    {activity.type === 'service' && <Briefcase size={20} />}
+                                    {activity.type === 'message' && <Mail size={20} />}
+                                    {activity.type === 'testimonial' && <Users size={20} />}
+                                </div>
+                                <div className="flex-1 min-w-0 pt-1">
+                                    <div className="flex justify-between items-start mb-1">
+                                        <h4 className="font-semibold text-slate-900 dark:text-white truncate pr-4 text-base">
+                                            {activity.title}
+                                        </h4>
+                                        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 capitalize whitespace-nowrap">
+                                            {activity.type}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+                                        {activity.details || 'No details available'}
+                                    </p>
+                                    <p className="text-xs text-slate-400 dark:text-slate-500 flex items-center gap-1.5 font-medium">
+                                        <Clock size={12} />
+                                        {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-1/3 mb-2"></div>
-                                <div className="h-3 bg-slate-50 dark:bg-slate-800 rounded w-1/4"></div>
-                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center py-12 text-slate-500 dark:text-slate-400">
+                            <Activity size={48} className="mx-auto mb-3 opacity-20" />
+                            <p>No recent activity found.</p>
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
         </div>

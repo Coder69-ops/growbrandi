@@ -533,3 +533,42 @@ export const generateProjectBrief = async (details?: { service: string; subject:
         throw new Error("Could not generate project brief at this time.");
     }
 };
+
+// Content Translation Service
+export const translateContent = async (text: string, sourceLang: string, targetLangs: string[]): Promise<Record<string, string>> => {
+    const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
+    if (!apiKey) {
+        throw new Error("API_KEY environment variable not set.");
+    }
+
+    try {
+        const ai = new GoogleGenAI({ apiKey });
+
+        const response = await ai.models.generateContent({
+            model: "gemini-1.5-flash",
+            contents: `Translate the following text from ${sourceLang} to these languages: ${targetLangs.join(', ')}.
+            
+            Text to translate:
+            "${text}"
+
+            Maintain professional tone and context.
+            Return ONLY a JSON object where keys are the language codes (${targetLangs.join(', ')}) and values are the translated text.
+            Example: { "es": "Hola", "fr": "Bonjour" }`,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: targetLangs.reduce((acc, lang) => ({
+                        ...acc,
+                        [lang]: { type: Type.STRING }
+                    }), {})
+                }
+            }
+        });
+
+        return JSON.parse(response.text);
+    } catch (error) {
+        console.error("Failed to translate content:", error);
+        throw new Error("Translation failed.");
+    }
+};

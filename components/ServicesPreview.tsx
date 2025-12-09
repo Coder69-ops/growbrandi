@@ -43,7 +43,7 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
     const { t, i18n } = useTranslation();
 
     // Helper to get localized text
-    const localized = (field: any) => getLocalizedField(field, i18n.language);
+    const localized = (field: any) => t(getLocalizedField(field, i18n.language));
 
     // Dynamically retrieve process steps from translation file based on service ID
     const serviceId = (service as any).serviceId || service.id;
@@ -216,7 +216,7 @@ interface ServiceCardProps {
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, featured = false }) => {
     const { t, i18n } = useTranslation();
-    const localized = (field: any) => getLocalizedField(field, i18n.language);
+    const localized = (field: any) => t(getLocalizedField(field, i18n.language));
 
     // Check service types for specific visuals based on IDs
     // Support both static ID (id) and seeded ID (serviceId)

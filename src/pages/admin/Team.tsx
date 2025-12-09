@@ -8,8 +8,10 @@ import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
+import { AdminLoader } from '../../components/admin/AdminLoader';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
+import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
 
 const AdminTeam = () => {
@@ -56,6 +58,8 @@ const AdminTeam = () => {
         }
     };
 
+    const { showSuccess, showError, StatusModal } = useStatusModal();
+
     const handleSeedData = async () => {
         if (!window.confirm("This will add all team members from constants.ts to Firestore with multi-language structure. Continue?")) return;
         setLoading(true);
@@ -79,10 +83,10 @@ const AdminTeam = () => {
                 await addDoc(collection(db, 'team_members'), multiLangMember);
             }
             await fetchTeam();
-            alert("Data seeded successfully!");
+            showSuccess('Data Seeded', 'Team members seeded successfully!');
         } catch (error) {
             console.error("Error seeding data:", error);
-            alert("Failed to seed data.");
+            showError('Seeding Failed', 'Failed to seed data. Please check the console for details.');
         } finally {
             setLoading(false);
         }
@@ -92,9 +96,11 @@ const AdminTeam = () => {
         if (!window.confirm("Are you sure you want to delete this member?")) return;
         try {
             await deleteDoc(doc(db, 'team_members', id));
+            showSuccess('Member Deleted', 'The team member has been successfully removed.');
             setTeam(team.filter(t => t.id !== id));
         } catch (error) {
             console.error("Error deleting member:", error);
+            showError('Delete Failed', 'There was an error deleting the team member.');
         }
     };
 
@@ -116,11 +122,12 @@ const AdminTeam = () => {
                 memberData.order = team.length + 1; // Add order
                 await addDoc(collection(db, 'team_members'), memberData);
             }
+            await fetchTeam();
             setIsEditing(false);
-            fetchTeam();
+            showSuccess('Member Saved', 'Team member details have been successfully saved.');
         } catch (error) {
             console.error("Error saving member:", error);
-            alert("Failed to save member.");
+            showError('Save Failed', 'There was an error saving the team member.');
         } finally {
             setLoading(false);
         }
@@ -162,33 +169,35 @@ const AdminTeam = () => {
         });
     };
 
-    if (loading && !isEditing) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading team...</div>;
-
     return (
         <AdminPageLayout
-            title="Team Members"
-            description="Manage your team profiles and roles"
+            title="Team & Crew"
+            description="Manage your team members"
             actions={
-                <div className="flex gap-3">
-                    {team.length === 0 && (
+                !loading && (
+                    <div className="flex gap-3">
+                        {team.length === 0 && (
+                            <button
+                                onClick={handleSeedData}
+                                className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                            >
+                                <Database size={18} />
+                                Seed Data
+                            </button>
+                        )}
                         <button
-                            onClick={handleSeedData}
-                            className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                            onClick={() => openEdit()}
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
                         >
-                            <Database size={18} />
-                            Seed Data
+                            <Plus size={20} /> Add Member
                         </button>
-                    )}
-                    <button
-                        onClick={() => openEdit()}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
-                    >
-                        <Plus size={20} /> Add Member
-                    </button>
-                </div>
+                    </div>
+                )
             }
         >
-            {isEditing ? (
+            {loading && !isEditing ? (
+                <AdminLoader message="Loading team..." />
+            ) : isEditing ? (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 animate-in slide-in-from-bottom-4 duration-300">
                     <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-200 dark:border-slate-700">
                         <div className="flex items-center gap-4">
@@ -447,7 +456,8 @@ const AdminTeam = () => {
                     )}
                 </Reorder.Group>
             )}
-        </AdminPageLayout>
+            <StatusModal />
+        </AdminPageLayout >
     );
 };
 

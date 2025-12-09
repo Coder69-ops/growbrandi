@@ -4,20 +4,38 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
 import { TEAM_MEMBERS } from '../constants';
+import { useContent } from '../src/hooks/useContent';
+import { getLocalizedField } from '../src/utils/localization';
 
 const TeamMemberProfile: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [isImageExpanded, setIsImageExpanded] = useState(false);
 
-    const member = TEAM_MEMBERS.find((m) => m.slug === slug);
+    // Fetch team members from Firestore with fallback to constants
+    // We request localized fields for top-level string properties
+    const { data: teamMembers, loading } = useContent('team_members', TEAM_MEMBERS, {
+        localizedFields: ['role', 'description', 'bio']
+    });
+
+    // Find the specific member by slug
+    // We check both the root 'slug' property and if it might be missing/different
+    const member = teamMembers.find((m: any) => m.slug === slug);
 
     useEffect(() => {
-        if (!member) {
+        if (!loading && !member) {
             navigate('/team', { replace: true });
         }
-    }, [member, navigate]);
+    }, [member, loading, navigate]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-luxury-black">
+                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
 
     if (!member) {
         return null;
@@ -208,12 +226,15 @@ const TeamMemberProfile: React.FC = () => {
                                 {t('team.ui.achievements_title')}
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {member.achievements.map((achievement, index) => (
+                                {member.achievements?.map((achievement: any, index: number) => (
                                     <div key={index} className="glass-effect p-6 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-purple-500/30 transition-colors group bg-white/50 dark:bg-zinc-900/40">
                                         <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
                                             <FaMedal className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                                         </div>
-                                        <p className="text-slate-600 dark:text-zinc-300 font-medium leading-relaxed">{t(achievement)}</p>
+                                        {/* Use getLocalizedField to safe-guard against object vs string formats, then t() for potential key-based translation */}
+                                        <p className="text-slate-600 dark:text-zinc-300 font-medium leading-relaxed">
+                                            {t(getLocalizedField(achievement, i18n.language))}
+                                        </p>
                                     </div>
                                 ))}
                             </div>
@@ -228,13 +249,13 @@ const TeamMemberProfile: React.FC = () => {
                                 {t('team.ui.expertise_title')}
                             </h2>
                             <div className="flex flex-wrap gap-3">
-                                {member.specialties.map((specialty, index) => (
+                                {member.specialties?.map((specialty: any, index: number) => (
                                     <span
                                         key={index}
                                         className="px-5 py-3 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl text-slate-600 dark:text-zinc-300 font-medium hover:border-emerald-500/30 hover:text-emerald-600 dark:hover:text-emerald-300 hover:bg-emerald-500/10 transition-all duration-300 cursor-default flex items-center gap-2"
                                     >
                                         <FaCheckCircle className="w-4 h-4 text-emerald-500/50" />
-                                        {t(specialty)}
+                                        {t(getLocalizedField(specialty, i18n.language))}
                                     </span>
                                 ))}
                             </div>

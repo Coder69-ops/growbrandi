@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { TESTIMONIALS } from '../../../constants';
-import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, MessageSquareQuote, Star, Building2, User } from 'lucide-react';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { Plus, Edit2, Trash2, Save, X, MessageSquare, Star, ArrowLeft, User, Quote } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
-import { ImageUpload } from '../../components/admin/ImageUpload';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
+import { AdminLoader } from '../../components/admin/AdminLoader';
+import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
+import { Reorder } from 'framer-motion';
+import { useStatusModal } from '../../hooks/useStatusModal';
+import { SortableItem } from '../../components/admin/SortableItem';
 
 const AdminTestimonials = () => {
     const [testimonials, setTestimonials] = useState<any[]>([]);
@@ -21,8 +24,11 @@ const AdminTestimonials = () => {
         setLoading(true);
         try {
             const querySnapshot = await getDocs(collection(db, 'testimonials'));
-            const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setTestimonials(data);
+            const testimonialsData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            })).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
+            setTestimonials(testimonialsData);
         } catch (error) {
             console.error("Error fetching testimonials:", error);
         } finally {
@@ -30,69 +36,77 @@ const AdminTestimonials = () => {
         }
     };
 
-    useEffect(() => { fetchTestimonials(); }, []);
+    useEffect(() => {
+        fetchTestimonials();
+    }, []);
 
-    const handleSeedData = async () => {
-        if (!window.confirm("Seed testimonials data?")) return;
-        setLoading(true);
+    const handleDelete = async (id: string) => {
+        if (!window.confirm("Are you sure you want to delete this testimonial?")) return;
         try {
-            for (const t of TESTIMONIALS) {
-                await addDoc(collection(db, 'testimonials'), {
-                    author: t.author,
-                    image: t.image || '',
-                    rating: t.rating || 5,
-                    quote: { en: t.quote },
-                    company: { en: t.company },
-                    createdAt: serverTimestamp(),
-                    updatedAt: serverTimestamp(),
-                });
-            }
-            await fetchTestimonials();
-            alert("Data seeded!");
+            await deleteDoc(doc(db, 'testimonials', id));
+            showSuccess('Testimonial Deleted', 'Testimonial deleted successfully.');
+            setTestimonials(testimonials.filter(t => t.id !== id));
         } catch (error) {
-            console.error(error);
-            alert("Failed to seed data.");
-        } finally {
-            setLoading(false);
+            console.error("Error deleting testimonial:", error);
+            showError('Delete Failed', 'Failed to delete the testimonial.');
         }
     };
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm("Delete this testimonial?")) return;
-        await deleteDoc(doc(db, 'testimonials', id));
-        setTestimonials(testimonials.filter(t => t.id !== id));
-    };
+    const { showSuccess, showError, StatusModal } = useStatusModal();
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const data = { ...currentTestimonial, updatedAt: serverTimestamp() };
+            const testimonialData = {
+                ...currentTestimonial,
+                updatedAt: serverTimestamp(),
+            };
+
             if (currentTestimonial.id) {
-                const { id, ...rest } = data;
-                await updateDoc(doc(db, 'testimonials', id), rest);
+                const { id, ...data } = testimonialData;
+                await updateDoc(doc(db, 'testimonials', id), data);
+                showSuccess('Testimonial Updated', 'Testimonial updated successfully.');
             } else {
-                data.createdAt = serverTimestamp();
-                await addDoc(collection(db, 'testimonials'), data);
+                testimonialData.createdAt = serverTimestamp();
+                testimonialData.order = testimonials.length + 1;
+                await addDoc(collection(db, 'testimonials'), testimonialData);
             }
+            await fetchTestimonials();
             setIsEditing(false);
-            fetchTestimonials();
         } catch (error) {
-            console.error(error);
-            alert("Failed to save.");
+            console.error("Error saving testimonial:", error);
+            alert("Failed to save testimonial.");
         } finally {
             setLoading(false);
         }
     };
 
-    const openEdit = (t: any = {}) => {
+    const handleReorder = async (newOrder: any[]) => {
+        setTestimonials(newOrder);
+
+        const batch = writeBatch(db);
+        newOrder.forEach((testimonial, index) => {
+            const docRef = doc(db, 'testimonials', testimonial.id);
+            batch.update(docRef, { order: index + 1 });
+        });
+
+        try {
+            await batch.commit();
+        } catch (error) {
+            console.error("Error updating order:", error);
+            fetchTestimonials();
+        }
+    };
+
+    const openEdit = (testimonial: any = {}) => {
         setCurrentTestimonial({
-            author: t.author || '',
-            image: t.image || '',
-            rating: t.rating || 5,
-            quote: ensureLocalizedFormat(t.quote),
-            company: ensureLocalizedFormat(t.company),
-            ...t,
+            name: ensureLocalizedFormat(testimonial.name),
+            role: ensureLocalizedFormat(testimonial.role),
+            content: ensureLocalizedFormat(testimonial.content),
+            image: testimonial.image || '',
+            rating: testimonial.rating || 5,
+            ...testimonial,
         });
         setActiveLanguage('en');
         setIsEditing(true);
@@ -106,56 +120,50 @@ const AdminTestimonials = () => {
         currentTestimonial,
         setCurrentTestimonial,
         {
-            fields: ['quote', 'company']
+            fields: ['name', 'role', 'content']
         }
     );
-
-    if (loading && !isEditing) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading testimonials...</div>;
 
     return (
         <AdminPageLayout
             title="Testimonials"
-            description="Manage client reviews and feedback"
+            description="Manage client testimonials."
             actions={
-                <div className="flex gap-3">
-                    {testimonials.length === 0 && (
+                !loading && (
+                    <div className="flex gap-3">
                         <button
-                            onClick={handleSeedData}
-                            className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                            onClick={() => openEdit()}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 hover:scale-105 active:scale-95"
                         >
-                            <Database size={18} />
-                            Seed Data
+                            <Plus size={20} />
+                            Add Testimonial
                         </button>
-                    )}
-                    <button
-                        onClick={() => openEdit()}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
-                    >
-                        <Plus size={20} /> Add Testimonial
-                    </button>
-                </div>
+                    </div>
+                )
             }
         >
-            {isEditing ? (
-                <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 animate-in slide-in-from-bottom-4 duration-300">
-                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-200 dark:border-slate-700">
+            {loading && !isEditing ? (
+                <AdminLoader message="Loading testimonials..." />
+            ) : isEditing ? (
+                <div className="glass-panel p-8 animate-in slide-in-from-bottom-4 duration-300">
+                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-200/50 dark:border-slate-700/50">
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={() => setIsEditing(false)}
-                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                                className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500 hover:text-slate-900 dark:hover:text-white"
                             >
-                                <ArrowLeft size={20} className="text-slate-500" />
+                                <ArrowLeft size={20} />
                             </button>
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                            <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
                                 {currentTestimonial.id ? 'Edit Testimonial' : 'New Testimonial'}
                             </h2>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                             <button
                                 type="button"
                                 onClick={handleAutoTranslate}
                                 disabled={isTranslating}
-                                className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                 title="Auto-translate English text to all other languages"
                             >
                                 <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
@@ -163,16 +171,16 @@ const AdminTestimonials = () => {
                             </button>
                             <button
                                 onClick={() => setIsEditing(false)}
-                                className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                                className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/20"
-                                disabled={loading}
+                                className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-lg hover:from-blue-700 hover:to-violet-700 transition-all shadow-lg shadow-blue-500/20 hover:scale-105 active:scale-95"
                             >
-                                <Save size={18} /> Save Testimonial
+                                <Save size={18} />
+                                Save Changes
                             </button>
                         </div>
                     </div>
@@ -182,145 +190,163 @@ const AdminTestimonials = () => {
                     </div>
 
                     <form onSubmit={handleSave} className="space-y-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div className="space-y-6">
-                                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800/50 space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {/* Main Info */}
+                            <div className="lg:col-span-2 space-y-6">
+                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
                                     <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <MessageSquareQuote size={18} />
+                                        <Quote size={18} className="text-blue-500" />
                                         Content
                                     </h3>
 
-                                    <LocalizedInput
-                                        label="Quote Content"
-                                        value={currentTestimonial.quote}
-                                        onChange={(v) => updateField('quote', v)}
-                                        activeLanguage={activeLanguage}
-                                        type="textarea"
-                                        rows={6}
-                                        required
-                                        placeholder="Enter the client's testimonial..."
-                                    />
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <LocalizedInput
+                                            label="Client Name"
+                                            value={currentTestimonial.name}
+                                            onChange={(v) => updateField('name', v)}
+                                            activeLanguage={activeLanguage}
+                                            required
+                                        />
+                                        <LocalizedInput
+                                            label="Role / Company"
+                                            value={currentTestimonial.role}
+                                            onChange={(v) => updateField('role', v)}
+                                            activeLanguage={activeLanguage}
+                                        />
+                                    </div>
 
                                     <LocalizedInput
-                                        label="Company / Role"
-                                        value={currentTestimonial.company}
-                                        onChange={(v) => updateField('company', v)}
+                                        label="Review Content"
+                                        value={currentTestimonial.content}
+                                        onChange={(v) => updateField('content', v)}
                                         activeLanguage={activeLanguage}
-                                        placeholder="e.g., CEO at TechCorp"
+                                        type="textarea"
+                                        rows={4}
+                                        required
                                     />
                                 </div>
                             </div>
 
+                            {/* Sidebar Options */}
                             <div className="space-y-6">
-                                <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800/50 space-y-6">
+                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
                                     <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <User size={18} />
-                                        Author Details
+                                        <User size={18} className="text-violet-500" />
+                                        Profile Image
                                     </h3>
 
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Author Name</label>
-                                        <input
-                                            type="text"
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            value={currentTestimonial.author}
-                                            onChange={(e) => updateField('author', e.target.value)}
-                                            required
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Rating (0-5)</label>
-                                        <div className="flex items-center gap-4">
-                                            <input
-                                                type="range"
-                                                min="0"
-                                                max="5"
-                                                step="1"
-                                                className="flex-1"
-                                                value={currentTestimonial.rating}
-                                                onChange={(e) => updateField('rating', parseFloat(e.target.value))}
-                                            />
-                                            <div className="flex items-center gap-1 font-bold text-lg text-slate-900 dark:text-white">
-                                                {currentTestimonial.rating} <Star size={18} className="fill-yellow-400 text-yellow-400" />
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <ImageUpload
-                                        label="Author Photo"
+                                        label="Client Photo"
                                         value={currentTestimonial.image}
-                                        onChange={(v) => updateField('image', v)}
-                                        folder="testimonials"
+                                        onChange={(url) => updateField('image', url)}
+                                        folder={`testimonials/${currentTestimonial.id || 'new'}`}
                                     />
+                                </div>
+
+                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <Star size={18} className="text-amber-500" />
+                                        Rating
+                                    </h3>
+
+                                    <div className="flex items-center gap-4">
+                                        <input
+                                            type="range"
+                                            min="1"
+                                            max="5"
+                                            step="1"
+                                            value={currentTestimonial.rating}
+                                            onChange={(e) => updateField('rating', parseInt(e.target.value))}
+                                            className="flex-1 accent-amber-500"
+                                        />
+                                        <span className="font-bold text-lg text-slate-900 dark:text-white bg-amber-50 dark:bg-amber-900/20 px-3 py-1 rounded-lg border border-amber-100 dark:border-amber-900/30 text-amber-600 dark:text-amber-400">
+                                            {currentTestimonial.rating} ★
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {testimonials.map((t) => (
-                        <div key={t.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-8 border border-slate-200 dark:border-slate-700 flex flex-col hover:shadow-md transition-shadow">
-
-                            <div className="flex items-start justify-between mb-6">
-                                <div className="flex gap-1 text-yellow-400">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star key={i} size={16} fill={i < (t.rating || 5) ? "currentColor" : "none"} className={i < (t.rating || 5) ? "" : "text-slate-300 dark:text-slate-600"} />
-                                    ))}
+                <Reorder.Group axis="y" values={testimonials} onReorder={handleReorder} className="space-y-4">
+                    {testimonials.map((testimonial) => (
+                        <SortableItem key={testimonial.id} item={testimonial}>
+                            <div className="glass-card p-6 flex items-start gap-6 hover:scale-[1.01] transition-all duration-300 group">
+                                <div className="shrink-0 relative">
+                                    <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 ring-2 ring-slate-200 dark:ring-slate-700">
+                                        {testimonial.image ? (
+                                            <img
+                                                src={testimonial.image}
+                                                alt={getLocalizedField(testimonial.name, 'en')}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                                <User size={32} />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="absolute -bottom-1 -right-1 bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ring-2 ring-white dark:ring-slate-900 flex items-center gap-0.5">
+                                        {testimonial.rating} <Star size={8} fill="currentColor" />
+                                    </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <button onClick={() => openEdit(t)} className="text-slate-400 hover:text-blue-500 transition-colors"><Edit2 size={16} /></button>
-                                    <button onClick={() => handleDelete(t.id)} className="text-slate-400 hover:text-red-500 transition-colors"><Trash2 size={16} /></button>
-                                </div>
-                            </div>
 
-                            <div className="mb-8 flex-1">
-                                <MessageSquareQuote size={32} className="text-blue-100 dark:text-blue-900/30 mb-4" />
-                                <p className="text-slate-600 dark:text-slate-300 italic">"{getLocalizedField(t.quote, 'en')}"</p>
-                            </div>
-
-                            <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-slate-700/50">
-                                <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 flex-shrink-0">
-                                    {t.image ? (
-                                        <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-400">
-                                            <User size={20} />
+                                <div className="flex-1 min-w-0 pt-1">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                {getLocalizedField(testimonial.name, 'en')}
+                                            </h3>
+                                            <p className="text-sm text-slate-500 dark:text-slate-400">
+                                                {getLocalizedField(testimonial.role, 'en')}
+                                            </p>
                                         </div>
-                                    )}
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-slate-900 dark:text-white">{t.author}</h4>
-                                    <div className="flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
-                                        <Building2 size={12} />
-                                        <span>{getLocalizedField(t.company, 'en')}</span>
+                                        <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            <button
+                                                onClick={() => openEdit(testimonial)}
+                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                                            >
+                                                <Edit2 size={18} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(testimonial.id)}
+                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="relative pl-4 border-l-2 border-slate-200 dark:border-slate-700">
+                                        <Quote size={16} className="absolute -top-1 -left-[9px] bg-white dark:bg-slate-950 text-slate-300 dark:text-slate-600" />
+                                        <p className="text-slate-600 dark:text-slate-300 italic line-clamp-2">
+                                            {getLocalizedField(testimonial.content, 'en')}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </SortableItem>
                     ))}
 
                     {testimonials.length === 0 && (
-                        <div className="col-span-full py-16 text-center">
-                            <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400">
-                                <MessageSquareQuote size={32} />
+                        <div className="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 glass-panel border-dashed border-2 border-slate-300 dark:border-slate-700">
+                            <div className="w-20 h-20 mx-auto bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-4">
+                                <MessageSquare size={40} className="opacity-50" />
                             </div>
-                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No Testimonials</h3>
-                            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
-                                Showcase your happy clients to build trust.
-                            </p>
+                            <p className="font-bold text-xl text-slate-900 dark:text-white">No testimonials yet</p>
+                            <p className="text-sm mt-2 mb-6 max-w-sm mx-auto">Add client reviews to build trust with your visitors.</p>
                             <button
                                 onClick={() => openEdit()}
-                                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 font-medium"
+                                className="px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 font-medium"
                             >
                                 Add Testimonial
                             </button>
                         </div>
                     )}
-                </div>
+                </Reorder.Group>
             )}
-        </AdminPageLayout>
+            <StatusModal />
+        </AdminPageLayout >
     );
 };
 

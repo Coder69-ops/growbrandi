@@ -11,6 +11,8 @@ import { CONTACT_INFO, SERVICES } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
+import { db } from '../src/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import { useContent } from '../src/hooks/useContent';
 import { useSiteContentData } from '../src/hooks/useSiteContent';
@@ -111,6 +113,14 @@ I would like to book this consultation.`;
                 data,
                 EMAILJS_PUBLIC_KEY
             );
+
+            // Save to Firestore
+            await addDoc(collection(db, 'messages'), {
+                ...data,
+                createdAt: serverTimestamp(),
+                read: false,
+                source: 'auto-send' // Track source
+            });
             setFormStatus('success');
             setAiContext(null);
             // Reset success status after 8 seconds
@@ -160,6 +170,14 @@ I would like to book this consultation.`;
                 formData,
                 EMAILJS_PUBLIC_KEY
             );
+
+            // Save to Firestore
+            await addDoc(collection(db, 'messages'), {
+                ...formData,
+                createdAt: serverTimestamp(),
+                read: false,
+                source: 'web-form'
+            });
 
             setFormStatus('success');
             setFormData({ name: '', email: '', subject: '', service: '', message: '' });

@@ -59,6 +59,7 @@ import AdminSettings from './src/pages/admin/Settings';
 import AdminSeedData from './src/pages/admin/SeedData';
 import AdminSiteContent from './src/pages/admin/SiteContent';
 import AdminContactSettings from './src/pages/admin/ContactSettings';
+import AdminMessages from './src/pages/admin/Messages';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -290,7 +291,14 @@ ${servicesDetails}
         <main id="main-content" role="main" className="w-full">
           <Suspense fallback={<PageLoader />}>
             <AnimatePresence mode="wait">
-              <Routes location={location} key={location.pathname}>
+              <Routes
+                location={location}
+                key={
+                  currentPath.startsWith('/admin') && !currentPath.includes('/login')
+                    ? 'admin-shell'
+                    : currentPath
+                }
+              >
                 {/* Home */}
                 <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
 
@@ -341,6 +349,7 @@ ${servicesDetails}
                     <Route path="seed-data" element={<AdminSeedData />} />
                     <Route path="site-content" element={<AdminSiteContent />} />
                     <Route path="contact-settings" element={<AdminContactSettings />} />
+                    <Route path="messages" element={<AdminMessages />} />
                   </Route>
                 </Route>
               </Routes>

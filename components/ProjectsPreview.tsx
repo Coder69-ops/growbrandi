@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaFolderOpen, FaBriefcase, FaWhatsapp } from 'react-icons/fa';
-import { PROJECTS, CONTACT_INFO } from '../constants';
 import { Project } from '../types';
+import { useContent } from '../src/hooks/useContent';
+import { PROJECTS, CONTACT_INFO } from '../constants';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
@@ -40,12 +41,21 @@ const ProjectsPreview: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeFilter, setActiveFilter] = useState<string>('All');
 
-    const categories = ['All', ...Array.from(new Set(PROJECTS.map(p => p.category)))];
+    // Use dynamic content with fallback
+    const { data: projectsData } = useContent<Project>(
+        'projects',
+        PROJECTS,
+        { localizedFields: ['title', 'description', 'category'] }
+    );
+
+    const contactSettings = CONTACT_INFO;
+
+    const categories = ['All', ...Array.from(new Set(projectsData.map(p => p.category)))];
 
     // Direct derivation for filtering
     const displayedProjects = activeFilter === 'All'
-        ? PROJECTS
-        : PROJECTS.filter(p => p.category === activeFilter);
+        ? projectsData
+        : projectsData.filter(p => p.category === activeFilter);
 
     const handleProjectClick = (project: Project) => {
         setSelectedProject(project);
@@ -91,9 +101,9 @@ const ProjectsPreview: React.FC = () => {
                                         />
                                     )}
                                     <span className="relative z-10 flex items-center gap-2">
-                                        {category === 'All' ? t('projects_preview.filter_all') : t(category)}
+                                        {category === 'All' ? t('projects_preview.filter_all') : t(category as any)}
                                         <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'}`}>
-                                            {category === 'All' ? PROJECTS.length : PROJECTS.filter(p => p.category === category).length}
+                                            {category === 'All' ? projectsData.length : projectsData.filter(p => p.category === category).length}
                                         </span>
                                     </span>
                                 </motion.button>
@@ -169,7 +179,7 @@ const ProjectsPreview: React.FC = () => {
                                         {t('projects_preview.cta_portfolio')}
                                     </button>
                                     <button
-                                        onClick={() => window.open(`https://wa.me/${CONTACT_INFO.phone.replace(/[^0-9]/g, '')}`, '_blank')}
+                                        onClick={() => window.open(`https://wa.me/${contactSettings?.phone?.replace(/[^0-9]/g, '')}`, '_blank')}
                                         className="group inline-flex items-center justify-center gap-3 bg-transparent border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white font-bold py-4 px-10 rounded-full text-lg hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
                                     >
                                         <FaWhatsapp className="w-5 h-5 text-green-600 dark:text-green-500" />
