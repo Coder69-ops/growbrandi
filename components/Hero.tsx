@@ -295,6 +295,11 @@ const HeroSection: React.FC = () => {
                                                 src="/foriphonecard.jpg"
                                                 alt="Viral Content"
                                                 className="w-full h-full object-cover"
+                                                loading="eager"
+                                                width="260"
+                                                height="550"
+                                                // @ts-ignore - fetchPriority is standard but missing in some React types
+                                                fetchPriority="high"
                                             />
 
                                             <div className="absolute inset-0 flex items-center justify-center z-20">
