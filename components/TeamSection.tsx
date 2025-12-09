@@ -62,19 +62,19 @@ const TeamSection: React.FC = () => {
                             <div key={i} className="h-[500px] rounded-3xl overflow-hidden bg-white/5 dark:bg-white/5 border border-white/10 relative">
                                 <Skeleton className="w-full h-full absolute inset-0 bg-slate-200/50 dark:bg-zinc-800/50" />
                                 <div className="absolute top-8 left-8 right-8 bottom-8 flex flex-col items-center">
-                                    <Skeleton className="w-32 h-32 rounded-2xl mb-6 shadow-lg" />
+                                    <Skeleton variant="card" className="w-32 h-32 mb-6 shadow-lg" />
                                     <Skeleton className="h-8 w-3/4 mb-3" />
                                     <Skeleton className="h-6 w-1/2 mb-4" />
                                     <Skeleton className="h-20 w-full mb-6" />
                                     <div className="flex gap-2 mb-6">
-                                        <Skeleton className="h-6 w-16 rounded-full" />
-                                        <Skeleton className="h-6 w-16 rounded-full" />
-                                        <Skeleton className="h-6 w-16 rounded-full" />
+                                        <Skeleton variant="circle" className="h-6 w-16" />
+                                        <Skeleton variant="circle" className="h-6 w-16" />
+                                        <Skeleton variant="circle" className="h-6 w-16" />
                                     </div>
                                     <div className="mt-auto flex gap-4">
-                                        <Skeleton className="w-8 h-8 rounded-lg" />
-                                        <Skeleton className="w-8 h-8 rounded-lg" />
-                                        <Skeleton className="w-8 h-8 rounded-lg" />
+                                        <Skeleton variant="card" className="w-8 h-8" />
+                                        <Skeleton variant="card" className="w-8 h-8" />
+                                        <Skeleton variant="card" className="w-8 h-8" />
                                     </div>
                                 </div>
                             </div>

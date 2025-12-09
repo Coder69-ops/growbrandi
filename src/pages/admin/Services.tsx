@@ -294,15 +294,41 @@ const AdminServices = () => {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Gradient Color</label>
-                                        <input
-                                            type="text"
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            value={currentService.color}
-                                            onChange={(e) => updateField('color', e.target.value)}
-                                            placeholder="from-blue-500 to-cyan-500"
-                                        />
-                                        <div className={`mt-2 h-8 rounded-lg bg-gradient-to-br ${currentService.color} shadow-sm border border-slate-200/50 dark:border-slate-700/50`}></div>
+                                        <label className="block text-sm font-medium mb-3 text-slate-700 dark:text-slate-300">Theme Color</label>
+                                        <div className="grid grid-cols-4 gap-2 mb-3">
+                                            {[
+                                                'from-blue-500 to-cyan-500',
+                                                'from-purple-500 to-pink-500',
+                                                'from-orange-500 to-red-500',
+                                                'from-emerald-500 to-teal-500',
+                                                'from-amber-400 to-orange-500',
+                                                'from-violet-600 to-indigo-600',
+                                                'from-pink-500 to-rose-500',
+                                                'from-slate-700 to-slate-900',
+                                            ].map((gradient) => (
+                                                <button
+                                                    key={gradient}
+                                                    type="button"
+                                                    onClick={() => updateField('color', gradient)}
+                                                    className={`h-10 rounded-lg bg-gradient-to-br ${gradient} transition-all duration-200 ${currentService.color === gradient
+                                                            ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-900 scale-105'
+                                                            : 'hover:scale-105 opacity-80 hover:opacity-100'
+                                                        }`}
+                                                    title={gradient}
+                                                />
+                                            ))}
+                                        </div>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                className="w-full px-4 py-2 pl-10 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
+                                                value={currentService.color}
+                                                onChange={(e) => updateField('color', e.target.value)}
+                                                placeholder="Custom tailwind classes..."
+                                            />
+                                            <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 border border-slate-300 dark:border-slate-600" />
+                                        </div>
+                                        <p className="text-xs text-slate-500 mt-2">Select a preset or enter custom Tailwind gradient classes.</p>
                                     </div>
                                 </div>
                             </div>

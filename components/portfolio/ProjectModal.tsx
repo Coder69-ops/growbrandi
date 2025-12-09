@@ -157,12 +157,18 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                         </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             {project.results.map((result, i) => (
-                                                <div key={i} className="p-6 bg-slate-50 dark:bg-zinc-900/50 rounded-2xl border border-slate-100 dark:border-white/5 flex items-start gap-4">
-                                                    <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
-                                                        <FaCheck />
+                                                <div key={i} className="group relative p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-white/5 hover:border-blue-500/30 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1 overflow-hidden">
+                                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                        <FaRocket className="text-6xl text-blue-500 transform rotate-45" />
                                                     </div>
-                                                    <div>
-                                                        <p className="font-semibold text-slate-700 dark:text-zinc-200 leading-relaxed">{getText(result)}</p>
+                                                    <div className="relative z-10 flex items-start gap-4">
+                                                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 flex-shrink-0 group-hover:scale-110 transition-transform">
+                                                            <FaChartLine className="text-xl" />
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">Impact {i + 1}</h4>
+                                                            <p className="font-bold text-lg text-slate-900 dark:text-white leading-tight">{getText(result)}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             ))}
@@ -217,25 +223,36 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                                     <h4 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-6">{t('portfolio.params.project_metadata')}</h4>
 
                                     <div className="space-y-6">
-                                        <div>
-                                            <p className="text-sm text-slate-500 dark:text-zinc-500 mb-1">{t('portfolio.params.client')}</p>
-                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{getText(project.client)}</p>
+                                        <div className="group">
+                                            <p className="text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider mb-2">{t('portfolio.params.client')}</p>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500 dark:text-zinc-400 text-lg font-bold border border-slate-200 dark:border-white/10">
+                                                    {getText(project.client).charAt(0)}
+                                                </div>
+                                                <p className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{getText(project.client)}</p>
+                                            </div>
                                         </div>
                                         <div>
-                                            <p className="text-sm text-slate-500 dark:text-zinc-500 mb-1">{t('portfolio.params.timeline')}</p>
-                                            <p className="text-xl font-bold text-slate-900 dark:text-white">{getText(project.completionTime)}</p>
+                                            <p className="text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-wider mb-2">{t('portfolio.params.timeline')}</p>
+                                            <div className="flex items-center gap-2">
+                                                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                                <p className="text-xl font-bold text-slate-900 dark:text-white">{getText(project.completionTime)}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-slate-500 dark:text-zinc-500 mb-2">{t('portfolio.params.verified_review')}</p>
-                                            <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl border border-emerald-100 dark:border-emerald-500/20">
-                                                <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-5 w-auto" />
-                                                <div className="w-px h-4 bg-emerald-200 dark:bg-emerald-500/30" />
-                                                <div className="flex text-yellow-400 text-xs">
+                                        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/10 dark:to-teal-900/10 rounded-xl p-4 border border-emerald-100 dark:border-emerald-500/20">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{t('portfolio.params.verified_review')}</p>
+                                                <div className="flex text-yellow-500 text-xs">
                                                     {[...Array(5)].map((_, i) => (
                                                         <FaStar key={i} />
                                                     ))}
                                                 </div>
                                             </div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <span className="text-2xl font-black text-slate-900 dark:text-white">5.0</span>
+                                                <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-5 w-auto" />
+                                            </div>
+                                            <p className="text-xs text-slate-500 dark:text-emerald-200/60 font-medium">Top rated on Trustpilot</p>
                                         </div>
                                     </div>
 

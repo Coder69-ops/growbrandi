@@ -73,10 +73,10 @@ const TestimonialsSlider: React.FC = () => {
                         <div className="w-full max-w-4xl px-4">
                             <GlassCard className="p-8 md:p-12 relative">
                                 <div className="flex flex-col items-center text-center">
-                                    <Skeleton className="w-20 h-20 rounded-full mb-6" />
+                                    <Skeleton variant="circle" className="w-20 h-20 mb-6" />
                                     <div className="flex gap-2 mb-6">
                                         {[...Array(5)].map((_, i) => (
-                                            <Skeleton key={i} className="w-5 h-5 rounded-full" />
+                                            <Skeleton key={i} variant="circle" className="w-5 h-5" />
                                         ))}
                                     </div>
                                     <Skeleton className="w-full h-24 mb-6" />
