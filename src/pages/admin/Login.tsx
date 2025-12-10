@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, AlertCircle, ArrowLeft, Loader2, CheckCircle } from 'lucide-react';
@@ -70,26 +70,7 @@ const AdminLogin = () => {
         }
     };
 
-    const handleGoogleLogin = async () => {
-        setLoading(true);
-        setError('');
-        setInfoMessage('');
-        setSuccess(false);
 
-        try {
-            const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
-            setLoading(false);
-            setSuccess(true);
-            setTimeout(() => {
-                navigate('/admin/dashboard');
-            }, 1000);
-        } catch (err: any) {
-            console.error(err);
-            setError('Google sign-in failed. Please try again.');
-            setLoading(false);
-        }
-    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-luxury-black relative overflow-hidden font-sans transition-colors duration-300">
@@ -174,21 +155,7 @@ const AdminLogin = () => {
                             )}
                         </AnimatePresence>
 
-                        <button
-                            type="button"
-                            disabled={loading || success}
-                            onClick={handleGoogleLogin}
-                            className="w-full font-medium py-3.5 px-4 rounded-xl transition-all transform active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2 shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 dark:bg-white/10 dark:text-white dark:border-white/10 dark:hover:bg-white/20"
-                        >
-                            <img src="/logos/google.svg" alt="Google" className="w-5 h-5" />
-                            <span>Sign in with Google</span>
-                        </button>
 
-                        <div className="relative flex items-center py-2">
-                            <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-                            <span className="flex-shrink-0 mx-4 text-xs font-medium text-slate-400 dark:text-slate-500 uppercase tracking-wider">Or continue with</span>
-                            <div className="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-                        </div>
 
                         <div className="space-y-4">
                             <div className="space-y-2">

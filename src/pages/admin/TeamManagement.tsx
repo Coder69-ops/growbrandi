@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { db, auth, createTeamMemberAuth } from '../../lib/firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { sendPasswordResetEmail } from 'firebase/auth';
@@ -18,6 +19,7 @@ const AVAILABLE_PERMISSIONS = [
 ];
 
 const AdminTeamManagement = () => {
+    const { currentUser } = useAuth();
     const [users, setUsers] = useState<any[]>([]);
     const [publicTeam, setPublicTeam] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -216,7 +218,7 @@ const AdminTeamManagement = () => {
             title="Team & Permissions"
             description="Manage admin access for your team members"
             actions={
-                !isEditing && (
+                !isEditing && (currentUser as any)?.role === 'admin' && (
                     <button
                         onClick={() => {
                             resetForm();
@@ -434,7 +436,7 @@ const AdminTeamManagement = () => {
 
 
                     {/* Standalone Admins Section */}
-                    {standaloneUsers.length > 0 && (
+                    {standaloneUsers.length > 0 && (currentUser as any)?.role === 'admin' && (
                         <section>
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                 <Shield size={20} className="text-slate-500" />

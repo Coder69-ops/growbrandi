@@ -72,7 +72,7 @@ const AdminLayout = () => {
         { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' }, // New
         { path: '/admin/messages', icon: Mail, label: 'Messages', permission: 'view_messages' },
         { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
-        { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings' },
+        { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -107,7 +107,7 @@ const AdminLayout = () => {
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto py-6 px-3 custom-scrollbar">
                     <ul className="space-y-2">
-                        {menuItems.map((item) => {
+                        {menuItems.map((item: any) => {
                             // Permission Check
                             // 1. explicit admin role
                             // 2. no restriction on item
@@ -115,6 +115,9 @@ const AdminLayout = () => {
                             // 4. FALLBACK: If user has NO role AND NO permissions defined (Legacy/Main Admin who hasn't been migrated), allow all.
                             const user = currentUser as any;
                             const isLegacyAdmin = !user?.role && !user?.permissions;
+
+                            // Strict Admin Check for specific items
+                            if (item.adminOnly && user?.role !== 'admin') return null;
 
                             const hasPermission =
                                 user?.role === 'admin' ||

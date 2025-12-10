@@ -309,8 +309,8 @@ const HeroSection: React.FC = () => {
                                                 loading="eager"
                                                 width="260"
                                                 height="550"
-                                                // @ts-ignore - fetchPriority is standard but missing in some React types
-                                                fetchPriority="high"
+                                                // @ts-ignore - fetchpriority is standard but missing in some React types
+                                                fetchpriority="high"
                                             />
 
                                             <div className="absolute inset-0 flex items-center justify-center z-20">
