@@ -58,8 +58,11 @@ export const useContent = <T extends Record<string, any>>(
             }
         };
 
+
         fetchData();
-    }, [collectionName, i18n.language, options?.localizedFields]);
+        // Use JSON.stringify for deep comparison of the array to avoid infinite loops/refetching
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [collectionName, i18n.language, JSON.stringify(options?.localizedFields)]);
 
     return { data, loading, error };
 };
