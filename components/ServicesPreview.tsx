@@ -621,7 +621,7 @@ const ServicesPreview: React.FC = () => {
                                     service={service}
                                     index={index}
                                     onLearnMore={() => handleLearnMore(service)}
-                                    featured={((service as any).serviceId || service.id) === 'ui_ux_design_full'}
+                                    featured={!!service.isPopular}
                                 />
                             ))}
                         </motion.div>

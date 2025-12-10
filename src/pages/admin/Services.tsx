@@ -125,6 +125,7 @@ const AdminServices = () => {
             description: ensureLocalizedFormat(service.description),
             price: ensureLocalizedFormat(service.price),
             features: (service.features || []).map((f: any) => ensureLocalizedFormat(f)),
+            isPopular: service.isPopular || false,
             ...service,
         });
         setActiveLanguage('en');
@@ -311,8 +312,8 @@ const AdminServices = () => {
                                                     type="button"
                                                     onClick={() => updateField('color', gradient)}
                                                     className={`h-10 rounded-lg bg-gradient-to-br ${gradient} transition-all duration-200 ${currentService.color === gradient
-                                                            ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-900 scale-105'
-                                                            : 'hover:scale-105 opacity-80 hover:opacity-100'
+                                                        ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-900 scale-105'
+                                                        : 'hover:scale-105 opacity-80 hover:opacity-100'
                                                         }`}
                                                     title={gradient}
                                                 />
@@ -329,6 +330,15 @@ const AdminServices = () => {
                                             <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 border border-slate-300 dark:border-slate-600" />
                                         </div>
                                         <p className="text-xs text-slate-500 mt-2">Select a preset or enter custom Tailwind gradient classes.</p>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 p-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                                        <div className={`w-10 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${currentService.isPopular ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                                            onClick={() => updateField('isPopular', !currentService.isPopular)}
+                                        >
+                                            <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${currentService.isPopular ? 'translate-x-4' : ''}`} />
+                                        </div>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Mark as Popular</span>
                                     </div>
                                 </div>
                             </div>

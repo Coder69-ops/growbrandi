@@ -301,9 +301,8 @@ export const ServicesPage: React.FC = () => {
   };
 
   // Helper for title checking
-  const getIsFeatured = (title: any) => {
-    const t = getLocalizedField(title, 'en');
-    return t === 'UI/UX Design' || t.includes('UI/UX');
+  const getIsFeatured = (service: Service) => {
+    return !!service.isPopular;
   };
 
   const handleLearnMore = (service: Service) => {
@@ -393,7 +392,7 @@ export const ServicesPage: React.FC = () => {
                     <ServiceCard
                       service={service}
                       onLearnMore={() => handleLearnMore(service)}
-                      featured={getIsFeatured(service.title)}
+                      featured={getIsFeatured(service)}
                     />
                   </motion.div>
                 ))}

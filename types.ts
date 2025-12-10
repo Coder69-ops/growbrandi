@@ -19,6 +19,7 @@ export interface Service {
   features: string[];
   price: string;
   color: string;
+  isPopular?: boolean;
 }
 
 export interface Project {
