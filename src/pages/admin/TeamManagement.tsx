@@ -218,7 +218,10 @@ const AdminTeamManagement = () => {
             actions={
                 !isEditing && (
                     <button
-                        onClick={resetForm}
+                        onClick={() => {
+                            resetForm();
+                            setIsEditing(true);
+                        }}
                         className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                     >
                         <Plus size={18} /> Add Hidden Admin
@@ -312,8 +315,8 @@ const AdminTeamManagement = () => {
                                     {AVAILABLE_PERMISSIONS.map((perm) => (
                                         <label key={perm.id} className="flex items-center gap-3 p-2 hover:bg-white dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-colors">
                                             <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${formData.permissions.includes(perm.id)
-                                                    ? 'bg-blue-600 border-blue-600 text-white'
-                                                    : 'border-slate-300 dark:border-slate-600'
+                                                ? 'bg-blue-600 border-blue-600 text-white'
+                                                : 'border-slate-300 dark:border-slate-600'
                                                 }`}>
                                                 {formData.permissions.includes(perm.id) && <Check size={14} />}
                                             </div>
@@ -366,8 +369,8 @@ const AdminTeamManagement = () => {
                                 const linkedUser = getUserForMember(member.id);
                                 return (
                                     <div key={member.id} className={`bg-white dark:bg-slate-800 rounded-xl shadow-sm border p-6 flex flex-col group relative overflow-hidden transition-all hover:shadow-md ${linkedUser
-                                            ? 'border-blue-200 dark:border-blue-900/30 ring-1 ring-blue-50 dark:ring-blue-900/10'
-                                            : 'border-slate-200 dark:border-slate-700'
+                                        ? 'border-blue-200 dark:border-blue-900/30 ring-1 ring-blue-50 dark:ring-blue-900/10'
+                                        : 'border-slate-200 dark:border-slate-700'
                                         }`}>
                                         <div className="flex items-center gap-4 mb-4">
                                             <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 overflow-hidden shrink-0">
