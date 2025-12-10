@@ -266,6 +266,26 @@ const AdminSiteContent = () => {
                                                         onChange={(val) => handleChange('hero', 'bg_image', val)}
                                                         folder="site_content/hero"
                                                     />
+                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                                                        <ImageUpload
+                                                            label="Phone Screen Image"
+                                                            value={content.hero?.phone_screen_image}
+                                                            onChange={(val) => handleChange('hero', 'phone_screen_image', val)}
+                                                            folder="site_content/hero"
+                                                        />
+                                                        <ImageUpload
+                                                            label="Phone Profile Image"
+                                                            value={content.hero?.phone_profile_image}
+                                                            onChange={(val) => handleChange('hero', 'phone_profile_image', val)}
+                                                            folder="site_content/hero"
+                                                        />
+                                                        <ImageUpload
+                                                            label="Trustpilot Logo"
+                                                            value={content.hero?.trustpilot_logo}
+                                                            onChange={(val) => handleChange('hero', 'trustpilot_logo', val)}
+                                                            folder="site_content/hero"
+                                                        />
+                                                    </div>
                                                 </div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <LocalizedInput label="Button 1 (Consultation)" value={content.hero?.cta_consultation} onChange={(val) => handleChange('hero', 'cta_consultation', val)} activeLanguage={activeLanguage} />

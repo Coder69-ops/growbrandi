@@ -207,7 +207,7 @@ const HeroSection: React.FC = () => {
                                     </div>
                                     <div className="flex items-center gap-1 opacity-80">
                                         <span className="text-[10px] font-medium text-slate-500 dark:text-zinc-400">{getHeroText('trustpilot_on')}</span>
-                                        <img src="/logos/trustpilot--logo.png" alt="Trustpilot" className="h-5 w-auto object-contain" />
+                                        <img src={content?.hero?.trustpilot_logo || "/logos/trustpilot--logo.png"} alt="Trustpilot" className="h-5 w-auto object-contain" />
                                     </div>
                                 </div>
                             </motion.div>
@@ -303,7 +303,7 @@ const HeroSection: React.FC = () => {
                                         <div className="relative h-[65%] w-full overflow-hidden">
                                             <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent z-10" />
                                             <img
-                                                src="/foriphonecard.jpg"
+                                                src={content?.hero?.phone_screen_image || "/foriphonecard.jpg"}
                                                 alt="Viral Content"
                                                 className="w-full h-full object-cover"
                                                 loading="eager"
@@ -354,7 +354,7 @@ const HeroSection: React.FC = () => {
                                         <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-white dark:bg-slate-900/95 backdrop-blur-xl p-5 flex flex-col justify-between z-20">
                                             <div className="flex items-center gap-2.5">
                                                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 p-[2px]">
-                                                    <img src="/team/sabrina-jui.jpg" alt="Profile" className="w-full h-full rounded-full object-cover border-2 border-white dark:border-slate-900" />
+                                                    <img src={content?.hero?.phone_profile_image || "/team/sabrina-jui.jpg"} alt="Profile" className="w-full h-full rounded-full object-cover border-2 border-white dark:border-slate-900" />
                                                 </div>
                                                 <div>
                                                     <div className="text-xs font-bold text-slate-900 dark:text-white">{getHeroText('mock_viral_campaign')}</div>
