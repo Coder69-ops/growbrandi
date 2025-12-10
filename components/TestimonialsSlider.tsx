@@ -111,7 +111,7 @@ const TestimonialsSlider: React.FC = () => {
                                                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
                                                 <img
                                                     src={testimonials[currentIndex]?.image}
-                                                    alt={testimonials[currentIndex]?.author}
+                                                    alt={localized(testimonials[currentIndex]?.author)}
                                                     className="w-20 h-20 rounded-full object-cover border-2 border-white dark:border-white/10 shadow-xl relative z-10"
                                                     onError={(e) => {
                                                         e.currentTarget.style.display = 'none';
@@ -123,7 +123,7 @@ const TestimonialsSlider: React.FC = () => {
                                                     id={`fallback-${currentIndex}`}
                                                     className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-xl relative z-10 hidden"
                                                 >
-                                                    {testimonials[currentIndex]?.author?.charAt(0)}
+                                                    {localized(testimonials[currentIndex]?.author)?.charAt(0)}
                                                 </div>
                                             </div>
 
@@ -139,7 +139,7 @@ const TestimonialsSlider: React.FC = () => {
 
                                             <div>
                                                 <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                                                    {testimonials[currentIndex]?.author}
+                                                    {localized(testimonials[currentIndex]?.author)}
                                                 </h4>
                                                 <p className="text-blue-600 dark:text-blue-400 font-medium">
                                                     {localized(testimonials[currentIndex]?.company)}
