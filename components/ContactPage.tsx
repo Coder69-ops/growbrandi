@@ -26,7 +26,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 export const ContactPage: React.FC = () => {
     const { t, i18n } = useTranslation();
-    const { getText } = useSiteContentData();
+    const { getText, content } = useSiteContentData();
     const { content: contactContent, getText: getContactText } = useContactSettings();
     const { getLocalizedPath } = useLocalizedPath();
     const lang = i18n.language as SupportedLanguage;
@@ -230,6 +230,16 @@ I would like to book this consultation.`;
             />
             <div className="min-h-screen py-24 px-4 bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white relative overflow-hidden flex flex-col justify-center transition-colors duration-300">
                 <BackgroundEffects />
+                {/* Dynamic Background Image */}
+                {content?.contact?.hero?.bg_image && (
+                    <>
+                        <div
+                            className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                            style={{ backgroundImage: `url(${content.contact.hero.bg_image})` }}
+                        />
+                        <div className="absolute inset-0 z-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm" />
+                    </>
+                )}
 
                 <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20">
 

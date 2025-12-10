@@ -21,6 +21,8 @@ const TABS = [
     { id: 'footer', label: 'Footer', icon: Layout },
 ];
 
+import { ImageUpload } from '../../components/admin/ImageUpload';
+
 const TRANSLATE_OPTIONS: Record<string, string[]> = {
     hero: ['hero.badge', 'hero.title_prefix', 'hero.title_highlight', 'hero.description', 'hero.cta_consultation', 'hero.cta_showreel'],
     footer: ['footer.tagline_desc', 'footer.copyright'],
@@ -257,6 +259,14 @@ const AdminSiteContent = () => {
                                                     activeLanguage={activeLanguage}
                                                     rows={3}
                                                 />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.hero?.bg_image}
+                                                        onChange={(val) => handleChange('hero', 'bg_image', val)}
+                                                        folder="site_content/hero"
+                                                    />
+                                                </div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <LocalizedInput label="Button 1 (Consultation)" value={content.hero?.cta_consultation} onChange={(val) => handleChange('hero', 'cta_consultation', val)} activeLanguage={activeLanguage} />
                                                     <LocalizedInput label="Button 2 (Showreel)" value={content.hero?.cta_showreel} onChange={(val) => handleChange('hero', 'cta_showreel', val)} activeLanguage={activeLanguage} />
@@ -294,6 +304,14 @@ const AdminSiteContent = () => {
                                                     <LocalizedInput label="Highlight" value={content.about?.hero?.highlight} onChange={(val) => handleChange('about', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
                                                 </div>
                                                 <LocalizedTextArea label="Description" value={content.about?.hero?.description} onChange={(val) => handleChange('about', 'hero', val, 'description')} activeLanguage={activeLanguage} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.about?.hero?.bg_image}
+                                                        onChange={(val) => handleChange('about', 'hero', val, 'bg_image')}
+                                                        folder="site_content/about"
+                                                    />
+                                                </div>
                                             </div>
 
                                             <div className="glass-panel p-6 space-y-6">
@@ -344,6 +362,14 @@ const AdminSiteContent = () => {
                                                     <LocalizedInput label="Highlight" value={content.process?.hero?.highlight} onChange={(val) => handleChange('process', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
                                                 </div>
                                                 <LocalizedTextArea label="Description" value={content.process?.hero?.description} onChange={(val) => handleChange('process', 'hero', val, 'description')} activeLanguage={activeLanguage} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.process?.hero?.bg_image}
+                                                        onChange={(val) => handleChange('process', 'hero', val, 'bg_image')}
+                                                        folder="site_content/process"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="space-y-4">
                                                 <h3 className="font-semibold text-lg ml-2 text-slate-900 dark:text-white">Process Steps</h3>
@@ -395,6 +421,14 @@ const AdminSiteContent = () => {
                                                     <LocalizedInput label="Highlight" value={content.careers?.hero?.highlight} onChange={(val) => handleChange('careers', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
                                                 </div>
                                                 <LocalizedTextArea label="Description" value={content.careers?.hero?.description} onChange={(val) => handleChange('careers', 'hero', val, 'description')} activeLanguage={activeLanguage} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.careers?.hero?.bg_image}
+                                                        onChange={(val) => handleChange('careers', 'hero', val, 'bg_image')}
+                                                        folder="site_content/careers"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="glass-panel p-6 space-y-6">
                                                 <h3 className="font-semibold text-lg text-blue-600">Open Positions Header</h3>
@@ -421,6 +455,14 @@ const AdminSiteContent = () => {
                                                     <LocalizedInput label="Highlight" value={content.team_page?.hero?.highlight} onChange={(val) => handleChange('team_page', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
                                                 </div>
                                                 <LocalizedTextArea label="Description" value={content.team_page?.hero?.description} onChange={(val) => handleChange('team_page', 'hero', val, 'description')} activeLanguage={activeLanguage} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.team_page?.hero?.bg_image}
+                                                        onChange={(val) => handleChange('team_page', 'hero', val, 'bg_image')}
+                                                        folder="site_content/team"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="glass-panel p-6 space-y-6">
                                                 <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
@@ -454,6 +496,14 @@ const AdminSiteContent = () => {
                                                     <LocalizedInput label="Highlight" value={content.contact?.hero?.highlight} onChange={(val) => handleChange('contact', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
                                                 </div>
                                                 <LocalizedTextArea label="Description" value={content.contact?.hero?.description} onChange={(val) => handleChange('contact', 'hero', val, 'description')} activeLanguage={activeLanguage} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.contact?.hero?.bg_image}
+                                                        onChange={(val) => handleChange('contact', 'hero', val, 'bg_image')}
+                                                        folder="site_content/contact"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="glass-panel p-6 space-y-6">
                                                 <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">

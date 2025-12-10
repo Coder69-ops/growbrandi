@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../lib/firebase';
+import { storage } from '../../lib/storage'; // Switched to local R2 storage service
 import { Upload, X, Loader2 } from 'lucide-react';
 
 interface ImageUploadProps {
@@ -37,33 +36,26 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         }
 
         setUploading(true);
-        setProgress(0);
+        // Fake progress for R2 since SDK v3 doesn't easily expose progress on single PutObject
+        // In a real app with large files, we'd use lib-storage Upload helper, but for images PutObject is essentially instant for small files.
+        // We'll simulate a quick progress bar.
+        setProgress(10);
+        const progressInterval = setInterval(() => {
+            setProgress(prev => Math.min(prev + 10, 90));
+        }, 100);
 
         try {
-            const fileName = `${Date.now()}-${file.name}`;
-            const storageRef = ref(storage, `${folder}/${fileName}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const downloadURL = await storage.uploadFile(file, folder);
 
-            uploadTask.on(
-                'state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setProgress(progress);
-                },
-                (error) => {
-                    console.error('Upload failed:', error);
-                    alert('Failed to upload image');
-                    setUploading(false);
-                },
-                async () => {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    onChange(downloadURL);
-                    setUploading(false);
-                }
-            );
+            clearInterval(progressInterval);
+            setProgress(100);
+
+            onChange(downloadURL);
+            setUploading(false);
         } catch (error) {
+            clearInterval(progressInterval);
             console.error('Upload error:', error);
-            alert('Failed to upload image');
+            alert('Failed to upload image to R2');
             setUploading(false);
         }
     };

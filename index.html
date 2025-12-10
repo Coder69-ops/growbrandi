@@ -38,7 +38,7 @@
 
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="GrowBrandi - AI-Powered Digital Agency" />
+  <meta name="twitter:title" content="GrowBrandi - Digital Agency" />
   <meta name="twitter:description" content="Transform your business with expert digital solutions powered by AI." />
   <meta name="twitter:image" content="https://www.growbrandi.com/og-image.jpg" />
 
@@ -316,6 +316,188 @@
         font-size: 3rem;
       }
     }
+
+    /* Initial Loader Styles */
+    #initial-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      transition: opacity 0.5s ease-out;
+    }
+
+    /* Dark mode support via .dark class */
+    .dark #initial-loader {
+      background-color: rgba(9, 9, 11, 0.9);
+    }
+
+    /*
+    @media (prefers-color-scheme: dark) {
+      #initial-loader {
+        background-color: rgba(9, 9, 11, 0.9);
+      }
+    }
+    */
+
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .logo-wrapper {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .logo-glow-ring {
+      position: absolute;
+      inset: -1rem;
+      border-radius: 9999px;
+      padding: 1rem;
+      background: conic-gradient(from 0deg, #3b82f6, #a855f7, #06b6d4, #3b82f6);
+      opacity: 0.3;
+      filter: blur(8px);
+      animation: spin 8s linear infinite;
+    }
+
+    .logo-box {
+      position: relative;
+      width: 6rem;
+      height: 6rem;
+      background: rgba(15, 23, 42, 0.9);
+      /* Dark background for light mode */
+      border-radius: 1rem;
+      border: 1px solid rgba(226, 232, 240, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .logo-box {
+        background: rgba(24, 24, 27, 0.5);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .dark .logo-box {
+      background: rgba(24, 24, 27, 0.5);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-img {
+      width: 4rem;
+      height: 4rem;
+      object-fit: contain;
+      filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));
+    }
+
+    .dark .logo-img {
+      filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.5));
+    }
+
+    .progress-bar-bg {
+      width: 12rem;
+      height: 0.25rem;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .progress-bar-bg {
+        background: #27272a;
+      }
+    }
+
+    .dark .progress-bar-bg {
+      background: #27272a;
+    }
+
+    .progress-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      background: linear-gradient(to right, #3b82f6, #22d3ee, #3b82f6);
+      animation: mood-bar 1.5s ease-in-out infinite;
+    }
+
+    .init-text {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .init-text {
+        color: #a1a1aa;
+      }
+    }
+
+    .dark .init-text {
+      color: #a1a1aa;
+    }
+
+    .dot {
+      color: #2563eb;
+      animation: blink 1.5s infinite;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .dot {
+        color: #60a5fa;
+      }
+    }
+
+    .dark .dot {
+      color: #60a5fa;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes mood-bar {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(200%);
+      }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
   </style>
 
 
@@ -333,10 +515,47 @@
 }
 </script>
   <link rel="stylesheet" href="/index.css">
+  <script>
+    // Critical Theme Script to prevent FOUC / Wrong Theme Flash
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+        if (!savedTheme && supportDarkMode) {
+          document.documentElement.classList.add('dark');
+        } else if (savedTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { }
+    })();
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
+
+  <!-- Initial Loader (Will be faded out by React when ready) -->
+  <div id="initial-loader">
+    <div class="loader-content">
+      <div class="logo-wrapper">
+        <div class="logo-glow-ring"></div>
+        <div class="logo-box">
+          <img src="/growbrandi-logo.png" alt="GrowBrandi" class="logo-img" />
+        </div>
+      </div>
+
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill"></div>
+      </div>
+
+      <div class="init-text">
+        <span>Initializing</span>
+        <span class="dot">●</span>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/index.tsx"></script>
 </body>
 

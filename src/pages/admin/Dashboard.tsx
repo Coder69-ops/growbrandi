@@ -15,6 +15,7 @@ import { collection, getDocs, query, orderBy, limit, Timestamp } from 'firebase/
 import { db } from '../../lib/firebase';
 import { formatDistanceToNow } from 'date-fns';
 import { getLocalizedField } from '../../utils/localization';
+import { useAuth } from '../../context/AuthContext';
 
 interface DashboardActivity {
     id: string;
@@ -76,6 +77,10 @@ const QuickAction = ({ title, description, to, icon: Icon }: any) => (
 );
 
 const AdminDashboard = () => {
+    const { currentUser } = useAuth();
+    const userRole = (currentUser as any)?.jobTitle || (currentUser as any)?.role || 'Admin';
+    const userName = (currentUser as any)?.displayName || currentUser?.email?.split('@')[0] || 'User';
+
     const [counts, setCounts] = useState({
         projects: 0,
         services: 0,
@@ -232,12 +237,64 @@ const AdminDashboard = () => {
                         Overview
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-1 font-light text-lg">
-                        Welcome back! Here's what's happening today.
+                        Welcome back, <span className="font-semibold text-blue-600 dark:text-blue-400">{userName}</span>!
                     </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-sm">
                     <Clock size={14} />
                     <span>Updated just now</span>
+                </div>
+            </div>
+
+            {/* Profile / Status Card */}
+            <div className="glass-panel p-6 rounded-3xl relative overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-500/20">
+                {/* Decorative circles */}
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                    <div className="flex items-center gap-5">
+                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm p-1 border-2 border-white/50 shadow-inner">
+                            <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
+                                {currentUser?.photoURL ? (
+                                    <img src={currentUser.photoURL} alt={userName} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-2xl font-bold">{userName[0]?.toUpperCase()}</span>
+                                )}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2 mb-1">
+                                <h2 className="text-2xl font-bold">{userName}</h2>
+                                <span className="px-2 py-0.5 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider border border-white/10">
+                                    {userRole}
+                                </span>
+                            </div>
+                            <p className="text-blue-100 flex items-center gap-2 opacity-90">
+                                <Mail size={14} /> {currentUser?.email}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 w-full md:w-auto grid grid-cols-2 md:grid-cols-3 gap-4 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-8">
+                        <div>
+                            <p className="text-blue-200 text-xs uppercase tracking-wider mb-1">Status</p>
+                            <p className="font-semibold flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_theme(colors.emerald.400)]"></span>
+                                Active
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-blue-200 text-xs uppercase tracking-wider mb-1">Permissions</p>
+                            <p className="font-semibold">
+                                {(currentUser as any)?.permissions?.length || 0} Enabled
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-blue-200 text-xs uppercase tracking-wider mb-1">Last Login</p>
+                            <p className="font-semibold">Just now</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

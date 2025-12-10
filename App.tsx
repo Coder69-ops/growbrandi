@@ -62,6 +62,7 @@ import AdminSeedData from './src/pages/admin/SeedData';
 import AdminSiteContent from './src/pages/admin/SiteContent';
 import AdminContactSettings from './src/pages/admin/ContactSettings';
 import AdminMessages from './src/pages/admin/Messages';
+import AdminTeamManagement from './src/pages/admin/TeamManagement';
 
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
@@ -123,6 +124,15 @@ function AppContent() {
       }
     };
     fetchServices();
+
+    // Remove simple loader once React apps starts mounting/handling content
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => {
+        loader.remove();
+      }, 500);
+    }
   }, []);
 
   // Preload chat on app startup
@@ -386,6 +396,7 @@ ${servicesDetails}
                     <Route path="site-content" element={<AdminSiteContent />} />
                     <Route path="contact-settings" element={<AdminContactSettings />} />
                     <Route path="messages" element={<AdminMessages />} />
+                    <Route path="team-management" element={<AdminTeamManagement />} />
                   </Route>
                 </Route>
               </Routes>

@@ -26,5 +26,37 @@ export const storage = getStorage(app);
 
 // Helper to log if config is missing (for developer sanity)
 if (!isConfigured) {
-    // Firebase config is missing - admin features will not work
+    console.warn("Firebase config is missing - various features may not work.");
 }
+
+/**
+ * Creates a secondary Firebase app instance to create a new user 
+ * without logging out the current admin user.
+ */
+export const createTeamMemberAuth = async (email: string, password: string) => {
+    // 1. Initialize a secondary app key to avoid conflict
+    const secondaryAppName = `secondaryApp-${Date.now()}`;
+    const secondaryApp = initializeApp(firebaseConfig, secondaryAppName);
+    const secondaryAuth = getAuth(secondaryApp);
+
+    try {
+        const { createUserWithEmailAndPassword, signOut } = await import("firebase/auth");
+        // 2. Create the user on this secondary instance
+        const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+
+        // 3. Document ID and basic info to return
+        const newUser = userCredential.user;
+
+        // 4. Immediately sign out from this secondary instance to be safe
+        await signOut(secondaryAuth);
+
+        return newUser;
+    } catch (error) {
+        throw error;
+    } finally {
+        // 5. Clean up the secondary app
+        // We import deleteApp dynamically to avoid issues if it's not needed elsewhere
+        const { deleteApp } = await import("firebase/app");
+        await deleteApp(secondaryApp);
+    }
+};

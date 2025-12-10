@@ -100,11 +100,22 @@ const HeroSection: React.FC = () => {
             />
             <div className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white pt-24 lg:pt-32 pb-12 transition-colors duration-300">
                 {/* Background Effects */}
+                <div
+                    className="absolute inset-0 z-0 pointer-events-none bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+                    style={{
+                        backgroundImage: content?.hero?.bg_image ? `url(${content.hero.bg_image})` : undefined,
+                        opacity: content?.hero?.bg_image ? 1 : 0
+                    }}
+                />
+
+                {/* Overlay for text readability when using background image */}
+                <div className={`absolute inset-0 z-0 pointer-events-none transition-opacity duration-300 ${content?.hero?.bg_image ? 'bg-white/80 dark:bg-black/80 backdrop-blur-sm' : ''}`} />
+
                 <div className="absolute inset-0 z-0 pointer-events-none">
                     {/* Noise Texture Overlay */}
                     <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay brightness-100 contrast-150" />
 
-                    {/* Cinematic Shadows/Lighting */}
+                    {/* Cinematic Shadows/Lighting - Only show if no bg image or if overlay is strong */}
                     <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-green-500/5 dark:bg-green-500/10 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen" />
                     <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/5 dark:bg-blue-600/10 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen" />
                     <div className="absolute top-[40%] left-[40%] w-[500px] h-[500px] bg-cyan-500/5 dark:bg-cyan-500/5 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen" />

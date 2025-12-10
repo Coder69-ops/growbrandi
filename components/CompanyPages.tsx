@@ -41,6 +41,17 @@ export const AboutUsPage: React.FC = () => {
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden min-h-[60vh] flex items-center justify-center transition-colors duration-300">
         <BackgroundEffects />
 
+        {/* Dynamic Background Image */}
+        {content?.about?.hero?.bg_image && (
+          <>
+            <div
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+              style={{ backgroundImage: `url(${content.about.hero.bg_image})` }}
+            />
+            <div className="absolute inset-0 z-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm transition-opacity duration-300" />
+          </>
+        )}
+
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
             badge={getText('about.hero.badge', lang) || t('company.about_us.hero.badge')}
@@ -209,6 +220,16 @@ export const ProcessPage: React.FC = () => {
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
+        {/* Dynamic Background Image */}
+        {content?.process?.hero?.bg_image && (
+          <>
+            <div
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${content.process.hero.bg_image})` }}
+            />
+            <div className="absolute inset-0 z-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm" />
+          </>
+        )}
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
             badge={getText('process.hero.badge', lang) || t('company.process.heading.badge')}
@@ -371,7 +392,7 @@ export const CaseStudiesPage: React.FC = () => {
 // CareersPage
 export const CareersPage: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { getText } = useSiteContentData();
+  const { getText, content } = useSiteContentData();
   const lang = i18n.language as SupportedLanguage;
   const jobOpenings = t('company.careers.openings', { returnObjects: true }) as any[];
 
@@ -384,6 +405,16 @@ export const CareersPage: React.FC = () => {
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
+        {/* Dynamic Background Image */}
+        {content?.careers?.hero?.bg_image && (
+          <>
+            <div
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${content.careers.hero.bg_image})` }}
+            />
+            <div className="absolute inset-0 z-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm" />
+          </>
+        )}
         <div className="container mx-auto max-w-6xl relative z-10">
           <SectionHeading
             badge={getText('careers.hero.badge', lang) || t('company.careers.heading.badge')}
@@ -452,7 +483,7 @@ export const TeamPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [hoveredMember, setHoveredMember] = useState<number | null>(null);
   const { data: teamMembers } = useContent('team_members');
-  const { getText } = useSiteContentData();
+  const { getText, content } = useSiteContentData();
   const { getLocalizedPath } = useLocalizedPath();
   const lang = i18n.language as SupportedLanguage;
 
@@ -471,6 +502,16 @@ export const TeamPage: React.FC = () => {
       />
       <section className="relative min-h-screen bg-slate-50 dark:bg-[#09090b] flex flex-col items-center justify-center overflow-hidden py-24 transition-colors duration-300">
         <BackgroundEffects />
+        {/* Dynamic Background Image */}
+        {content?.team_page?.hero?.bg_image && (
+          <>
+            <div
+              className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${content.team_page.hero.bg_image})` }}
+            />
+            <div className="absolute inset-0 z-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm" />
+          </>
+        )}
 
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
           <SectionHeading

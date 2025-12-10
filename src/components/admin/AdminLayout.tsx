@@ -20,14 +20,17 @@ import {
     ChevronLeft,
     Search,
     Bell,
-    Mail
+    Mail,
+    Shield
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     // Handle scroll effect
     useEffect(() => {
@@ -37,6 +40,11 @@ const AdminLayout = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const user = currentUser as any;
+    const displayName = user?.displayName || user?.email?.split('@')[0] || 'Admin';
+    const role = user?.jobTitle || user?.role || 'Admin';
+    const initials = displayName[0]?.toUpperCase() || 'A';
 
     const handleLogout = async () => {
         try {
@@ -49,18 +57,22 @@ const AdminLayout = () => {
         }
     };
 
+    // Helper to check permission is done inline in the map
+    // We used to have a helper here, but it's cleaner inline with the item.
+
     const menuItems = [
         { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-        { path: '/admin/site-content', icon: FileText, label: 'Site Content' },
-        { path: '/admin/projects', icon: FolderKanban, label: 'Projects' },
-        { path: '/admin/services', icon: Briefcase, label: 'Services' },
-        { path: '/admin/team', icon: Users, label: 'Team' },
-        { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials' },
-        { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs' },
-        { path: '/admin/contact-settings', icon: Contact, label: 'Contact Settings' },
-        { path: '/admin/settings', icon: Settings, label: 'Settings' },
-        { path: '/admin/seed-data', icon: Database, label: 'Seed Data' },
-        { path: '/admin/messages', icon: Mail, label: 'Messages' },
+        { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
+        { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permission: 'manage_content' },
+        { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
+        { path: '/admin/team', icon: Users, label: 'Public Team', permission: 'manage_team_profiles' },
+        { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
+        { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
+        { path: '/admin/contact-settings', icon: Contact, label: 'Contact Settings', permission: 'manage_settings' },
+        { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' }, // New
+        { path: '/admin/messages', icon: Mail, label: 'Messages', permission: 'view_messages' },
+        { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
+        { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings' },
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -96,6 +108,22 @@ const AdminLayout = () => {
                 <nav className="flex-1 overflow-y-auto py-6 px-3 custom-scrollbar">
                     <ul className="space-y-2">
                         {menuItems.map((item) => {
+                            // Permission Check
+                            // 1. explicit admin role
+                            // 2. no restriction on item
+                            // 3. has specific permission
+                            // 4. FALLBACK: If user has NO role AND NO permissions defined (Legacy/Main Admin who hasn't been migrated), allow all.
+                            const user = currentUser as any;
+                            const isLegacyAdmin = !user?.role && !user?.permissions;
+
+                            const hasPermission =
+                                user?.role === 'admin' ||
+                                !item.permission ||
+                                user?.permissions?.includes(item.permission) ||
+                                isLegacyAdmin;
+
+                            if (!hasPermission) return null;
+
                             const isActive = location.pathname === item.path;
                             return (
                                 <li key={item.path}>
@@ -178,28 +206,42 @@ const AdminLayout = () => {
                             />
                         </div>
 
-                        <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm">
-                            {/* Notifications */}
-                            <button className="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors relative">
+                        <div className="flex items-center gap-4">
+                            <div className="hidden md:flex flex-col items-end">
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
+                                    {displayName}
+                                </span>
+                                <span className="text-[10px] uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-full">
+                                    {role}
+                                </span>
+                            </div>
+
+                            <button className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full relative transition-colors">
                                 <Bell size={20} />
-                                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-slate-800"></span>
+                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
                             </button>
 
-                            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700"></div>
-
-                            {/* Theme Toggle */}
-                            <ThemeToggle />
-                        </div>
-
-                        {/* User Avatar */}
-                        <div className="w-11 h-11 rounded-full p-0.5 premium-gradient cursor-pointer hover:scale-105 transition-transform shadow-lg shadow-indigo-500/20">
-                            <div className="w-full h-full rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-900">
-                                <img
-                                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
-                                    alt="Admin"
-                                    className="w-full h-full object-cover"
-                                />
+                            {/* User Avatar - Image or Initials */}
+                            <div className="relative group cursor-pointer">
+                                {user?.photoURL ? (
+                                    <div className="w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-blue-600 to-purple-600 shadow-md hover:scale-105 transition-transform">
+                                        <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-800">
+                                            <img
+                                                src={user.photoURL}
+                                                alt={displayName}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <button className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white dark:ring-slate-800 transition-transform hover:scale-105">
+                                        {initials}
+                                    </button>
+                                )}
                             </div>
+
+                            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                            <ThemeToggle />
                         </div>
                     </div>
                 </header>
@@ -209,7 +251,7 @@ const AdminLayout = () => {
                     <Outlet />
                 </div>
             </main>
-        </div>
+        </div >
     );
 };
 
