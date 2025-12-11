@@ -71,7 +71,7 @@ const AdminMessages = () => {
 
     return (
         <AdminPageLayout
-            title="Messages"
+            title="Inquiries"
             description="View and manage inquiries from the contact form"
             actions={
                 <div className="flex gap-3">

@@ -33,7 +33,7 @@ interface LocalizedInputProps {
     value: LocalizedString;
     onChange: (value: LocalizedString) => void;
     activeLanguage: SupportedLanguage;
-    placeholder?: string;
+    placeholder?: string | LocalizedString;
     required?: boolean;
     type?: 'text' | 'textarea';
     rows?: number;
@@ -59,6 +59,11 @@ export const LocalizedInput: React.FC<LocalizedInputProps> = ({
     const currentValue = value?.[activeLanguage] || '';
     const inputId = `${label.toLowerCase().replace(/\s+/g, '-')}-${activeLanguage}`;
     const [isTranslating, setIsTranslating] = useState(false);
+
+    // Handle localized placeholder
+    const placeholderText = typeof placeholder === 'object' && placeholder !== null
+        ? placeholder[activeLanguage] || placeholder['en']
+        : placeholder as string;
 
     const handleAutoTranslate = async () => {
         if (!currentValue) return;
@@ -112,7 +117,7 @@ export const LocalizedInput: React.FC<LocalizedInputProps> = ({
                     className={baseClassName}
                     value={currentValue}
                     onChange={handleChange}
-                    placeholder={placeholder}
+                    placeholder={placeholderText}
                     required={required && activeLanguage === 'en'}
                     rows={rows}
                 />
@@ -123,7 +128,7 @@ export const LocalizedInput: React.FC<LocalizedInputProps> = ({
                     className={baseClassName}
                     value={currentValue}
                     onChange={handleChange}
-                    placeholder={placeholder}
+                    placeholder={placeholderText}
                     required={required && activeLanguage === 'en'}
                 />
             )}
@@ -150,6 +155,11 @@ export const LocalizedTextArea: React.FC<LocalizedInputProps> = ({
     const currentValue = value?.[activeLanguage] || '';
     const inputId = `${label.toLowerCase().replace(/\s+/g, '-')}-${activeLanguage}`;
     const [isTranslating, setIsTranslating] = useState(false);
+
+    // Handle localized placeholder
+    const placeholderText = typeof placeholder === 'object' && placeholder !== null
+        ? placeholder[activeLanguage] || placeholder['en']
+        : placeholder as string;
 
     const handleAutoTranslate = async () => {
         if (!currentValue) return;
@@ -202,7 +212,7 @@ export const LocalizedTextArea: React.FC<LocalizedInputProps> = ({
                 className={baseClassName}
                 value={currentValue}
                 onChange={handleChange}
-                placeholder={placeholder}
+                placeholder={placeholderText}
                 required={required && activeLanguage === 'en'}
                 rows={rows}
             />

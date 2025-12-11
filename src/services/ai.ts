@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { generateStructuredResponse } from "../../services/openRouterService";
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -19,37 +20,32 @@ interface TranslationResponse {
 export const translateContent = async (
     content: TranslationRequest
 ): Promise<TranslationResponse> => {
-    if (!API_KEY) {
-        throw new Error("Missing VITE_GEMINI_API_KEY in environment variables");
+    const prompt = `
+    STRICT JSON OUTPUT ONLY. NO CONVERSATIONAL TEXT.
+    Translated the values in the provided JSON object from English (en) to: ${TARGET_LANGUAGES.join(', ')}.
+    
+    Input JSON:
+    ${JSON.stringify(content, null, 2)}
+    
+    RULES:
+    1. Return ONLY valid JSON.
+    2. Do NOT add any explanations or text before/after the JSON.
+    3. Maintain the exact same keys as the input.
+    4. Each key's value must be an object with keys: ${TARGET_LANGUAGES.join(', ')}.
+    5. PRESERVE URLs, file paths, IDs, and technical strings EXACTLY as is. Do not translate them.
+    
+    Example Output:
+    {
+        "key1": { "de": "...", "es": "...", "fr": "...", "nl": "..." }
     }
-
-    const genAI = new GoogleGenAI({ apiKey: API_KEY });
+    `;
 
     try {
-
-        const prompt = `
-        You are a professional translator. 
-        Translate the following JSON object's values from English (en) to the following languages: ${TARGET_LANGUAGES.join(', ')}.
-        
-        Input JSON:
-        ${JSON.stringify(content, null, 2)}
-        
-        Output MUST be valid JSON with the exact same keys as the input.
-        For each key, the value must be an object containing the translations for each target language.
-        
-        Example Output Format:
-        {
-            "someKey": {
-                "de": "German Translation",
-                "es": "Spanish Translation",
-                "fr": "French Translation",
-                "nl": "Dutch Translation"
-            }
+        if (!API_KEY) {
+            throw new Error("Missing VITE_GEMINI_API_KEY in environment variables");
         }
 
-        Do not include markdown code block formatting in your response, just the raw JSON string.
-        `;
-
+        const genAI = new GoogleGenAI({ apiKey: API_KEY });
         const result = await genAI.models.generateContent({
             model: "gemini-2.5-flash",
             contents: [
@@ -74,12 +70,20 @@ export const translateContent = async (
 
         // Clean up markdown code blocks if present (just in case)
         const cleanJson = responseText.replace(/```json\n?|\n?```/g, "").trim();
-
         const translations: TranslationResponse = JSON.parse(cleanJson);
         return translations;
 
     } catch (error) {
-        console.error("AI Translation Error:", error);
-        throw error;
+        console.warn("Gemini translation failed, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            const result = await generateStructuredResponse<TranslationResponse>(prompt);
+            return result;
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw fallbackError;
+        }
     }
 };
+

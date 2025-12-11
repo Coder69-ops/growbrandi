@@ -58,6 +58,15 @@ const AdminLogin = () => {
 
         try {
             await signInWithEmailAndPassword(auth, email, password);
+
+            // Log successful login
+            try {
+                const { logAction } = await import('../../services/auditService');
+                await logAction('login', 'auth', 'User logged in via Admin Login page');
+            } catch (err) {
+                console.warn("Failed to log login:", err);
+            }
+
             setLoading(false);
             setSuccess(true);
             setTimeout(() => {

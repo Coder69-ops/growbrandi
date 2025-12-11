@@ -155,7 +155,7 @@ const BlogPostPage = () => {
                         onClick={() => navigate(getLocalizedPath('/blog'))}
                         className="flex items-center gap-2 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8 group"
                     >
-                        <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="group-hover:-translate-x-1 transition-transform"><FaArrowLeft /></span>
                         {t('common.back', 'Back to Blog')}
                     </button>
 
@@ -184,14 +184,14 @@ const BlogPostPage = () => {
                                 <div className="p-8 md:p-12">
                                     <div className="flex flex-wrap gap-6 mb-8 text-sm text-slate-500 dark:text-zinc-400 border-b border-slate-200 dark:border-white/10 pb-8">
                                         <span className="flex items-center gap-2">
-                                            <FaCalendar className="text-blue-500" /> {post.date}
+                                            <span className="text-blue-500"><FaCalendar /></span> {post.date}
                                         </span>
                                         <span className="flex items-center gap-2">
-                                            <FaClock className="text-blue-500" /> {post.readTime}
+                                            <span className="text-blue-500"><FaClock /></span> {post.readTime}
                                         </span>
                                         {post.author && (
                                             <span className="flex items-center gap-2">
-                                                <FaUser className="text-blue-500" /> {typeof post.author === 'object' ? post.author.name : post.author}
+                                                <span className="text-blue-500"><FaUser /></span> {typeof post.author === 'object' ? post.author.name : post.author}
                                             </span>
                                         )}
                                     </div>
@@ -210,7 +210,7 @@ const BlogPostPage = () => {
                                     {blogSettings.inline_cta?.enabled && (
                                         <div className="my-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30 flex flex-col md:flex-row items-center gap-6">
                                             <div className="p-4 bg-blue-100 dark:bg-blue-600/20 rounded-xl shrink-0">
-                                                <FaRocket className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                                                <span className="w-8 h-8 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform"><FaRocket /></span>
                                             </div>
                                             <div className="flex-grow text-center md:text-left">
                                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
@@ -304,10 +304,10 @@ const BlogPostPage = () => {
 
                                         <div className="mt-6 pt-6 border-t border-white/10 relative z-10">
                                             <div className="flex items-center gap-2 text-xs text-slate-400">
-                                                <FaCheckCircle className="text-green-400" /> <span>Free 30-min consultation</span>
+                                                <span className="text-green-400"><FaCheckCircle /></span> <span>Free 30-min consultation</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-xs text-slate-400 mt-2">
-                                                <FaCheckCircle className="text-green-400" /> <span>No obligation required</span>
+                                                <span className="text-green-400"><FaCheckCircle /></span> <span>No obligation required</span>
                                             </div>
                                         </div>
                                     </GlassCard>
@@ -348,7 +348,7 @@ const BlogPostPage = () => {
                                                 </h3>
                                             </div>
                                             <span className="text-xs text-slate-500 dark:text-zinc-400 flex items-center gap-1 mt-auto pt-4">
-                                                <FaClock className="w-3 h-3" /> {rPost.readTime || '5 min read'}
+                                                <span className="w-3 h-3"><FaClock /></span> {rPost.readTime || '5 min read'}
                                             </span>
                                         </div>
                                     </GlassCard>

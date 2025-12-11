@@ -113,7 +113,7 @@ export const AboutUsPage: React.FC = () => {
                 <div className="space-y-8 relative z-10">
                   <div className="flex items-start gap-6 group">
                     <div className="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-blue-500/20 group-hover:bg-blue-500/20 transition-all duration-300">
-                      <FaLightbulb className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+                      <span className="w-7 h-7 text-blue-600 dark:text-blue-400"><FaLightbulb /></span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{getText('about.values.innovation.title', lang) || t('company.about_us.values.innovation.title')}</h3>
@@ -123,7 +123,7 @@ export const AboutUsPage: React.FC = () => {
 
                   <div className="flex items-start gap-6 group">
                     <div className="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-purple-500/20 group-hover:bg-purple-500/20 transition-all duration-300">
-                      <FaUsers className="w-7 h-7 text-purple-600 dark:text-purple-400" />
+                      <span className="w-7 h-7 text-purple-600 dark:text-purple-400"><FaUsers /></span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">{getText('about.values.client.title', lang) || t('company.about_us.values.client.title')}</h3>
@@ -133,7 +133,7 @@ export const AboutUsPage: React.FC = () => {
 
                   <div className="flex items-start gap-6 group">
                     <div className="w-14 h-14 bg-pink-500/10 rounded-2xl flex items-center justify-center shrink-0 border border-pink-500/20 group-hover:bg-pink-500/20 transition-all duration-300">
-                      <FaCheckCircle className="w-7 h-7 text-pink-600 dark:text-pink-400" />
+                      <span className="w-7 h-7 text-pink-600 dark:text-pink-400"><FaCheckCircle /></span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 font-heading group-hover:text-pink-600 dark:group-hover:text-pink-400 transition-colors">{getText('about.values.quality.title', lang) || t('company.about_us.values.quality.title')}</h3>
@@ -180,12 +180,12 @@ export const AboutUsPage: React.FC = () => {
                     <div className="flex justify-center gap-4">
                       {member.social.linkedin && (
                         <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-500 dark:text-zinc-500 hover:text-blue-600 dark:hover:text-white transition-colors">
-                          <FaLinkedin className="w-5 h-5" />
+                          <span className="w-5 h-5"><FaLinkedin /></span>
                         </a>
                       )}
                       {member.social.twitter && (
                         <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-slate-500 dark:text-zinc-500 hover:text-blue-400 dark:hover:text-white transition-colors">
-                          <FaTwitter className="w-5 h-5" />
+                          <span className="w-5 h-5"><FaTwitter /></span>
                         </a>
                       )}
                     </div>
@@ -339,7 +339,7 @@ export const CaseStudiesPage: React.FC = () => {
 
                       <div className="mt-auto">
                         <button className="text-slate-500 dark:text-zinc-400 font-semibold hover:text-blue-600 dark:hover:text-white transition-colors flex items-center gap-2 text-sm">
-                          {selectedCase === index ? t('company.case_studies.common.hide_details') : t('company.case_studies.common.view_details')} <FaArrowRight className="w-3 h-3" />
+                          {selectedCase === index ? t('company.case_studies.common.hide_details') : t('company.case_studies.common.view_details')} <span className="w-3 h-3"><FaArrowRight /></span>
                         </button>
                       </div>
                     </div>
@@ -368,7 +368,7 @@ export const CaseStudiesPage: React.FC = () => {
                                 {study.results ? (
                                   Array.isArray(study.results) ? study.results.map((metric: any, metricIndex: number) => (
                                     <li key={metricIndex} className="text-slate-600 dark:text-zinc-400 text-sm flex items-center gap-2 font-light">
-                                      <FaCheckCircle className="w-4 h-4 text-green-500" />
+                                      <span className="w-4 h-4 text-green-500"><FaCheckCircle /></span>
                                       {typeof metric === 'string' ? metric : getLocalizedField(metric, i18n.language)}
                                     </li>
                                   )) : null
@@ -460,9 +460,9 @@ export const CareersPage: React.FC = () => {
                     <div>
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 font-heading">{job.title}</h3>
                       <div className="flex flex-wrap gap-4 text-slate-600 dark:text-zinc-400 font-light text-sm">
-                        <span className="flex items-center gap-1"><FaBriefcase className="text-blue-500" /> {job.department}</span>
-                        <span className="flex items-center gap-1"><FaMapMarkerAlt className="text-blue-500" /> {job.location}</span>
-                        <span className="flex items-center gap-1"><FaClock className="text-blue-500" /> {job.type}</span>
+                        <span className="flex items-center gap-1"><span className="text-blue-500"><FaBriefcase /></span> {job.department}</span>
+                        <span className="flex items-center gap-1"><span className="text-blue-500"><FaMapMarkerAlt /></span> {job.location}</span>
+                        <span className="flex items-center gap-1"><span className="text-blue-500"><FaClock /></span> {job.type}</span>
                       </div>
                     </div>
                     <Link to={getLocalizedPath(`/careers/${job.id}`)}>
@@ -611,12 +611,12 @@ export const TeamPage: React.FC = () => {
                       {Object.entries(member.social).map(([platform, url]) => {
                         if (!url) return null;
                         const icons = {
-                          linkedin: <FaLinkedin className="w-4 h-4" />,
-                          twitter: <FaTwitter className="w-4 h-4" />,
-                          github: <FaGithub className="w-4 h-4" />,
-                          dribbble: <FaDribbble className="w-4 h-4" />,
-                          instagram: <FaInstagram className="w-4 h-4" />,
-                          email: <FaEnvelope className="w-4 h-4" />
+                          linkedin: <span className="w-4 h-4 inline-flex"><FaLinkedin /></span>,
+                          twitter: <span className="w-4 h-4 inline-flex"><FaTwitter /></span>,
+                          github: <span className="w-4 h-4 inline-flex"><FaGithub /></span>,
+                          dribbble: <span className="w-4 h-4 inline-flex"><FaDribbble /></span>,
+                          instagram: <span className="w-4 h-4 inline-flex"><FaInstagram /></span>,
+                          email: <span className="w-4 h-4 inline-flex"><FaEnvelope /></span>
                         };
 
                         return (
@@ -766,7 +766,7 @@ export const BlogPage: React.FC = () => {
                   <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
                     <div className="flex items-center gap-3 mb-4">
                       <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">{featuredPost.category || 'Blog'}</span>
-                      <span className="text-slate-300 text-sm flex items-center gap-2"><FaClock className="w-3 h-3" /> {featuredPost.readTime}</span>
+                      <span className="text-slate-300 text-sm flex items-center gap-2"><span className="w-3 h-3"><FaClock /></span> {featuredPost.readTime}</span>
                     </div>
                     <h2 className="text-3xl md:text-5xl font-black text-white mb-4 font-heading leading-tight group-hover:text-blue-400 transition-colors">
                       {featuredPost.title}
@@ -803,7 +803,7 @@ export const BlogPage: React.FC = () => {
 
             {/* Search Bar */}
             <div className="relative w-full md:w-72">
-              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><FaSearch /></span>
               <input
                 type="text"
                 placeholder="Search articles..."
@@ -833,7 +833,7 @@ export const BlogPage: React.FC = () => {
                   <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                   <div className="relative z-10">
                     <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                      <FaMagnet className="w-8 h-8 text-white" />
+                      <span className="w-8 h-8 text-white"><FaMagnet /></span>
                     </div>
                     <h3 className="text-2xl font-bold mb-3 font-heading">
                       {getText('blog_settings.lead_magnet.title', lang) || "Free Growth Checklist"}
@@ -877,7 +877,7 @@ export const BlogPage: React.FC = () => {
                     </Link>
                     <div className="p-6 flex-grow flex flex-col">
                       <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
-                        <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-3"><FaClock /></span> {post.readTime}</span>
                         <span>{post.date}</span>
                       </div>
                       <Link to={getLocalizedPath(linkUrl)}>
@@ -886,7 +886,7 @@ export const BlogPage: React.FC = () => {
                       <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow line-clamp-3">{post.excerpt}</p>
                       <div className="mt-auto pt-4 border-t border-slate-100 dark:border-white/5">
                         <Link to={getLocalizedPath(linkUrl)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2 text-sm">
-                          {getText('blog_settings.labels.card_read_more', lang) || t('company.blog.card_read_more')} <FaArrowRight className="w-3 h-3" />
+                          {getText('blog_settings.labels.card_read_more', lang) || t('company.blog.card_read_more')} <span className="w-3 h-3"><FaArrowRight /></span>
                         </Link>
                       </div>
                     </div>
@@ -903,7 +903,7 @@ export const BlogPage: React.FC = () => {
               className="col-span-full py-20 text-center"
             >
               <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-100 dark:bg-white/5 rounded-full mb-6 text-slate-400 dark:text-zinc-500">
-                <FaSearch className="w-8 h-8" />
+                <span className="w-8 h-8"><FaSearch /></span>
               </div>
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 font-heading">No articles found</h3>
               <p className="text-slate-500 dark:text-zinc-400 text-lg mb-8 max-w-md mx-auto">

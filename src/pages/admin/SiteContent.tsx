@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { setDoc } from '../../lib/firestore-audit';
 import { Save, Loader2, Layout, LayoutTemplate, Globe, Info, Users, Briefcase, Phone, FileText, List, Sparkles, Box, Megaphone, Shield } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';

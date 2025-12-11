@@ -48,5 +48,30 @@ service cloud.firestore {
       allow create: if true;
       allow read, delete, update: if isAuthenticated();
     }
+
+    // Tasks: Authenticated only (Admin Dashboard)
+    match /tasks/{taskId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Audit Logs: Admin read/write
+    match /audit_logs/{logId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Time Entries: Authenticated read/write
+    match /time_entries/{entryId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Assets (Metadata for R2 files)
+    match /assets/{assetId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Folders (Hierarchy for Asset Library)
+    match /folders/{folderId} {
+      allow read, write: if isAuthenticated();
+    }
   }
 }

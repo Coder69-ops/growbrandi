@@ -9,6 +9,8 @@ interface AdminPageLayoutProps {
     actions?: React.ReactNode;
     showBack?: boolean;
     fullHeight?: boolean;
+    fullWidth?: boolean;
+    noPadding?: boolean;
 }
 
 export const AdminPageLayout: React.FC<AdminPageLayoutProps> = ({
@@ -17,14 +19,16 @@ export const AdminPageLayout: React.FC<AdminPageLayoutProps> = ({
     children,
     actions,
     showBack = false,
-    fullHeight = false
+    fullHeight = false,
+    fullWidth = false,
+    noPadding = false
 }) => {
     const navigate = useNavigate();
 
     return (
-        <div className={`mx-auto anime-fade-in relative z-10 ${fullHeight ? 'h-[calc(100vh-8rem)] flex flex-col' : 'space-y-8 max-w-7xl'}`}>
+        <div className={`mx-auto anime-fade-in relative z-10 ${fullHeight ? 'h-[calc(100vh-8rem)] flex flex-col' : `space-y-8 ${!fullWidth && 'max-w-7xl'}`}`}>
             {/* Header */}
-            <div className={`flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-200/60 dark:border-slate-800/60 flex-wrap ${fullHeight ? 'pb-6 shrink-0' : 'pb-8'}`}>
+            <div className={`flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-200/60 dark:border-slate-800/60 flex-wrap ${fullHeight || noPadding ? 'pb-6 shrink-0' : 'pb-8'} ${noPadding ? 'px-8 pt-8' : ''}`}>
                 <div className="flex items-start gap-5">
                     {showBack && (
                         <button
@@ -54,7 +58,7 @@ export const AdminPageLayout: React.FC<AdminPageLayoutProps> = ({
             </div>
 
             {/* Content */}
-            <div className={`relative ${fullHeight ? 'flex-1 min-h-0 overflow-hidden rounded-2xl border border-slate-200/50 dark:border-slate-700/50' : 'min-h-[600px]'}`}>
+            <div className={`relative ${fullHeight ? 'flex-1 min-h-0 overflow-hidden rounded-2xl border border-slate-200/50 dark:border-slate-700/50' : 'min-h-[600px]'} ${noPadding ? '' : ''}`}>
                 {children}
             </div>
         </div>

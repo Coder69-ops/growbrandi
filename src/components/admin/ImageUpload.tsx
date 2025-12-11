@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { storage } from '../../lib/storage'; // Switched to local R2 storage service
-import { Upload, X, Loader2 } from 'lucide-react';
+import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { AssetPickerModal } from './assets/AssetPickerModal';
 
 interface ImageUploadProps {
     label: string;
@@ -17,6 +18,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,40 +75,53 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                 {label}
             </label>
 
-            {value ? (
-                <div className="relative inline-block">
-                    <img
-                        src={value}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
-                    />
-                    <button
-                        type="button"
-                        onClick={handleRemove}
-                        className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                    >
-                        <X size={14} />
-                    </button>
-                </div>
-            ) : (
-                <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors ${uploading ? 'pointer-events-none' : ''
-                        }`}
-                >
-                    {uploading ? (
-                        <>
-                            <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                            <span className="text-xs text-gray-500 mt-2">{Math.round(progress)}%</span>
-                        </>
-                    ) : (
-                        <>
-                            <Upload className="w-6 h-6 text-gray-400" />
-                            <span className="text-xs text-gray-500 mt-2">Upload</span>
-                        </>
-                    )}
-                </div>
-            )}
+            <div className="flex gap-4 items-start">
+                {value ? (
+                    <div className="relative inline-block">
+                        <img
+                            src={value}
+                            alt="Preview"
+                            className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleRemove}
+                            className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                    </div>
+                ) : (
+                    <div className="flex gap-2">
+                        <div
+                            onClick={() => fileInputRef.current?.click()}
+                            className={`w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors ${uploading ? 'pointer-events-none' : ''}`}
+                            title="Upload from Device"
+                        >
+                            {uploading ? (
+                                <>
+                                    <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                                    <span className="text-xs text-slate-500 mt-2">{Math.round(progress)}%</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Upload className="w-6 h-6 text-slate-400" />
+                                    <span className="text-xs text-slate-500 mt-2 text-center px-2">Upload Device</span>
+                                </>
+                            )}
+                        </div>
+
+                        <div
+                            onClick={() => setIsPickerOpen(true)}
+                            className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10 transition-colors"
+                            title="Select from Library"
+                        >
+                            <ImageIcon className="w-6 h-6 text-slate-400" />
+                            <span className="text-xs text-slate-500 mt-2 text-center px-2">Select Library</span>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             <input
                 ref={fileInputRef}
@@ -117,15 +132,23 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
             />
 
             {/* Fallback: Manual URL input */}
-            <div className="mt-2">
-                <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder="Or paste image URL..."
-                    className="w-full p-2 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
-            </div>
+            {!value && (
+                <div className="mt-2">
+                    <input
+                        type="text"
+                        value={value}
+                        onChange={(e) => onChange(e.target.value)}
+                        placeholder="Or paste image URL..."
+                        className="w-full p-2 text-sm border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    />
+                </div>
+            )}
+
+            <AssetPickerModal
+                isOpen={isPickerOpen}
+                onClose={() => setIsPickerOpen(false)}
+                onSelect={(url) => { onChange(url); setIsPickerOpen(false); }}
+            />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 // import { FAQ_DATA } from '../../../constants'; (removed)
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, ChevronDown, HelpCircle, MessageCircle, Sparkles, FileText } from 'lucide-react';
 
@@ -12,7 +13,7 @@ import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService';
 
 const AdminFAQs = () => {
     const [faqs, setFaqs] = useState<any[]>([]);
@@ -63,7 +64,8 @@ const AdminFAQs = () => {
         if (!window.confirm("Delete this FAQ?")) return;
         try {
             await deleteDoc(doc(db, 'faqs', id));
-            await logAction('delete', 'faqs', `Deleted FAQ: ${id}`, { faqId: id });
+            await deleteDoc(doc(db, 'faqs', id));
+            // await logAction('delete', 'faqs', `Deleted FAQ: ${id}`, { faqId: id });
             showSuccess('FAQ Deleted', 'The FAQ has been deleted.');
             setFaqs(faqs.filter(f => f.id !== id));
         } catch (error) {
@@ -80,12 +82,13 @@ const AdminFAQs = () => {
             if (currentFAQ.id) {
                 const { id, ...rest } = data;
                 await updateDoc(doc(db, 'faqs', id), rest);
-                await logAction('update', 'faqs', `Updated FAQ: ${data.question?.en || 'Unknown'}`, { faqId: id });
+                await updateDoc(doc(db, 'faqs', id), rest);
+                // await logAction('update', 'faqs', `Updated FAQ: ${data.question?.en || 'Unknown'}`, { faqId: id });
             } else {
                 data.createdAt = serverTimestamp();
                 data.order = faqs.length + 1;
                 const docRef = await addDoc(collection(db, 'faqs'), data);
-                await logAction('create', 'faqs', `Created FAQ: ${data.question?.en || 'Unknown'}`, { faqId: docRef.id });
+                // await logAction('create', 'faqs', `Created FAQ: ${data.question?.en || 'Unknown'}`, { faqId: docRef.id });
             }
             await fetchFAQs();
             setIsEditing(false);

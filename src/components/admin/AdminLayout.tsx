@@ -24,7 +24,11 @@ import {
     Shield,
     BookOpen,
     Target,
-    History
+    History,
+    Zap,
+    MessageSquare,
+    Kanban,
+    Clock
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -44,6 +48,8 @@ const AdminLayout = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+
+
     const user = currentUser as any;
     const displayName = user?.displayName || user?.email?.split('@')[0] || 'Admin';
     const role = user?.jobTitle || user?.role || 'Admin';
@@ -51,6 +57,14 @@ const AdminLayout = () => {
 
     const handleLogout = async () => {
         try {
+            // Log logout action
+            try {
+                const { logAction } = await import('../../services/auditService');
+                await logAction('logout', 'auth', 'User logged out', { user: currentUser?.email });
+            } catch (err) {
+                console.warn("Failed to log logout:", err);
+            }
+
             // Set a flag in session storage so Login page knows we just logged out intentionally
             sessionStorage.setItem('logoutMessage', 'Successfully logged out');
             await signOut(auth);
@@ -67,13 +81,18 @@ const AdminLayout = () => {
         { path: '/admin/blog', icon: BookOpen, label: 'Blog', permission: 'manage_content' },
         { path: '/admin/jobs', icon: Target, label: 'Jobs', permission: 'manage_content' },
         { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
-        { path: '/admin/team', icon: Users, label: 'Public Team', permission: 'manage_team_profiles' },
+        { path: '/admin/team', icon: Users, label: 'Team', permission: 'manage_team_profiles' },
+        { path: '/admin/work', icon: Kanban, label: 'Work Board', permission: 'manage_content' },
+        { path: '/admin/timesheet', icon: Clock, label: 'Time Tracking', permission: 'manage_content' },
+        { path: '/admin/assets', icon: FolderKanban, label: 'Asset Library', permission: 'manage_content' },
         { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
         { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
         { path: '/admin/contact-settings', icon: Contact, label: 'Contact Settings', permission: 'manage_settings' },
         { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' },
-        { path: '/admin/messages', icon: Mail, label: 'Messages', permission: 'view_messages' },
+        { path: '/admin/messages', icon: Mail, label: 'Inquiries', permission: 'view_messages' },
+        { path: '/admin/chat', icon: MessageSquare, label: 'Team Chat', permission: 'view_messages' },
         { path: '/admin/audit', icon: History, label: 'Audit Logs', permission: 'view_logs' },
+        { path: '/admin/online-users', icon: Zap, label: 'Online Users', permission: 'view_users' },
         { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
         { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
     ];
@@ -228,7 +247,7 @@ const AdminLayout = () => {
                             </button>
 
                             {/* User Avatar - Image or Initials */}
-                            <div className="relative group cursor-pointer">
+                            <Link to="/admin/profile" className="relative group cursor-pointer block">
                                 {user?.photoURL ? (
                                     <div className="w-10 h-10 rounded-full p-0.5 bg-gradient-to-tr from-blue-600 to-purple-600 shadow-md hover:scale-105 transition-transform">
                                         <div className="w-full h-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center overflow-hidden border-2 border-white dark:border-slate-800">
@@ -244,7 +263,7 @@ const AdminLayout = () => {
                                         {initials}
                                     </button>
                                 )}
-                            </div>
+                            </Link>
 
                             <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
                             <ThemeToggle />

@@ -58,8 +58,12 @@ import ProtectedRoute from './src/components/admin/ProtectedRoute';
 import AdminLogin from './src/pages/admin/Login';
 import AdminLayout from './src/components/admin/AdminLayout';
 import AdminDashboard from './src/pages/admin/Dashboard';
-import AdminProjects from './src/pages/admin/Projects';
-import AdminTeam from './src/pages/admin/Team';
+const AdminProjects = React.lazy(() => import('./src/pages/admin/Projects'));
+const AdminTeam = React.lazy(() => import('./src/pages/admin/Team'));
+const AdminTasks = React.lazy(() => import('./src/pages/admin/Tasks'));
+const Timesheet = React.lazy(() => import('./src/pages/admin/Timesheet'));
+const AdminAssets = React.lazy(() => import('./src/pages/admin/Assets'));
+const AdminBlog = React.lazy(() => import('./src/pages/admin/Blog'));
 import AdminServices from './src/pages/admin/Services';
 import AdminTestimonials from './src/pages/admin/Testimonials';
 import AdminFAQs from './src/pages/admin/FAQs';
@@ -68,11 +72,12 @@ import AdminSeedData from './src/pages/admin/SeedData';
 import AdminSiteContent from './src/pages/admin/SiteContent';
 import AdminContactSettings from './src/pages/admin/ContactSettings';
 import AdminMessages from './src/pages/admin/Messages';
+import AdminChat from './src/pages/admin/Chat';
 import AdminTeamManagement from './src/pages/admin/TeamManagement';
-import AdminBlog from './src/pages/admin/Blog';
 import AdminJobs from './src/pages/admin/Jobs';
 import AdminAuditLog from './src/pages/admin/AuditLog';
-
+import AdminOnlineUsers from './src/pages/admin/OnlineUsers';
+import AdminProfile from './src/pages/admin/Profile';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
@@ -344,11 +349,6 @@ ${servicesDetails}
             <AnimatePresence mode="wait">
               <Routes
                 location={location}
-                key={
-                  currentPath.startsWith('/admin') && !currentPath.includes('/login')
-                    ? 'admin-shell'
-                    : currentPath
-                }
               >
                 {/* Root Redirect */}
                 <Route path="/" element={<RootRedirect />} />
@@ -407,10 +407,16 @@ ${servicesDetails}
                     <Route path="site-content" element={<AdminSiteContent />} />
                     <Route path="contact-settings" element={<AdminContactSettings />} />
                     <Route path="messages" element={<AdminMessages />} />
+                    <Route path="chat" element={<AdminChat />} />
+                    <Route path="work" element={<AdminTasks />} />
+                    <Route path="timesheet" element={<Timesheet />} />
+                    <Route path="assets" element={<AdminAssets />} />
                     <Route path="team-management" element={<AdminTeamManagement />} />
                     <Route path="blog" element={<AdminBlog />} />
                     <Route path="jobs" element={<AdminJobs />} />
                     <Route path="audit" element={<AdminAuditLog />} />
+                    <Route path="online-users" element={<AdminOnlineUsers />} />
+                    <Route path="profile" element={<AdminProfile />} />
                   </Route>
                 </Route>
               </Routes>

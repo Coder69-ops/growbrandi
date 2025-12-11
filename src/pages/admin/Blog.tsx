@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 import { useAuth } from '../../context/AuthContext';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
@@ -11,7 +12,7 @@ import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { LanguageTabs, LocalizedInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
 import { getLocalizedField, ensureLocalizedFormat, SupportedLanguage } from '../../utils/localization';
 import { ImageUpload } from '../../components/admin/ImageUpload';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService';
 
 const AdminBlog = () => {
     const [posts, setPosts] = useState<any[]>([]);
@@ -63,7 +64,8 @@ const AdminBlog = () => {
         if (!window.confirm("Are you sure you want to delete this post?")) return;
         try {
             await deleteDoc(doc(db, 'blog_posts', id));
-            await logAction('delete', 'blog', `Deleted blog post: ${id}`, { postId: id });
+            await deleteDoc(doc(db, 'blog_posts', id));
+            // await logAction('delete', 'blog', `Deleted blog post: ${id}`, { postId: id });
             showSuccess('Post Deleted', 'The blog post has been permanently deleted.');
             setPosts(posts.filter(p => p.id !== id));
         } catch (error) {
@@ -94,12 +96,13 @@ const AdminBlog = () => {
             if (currentPost.id) {
                 const { id, ...data } = postData;
                 await updateDoc(doc(db, 'blog_posts', id), data);
-                await logAction('update', 'blog', `Updated blog post: ${data.title?.en || 'Untitled'}`, { postId: id, status: data.status });
+                await updateDoc(doc(db, 'blog_posts', id), data);
+                // await logAction('update', 'blog', `Updated blog post: ${data.title?.en || 'Untitled'}`, { postId: id, status: data.status });
                 showSuccess('Post Updated', 'The blog post has been successfully updated.');
             } else {
                 postData.createdAt = serverTimestamp();
                 const docRef = await addDoc(collection(db, 'blog_posts'), postData);
-                await logAction('create', 'blog', `Created new blog post: ${postData.title?.en || 'Untitled'}`, { postId: docRef.id });
+                // await logAction('create', 'blog', `Created new blog post: ${postData.title?.en || 'Untitled'}`, { postId: docRef.id });
                 showSuccess('Post Created', 'New blog post has been successfully created.');
             }
             await fetchPosts();

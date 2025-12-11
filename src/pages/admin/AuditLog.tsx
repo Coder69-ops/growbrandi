@@ -52,6 +52,8 @@ const AuditLog = () => {
             case 'create': return 'text-emerald-600 bg-emerald-50 border-emerald-200';
             case 'update': return 'text-blue-600 bg-blue-50 border-blue-200';
             case 'delete': return 'text-red-600 bg-red-50 border-red-200';
+            case 'login': return 'text-violet-600 bg-violet-50 border-violet-200';
+            case 'logout': return 'text-slate-600 bg-slate-50 border-slate-200';
             default: return 'text-slate-600 bg-slate-50 border-slate-200';
         }
     };
@@ -82,6 +84,7 @@ const AuditLog = () => {
                             className="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
                         >
                             <option value="all">All Modules</option>
+                            <option value="auth">Authentication</option>
                             <option value="blog">Blog</option>
                             <option value="services">Services</option>
                             <option value="site_content">Site Content</option>

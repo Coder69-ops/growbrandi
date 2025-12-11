@@ -78,8 +78,11 @@ const QuickAction = ({ title, description, to, icon: Icon }: any) => (
 
 const AdminDashboard = () => {
     const { currentUser } = useAuth();
-    const userRole = (currentUser as any)?.jobTitle || (currentUser as any)?.role || 'Admin';
-    const userName = (currentUser as any)?.displayName || currentUser?.email?.split('@')[0] || 'User';
+    const [userProfile, setUserProfile] = useState<{ name: string; role: string; image: string | null }>({
+        name: (currentUser as any)?.displayName || currentUser?.email?.split('@')[0] || 'User',
+        role: (currentUser as any)?.jobTitle || (currentUser as any)?.role || 'Admin',
+        image: currentUser?.photoURL || null
+    });
 
     const [counts, setCounts] = useState({
         projects: 0,
@@ -107,6 +110,34 @@ const AdminDashboard = () => {
                     team: teamSnap.size,
                     testimonials: testimonialsSnap.size
                 });
+
+                // Find matching team member for profile
+                if (currentUser?.email) {
+                    const normalize = (str: string) => str?.toLowerCase().trim() || '';
+                    const userEmail = normalize(currentUser.email);
+                    const userName = normalize((currentUser as any)?.displayName || '');
+
+                    const matchingMember = teamSnap.docs.find(doc => {
+                        const data = doc.data();
+                        const teamEmail = normalize(data.social?.email);
+                        const teamName = normalize(data.name);
+
+                        const emailMatch = teamEmail === userEmail;
+                        const nameMatch = userName && teamName && teamName.includes(userName); // Loose name matching
+
+                        return emailMatch || nameMatch;
+                    });
+
+                    if (matchingMember) {
+                        const data = matchingMember.data();
+
+                        setUserProfile({
+                            name: data.name || userProfile.name,
+                            role: getLocalizedField(data.role, 'en') || userProfile.role,
+                            image: data.image || userProfile.image
+                        });
+                    }
+                }
 
                 // Fetch Recent Activity
                 // Messages
@@ -164,7 +195,7 @@ const AdminDashboard = () => {
         };
 
         fetchDashboardData();
-    }, []);
+    }, [currentUser]);
 
     const stats = [
         {
@@ -237,7 +268,7 @@ const AdminDashboard = () => {
                         Overview
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 mt-1 font-light text-lg">
-                        Welcome back, <span className="font-semibold text-blue-600 dark:text-blue-400">{userName}</span>!
+                        Welcome back, <span className="font-semibold text-blue-600 dark:text-blue-400">{userProfile.name}</span>!
                     </p>
                 </div>
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-sm">
@@ -256,18 +287,18 @@ const AdminDashboard = () => {
                     <div className="flex items-center gap-5">
                         <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm p-1 border-2 border-white/50 shadow-inner">
                             <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center overflow-hidden">
-                                {currentUser?.photoURL ? (
-                                    <img src={currentUser.photoURL} alt={userName} className="w-full h-full object-cover" />
+                                {userProfile.image ? (
+                                    <img src={userProfile.image} alt={userProfile.name} className="w-full h-full object-cover" />
                                 ) : (
-                                    <span className="text-2xl font-bold">{userName[0]?.toUpperCase()}</span>
+                                    <span className="text-2xl font-bold">{userProfile.name[0]?.toUpperCase()}</span>
                                 )}
                             </div>
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <h2 className="text-2xl font-bold">{userName}</h2>
+                                <h2 className="text-2xl font-bold">{userProfile.name}</h2>
                                 <span className="px-2 py-0.5 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider border border-white/10">
-                                    {userRole}
+                                    {userProfile.role}
                                 </span>
                             </div>
                             <p className="text-blue-100 flex items-center gap-2 opacity-90">

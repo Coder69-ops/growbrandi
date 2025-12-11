@@ -67,7 +67,7 @@ const JobDetailsPage: React.FC = () => {
                         onClick={() => navigate(getLocalizedPath('/careers'))}
                         className="flex items-center gap-2 text-slate-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8 group"
                     >
-                        <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="group-hover:-translate-x-1 transition-transform"><FaArrowLeft /></span>
                         {t('common.back', 'Back to Careers')}
                     </button>
 
@@ -78,9 +78,9 @@ const JobDetailsPage: React.FC = () => {
                                     {title}
                                 </h1>
                                 <div className="flex flex-wrap gap-4 text-slate-600 dark:text-zinc-400 font-light text-sm">
-                                    <span className="flex items-center gap-1"><FaBriefcase className="text-blue-500" /> {job.department}</span>
-                                    <span className="flex items-center gap-1"><FaMapMarkerAlt className="text-blue-500" /> {job.location}</span>
-                                    <span className="flex items-center gap-1"><FaClock className="text-blue-500" /> {job.type}</span>
+                                    <span className="flex items-center gap-1"><span className="text-blue-500"><FaBriefcase /></span> {job.department}</span>
+                                    <span className="flex items-center gap-1"><span className="text-blue-500"><FaMapMarkerAlt /></span> {job.location}</span>
+                                    <span className="flex items-center gap-1"><span className="text-blue-500"><FaClock /></span> {job.type}</span>
                                 </div>
                             </div>
                             <button

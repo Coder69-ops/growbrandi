@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 
 interface AuthContextType {
     currentUser: User | null;
@@ -14,50 +15,75 @@ const AuthContext = createContext<AuthContextType>({
 
 export const useAuth = () => useContext(AuthContext);
 
+import { usePresence } from '../hooks/usePresence';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+
+    // Enable realtime presence tracking
+    usePresence(currentUser);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // Fetch user profile from Firestore
                 try {
-                    // Dynamic import to avoid circular dependency issues if any
-                    const { doc, getDoc } = await import('firebase/firestore');
-                    const { db } = await import('../lib/firebase');
+                    // Imports moved to top
 
-                    const userDoc = await getDoc(doc(db, 'users', user.uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        let jobTitle = null;
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const userDocSnap = await getDoc(userDocRef);
 
-                        // If linked to a team member, fetch their public profile for the job title
-                        if (userData.teamMemberId) {
-                            try {
-                                const teamMemberDoc = await getDoc(doc(db, 'team_members', userData.teamMemberId));
-                                if (teamMemberDoc.exists()) {
-                                    // Get English role or first available
-                                    const roleData = teamMemberDoc.data().role;
-                                    jobTitle = typeof roleData === 'string' ? roleData : (roleData?.en || Object.values(roleData || {})[0]);
+                    let enhancedUser: any = { ...user };
 
-                                    // Map team member image to photoURL
-                                    if (teamMemberDoc.data().image) {
-                                        (userData as any).photoURL = teamMemberDoc.data().image;
-                                    }
-                                }
-                            } catch (err) {
-                                console.error("Error fetching linked team member:", err);
-                            }
-                        }
-
-                        // enhanced user object
-                        setCurrentUser({ ...user, ...userData, jobTitle } as any);
-                    } else {
-                        // Fallback if no firestore doc (e.g. legacy or direct auth)
-                        // We still allow login, but they might have no permissions
-                        setCurrentUser(user);
+                    if (userDocSnap.exists()) {
+                        const userData = userDocSnap.data();
+                        const jobTitle = userData?.jobTitle || null;
+                        enhancedUser = { ...enhancedUser, ...userData, jobTitle };
                     }
+
+                    // Attempt to fetch from team_members for richer profile (role, image)
+                    // We fetch all members to ensure robust case-insensitive matching, matching Dashboard logic
+                    if (user.email) {
+
+                        // Fetch all members (optimization: could limit fields, but list is small)
+                        const teamSnap = await getDocs(collection(db, 'team_members'));
+
+                        const normalize = (str: string) => str?.toLowerCase().trim() || '';
+                        const userEmail = normalize(user.email);
+                        const userName = normalize(user.displayName || '');
+
+                        const matchedMember = teamSnap.docs.find(doc => {
+                            const data = doc.data();
+                            const teamEmail = normalize(data.social?.email);
+                            const teamName = normalize(data.name);
+
+                            const emailMatch = teamEmail === userEmail;
+                            const nameMatch = userName && teamName && teamName.includes(userName);
+
+                            return emailMatch || nameMatch;
+                        });
+
+                        if (matchedMember) {
+                            const teamData = matchedMember.data();
+
+                            // Helper to safely get English role
+                            const roleEn = typeof teamData.role === 'object' ? teamData.role?.en : teamData.role;
+
+                            enhancedUser = {
+                                ...enhancedUser,
+                                displayName: teamData.name || enhancedUser.displayName,
+                                photoURL: teamData.image || enhancedUser.photoURL,
+                                role: roleEn || enhancedUser.role || 'Admin',
+                                jobTitle: roleEn || enhancedUser.jobTitle || 'Admin',
+                                teamId: matchedMember.id
+                            };
+                        } else {
+                            // No matching team member found for", user.email
+                        }
+                    }
+
+                    setCurrentUser(enhancedUser as any);
                 } catch (error) {
                     console.error("Error fetching user profile:", error);
                     setCurrentUser(user);

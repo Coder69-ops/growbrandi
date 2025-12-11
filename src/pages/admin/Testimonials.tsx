@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 import { Plus, Edit2, Trash2, Save, X, MessageSquare, Star, ArrowLeft, User, Quote } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
@@ -12,7 +13,7 @@ import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService';
 
 const AdminTestimonials = () => {
     const [testimonials, setTestimonials] = useState<any[]>([]);
@@ -45,7 +46,8 @@ const AdminTestimonials = () => {
         if (!window.confirm("Are you sure you want to delete this testimonial?")) return;
         try {
             await deleteDoc(doc(db, 'testimonials', id));
-            await logAction('delete', 'testimonials', `Deleted testimonial: ${id}`, { testimonialId: id });
+            await deleteDoc(doc(db, 'testimonials', id));
+            // await logAction('delete', 'testimonials', `Deleted testimonial: ${id}`, { testimonialId: id });
             showSuccess('Testimonial Deleted', 'Testimonial deleted successfully.');
             setTestimonials(testimonials.filter(t => t.id !== id));
         } catch (error) {
@@ -68,13 +70,14 @@ const AdminTestimonials = () => {
             if (currentTestimonial.id) {
                 const { id, ...data } = testimonialData;
                 await updateDoc(doc(db, 'testimonials', id), data);
-                await logAction('update', 'testimonials', `Updated testimonial by: ${data.author?.en || 'Unknown'}`, { testimonialId: id });
+                await updateDoc(doc(db, 'testimonials', id), data);
+                // await logAction('update', 'testimonials', `Updated testimonial by: ${data.author?.en || 'Unknown'}`, { testimonialId: id });
                 showSuccess('Testimonial Updated', 'Testimonial updated successfully.');
             } else {
                 testimonialData.createdAt = serverTimestamp();
                 testimonialData.order = testimonials.length + 1;
                 const docRef = await addDoc(collection(db, 'testimonials'), testimonialData);
-                await logAction('create', 'testimonials', `Created testimonial by: ${testimonialData.author?.en || 'Unknown'}`, { testimonialId: docRef.id });
+                // await logAction('create', 'testimonials', `Created testimonial by: ${testimonialData.author?.en || 'Unknown'}`, { testimonialId: docRef.id });
             }
             await fetchTestimonials();
             setIsEditing(false);

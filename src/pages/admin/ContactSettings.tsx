@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { setDoc } from '../../lib/firestore-audit';
 import { Save, Mail, Phone, MapPin, Loader2, MessageSquare, FormInput, AtSign, Clock } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
 import { SupportedLanguage, createEmptyLocalizedString } from '../../utils/localization';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
@@ -72,7 +73,7 @@ const AdminContactSettings = () => {
                 ...settings,
                 updatedAt: serverTimestamp(),
             });
-            await logAction('update', 'contact', 'Updated contact settings details');
+            // await logAction('update', 'contact', 'Updated contact settings details');
             showSuccess('Settings Saved', 'Contact settings saved successfully!');
         } catch (error) {
             console.error('Error saving contact settings:', error);

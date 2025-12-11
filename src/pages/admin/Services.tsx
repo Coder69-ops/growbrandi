@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Briefcase, List, DollarSign, Check } from 'lucide-react';
 import * as FaIcons from 'react-icons/fa';
 
@@ -13,7 +14,7 @@ import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
 import { Sparkles } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService'; // Removed manual logging
 
 // Icon Picker Component
 const IconPicker = ({ value, onChange }: { value: string, onChange: (icon: string) => void }) => {
@@ -198,7 +199,8 @@ const AdminServices = () => {
         if (!window.confirm("Are you sure you want to delete this service?")) return;
         try {
             await deleteDoc(doc(db, 'services', id));
-            await logAction('delete', 'services', `Deleted service: ${id}`, { serviceId: id });
+            await deleteDoc(doc(db, 'services', id));
+            // await logAction('delete', 'services', `Deleted service: ${id}`, { serviceId: id }); // Handled by wrapper
             showSuccess('Service Deleted', 'The service has been permanently deleted.');
             setServices(services.filter(s => s.id !== id));
         } catch (error) {
@@ -219,13 +221,14 @@ const AdminServices = () => {
             if (currentService.id) {
                 const { id, ...data } = serviceData;
                 await updateDoc(doc(db, 'services', id), data);
-                await logAction('update', 'services', `Updated service: ${data.title?.en || 'Untitled'}`, { serviceId: id });
+                await updateDoc(doc(db, 'services', id), data);
+                // await logAction('update', 'services', `Updated service: ${data.title?.en || 'Untitled'}`, { serviceId: id });
                 showSuccess('Service Updated', 'The service has been successfully updated.');
             } else {
                 serviceData.createdAt = serverTimestamp();
                 serviceData.order = services.length + 1;
                 const docRef = await addDoc(collection(db, 'services'), serviceData);
-                await logAction('create', 'services', `Created service: ${serviceData.title?.en || 'Untitled'}`, { serviceId: docRef.id });
+                // await logAction('create', 'services', `Created service: ${serviceData.title?.en || 'Untitled'}`, { serviceId: docRef.id });
                 showSuccess('Service Created', 'New service has been successfully created.');
             }
             await fetchServices();

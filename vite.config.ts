@@ -23,7 +23,9 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY),
-      'import.meta.env.VITE_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY)
+      'import.meta.env.VITE_API_KEY': JSON.stringify(env.VITE_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY),
+      'process.env.OPENROUTER_API_KEY2': JSON.stringify(env.OPENROUTER_API_KEY2 || process.env.OPENROUTER_API_KEY2),
+      'import.meta.env.VITE_OPENROUTER_API_KEY2': JSON.stringify(env.VITE_OPENROUTER_API_KEY2 || process.env.VITE_OPENROUTER_API_KEY2)
     },
     resolve: {
       alias: {

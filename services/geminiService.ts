@@ -1,6 +1,7 @@
 import { GoogleGenAI, Chat, Type } from "@google/genai";
 import { db } from "../src/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { streamOpenRouter, generateStructuredResponse } from "./openRouterService";
 // import { SERVICES, COMPANY_STATS, TESTIMONIALS } from "../constants"; // Removed
 
 // Chat interface adapter to maintain compatibility  
@@ -38,8 +39,16 @@ export class ChatAdapter {
             // The @google/genai package may have different streaming API
             yield { text: response.text };
         } catch (error) {
-            console.error('Gemini API error:', error);
-            throw error;
+            console.warn('Gemini API error, falling back to OpenRouter:', error);
+            // Fallback to OpenRouter
+            try {
+                for await (const chunk of streamOpenRouter(message)) {
+                    yield chunk;
+                }
+            } catch (fallbackError) {
+                console.error('OpenRouter fallback also failed:', fallbackError);
+                throw new Error('Both Gemini and OpenRouter APIs failed');
+            }
         }
     }
 }
@@ -63,11 +72,12 @@ export const initializeChat = (systemInstruction: string): ChatAdapter | null =>
 
 export const generateSlogan = async (keywords: string): Promise<string[]> => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
 
     try {
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
+
         const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -93,8 +103,21 @@ export const generateSlogan = async (keywords: string): Promise<string[]> => {
         return [];
 
     } catch (error) {
-        console.error("Failed to generate slogan:", error);
-        throw new Error("Could not generate slogans at this time.");
+        console.warn("Gemini failed to generate slogan, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            const prompt = `Generate 3 creative, witty, and memorable brand slogans based on these keywords: "${keywords}". Return a JSON object with a "slogans" array containing exactly 3 slogans.`;
+            const result = await generateStructuredResponse<{ slogans: string[] }>(prompt);
+
+            if (result.slogans && Array.isArray(result.slogans)) {
+                return result.slogans;
+            }
+            return [];
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate slogans at this time.");
+        }
     }
 };
 
@@ -108,57 +131,59 @@ export const estimateProject = async (requirements: {
     serviceContext?: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
+
+    // Fetch dynamic context (needed for both Gemini and OpenRouter)
+    const servicesSnap = await getDocs(collection(db, "services"));
+    const servicesData = servicesSnap.docs.map(d => d.data());
+    const pricingContext = servicesData.map((s: any) =>
+        `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
+    ).join('\n');
+
+    const testimonialsSnap = await getDocs(collection(db, "testimonials"));
+    const testimonialsData = testimonialsSnap.docs.map(d => d.data());
+    const socialProofContext = `
+    GrowBrandi has completed 150+ projects with 50+ happy clients.
+    Key Testimonial: "${testimonialsData[0]?.quote?.en || "Great service!"}" - ${testimonialsData[0]?.author || "Happy Client"}
+    `;
+
+    const promptContent = `As a senior sales engineer at GrowBrandi (a premium digital growth agency), provide a persuasive project estimation for:
+    Project Type: ${requirements.projectType}
+    Features: ${requirements.features.join(', ')}
+    Timeline: ${requirements.timeline}
+    Budget: ${requirements.budget}
+    Industry: ${requirements.industry}
+    Specific Service Context: ${requirements.serviceContext || 'General Project'}
+    
+    CONTEXT:
+    Pricing:
+    ${pricingContext}
+    
+    Social Proof:
+    ${socialProofContext}
+
+    INSTRUCTIONS:
+    1. Analyze the client's budget vs our standard pricing.
+    2. CRITICAL: If the client's budget is LOWER than our standard price, provide an estimate that is CLOSE to their entered budget (e.g., slightly higher or a range starting near their budget) to keep them interested. DO NOT quote the full standard price if it creates a sticker shock.
+    3. If the budget is reasonable, lean towards the lower end of our standard range.
+    4. MANDATORY: Professionally state that "This is a preliminary estimate. Final pricing is flexible and depends on your specific scope and requirements."
+    5. KEEP "estimatedCost" VERY SHORT (e.g., "$3k - $5k").
+    6. Use a professional, confident, and persuasive tone.
+    7. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
+    8. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
+    9. In "Recommendations", specifically mention GrowBrandi services related to "${requirements.serviceContext || 'the project'}".
+    10. Generate an "executiveSummary" (2-3 sentences) that explains the estimate professionally and encourages the next step.
+    
+    Return a JSON object with: estimatedCost, executiveSummary, estimatedTimeline, recommendedServices (array), costBreakdown (array of {service, cost, description}), recommendations (array), potentialChallenges (array), nextSteps (array).`;
 
     try {
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
+
         const ai = new GoogleGenAI({ apiKey });
-
-        // Fetch dynamic context
-        const servicesSnap = await getDocs(collection(db, "services"));
-        const servicesData = servicesSnap.docs.map(d => d.data());
-        const pricingContext = servicesData.map((s: any) =>
-            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
-        ).join('\n');
-
-        const testimonialsSnap = await getDocs(collection(db, "testimonials"));
-        const testimonialsData = testimonialsSnap.docs.map(d => d.data());
-        const socialProofContext = `
-        GrowBrandi has completed 150+ projects with 50+ happy clients.
-        Key Testimonial: "${testimonialsData[0]?.quote?.en || "Great service!"}" - ${testimonialsData[0]?.author || "Happy Client"}
-        `;
-
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `As a senior sales engineer at GrowBrandi (a premium digital growth agency), provide a persuasive project estimation for:
-            Project Type: ${requirements.projectType}
-            Features: ${requirements.features.join(', ')}
-            Timeline: ${requirements.timeline}
-            Budget: ${requirements.budget}
-            Industry: ${requirements.industry}
-            Specific Service Context: ${requirements.serviceContext || 'General Project'}
-            
-            CONTEXT:
-            Pricing:
-            ${pricingContext}
-            
-            Social Proof:
-            ${socialProofContext}
-
-            INSTRUCTIONS:
-            1. Analyze the client's budget vs our standard pricing.
-            2. CRITICAL: If the client's budget is LOWER than our standard price, provide an estimate that is CLOSE to their entered budget (e.g., slightly higher or a range starting near their budget) to keep them interested. DO NOT quote the full standard price if it creates a sticker shock.
-            3. If the budget is reasonable, lean towards the lower end of our standard range.
-            4. MANDATORY: Professionally state that "This is a preliminary estimate. Final pricing is flexible and depends on your specific scope and requirements."
-            5. KEEP "estimatedCost" VERY SHORT (e.g., "$3k - $5k").
-            6. Use a professional, confident, and persuasive tone.
-            7. Highlight how GrowBrandi's expertise (150+ projects, 50+ happy clients) mitigates risks.
-            8. Frame "Potential Challenges" as opportunities for GrowBrandi to help.
-            9. In "Recommendations", specifically mention GrowBrandi services related to "${requirements.serviceContext || 'the project'}".
-            10. Generate an "executiveSummary" (2-3 sentences) that explains the estimate professionally and encourages the next step.
-            
-            The output must be only the JSON object.`,
+            contents: promptContent,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -201,8 +226,15 @@ export const estimateProject = async (requirements: {
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to estimate project:", error);
-        throw new Error("Could not generate project estimation at this time.");
+        console.warn("Gemini failed to estimate project, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse(promptContent);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate project estimation at this time.");
+        }
     }
 };
 
@@ -215,50 +247,52 @@ export const recommendServices = async (businessInfo: {
     timeline: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
+
+    // Fetch dynamic context (needed for both Gemini and OpenRouter)
+    const servicesSnap = await getDocs(collection(db, "services"));
+    const servicesData = servicesSnap.docs.map(d => d.data());
+    const pricingContext = servicesData.map((s: any) =>
+        `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
+    ).join('\n');
+
+    const socialProofContext = `
+    GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
+    `;
+
+    const promptContent = `Act as a strategic growth consultant for GrowBrandi. Recommend digital services for: 
+    Industry: ${businessInfo.industry}, 
+    Challenges: ${businessInfo.currentChallenges.join(', ')}
+    Goals: ${businessInfo.goals.join(', ')}
+    Budget: ${businessInfo.budget}
+    Timeline: ${businessInfo.timeline}
+
+    CONTEXT:
+    Pricing:
+    ${pricingContext}
+    
+    Social Proof:
+    ${socialProofContext}
+
+    INSTRUCTIONS:
+    1. Recommend specific GrowBrandi services that directly solve the user's challenges.
+    2. Base estimated costs STRICTLY on the provided pricing.
+    3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise). Keep it concise (max 15 words).
+    4. Focus on ROI and business outcomes.
+    5. Keep "expectedOutcome" concise (max 15 words).
+    6. Keep "executiveSummary" to 2-3 sentences max.
+    7. Keep all text descriptions brief to fit on a single page summary.
+
+    Return a JSON object with: executiveSummary, priorityServices (array of {service, priority, reason, expectedOutcome, estimatedCost}), strategicPlan (array of {phase, duration, activities}), expectedResults (array), additionalTips (array).`;
 
     try {
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
+
         const ai = new GoogleGenAI({ apiKey });
-
-        // Fetch dynamic context
-        const servicesSnap = await getDocs(collection(db, "services"));
-        const servicesData = servicesSnap.docs.map(d => d.data());
-        const pricingContext = servicesData.map((s: any) =>
-            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
-        ).join('\n');
-
-        const socialProofContext = `
-        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
-        `;
-
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Act as a strategic growth consultant for GrowBrandi. Recommend digital services for: 
-            Industry: ${businessInfo.industry}, 
-            Challenges: ${businessInfo.currentChallenges.join(', ')}
-            Goals: ${businessInfo.goals.join(', ')}
-            Budget: ${businessInfo.budget}
-            Timeline: ${businessInfo.timeline}
-
-            CONTEXT:
-            Pricing:
-            ${pricingContext}
-            
-            Social Proof:
-            ${socialProofContext}
-
-            INSTRUCTIONS:
-            1. Recommend specific GrowBrandi services that directly solve the user's challenges.
-            2. Base estimated costs STRICTLY on the provided pricing.
-            3. In "Reason", explain why GrowBrandi is the best choice (mentioning our stats/expertise). Keep it concise (max 15 words).
-            4. Focus on ROI and business outcomes.
-            5. Keep "expectedOutcome" concise (max 15 words).
-            6. Keep "executiveSummary" to 2-3 sentences max.
-            7. Keep all text descriptions brief to fit on a single page summary.
-
-            The output must be only the JSON object.`,
+            contents: promptContent,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -307,8 +341,15 @@ export const recommendServices = async (businessInfo: {
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to recommend services:", error);
-        throw new Error("Could not generate service recommendations at this time.");
+        console.warn("Gemini failed to recommend services, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse(promptContent);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate service recommendations at this time.");
+        }
     }
 };
 
@@ -322,51 +363,53 @@ export const analyzeBusinessGrowth = async (businessData: {
     serviceContext?: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
+
+    // Fetch dynamic context (needed for both Gemini and OpenRouter)
+    const servicesSnap = await getDocs(collection(db, "services"));
+    const servicesData = servicesSnap.docs.map(d => d.data());
+    const pricingContext = servicesData.map((s: any) =>
+        `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
+    ).join('\n');
+
+    const socialProofContext = `
+    GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
+    `;
+
+    const promptContent = `Act as a senior business analyst at GrowBrandi. Analyze the growth potential for this business:
+    Current Revenue: ${businessData.currentRevenue}
+    Industry: ${businessData.industry}
+    Market Position: ${businessData.marketPosition}
+    Digital Presence: ${businessData.digitalPresence}
+    Competitors Level: ${businessData.competitorsLevel}
+    Specific Service Context: ${businessData.serviceContext || 'General Growth'}
+    
+    CONTEXT:
+    GrowBrandi Services:
+    ${pricingContext}
+
+    GrowBrandi Track Record:
+    ${socialProofContext}
+
+    INSTRUCTIONS:
+    1. Provide a realistic growth analysis considering the context of "${businessData.serviceContext || 'business growth'}".
+    2. In "Recommended Actions", SPECIFICALLY recommend GrowBrandi services as solutions to their gaps.
+    3. Mention how our data-driven approach (proven by 150+ projects) ensures growth.
+    4. Be encouraging but honest about the need for professional digital intervention.
+    5. Keep "executiveSummary" to 2-3 sentences max.
+    6. Keep "growthPotential" short and punchy (max 5 words).
+    7. Keep "action" and "impact" descriptions concise (max 15 words).
+
+    Return a JSON object with: growthPotential, executiveSummary, marketOpportunities (array), digitalGaps (array), recommendedActions (array of {action, impact, timeframe, investment}), predictions ({sixMonths, oneYear, threeYears}), keyMetrics (array).`;
 
     try {
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
+
         const ai = new GoogleGenAI({ apiKey });
-
-        // Fetch dynamic context
-        const servicesSnap = await getDocs(collection(db, "services"));
-        const servicesData = servicesSnap.docs.map(d => d.data());
-        const pricingContext = servicesData.map((s: any) =>
-            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
-        ).join('\n');
-
-        const socialProofContext = `
-        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
-        `;
-
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Act as a senior business analyst at GrowBrandi. Analyze the growth potential for this business:
-            Current Revenue: ${businessData.currentRevenue}
-            Industry: ${businessData.industry}
-            Market Position: ${businessData.marketPosition}
-            Digital Presence: ${businessData.digitalPresence}
-            Competitors Level: ${businessData.competitorsLevel}
-            Specific Service Context: ${businessData.serviceContext || 'General Growth'}
-            
-            CONTEXT:
-            GrowBrandi Services:
-            ${pricingContext}
-
-            GrowBrandi Track Record:
-            ${socialProofContext}
-
-            INSTRUCTIONS:
-            1. Provide a realistic growth analysis considering the context of "${businessData.serviceContext || 'business growth'}".
-            2. In "Recommended Actions", SPECIFICALLY recommend GrowBrandi services as solutions to their gaps.
-            3. Mention how our data-driven approach (proven by 150+ projects) ensures growth.
-            4. Be encouraging but honest about the need for professional digital intervention.
-            5. Keep "executiveSummary" to 2-3 sentences max.
-            6. Keep "growthPotential" short and punchy (max 5 words).
-            7. Keep "action" and "impact" descriptions concise (max 15 words).
-
-            The output must be only the JSON object.`,
+            contents: promptContent,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -413,8 +456,15 @@ export const analyzeBusinessGrowth = async (businessData: {
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to analyze business growth:", error);
-        throw new Error("Could not generate business analysis at this time.");
+        console.warn("Gemini failed to analyze business growth, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse(promptContent);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate business analysis at this time.");
+        }
     }
 };
 
@@ -426,48 +476,50 @@ export const generateConsultationPlan = async (clientInfo: {
     experience: string;
 }) => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
+
+    // Fetch dynamic context (needed for both Gemini and OpenRouter)
+    const servicesSnap = await getDocs(collection(db, "services"));
+    const servicesData = servicesSnap.docs.map(d => d.data());
+    const pricingContext = servicesData.map((s: any) =>
+        `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
+    ).join('\n');
+
+    const socialProofContext = `
+    GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
+    `;
+
+    const promptContent = `Act as a client success manager at GrowBrandi. Create a personalized consultation plan for:
+    Business Type: ${clientInfo.businessType}
+    Specific Needs: ${clientInfo.specificNeeds.join(', ')}
+    Urgency: ${clientInfo.urgency}
+    Experience Level: ${clientInfo.experience}
+    
+    CONTEXT:
+    GrowBrandi Services:
+    ${pricingContext}
+
+    GrowBrandi Track Record:
+    ${socialProofContext}
+
+    INSTRUCTIONS:
+    1. Design a consultation structure that positions GrowBrandi as the ideal partner.
+    2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs. Keep topics short (max 5 words).
+    3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects). Keep it under 30 words.
+    4. Emphasize that the consultation is the first step towards measurable growth.
+    5. Keep "executiveSummary" to 2-3 sentences max.
+    6. Ensure all output is concise and suitable for a one-page summary.
+
+    Return a JSON object with: consultationType, executiveSummary, recommendedDuration, keyTopics (array), preparationItems (array), expectedOutcomes (array), followUpActions (array), personalizedMessage.`;
 
     try {
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
+
         const ai = new GoogleGenAI({ apiKey });
-
-        // Fetch dynamic context
-        const servicesSnap = await getDocs(collection(db, "services"));
-        const servicesData = servicesSnap.docs.map(d => d.data());
-        const pricingContext = servicesData.map((s: any) =>
-            `- ${s.title?.en || s.title} (${s.price?.en || s.price}): ${s.description?.en || s.description}. Features: ${(s.features || []).map((f: any) => f.en || f).join(', ')}`
-        ).join('\n');
-
-        const socialProofContext = `
-        GrowBrandi Stats: 150+ Projects, 50+ Happy Clients
-        `;
-
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Act as a client success manager at GrowBrandi. Create a personalized consultation plan for:
-            Business Type: ${clientInfo.businessType}
-            Specific Needs: ${clientInfo.specificNeeds.join(', ')}
-            Urgency: ${clientInfo.urgency}
-            Experience Level: ${clientInfo.experience}
-            
-            CONTEXT:
-            GrowBrandi Services:
-            ${pricingContext}
-
-            GrowBrandi Track Record:
-            ${socialProofContext}
-
-            INSTRUCTIONS:
-            1. Design a consultation structure that positions GrowBrandi as the ideal partner.
-            2. In "Key Topics", include a discussion on how our specific services (mention them by name) address their needs. Keep topics short (max 5 words).
-            3. In "Personalized Message", be warm, professional, and mention our success with similar businesses (150+ projects). Keep it under 30 words.
-            4. Emphasize that the consultation is the first step towards measurable growth.
-            5. Keep "executiveSummary" to 2-3 sentences max.
-            6. Ensure all output is concise and suitable for a one-page summary.
-
-            The output must be only the JSON object.`,
+            contents: promptContent,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -500,27 +552,34 @@ export const generateConsultationPlan = async (clientInfo: {
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to generate consultation plan:", error);
-        throw new Error("Could not generate consultation plan at this time.");
+        console.warn("Gemini failed to generate consultation plan, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse(promptContent);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate consultation plan at this time.");
+        }
     }
 };
 
 // Project Brief Generation Service
 export const generateProjectBrief = async (details?: { service: string; subject: string }): Promise<{ brief: string }> => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
+
+    let prompt = `A user wants to contact GrowBrandi. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion. Return a JSON object with a "brief" field.`;
+
+    if (details?.service && details?.subject) {
+        prompt = `A user wants to contact GrowBrandi regarding "${details.service}". The subject is "${details.subject}". Generate a professional, concise project brief (max 100 words) tailored to this service and subject. Focus on clear goals, target audience, and desired outcomes. Return a JSON object with a "brief" field.`;
     }
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
-
-        let prompt = `A user wants to contact GrowBrandi. Generate a BRIEF, urgent project brief (max 100 words) that includes project goal, target audience, and key features. Make it sound professional but concise. Focus on conversion.`;
-
-        if (details?.service && details?.subject) {
-            prompt = `A user wants to contact GrowBrandi regarding "${details.service}". The subject is "${details.subject}". Generate a professional, concise project brief (max 100 words) tailored to this service and subject. Focus on clear goals, target audience, and desired outcomes.`;
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
         }
 
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -537,31 +596,40 @@ export const generateProjectBrief = async (details?: { service: string; subject:
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to generate project brief:", error);
-        throw new Error("Could not generate project brief at this time.");
+        console.warn("Gemini failed to generate project brief, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse<{ brief: string }>(prompt);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Could not generate project brief at this time.");
+        }
     }
 };
 
 // Content Translation Service
 export const translateContent = async (text: string, sourceLang: string, targetLangs: string[]): Promise<Record<string, string>> => {
     const apiKey = process.env.API_KEY || import.meta.env.VITE_API_KEY;
-    if (!apiKey) {
-        throw new Error("API_KEY environment variable not set.");
-    }
+
+    const promptContent = `Translate the following text from ${sourceLang} to these languages: ${targetLangs.join(', ')}.
+    
+    Text to translate:
+    "${text}"
+
+    Maintain professional tone and context.
+    Return ONLY a JSON object where keys are the language codes (${targetLangs.join(', ')}) and values are the translated text.
+    Example: { "es": "Hola", "fr": "Bonjour" }`;
 
     try {
-        const ai = new GoogleGenAI({ apiKey });
+        if (!apiKey) {
+            throw new Error("API_KEY environment variable not set.");
+        }
 
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
-            contents: `Translate the following text from ${sourceLang} to these languages: ${targetLangs.join(', ')}.
-            
-            Text to translate:
-            "${text}"
-
-            Maintain professional tone and context.
-            Return ONLY a JSON object where keys are the language codes (${targetLangs.join(', ')}) and values are the translated text.
-            Example: { "es": "Hola", "fr": "Bonjour" }`,
+            contents: promptContent,
             config: {
                 responseMimeType: "application/json",
                 responseSchema: {
@@ -576,7 +644,14 @@ export const translateContent = async (text: string, sourceLang: string, targetL
 
         return JSON.parse(response.text);
     } catch (error) {
-        console.error("Failed to translate content:", error);
-        throw new Error("Translation failed.");
+        console.warn("Gemini failed to translate content, falling back to OpenRouter:", error);
+
+        // Fallback to OpenRouter
+        try {
+            return await generateStructuredResponse<Record<string, string>>(promptContent);
+        } catch (fallbackError) {
+            console.error("OpenRouter fallback also failed:", fallbackError);
+            throw new Error("Translation failed.");
+        }
     }
 };

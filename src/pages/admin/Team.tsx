@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 // import { TEAM_MEMBERS } from '../../../constants'; // Removed
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, User, Linkedin, Twitter, Github, Mail, Trophy, Star } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
@@ -13,7 +14,8 @@ import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService'; // Removed
+import { useOnlineUsers } from '../../hooks/usePresence';
 
 const AdminTeam = () => {
     const [team, setTeam] = useState<any[]>([]);
@@ -21,6 +23,7 @@ const AdminTeam = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentMember, setCurrentMember] = useState<any>(null);
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+    const { onlineUsers } = useOnlineUsers();
 
     const fetchTeam = async () => {
         setLoading(true);
@@ -98,7 +101,8 @@ const AdminTeam = () => {
         if (!window.confirm("Are you sure you want to delete this member?")) return;
         try {
             await deleteDoc(doc(db, 'team_members', id));
-            await logAction('delete', 'team', `Deleted team member: ${id}`, { memberId: id });
+            await deleteDoc(doc(db, 'team_members', id));
+            // await logAction('delete', 'team', `Deleted team member: ${id}`, { memberId: id });
             showSuccess('Member Deleted', 'The team member has been successfully removed.');
             setTeam(team.filter(t => t.id !== id));
         } catch (error) {
@@ -120,12 +124,13 @@ const AdminTeam = () => {
             if (currentMember.id) {
                 const { id, ...data } = memberData;
                 await updateDoc(doc(db, 'team_members', id), data);
-                await logAction('update', 'team', `Updated team member: ${data.name}`, { memberId: id });
+                await updateDoc(doc(db, 'team_members', id), data);
+                // await logAction('update', 'team', `Updated team member: ${data.name}`, { memberId: id });
             } else {
                 memberData.createdAt = serverTimestamp();
                 memberData.order = team.length + 1; // Add order
                 const docRef = await addDoc(collection(db, 'team_members'), memberData);
-                await logAction('create', 'team', `Created team member: ${memberData.name}`, { memberId: docRef.id });
+                // await logAction('create', 'team', `Created team member: ${memberData.name}`, { memberId: docRef.id });
             }
             await fetchTeam();
             setIsEditing(false);
@@ -433,6 +438,24 @@ const AdminTeam = () => {
                                     <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
                                         {getLocalizedField(member.description, 'en')}
                                     </p>
+
+                                    {/* Online Status Indicator */}
+                                    <div className="flex items-center gap-2 mb-2">
+                                        {onlineUsers.some(u => u.email === member.social?.email) ? (
+                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-medium">
+                                                <span className="relative flex h-2 w-2">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                                </span>
+                                                Online
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-medium">
+                                                <span className="h-2 w-2 rounded-full bg-slate-400"></span>
+                                                Offline
+                                            </span>
+                                        )}
+                                    </div>
 
                                     {/* Social Icons Mini */}
                                     <div className="flex gap-3 mt-auto opacity-60">

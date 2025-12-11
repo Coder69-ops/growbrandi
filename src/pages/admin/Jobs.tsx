@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 import { Plus, Edit2, Trash2, Save, ArrowLeft, Briefcase, MapPin, Clock, CheckCircle2 } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedTextArea, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
@@ -9,7 +10,7 @@ import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
-import { logAction } from '../../services/auditService';
+// import { logAction } from '../../services/auditService';
 
 const JOB_TYPES = ['Full-time', 'Part-time', 'Contract', 'Internship', 'Freelance'];
 const DEPARTMENTS = ['Engineering', 'Design', 'Marketing', 'Sales', 'Product', 'Operations'];
@@ -47,7 +48,8 @@ const AdminJobs = () => {
         if (!window.confirm("Are you sure you want to delete this job opening?")) return;
         try {
             await deleteDoc(doc(db, 'jobs', id));
-            await logAction('delete', 'jobs', `Deleted job: ${id}`, { jobId: id });
+            await deleteDoc(doc(db, 'jobs', id));
+            // await logAction('delete', 'jobs', `Deleted job: ${id}`, { jobId: id });
             showSuccess('Job Deleted', 'The job opening has been permanently deleted.');
             setJobs(jobs.filter(j => j.id !== id));
         } catch (error) {
@@ -68,12 +70,13 @@ const AdminJobs = () => {
             if (currentJob.id) {
                 const { id, ...data } = jobData;
                 await updateDoc(doc(db, 'jobs', id), data);
-                await logAction('update', 'jobs', `Updated job: ${data.title?.en || 'Untitled'}`, { jobId: id });
+                await updateDoc(doc(db, 'jobs', id), data);
+                // await logAction('update', 'jobs', `Updated job: ${data.title?.en || 'Untitled'}`, { jobId: id });
                 showSuccess('Job Updated', 'The job opening has been successfully updated.');
             } else {
                 jobData.createdAt = serverTimestamp();
-                await addDoc(collection(db, 'jobs'), jobData);
-                await logAction('create', 'jobs', `Created job: ${jobData.title?.en || 'Untitled'}`);
+                const docRef = await addDoc(collection(db, 'jobs'), jobData); // Modified to capture docRef for consistency, though audit wrapper handles internal result
+                // await logAction('create', 'jobs', `Created job: ${jobData.title?.en || 'Untitled'}`);
                 showSuccess('Job Created', 'New job opening has been successfully created.');
             }
             await fetchJobs();

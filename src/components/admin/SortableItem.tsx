@@ -5,6 +5,7 @@ import { GripVertical } from 'lucide-react';
 interface SortableItemProps {
     item: any;
     children: React.ReactNode;
+    key?: React.Key | null | undefined;
 }
 
 export const SortableItem = ({ item, children }: SortableItemProps) => {
