@@ -3,16 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { useTranslation } from 'react-i18next';
-import { PageLoader } from './PageLoader';
-import { SEO } from './SEO';
+import PageLoader from './PageLoader';
+import SEO from './SEO';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import {
     FaCalendar, FaClock, FaUser, FaFacebook, FaTwitter, FaLinkedin, FaLink,
     FaArrowLeft, FaCheckCircle, FaRocket, FaQuoteLeft
 } from 'react-icons/fa';
-import { useSiteContentData } from '../src/hooks/useSiteContentData';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { GlassCard } from './ui/GlassCard';
-import BackgroundEffects from './ui/BackgroundEffects';
+import { BackgroundEffects } from './ui/BackgroundEffects';
 import { SupportedLanguage, getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import ReactMarkdown from 'react-markdown';
