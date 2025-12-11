@@ -77,16 +77,17 @@ export const useAutoTranslate = (
                 }
             });
 
-            // 4. Handle Complex Array Fields (e.g. Process Steps)
+            // 4. Handle Complex Array Fields (e.g. Process Steps, Legal Sections)
             if (options.complexArrayFields) {
-                Object.entries(options.complexArrayFields).forEach(([arrayName, fields]) => {
-                    const array = data[arrayName];
+                Object.entries(options.complexArrayFields).forEach(([arrayPath, fields]) => {
+                    // Support nested paths like 'legal.privacy.sections'
+                    const array = getNestedValue(data, arrayPath);
                     if (Array.isArray(array)) {
                         array.forEach((item, index) => {
                             fields.forEach(field => {
                                 const value = item[field]?.en;
                                 if (value) {
-                                    contentToTranslate[`${arrayName}__COMPLEX__${index}__${field}`] = value;
+                                    contentToTranslate[`${arrayPath}__COMPLEX__${index}__${field}`] = value;
                                 }
                             });
                         });
@@ -137,14 +138,16 @@ export const useAutoTranslate = (
 
             // 4. Merge Complex Array Fields
             if (options.complexArrayFields) {
-                Object.entries(options.complexArrayFields).forEach(([arrayName, fields]) => {
-                    if (Array.isArray(newData[arrayName])) {
-                        newData[arrayName] = newData[arrayName].map((item: any, index: number) => {
+                Object.entries(options.complexArrayFields).forEach(([arrayPath, fields]) => {
+                    // Support nested paths like 'legal.privacy.sections'
+                    const currentArray = getNestedValue(newData, arrayPath);
+                    if (Array.isArray(currentArray)) {
+                        const updatedArray = currentArray.map((item: any, index: number) => {
                             const updatedItem = { ...item };
                             let hasUpdates = false;
 
                             fields.forEach(field => {
-                                const translationKey = `${arrayName}__COMPLEX__${index}__${field}`;
+                                const translationKey = `${arrayPath}__COMPLEX__${index}__${field}`;
                                 if (translations[translationKey]) {
                                     updatedItem[field] = { ...updatedItem[field], ...translations[translationKey] };
                                     hasUpdates = true;
@@ -153,6 +156,9 @@ export const useAutoTranslate = (
 
                             return hasUpdates ? updatedItem : item;
                         });
+
+                        // Use setNestedValue to update the nested array
+                        newData = setNestedValue(newData, arrayPath, updatedArray);
                     }
                 });
             }

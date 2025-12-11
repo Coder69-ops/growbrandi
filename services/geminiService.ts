@@ -445,7 +445,7 @@ export const generateConsultationPlan = async (clientInfo: {
         `;
 
         const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             contents: `Act as a client success manager at GrowBrandi. Create a personalized consultation plan for:
             Business Type: ${clientInfo.businessType}
             Specific Needs: ${clientInfo.specificNeeds.join(', ')}
@@ -522,7 +522,7 @@ export const generateProjectBrief = async (details?: { service: string; subject:
         }
 
         const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
@@ -553,7 +553,7 @@ export const translateContent = async (text: string, sourceLang: string, targetL
         const ai = new GoogleGenAI({ apiKey });
 
         const response = await ai.models.generateContent({
-            model: "gemini-1.5-flash",
+            model: "gemini-2.5-flash",
             contents: `Translate the following text from ${sourceLang} to these languages: ${targetLangs.join(', ')}.
             
             Text to translate:

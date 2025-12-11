@@ -5,6 +5,7 @@ import { LocalizedInput } from '../LocalizedFormFields';
 import { LocalizedTextArea } from '../LocalizedFormFields';
 import { useContent } from '../../../hooks/useContent';
 import { SupportedLanguage } from '../../../utils/localization';
+import { useAutoTranslate } from '../../../hooks/useAutoTranslate';
 
 // Helper Component for picking internal links
 const LinkSelector = ({ onSelect }: { onSelect: (url: string) => void }) => {
@@ -113,6 +114,22 @@ export const BlogSettingsEditor: React.FC<BlogSettingsEditorProps> = ({ initialD
             }
         }));
     };
+
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        data,
+        setData,
+        {
+            deepKeys: [
+                'blog_settings.sidebar_cta.title', 'blog_settings.sidebar_cta.body',
+                'blog_settings.sidebar_cta.button_text', 'blog_settings.sidebar_cta.button_url',
+                'blog_settings.inline_cta.title', 'blog_settings.inline_cta.body',
+                'blog_settings.inline_cta.button_text', 'blog_settings.inline_cta.button_url',
+                'blog_settings.lead_magnet.title', 'blog_settings.lead_magnet.description',
+                'blog_settings.lead_magnet.button_text', 'blog_settings.lead_magnet.button_url',
+                'blog_settings.labels.hero_read_article', 'blog_settings.labels.card_read_more'
+            ]
+        }
+    );
 
     const settings = data.blog_settings || {};
 
@@ -340,8 +357,19 @@ export const BlogSettingsEditor: React.FC<BlogSettingsEditorProps> = ({ initialD
                 </div>
             </section>
 
-            {/* Save Button */}
-            <div className="flex items-center justify-end pt-6 border-t border-slate-200 dark:border-slate-700">
+            {/* Buttons */}
+            <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-200 dark:border-slate-700">
+                <button
+                    type="button"
+                    onClick={handleAutoTranslate}
+                    disabled={saving || isTranslating}
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50"
+                >
+                    <svg className={`w-4 h-4 ${isTranslating ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    {isTranslating ? 'Translating...' : 'Auto Translate'}
+                </button>
                 <button
                     onClick={() => onSave(data)}
                     disabled={saving}

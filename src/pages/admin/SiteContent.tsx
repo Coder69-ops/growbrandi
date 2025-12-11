@@ -37,37 +37,68 @@ const TABS = [
     { id: 'footer', label: 'Footer', icon: Layout },
 ];
 
-const TRANSLATE_OPTIONS: Record<string, string[]> = {
-    hero: ['hero.badge', 'hero.title_prefix', 'hero.title_highlight', 'hero.description', 'hero.cta_consultation', 'hero.cta_showreel'],
-    footer: ['footer.tagline_desc', 'footer.copyright'],
-    about: [
-        'about.hero.badge', 'about.hero.title', 'about.hero.highlight', 'about.hero.description',
-        'about.story.title', 'about.story.title_highlight', 'about.story.p1', 'about.story.p2',
-        'about.values.innovation.title', 'about.values.innovation.desc',
-        'about.values.client.title', 'about.values.client.desc',
-        'about.values.quality.title', 'about.values.quality.desc'
-    ],
-    process: ['process.hero.badge', 'process.hero.title', 'process.hero.highlight', 'process.hero.description'],
-    careers: ['careers.hero.badge', 'careers.hero.title', 'careers.hero.highlight', 'careers.hero.description', 'careers.open_positions.title', 'careers.open_positions.highlight'],
-    team_page: ['team_page.hero.badge', 'team_page.hero.title', 'team_page.hero.highlight', 'team_page.hero.description', 'team_page.cta.title', 'team_page.cta.highlight', 'team_page.cta.description', 'team_page.cta.start_project', 'team_page.cta.learn_more'],
-    contact: ['contact.hero.badge', 'contact.hero.title', 'contact.hero.highlight', 'contact.hero.description', 'contact.info_labels.email', 'contact.info_labels.call', 'contact.info_labels.visit', 'contact.info_labels.response_time'],
-    section_headers: [
-        'section_headers.services.badge', 'section_headers.services.title', 'section_headers.services.highlight', 'section_headers.services.description',
-        'section_headers.testimonials.badge', 'section_headers.testimonials.title', 'section_headers.testimonials.highlight', 'section_headers.testimonials.description',
-        'section_headers.team.badge', 'section_headers.team.title', 'section_headers.team.highlight', 'section_headers.team.description',
-        'section_headers.projects.badge', 'section_headers.projects.title', 'section_headers.projects.highlight', 'section_headers.projects.description',
-        'section_headers.faq.badge', 'section_headers.faq.title', 'section_headers.faq.highlight', 'section_headers.faq.description'
-    ],
-    tools: [
-        'tools.slogan.badge', 'tools.slogan.title', 'tools.slogan.highlight', 'tools.slogan.description',
-        'tools.use_cases.badge', 'tools.use_cases.title', 'tools.use_cases.highlight', 'tools.use_cases.description'
-    ],
-    blog_settings: [
-        'blog_settings.sidebar_cta.title', 'blog_settings.sidebar_cta.body', 'blog_settings.sidebar_cta.button_text', 'blog_settings.sidebar_cta.button_url',
-        'blog_settings.inline_cta.title', 'blog_settings.inline_cta.body', 'blog_settings.inline_cta.button_text', 'blog_settings.inline_cta.button_url',
-        'blog_settings.lead_magnet.title', 'blog_settings.lead_magnet.description', 'blog_settings.lead_magnet.button_text', 'blog_settings.lead_magnet.button_url'
-    ],
-    legal: ['legal.privacy.title', 'legal.privacy.last_updated', 'legal.terms.title', 'legal.terms.last_updated', 'legal.cookies.title', 'legal.cookies.last_updated']
+const TRANSLATE_OPTIONS: Record<string, { deepKeys?: string[], complexArrayFields?: Record<string, string[]> }> = {
+    hero: {
+        deepKeys: ['hero.badge', 'hero.title_prefix', 'hero.title_highlight', 'hero.description', 'hero.cta_consultation', 'hero.cta_showreel']
+    },
+    footer: {
+        deepKeys: ['footer.tagline_desc', 'footer.copyright']
+    },
+    about: {
+        deepKeys: [
+            'about.hero.badge', 'about.hero.title', 'about.hero.highlight', 'about.hero.description',
+            'about.story.title', 'about.story.title_highlight', 'about.story.p1', 'about.story.p2',
+            'about.values.innovation.title', 'about.values.innovation.desc',
+            'about.values.client.title', 'about.values.client.desc',
+            'about.values.quality.title', 'about.values.quality.desc'
+        ]
+    },
+    process: {
+        deepKeys: ['process.hero.badge', 'process.hero.title', 'process.hero.highlight', 'process.hero.description'],
+        complexArrayFields: {
+            'process.steps': ['step', 'description']
+        }
+    },
+    careers: {
+        deepKeys: ['careers.hero.badge', 'careers.hero.title', 'careers.hero.highlight', 'careers.hero.description', 'careers.open_positions.title', 'careers.open_positions.highlight']
+    },
+    team_page: {
+        deepKeys: ['team_page.hero.badge', 'team_page.hero.title', 'team_page.hero.highlight', 'team_page.hero.description', 'team_page.cta.title', 'team_page.cta.highlight', 'team_page.cta.description', 'team_page.cta.start_project', 'team_page.cta.learn_more']
+    },
+    contact: {
+        deepKeys: ['contact.hero.badge', 'contact.hero.title', 'contact.hero.highlight', 'contact.hero.description', 'contact.info_labels.email', 'contact.info_labels.call', 'contact.info_labels.visit', 'contact.info_labels.response_time']
+    },
+    section_headers: {
+        deepKeys: [
+            'section_headers.services.badge', 'section_headers.services.title', 'section_headers.services.highlight', 'section_headers.services.description',
+            'section_headers.testimonials.badge', 'section_headers.testimonials.title', 'section_headers.testimonials.highlight', 'section_headers.testimonials.description',
+            'section_headers.team.badge', 'section_headers.team.title', 'section_headers.team.highlight', 'section_headers.team.description',
+            'section_headers.projects.badge', 'section_headers.projects.title', 'section_headers.projects.highlight', 'section_headers.projects.description',
+            'section_headers.faq.badge', 'section_headers.faq.title', 'section_headers.faq.highlight', 'section_headers.faq.description'
+        ]
+    },
+    tools: {
+        deepKeys: [
+            'tools.slogan.badge', 'tools.slogan.title', 'tools.slogan.highlight', 'tools.slogan.description',
+            'tools.use_cases.badge', 'tools.use_cases.title', 'tools.use_cases.highlight', 'tools.use_cases.description'
+        ]
+    },
+    blog_settings: {
+        deepKeys: [
+            'blog_settings.sidebar_cta.title', 'blog_settings.sidebar_cta.body', 'blog_settings.sidebar_cta.button_text', 'blog_settings.sidebar_cta.button_url',
+            'blog_settings.inline_cta.title', 'blog_settings.inline_cta.body', 'blog_settings.inline_cta.button_text', 'blog_settings.inline_cta.button_url',
+            'blog_settings.lead_magnet.title', 'blog_settings.lead_magnet.description', 'blog_settings.lead_magnet.button_text', 'blog_settings.lead_magnet.button_url',
+            'blog_settings.labels.hero_read_article', 'blog_settings.labels.card_read_more'
+        ]
+    },
+    legal: {
+        deepKeys: ['legal.privacy.title', 'legal.privacy.last_updated', 'legal.terms.title', 'legal.terms.last_updated', 'legal.cookies.title', 'legal.cookies.last_updated'],
+        complexArrayFields: {
+            'legal.privacy.sections': ['title', 'content'],
+            'legal.terms.sections': ['title', 'content'],
+            'legal.cookies.sections': ['title', 'content']
+        }
+    }
 };
 
 const AdminSiteContent = () => {
@@ -89,9 +120,7 @@ const AdminSiteContent = () => {
     const { isTranslating, handleAutoTranslate } = useAutoTranslate(
         content,
         setContent,
-        {
-            deepKeys: TRANSLATE_OPTIONS[activeTab] || []
-        }
+        TRANSLATE_OPTIONS[activeTab] || {}
     );
 
     // Fetch Content
