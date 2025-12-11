@@ -445,10 +445,7 @@ const Header: React.FC<HeaderProps> = () => {
                                 <div className="px-4 py-6 max-h-[80vh] overflow-y-auto">
                                     {/* Mobile Navigation Links */}
                                     <div className="space-y-2 mb-6">
-                                        <div className="flex justify-end mb-4 px-4 gap-4">
-                                            <LanguageSwitcher />
-                                            <ThemeToggle />
-                                        </div>
+
                                         <NavLink
                                             route="/"
                                             currentRoute={currentRoute}
