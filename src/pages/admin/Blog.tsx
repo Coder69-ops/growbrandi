@@ -423,7 +423,8 @@ const AdminBlog = () => {
                                                     id: selectedMember.id,
                                                     name: selectedMember.name,
                                                     role: selectedMember.role,
-                                                    image: selectedMember.image
+                                                    image: selectedMember.image,
+                                                    bio: selectedMember.bio || null
                                                 });
                                             } else {
                                                 // Fallback for "GrowBrandi Team" or unselected

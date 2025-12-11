@@ -5,6 +5,7 @@ import { db } from '../src/lib/firebase';
 import { useTranslation } from 'react-i18next';
 import PageLoader from './PageLoader';
 import SEO from './SEO';
+import { BlogPostSkeleton } from './skeletons/BlogSkeletons';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import {
     FaCalendar, FaClock, FaUser, FaFacebook, FaTwitter, FaLinkedin, FaLink,
@@ -118,7 +119,7 @@ const BlogPostPage = () => {
         fetchPost();
     }, [slug, navigate, getLocalizedPath]);
 
-    if (loading) return <PageLoader />;
+    if (loading) return <BlogPostSkeleton />;
     if (!post) return null;
 
     const title = getLocalizedField(post.title, lang);
@@ -276,7 +277,9 @@ const BlogPostPage = () => {
                                     </div>
                                 </div>
                                 <p className="text-sm text-slate-600 dark:text-zinc-400 leading-relaxed italic border-l-2 border-slate-200 dark:border-slate-700 pl-4 py-1">
-                                    {t("blog.author_bio", "Sharing insights on technology, growth, and digital transformation.")}
+                                    {typeof post.author === 'object' && post.author.bio
+                                        ? getLocalizedField(post.author.bio, lang)
+                                        : t("blog.author_bio", "Sharing insights on technology, growth, and digital transformation.")}
                                 </p>
                             </GlassCard>
 

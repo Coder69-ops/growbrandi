@@ -8,7 +8,8 @@
         "satisfaction_guarantee": "Satisfaction Guaranteed",
         "support_team": "24/7 Support Team",
         "rated_agency": "Top Rated Agency",
-        "verified": "Verified"
+        "verified": "Verified",
+        "back": "Back to Blog"
     },
     "admin": {
         "common": {
@@ -643,18 +644,6 @@
         }
     },
     "company": {
-        "blog": {
-            "title": "Blog",
-            "description": "Insights and expertise",
-            "heading": {
-                "title": "Latest",
-                "highlight": "Insights",
-                "description": "Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.",
-                "badge": "Our Blog"
-            },
-            "hero_read_article": "Read Article",
-            "card_read_more": "Read More"
-        },
         "about_us": {
             "title": "About Us",
             "description": "Learn about our mission and team",
@@ -888,7 +877,8 @@
                 "badge": "Our Blog"
             },
             "common": {
-                "read_more": "Read More"
+                "read_more": "Read More",
+                "hero_read_article": "Read Article"
             },
             "posts": [
                 {
@@ -1935,5 +1925,8 @@
                 }
             }
         }
+    },
+    "blog": {
+        "author_bio": "Sharing insights on technology, growth, and digital transformation."
     }
 }

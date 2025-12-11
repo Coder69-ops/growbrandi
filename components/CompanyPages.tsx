@@ -687,6 +687,7 @@ export const TeamPage: React.FC = () => {
 };
 
 import { FaSearch, FaTag, FaMagnet } from 'react-icons/fa';
+import { BlogPageSkeleton } from './skeletons/BlogSkeletons';
 
 // Blog Page
 export const BlogPage: React.FC = () => {
@@ -728,7 +729,7 @@ export const BlogPage: React.FC = () => {
   // but for now, let's keep it simple and maybe duplicate or just filter it out)
   const gridPosts = filteredPosts.filter((p: any) => p.id !== featuredPost?.id);
 
-  if (loading) return <div className="py-20 text-center">Loading...</div>;
+  if (loading) return <BlogPageSkeleton />;
 
   return (
     <>
@@ -774,7 +775,7 @@ export const BlogPage: React.FC = () => {
                       {featuredPost.excerpt}
                     </p>
                     <div className="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm">
-                      {getText('blog_settings.labels.hero_read_article', lang) || t('company.blog.hero_read_article')} <FaArrowRight />
+                      {getText('blog_settings.labels.hero_read_article', lang) || t('company.blog.common.hero_read_article')} <FaArrowRight />
                     </div>
                   </div>
                 </GlassCard>

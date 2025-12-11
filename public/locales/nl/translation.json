@@ -3,7 +3,8 @@
         "get_started": "Aan de slag",
         "learn_more": "Meer weten",
         "view_project": "Bekijk Project",
-        "verified": "Geverifieerd"
+        "verified": "Geverifieerd",
+        "back": "Terug naar het blog"
     },
     "admin": {
         "common": {
@@ -1729,5 +1730,8 @@
                 }
             }
         }
+    },
+    "blog": {
+        "author_bio": "Inzichten delen over technologie, groei en digitale transformatie."
     }
 }
