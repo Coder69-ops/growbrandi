@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../src/lib/firebase';
 import { useTranslation } from 'react-i18next';
 import { FaArrowLeft, FaClock, FaCalendar, FaUser } from 'react-icons/fa';
@@ -12,7 +12,8 @@ import { getLocalizedField, SupportedLanguage } from '../src/utils/localization'
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 const BlogPostPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    // We expect 'slug' from the route, but it might be 'id' in legacy routes or direct access
+    const { slug } = useParams<{ slug: string }>();
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { getLocalizedPath } = useLocalizedPath();
@@ -22,13 +23,33 @@ const BlogPostPage: React.FC = () => {
 
     useEffect(() => {
         const fetchPost = async () => {
-            if (!id) return;
+            if (!slug) return;
             try {
-                const docRef = doc(db, 'blog_posts', id);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setPost({ id: docSnap.id, ...docSnap.data() });
+                let postData = null;
+                let postId = null;
+
+                // 1. Try to find by slug
+                const q = query(collection(db, 'blog_posts'), where('slug', '==', slug), limit(1));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const docSnap = querySnapshot.docs[0];
+                    postData = docSnap.data();
+                    postId = docSnap.id;
                 } else {
+                    // 2. Fallback: Try to find by ID (if slug is actually an ID)
+                    const docRef = doc(db, 'blog_posts', slug);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        postData = docSnap.data();
+                        postId = docSnap.id;
+                    }
+                }
+
+                if (postData && postId) {
+                    setPost({ id: postId, ...postData });
+                } else {
+                    console.warn("Blog post not found for slug/id:", slug);
                     navigate(getLocalizedPath('/blog'));
                 }
             } catch (error) {
@@ -39,7 +60,7 @@ const BlogPostPage: React.FC = () => {
         };
 
         fetchPost();
-    }, [id, navigate, getLocalizedPath]);
+    }, [slug, navigate, getLocalizedPath]);
 
     if (loading) return <PageLoader />;
     if (!post) return null;
@@ -49,11 +70,18 @@ const BlogPostPage: React.FC = () => {
     const excerpt = getLocalizedField(post.excerpt, lang);
     const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop";
 
+    // enhanced SEO
+    const metaTitle = (getLocalizedField(post.seo?.metaTitle, lang) || title) as string;
+    const metaDesc = (getLocalizedField(post.seo?.metaDescription, lang) || excerpt) as string;
+    const keywordsRaw = getLocalizedField(post.seo?.keywords, lang);
+    const keywords = typeof keywordsRaw === 'string' ? keywordsRaw.split(',').map(k => k.trim()) : [];
+
     return (
         <>
             <SEO
-                title={title}
-                description={excerpt}
+                title={metaTitle}
+                description={metaDesc}
+                keywords={keywords}
                 ogImage={image}
             />
             <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300 pt-24 pb-20">

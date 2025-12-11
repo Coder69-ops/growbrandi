@@ -713,44 +713,47 @@ export const BlogPage: React.FC = () => {
       <section className="py-20 px-4 bg-white dark:bg-[#09090b] transition-colors duration-300">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => {
-              const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop";
+            {blogPosts
+              .filter(post => !post.status || post.status === 'published')
+              .map((post, index) => {
+                const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop";
+                const linkUrl = `/blog/${post.slug || post.id}`;
 
-              return (
-                <motion.article
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <GlassCard className="p-0 overflow-hidden h-full flex flex-col" hoverEffect={true}>
-                    <Link to={getLocalizedPath(`/blog/${post.id}`)} className="h-48 overflow-hidden relative block">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-                      <img src={image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                      <div className="absolute bottom-4 left-4 z-20">
-                        <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">{post.category}</span>
-                      </div>
-                    </Link>
-                    <div className="p-6 flex-grow flex flex-col">
-                      <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
-                        <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
-                        <span>{post.date}</span>
-                      </div>
-                      <Link to={getLocalizedPath(`/blog/${post.id}`)}>
-                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.title}</h3>
+                return (
+                  <motion.article
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <GlassCard className="p-0 overflow-hidden h-full flex flex-col" hoverEffect={true}>
+                      <Link to={getLocalizedPath(linkUrl)} className="h-48 overflow-hidden relative block">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                        <img src={image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                        <div className="absolute bottom-4 left-4 z-20">
+                          <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">{post.category}</span>
+                        </div>
                       </Link>
-                      <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow">{post.excerpt}</p>
-                      <div className="mt-auto">
-                        <Link to={getLocalizedPath(`/blog/${post.id}`)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
-                          {t('company.blog.common.read_more')} <FaArrowRight className="w-3 h-3" />
+                      <div className="p-6 flex-grow flex flex-col">
+                        <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
+                          <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
+                          <span>{post.date}</span>
+                        </div>
+                        <Link to={getLocalizedPath(linkUrl)}>
+                          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.title}</h3>
                         </Link>
+                        <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow">{post.excerpt}</p>
+                        <div className="mt-auto">
+                          <Link to={getLocalizedPath(linkUrl)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
+                            {t('company.blog.common.read_more')} <FaArrowRight className="w-3 h-3" />
+                          </Link>
+                        </div>
                       </div>
-                    </div>
-                  </GlassCard>
-                </motion.article>
-              );
-            })}
+                    </GlassCard>
+                  </motion.article>
+                );
+              })}
           </div>
         </div>
       </section>

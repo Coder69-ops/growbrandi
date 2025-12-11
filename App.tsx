@@ -372,7 +372,7 @@ ${servicesDetails}
                 <Route path="/:lang/careers" element={<LanguageWrapper><PageWrapper><CareersPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/careers/:id" element={<LanguageWrapper><PageWrapper><JobDetailsPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/blog" element={<LanguageWrapper><PageWrapper><BlogPage /></PageWrapper></LanguageWrapper>} />
-                <Route path="/:lang/blog/:id" element={<LanguageWrapper><PageWrapper><BlogPostPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/blog/:slug" element={<LanguageWrapper><PageWrapper><BlogPostPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Legal */}
                 <Route path="/:lang/legal/privacy-policy" element={<LanguageWrapper><PageWrapper><PrivacyPolicyPage /></PageWrapper></LanguageWrapper>} />

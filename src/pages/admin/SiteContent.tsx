@@ -9,6 +9,17 @@ import PreviewLayout from '../../components/admin/PreviewLayout';
 import { SupportedLanguage, LocalizedString } from '../../utils/localization';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { ImageUpload } from '../../components/admin/ImageUpload';
+
+import { HeroEditor } from '../../components/admin/site-content/HeroEditor';
+import { SectionHeadersEditor } from '../../components/admin/site-content/SectionHeadersEditor';
+import { AboutEditor } from '../../components/admin/site-content/AboutEditor';
+import { ProcessEditor } from '../../components/admin/site-content/ProcessEditor';
+import { CareersEditor } from '../../components/admin/site-content/CareersEditor';
+import { TeamPageEditor } from '../../components/admin/site-content/TeamPageEditor';
+import { ContactEditor } from '../../components/admin/site-content/ContactEditor';
+import { ToolsEditor } from '../../components/admin/site-content/ToolsEditor';
+import { FooterEditor } from '../../components/admin/site-content/FooterEditor';
 
 const TABS = [
     { id: 'hero', label: 'Home Hero', icon: LayoutTemplate },
@@ -21,8 +32,6 @@ const TABS = [
     { id: 'tools', label: 'Tools', icon: Sparkles },
     { id: 'footer', label: 'Footer', icon: Layout },
 ];
-
-import { ImageUpload } from '../../components/admin/ImageUpload';
 
 const TRANSLATE_OPTIONS: Record<string, string[]> = {
     hero: ['hero.badge', 'hero.title_prefix', 'hero.title_highlight', 'hero.description', 'hero.cta_consultation', 'hero.cta_showreel'],
@@ -107,6 +116,11 @@ const AdminSiteContent = () => {
                 newContent[section][field][nestedField][deepNestedField] = newValue;
             } else if (nestedField) {
                 if (!newContent[section][field]) newContent[section][field] = {};
+                if (!newContent[section][field][nestedField] && typeof newContent[section][field] === 'object') {
+                    // Ensure it's an object before assigning
+                }
+                // Determine if we are assigning to an object property or replacing it
+                if (!newContent[section][field]) newContent[section][field] = {};
                 newContent[section][field][nestedField] = newValue;
             } else {
                 newContent[section][field] = newValue;
@@ -147,7 +161,6 @@ const AdminSiteContent = () => {
         });
     };
 
-
     const { showSuccess, showError, StatusModal } = useStatusModal();
 
     const handleSave = async () => {
@@ -165,6 +178,7 @@ const AdminSiteContent = () => {
             setSaving(false);
         }
     };
+
 
     return (
         <AdminPageLayout
@@ -200,460 +214,70 @@ const AdminSiteContent = () => {
                 loading ? (
                     <AdminLoader message="Loading site content..." />
                 ) : (
-                    <PreviewLayout previewData={content} section={activeTab} showPreview={false}>
-                        <div className="space-y-6">
-                            {/* Top Controls */}
-                            < div className="card p-3 flex flex-col lg:flex-row gap-4 lg:items-center justify-between sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm" >
-                                <div className="flex-1 min-w-0 flex overflow-x-auto gap-2 max-w-full pb-2 md:pb-0 no-scrollbar">
-                                    {TABS.map(tab => (
-                                        <button
-                                            key={tab.id}
-                                            onClick={() => setActiveTab(tab.id)}
-                                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${activeTab === tab.id
-                                                ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md'
-                                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                                }`}
-                                        >
-                                            <tab.icon size={16} />
-                                            {tab.label}
-                                        </button>
-                                    ))}
+                    <div className="h-full flex flex-col md:flex-row bg-slate-50 dark:bg-slate-900/50">
+                        {/* Sidebar Navigation */}
+                        <div className="w-full md:w-64 shrink-0 bg-white dark:bg-slate-800 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700 flex flex-nowrap md:flex-col overflow-x-auto md:overflow-y-auto p-4 gap-2 no-scrollbar md:h-full z-10 sticky top-0 md:relative">
+                            {TABS.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap md:whitespace-normal text-left
+                                        ${activeTab === tab.id
+                                            ? 'bg-blue-50/80 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/10 shadow-sm'
+                                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200'
+                                        }`}
+                                >
+                                    <div className={`p-1.5 rounded-lg ${activeTab === tab.id ? 'bg-white dark:bg-blue-800/30' : 'bg-slate-100 dark:bg-slate-700/50'}`}>
+                                        <tab.icon size={18} />
+                                    </div>
+                                    <span>{tab.label}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Main Content Area */}
+                        <div className="flex-1 min-w-0 overflow-y-auto h-full">
+                            <PreviewLayout previewData={content} section={activeTab} showPreview={false}>
+                                <div className="space-y-6 max-w-5xl mx-auto pb-20">
+                                    {/* Language Selector Header */}
+                                    <div className="flex items-center justify-between p-1">
+                                        <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                                            {TABS.find(t => t.id === activeTab)?.icon && React.createElement(TABS.find(t => t.id === activeTab)!.icon, { size: 24, className: "text-blue-500" })}
+                                            {TABS.find(t => t.id === activeTab)?.label}
+                                        </h2>
+                                        <div className="w-auto">
+                                            <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
+                                        </div>
+                                    </div>
+
+                                    {/* Active Tab Content */}
+                                    <div className="anime-fade-in">
+                                        {activeTab === 'hero' && <HeroEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'section_headers' && <SectionHeadersEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'about' && <AboutEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'process' && (
+                                            <ProcessEditor
+                                                content={content}
+                                                handleChange={handleChange}
+                                                handleArrayChange={handleArrayChange}
+                                                handleArrayDetailChange={handleArrayDetailChange}
+                                                activeLanguage={activeLanguage}
+                                            />
+                                        )}
+                                        {activeTab === 'careers' && <CareersEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'team_page' && <TeamPageEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'contact' && <ContactEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'tools' && <ToolsEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'footer' && <FooterEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                    </div>
                                 </div>
-                                <div className="hidden lg:block w-px bg-slate-200 dark:bg-slate-700 h-8 mx-2"></div>
-                                <div className="w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
-                                    <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
-                                </div>
-                            </div >
-
-                            {/* Active Tab Content */}
-                            < div className="anime-fade-in" >
-                                {/* --- HERO TAB --- */}
-                                {
-                                    activeTab === 'hero' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                                                    <LayoutTemplate size={20} className="text-blue-500" />
-                                                    Main Hero Text
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput
-                                                        label="Badge Text"
-                                                        value={content.hero?.badge}
-                                                        onChange={(val) => handleChange('hero', 'badge', val)}
-                                                        activeLanguage={activeLanguage}
-                                                    />
-                                                    <div className="hidden md:block"></div> {/* Spacer */}
-                                                    <LocalizedInput
-                                                        label="Title Prefix"
-                                                        value={content.hero?.title_prefix}
-                                                        onChange={(val) => handleChange('hero', 'title_prefix', val)}
-                                                        activeLanguage={activeLanguage}
-                                                    />
-                                                    <LocalizedInput
-                                                        label="Title Highlight"
-                                                        value={content.hero?.title_highlight}
-                                                        onChange={(val) => handleChange('hero', 'title_highlight', val)}
-                                                        activeLanguage={activeLanguage}
-                                                    />
-                                                </div>
-                                                <LocalizedTextArea
-                                                    label="Description"
-                                                    value={content.hero?.description}
-                                                    onChange={(val) => handleChange('hero', 'description', val)}
-                                                    activeLanguage={activeLanguage}
-                                                    rows={3}
-                                                />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.hero?.bg_image}
-                                                        onChange={(val) => handleChange('hero', 'bg_image', val)}
-                                                        folder="site_content/hero"
-                                                    />
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-                                                        <ImageUpload
-                                                            label="Phone Screen Image"
-                                                            value={content.hero?.phone_screen_image}
-                                                            onChange={(val) => handleChange('hero', 'phone_screen_image', val)}
-                                                            folder="site_content/hero"
-                                                        />
-                                                        <ImageUpload
-                                                            label="Phone Profile Image"
-                                                            value={content.hero?.phone_profile_image}
-                                                            onChange={(val) => handleChange('hero', 'phone_profile_image', val)}
-                                                            folder="site_content/hero"
-                                                        />
-                                                        <ImageUpload
-                                                            label="Trustpilot Logo"
-                                                            value={content.hero?.trustpilot_logo}
-                                                            onChange={(val) => handleChange('hero', 'trustpilot_logo', val)}
-                                                            folder="site_content/hero"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Button 1 (Consultation)" value={content.hero?.cta_consultation} onChange={(val) => handleChange('hero', 'cta_consultation', val)} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Button 2 (Showreel)" value={content.hero?.cta_showreel} onChange={(val) => handleChange('hero', 'cta_showreel', val)} activeLanguage={activeLanguage} />
-                                                </div>
-                                            </div>
-
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                                                    <Users size={20} className="text-emerald-500" />
-                                                    Trusted By Logos
-                                                </h3>
-                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                                    {[1, 2, 3, 4, 5, 6].map(i => (
-                                                        <div key={i}>
-                                                            <ImageUpload
-                                                                label={`Partner Logo ${i}`}
-                                                                value={content.hero?.partners?.[`logo_${i}`]}
-                                                                onChange={(val) => handleChange('hero', 'partners', val, `logo_${i}`)}
-                                                                folder="site_content/partners"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- FOOTER TAB --- */}
-                                {
-                                    activeTab === 'footer' && (
-                                        <div className="glass-panel p-6 space-y-6">
-                                            <h3 className="font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                                                <Layout size={20} className="text-slate-500" />
-                                                Footer Content
-                                            </h3>
-                                            <LocalizedTextArea label="Tagline" value={content.footer?.tagline_desc} onChange={(val) => handleChange('footer', 'tagline_desc', val)} activeLanguage={activeLanguage} rows={2} />
-                                            <LocalizedInput label="Copyright Text" value={content.footer?.copyright} onChange={(val) => handleChange('footer', 'copyright', val)} activeLanguage={activeLanguage} />
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- ABOUT US TAB --- */}
-                                {
-                                    activeTab === 'about' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Info size={18} /> Hero Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.about?.hero?.badge} onChange={(val) => handleChange('about', 'hero', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.about?.hero?.title} onChange={(val) => handleChange('about', 'hero', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.about?.hero?.highlight} onChange={(val) => handleChange('about', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.about?.hero?.description} onChange={(val) => handleChange('about', 'hero', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.about?.hero?.bg_image}
-                                                        onChange={(val) => handleChange('about', 'hero', val, 'bg_image')}
-                                                        folder="site_content/about"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Users size={18} /> Our Story
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Title" value={content.about?.story?.title} onChange={(val) => handleChange('about', 'story', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.about?.story?.title_highlight} onChange={(val) => handleChange('about', 'story', val, 'title_highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedTextArea label="Paragraph 1" value={content.about?.story?.p1} onChange={(val) => handleChange('about', 'story', val, 'p1')} activeLanguage={activeLanguage} rows={4} />
-                                                    <LocalizedTextArea label="Paragraph 2" value={content.about?.story?.p2} onChange={(val) => handleChange('about', 'story', val, 'p2')} activeLanguage={activeLanguage} rows={4} />
-                                                </div>
-                                            </div>
-
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Sparkles size={18} /> Company Values
-                                                </h3>
-                                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                                    {['innovation', 'client', 'quality'].map(key => (
-                                                        <div key={key} className="p-5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50">
-                                                            <h4 className="font-bold capitalize mb-4 text-slate-700 dark:text-slate-300">{key}</h4>
-                                                            <div className="space-y-4">
-                                                                <LocalizedInput label="Title" value={content.about?.values?.[key]?.title} onChange={(val) => handleChange('about', 'values', val, key, 'title')} activeLanguage={activeLanguage} />
-                                                                <LocalizedTextArea label="Description" value={content.about?.values?.[key]?.desc} onChange={(val) => handleChange('about', 'values', val, key, 'desc')} activeLanguage={activeLanguage} rows={3} />
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- PROCESS TAB --- */}
-                                {
-                                    activeTab === 'process' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <List size={18} /> Hero Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.process?.hero?.badge} onChange={(val) => handleChange('process', 'hero', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.process?.hero?.title} onChange={(val) => handleChange('process', 'hero', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.process?.hero?.highlight} onChange={(val) => handleChange('process', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.process?.hero?.description} onChange={(val) => handleChange('process', 'hero', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.process?.hero?.bg_image}
-                                                        onChange={(val) => handleChange('process', 'hero', val, 'bg_image')}
-                                                        folder="site_content/process"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-4">
-                                                <h3 className="font-semibold text-lg ml-2 text-slate-900 dark:text-white">Process Steps</h3>
-                                                {content.process?.steps?.map((step: any, index: number) => (
-                                                    <div key={index} className="glass-panel p-6 space-y-6">
-                                                        <div className="font-bold text-slate-400 flex items-center gap-2">
-                                                            <span className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm">
-                                                                {index + 1}
-                                                            </span>
-                                                            Step {index + 1}
-                                                        </div>
-                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                            <LocalizedInput label="Title" value={step.title} onChange={(val) => handleArrayChange('process', 'steps', index, 'title', val)} activeLanguage={activeLanguage} />
-                                                            <LocalizedTextArea label="Description" value={step.description} onChange={(val) => handleArrayChange('process', 'steps', index, 'description', val)} activeLanguage={activeLanguage} rows={3} />
-                                                        </div>
-
-                                                        <div>
-                                                            <label className="text-sm font-medium mb-3 block text-slate-700 dark:text-slate-300">Details List</label>
-                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                {step.details?.map((detail: LocalizedString, dIndex: number) => (
-                                                                    <LocalizedInput
-                                                                        key={dIndex}
-                                                                        label={`Detail ${dIndex + 1}`}
-                                                                        value={detail}
-                                                                        onChange={(val) => handleArrayDetailChange('process', 'steps', index, dIndex, val)}
-                                                                        activeLanguage={activeLanguage}
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- CAREERS TAB --- */}
-                                {
-                                    activeTab === 'careers' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Briefcase size={18} /> Hero Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.careers?.hero?.badge} onChange={(val) => handleChange('careers', 'hero', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.careers?.hero?.title} onChange={(val) => handleChange('careers', 'hero', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.careers?.hero?.highlight} onChange={(val) => handleChange('careers', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.careers?.hero?.description} onChange={(val) => handleChange('careers', 'hero', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.careers?.hero?.bg_image}
-                                                        onChange={(val) => handleChange('careers', 'hero', val, 'bg_image')}
-                                                        folder="site_content/careers"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600">Open Positions Header</h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Title" value={content.careers?.open_positions?.title} onChange={(val) => handleChange('careers', 'open_positions', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.careers?.open_positions?.highlight} onChange={(val) => handleChange('careers', 'open_positions', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- TEAM PAGE TAB --- */}
-                                {
-                                    activeTab === 'team_page' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Users size={18} /> Hero Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.team_page?.hero?.badge} onChange={(val) => handleChange('team_page', 'hero', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.team_page?.hero?.title} onChange={(val) => handleChange('team_page', 'hero', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.team_page?.hero?.highlight} onChange={(val) => handleChange('team_page', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.team_page?.hero?.description} onChange={(val) => handleChange('team_page', 'hero', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.team_page?.hero?.bg_image}
-                                                        onChange={(val) => handleChange('team_page', 'hero', val, 'bg_image')}
-                                                        folder="site_content/team"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Box size={18} /> CTA Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Title" value={content.team_page?.cta?.title} onChange={(val) => handleChange('team_page', 'cta', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.team_page?.cta?.highlight} onChange={(val) => handleChange('team_page', 'cta', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.team_page?.cta?.description} onChange={(val) => handleChange('team_page', 'cta', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Button 1" value={content.team_page?.cta?.start_project} onChange={(val) => handleChange('team_page', 'cta', val, 'start_project')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Button 2" value={content.team_page?.cta?.learn_more} onChange={(val) => handleChange('team_page', 'cta', val, 'learn_more')} activeLanguage={activeLanguage} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- CONTACT TAB --- */}
-                                {
-                                    activeTab === 'contact' && (
-                                        <div className="space-y-6">
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Phone size={18} /> Hero Section
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.contact?.hero?.badge} onChange={(val) => handleChange('contact', 'hero', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.contact?.hero?.title} onChange={(val) => handleChange('contact', 'hero', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.contact?.hero?.highlight} onChange={(val) => handleChange('contact', 'hero', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.contact?.hero?.description} onChange={(val) => handleChange('contact', 'hero', val, 'description')} activeLanguage={activeLanguage} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.contact?.hero?.bg_image}
-                                                        onChange={(val) => handleChange('contact', 'hero', val, 'bg_image')}
-                                                        folder="site_content/contact"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Info size={18} /> Info Labels
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    <LocalizedInput label="Email Label" value={content.contact?.info_labels?.email} onChange={(val) => handleChange('contact', 'info_labels', val, 'email')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Call Label" value={content.contact?.info_labels?.call} onChange={(val) => handleChange('contact', 'info_labels', val, 'call')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Visit Label" value={content.contact?.info_labels?.visit} onChange={(val) => handleChange('contact', 'info_labels', val, 'visit')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Response Time" value={content.contact?.info_labels?.response_time} onChange={(val) => handleChange('contact', 'info_labels', val, 'response_time')} activeLanguage={activeLanguage} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- SECTION HEADERS TAB --- */}
-                                {
-                                    activeTab === 'section_headers' && (
-                                        <div className="space-y-6">
-                                            {['services', 'testimonials', 'team', 'projects', 'faq'].map(section => (
-                                                <div key={section} className="glass-panel p-6 space-y-4">
-                                                    <h3 className="font-semibold text-lg hover:text-blue-500 transition-colors capitalize flex items-center gap-2">
-                                                        <Info size={18} className="text-slate-400" />
-                                                        {section} Header
-                                                    </h3>
-                                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                        <LocalizedInput
-                                                            label="Badge"
-                                                            value={content.section_headers?.[section]?.badge}
-                                                            onChange={(val) => handleChange('section_headers', section, val, 'badge')}
-                                                            activeLanguage={activeLanguage}
-                                                        />
-                                                        <LocalizedInput
-                                                            label="Title"
-                                                            value={content.section_headers?.[section]?.title}
-                                                            onChange={(val) => handleChange('section_headers', section, val, 'title')}
-                                                            activeLanguage={activeLanguage}
-                                                        />
-                                                        <LocalizedInput
-                                                            label="Highlight"
-                                                            value={content.section_headers?.[section]?.highlight}
-                                                            onChange={(val) => handleChange('section_headers', section, val, 'highlight')}
-                                                            activeLanguage={activeLanguage}
-                                                        />
-                                                    </div>
-                                                    <LocalizedTextArea
-                                                        label="Description"
-                                                        value={content.section_headers?.[section]?.description}
-                                                        onChange={(val) => handleChange('section_headers', section, val, 'description')}
-                                                        activeLanguage={activeLanguage}
-                                                        rows={2}
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )
-                                }
-
-                                {/* --- TOOLS TAB --- */}
-                                {
-                                    activeTab === 'tools' && (
-                                        <div className="space-y-6">
-                                            {/* Slogan Generator */}
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Sparkles size={18} /> Slogan Generator
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.tools?.slogan?.badge} onChange={(val) => handleChange('tools', 'slogan', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.tools?.slogan?.title} onChange={(val) => handleChange('tools', 'slogan', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.tools?.slogan?.highlight} onChange={(val) => handleChange('tools', 'slogan', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.tools?.slogan?.description} onChange={(val) => handleChange('tools', 'slogan', val, 'description')} activeLanguage={activeLanguage} rows={2} />
-                                                <div className="pt-2">
-                                                    <ImageUpload
-                                                        label="Background Image (Optional)"
-                                                        value={content.tools?.slogan?.bg_image}
-                                                        onChange={(val) => handleChange('tools', 'slogan', val, 'bg_image')}
-                                                        folder="site_content/tools"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* AI Use Cases */}
-                                            <div className="glass-panel p-6 space-y-6">
-                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
-                                                    <Sparkles size={18} /> AI Use Cases
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                    <LocalizedInput label="Badge" value={content.tools?.use_cases?.badge} onChange={(val) => handleChange('tools', 'use_cases', val, 'badge')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Title" value={content.tools?.use_cases?.title} onChange={(val) => handleChange('tools', 'use_cases', val, 'title')} activeLanguage={activeLanguage} />
-                                                    <LocalizedInput label="Highlight" value={content.tools?.use_cases?.highlight} onChange={(val) => handleChange('tools', 'use_cases', val, 'highlight')} activeLanguage={activeLanguage} />
-                                                </div>
-                                                <LocalizedTextArea label="Description" value={content.tools?.use_cases?.description} onChange={(val) => handleChange('tools', 'use_cases', val, 'description')} activeLanguage={activeLanguage} rows={2} />
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </div >
-                        </div >
-                    </PreviewLayout >
+                            </PreviewLayout>
+                        </div>
+                    </div>
                 )
             }
             <StatusModal />
-        </AdminPageLayout >
+        </AdminPageLayout>
     );
 };
 

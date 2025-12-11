@@ -19,6 +19,7 @@ const AdminBlog = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentPost, setCurrentPost] = useState<any>(null);
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+    const [activeTab, setActiveTab] = useState<'content' | 'seo'>('content');
 
     const fetchPosts = async () => {
         setLoading(true);
@@ -58,6 +59,9 @@ const AdminBlog = () => {
         e.preventDefault();
         setLoading(true);
         try {
+            // Ensure slug is unique if possible (basic check)
+            // Ideally we'd do a server-side check or a more robust one here, but for now we rely on user manually checking or simple collision in real-time
+
             const postData = {
                 ...currentPost,
                 updatedAt: serverTimestamp(),
@@ -82,32 +86,66 @@ const AdminBlog = () => {
         }
     };
 
+    const generateSlug = (title: string) => {
+        return title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)+/g, '');
+    };
+
     const openEdit = (post: any = {}) => {
+        const defaultTitle = { en: '' };
         setCurrentPost({
             image: post.image || '',
             date: post.date || new Date().toISOString().split('T')[0],
             author: post.author || 'GrowBrandi Team',
             category: post.category || 'Insights',
+            status: post.status || 'draft',
+            slug: post.slug || '',
             tags: post.tags || [],
             title: ensureLocalizedFormat(post.title),
             excerpt: ensureLocalizedFormat(post.excerpt),
             content: ensureLocalizedFormat(post.content),
             readTime: post.readTime || '5 min read',
+            seo: {
+                metaTitle: ensureLocalizedFormat(post.seo?.metaTitle || post.title),
+                metaDescription: ensureLocalizedFormat(post.seo?.metaDescription || post.excerpt),
+                keywords: ensureLocalizedFormat(post.seo?.keywords || { en: '' }),
+            },
             ...post,
         });
         setActiveLanguage('en');
+        setActiveTab('content');
         setIsEditing(true);
     };
 
     const updateField = (field: string, value: any) => {
-        setCurrentPost({ ...currentPost, [field]: value });
+        setCurrentPost((prev: any) => {
+            const newState = { ...prev, [field]: value };
+
+            // Auto-generate slug if title changes and slug hasn't been manually set (or is empty) (only for main language 'en' usually, or handle localized slugs? simpler to keep one slug)
+            if (field === 'title' && activeLanguage === 'en' && (!prev.slug || prev.slug === generateSlug(getLocalizedField(prev.title, 'en')))) {
+                newState.slug = generateSlug(getLocalizedField(value, 'en'));
+            }
+            return newState;
+        });
+    };
+
+    const updateSeoField = (field: string, value: any) => {
+        setCurrentPost((prev: any) => ({
+            ...prev,
+            seo: {
+                ...prev.seo,
+                [field]: value
+            }
+        }));
     };
 
     const { isTranslating, handleAutoTranslate } = useAutoTranslate(
         currentPost,
         setCurrentPost,
         {
-            fields: ['title', 'excerpt', 'content'],
+            fields: ['title', 'excerpt', 'content', 'seo.metaTitle', 'seo.metaDescription', 'seo.keywords'],
         }
     );
 
@@ -141,18 +179,25 @@ const AdminBlog = () => {
                             >
                                 <ArrowLeft size={20} />
                             </button>
-                            <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
-                                {currentPost.id ? 'Edit Post' : 'New Post'}
-                            </h2>
+                            <div>
+                                <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-300">
+                                    {currentPost.id ? 'Edit Post' : 'New Post'}
+                                </h2>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <span className={`px-2 py-0.5 text-xs font-bold uppercase tracking-wider rounded-md border ${currentPost.status === 'published' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'}`}>
+                                        {currentPost.status === 'published' ? 'Published' : 'Draft'}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex items-center gap-3">
                             <button
                                 type="button"
                                 onClick={handleAutoTranslate}
                                 disabled={isTranslating}
-                                className="flex items-center gap-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-2 px-3 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50 text-sm"
                             >
-                                <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                                <Sparkles size={16} className={isTranslating ? "animate-spin" : ""} />
                                 {isTranslating ? 'Translating...' : 'Auto Translate'}
                             </button>
                             <button
@@ -171,124 +216,228 @@ const AdminBlog = () => {
                         </div>
                     </div>
 
-                    <div className="mb-8">
-                        <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
-                    </div>
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        {/* Main Editor Area */}
+                        <div className="flex-1 space-y-6">
+                            {/* Tabs */}
+                            <div className="flex border-b border-slate-200 dark:border-slate-700">
+                                <button
+                                    onClick={() => setActiveTab('content')}
+                                    className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${activeTab === 'content' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                >
+                                    Content
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('seo')}
+                                    className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${activeTab === 'seo' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                                >
+                                    SEO & Settings
+                                </button>
+                            </div>
 
-                    <form onSubmit={handleSave} className="space-y-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {/* Main Content */}
-                            <div className="lg:col-span-2 space-y-6">
-                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
-                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <FileText size={18} className="text-blue-500" />
-                                        Post Content
-                                    </h3>
+                            <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
 
-                                    <LocalizedInput
-                                        label="Post Title"
-                                        value={currentPost.title}
-                                        onChange={(v) => updateField('title', v)}
-                                        activeLanguage={activeLanguage}
-                                        required
-                                    />
+                            {activeTab === 'content' && (
+                                <div className="space-y-6 animate-in fade-in duration-300">
+                                    <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                        <LocalizedInput
+                                            label="Post Title"
+                                            value={currentPost.title}
+                                            onChange={(v) => updateField('title', v)}
+                                            activeLanguage={activeLanguage}
+                                            required
+                                        />
 
-                                    <LocalizedTextArea
-                                        label="Excerpt / Summary"
-                                        value={currentPost.excerpt}
-                                        onChange={(v) => updateField('excerpt', v)}
-                                        activeLanguage={activeLanguage}
-                                        rows={3}
-                                    />
+                                        {/* Permalink Display */}
+                                        <div className="flex items-center gap-2 text-sm text-slate-500 bg-slate-100 dark:bg-slate-800/50 px-3 py-2 rounded-lg -mt-4">
+                                            <span className="font-semibold">Permalink:</span>
+                                            <span className="truncate">https://growbrandi.com/blog/{currentPost.slug || '...'}</span>
+                                        </div>
 
-                                    <LocalizedTextArea
-                                        label="Full Content (Markdown supported)"
-                                        value={currentPost.content}
-                                        onChange={(v) => updateField('content', v)}
-                                        activeLanguage={activeLanguage}
-                                        rows={12}
+                                        <LocalizedTextArea
+                                            label="Excerpt / Summary"
+                                            value={currentPost.excerpt}
+                                            onChange={(v) => updateField('excerpt', v)}
+                                            activeLanguage={activeLanguage}
+                                            rows={3}
+                                            placeholder="A short summary for list views and social cards..."
+                                        />
+
+                                        <LocalizedTextArea
+                                            label="Full Content (Markdown supported)"
+                                            value={currentPost.content}
+                                            onChange={(v) => updateField('content', v)}
+                                            activeLanguage={activeLanguage}
+                                            rows={20}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'seo' && (
+                                <div className="space-y-6 animate-in fade-in duration-300">
+                                    <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                        <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+                                            <Sparkles size={18} className="text-purple-500" />
+                                            Search Engine Optimization
+                                        </h3>
+
+                                        <div className="p-4 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg mb-6">
+                                            <div className="text-sm font-medium text-slate-500 mb-2">Search Preview</div>
+                                            <div className="max-w-xl">
+                                                <div className="text-blue-600 text-lg hover:underline cursor-pointer truncate">
+                                                    {getLocalizedField(currentPost.seo.metaTitle, activeLanguage) || getLocalizedField(currentPost.title, activeLanguage) || 'Post Title'}
+                                                </div>
+                                                <div className="text-green-700 text-sm truncate">
+                                                    https://growbrandi.com/blog/{currentPost.slug}
+                                                </div>
+                                                <div className="text-slate-600 dark:text-slate-400 text-sm mt-1 line-clamp-2">
+                                                    {getLocalizedField(currentPost.seo.metaDescription, activeLanguage) || getLocalizedField(currentPost.excerpt, activeLanguage) || 'Post description will appear here...'}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <LocalizedInput
+                                            label="Meta Title (Browser Title)"
+                                            value={currentPost.seo.metaTitle}
+                                            onChange={(v) => updateSeoField('metaTitle', v)}
+                                            activeLanguage={activeLanguage}
+                                            placeholder={getLocalizedField(currentPost.title, activeLanguage)}
+                                        />
+
+                                        <LocalizedTextArea
+                                            label="Meta Description"
+                                            value={currentPost.seo.metaDescription}
+                                            onChange={(v) => updateSeoField('metaDescription', v)}
+                                            activeLanguage={activeLanguage}
+                                            rows={3}
+                                            placeholder={getLocalizedField(currentPost.excerpt, activeLanguage)}
+                                        />
+
+                                        <LocalizedInput
+                                            label="Keywords (Comma separated)"
+                                            value={currentPost.seo.keywords}
+                                            onChange={(v) => updateSeoField('keywords', v)}
+                                            activeLanguage={activeLanguage}
+                                            placeholder="AI, Growth, Marketing..."
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Sidebar */}
+                        <div className="w-full lg:w-80 space-y-6 shrink-0">
+                            {/* Publish Status Card */}
+                            <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-4">
+                                <h3 className="font-semibold text-slate-900 dark:text-white pb-2 border-b border-slate-200 dark:border-slate-700">Publishing</h3>
+
+                                <div className="flex items-center justify-between">
+                                    <label className="text-sm text-slate-700 dark:text-slate-300 font-medium">Status</label>
+                                    <select
+                                        value={currentPost.status}
+                                        onChange={(e) => updateField('status', e.target.value)}
+                                        className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium"
+                                    >
+                                        <option value="draft">Draft</option>
+                                        <option value="published">Published</option>
+                                        <option value="archived">Archived</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Slug (URL)</label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            value={currentPost.slug}
+                                            onChange={(e) => updateField('slug', e.target.value)}
+                                            className="w-full pl-3 pr-8 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm"
+                                        />
+                                        <div className="absolute right-2 top-2.5 text-slate-400">
+                                            <Edit2 size={14} />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Publish Date</label>
+                                    <input
+                                        type="date"
+                                        value={currentPost.date}
+                                        onChange={(e) => updateField('date', e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
                             </div>
 
-                            {/* Sidebar Options */}
-                            <div className="space-y-6">
-                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
-                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <Tag size={18} className="text-emerald-500" />
-                                        Metadata
-                                    </h3>
+                            {/* Metadata Card */}
+                            <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+                                    <Tag size={18} className="text-emerald-500" />
+                                    Categorization
+                                </h3>
 
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Category</label>
-                                        <input
-                                            type="text"
-                                            value={currentPost.category}
-                                            onChange={(e) => updateField('category', e.target.value)}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                            placeholder="e.g. AI Trends"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Publish Date</label>
-                                        <input
-                                            type="date"
-                                            value={currentPost.date}
-                                            onChange={(e) => updateField('date', e.target.value)}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Author</label>
-                                        <input
-                                            type="text"
-                                            value={currentPost.author}
-                                            onChange={(e) => updateField('author', e.target.value)}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Read Time</label>
-                                        <input
-                                            type="text"
-                                            value={currentPost.readTime}
-                                            onChange={(e) => updateField('readTime', e.target.value)}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                            placeholder="e.g. 5 min read"
-                                        />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Tags</label>
-                                        <input
-                                            type="text"
-                                            value={currentPost.tags?.join(', ')}
-                                            onChange={(e) => updateField('tags', e.target.value.split(',').map((t: string) => t.trim()))}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                            placeholder="AI, Tech, Future..."
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
-                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                                        <Image size={18} className="text-violet-500" />
-                                        Featured Image
-                                    </h3>
-
-                                    <ImageUpload
-                                        label="Cover Image"
-                                        value={currentPost.image}
-                                        onChange={(url) => updateField('image', url)}
-                                        folder={`blog/${currentPost.id || 'new'}`}
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Category</label>
+                                    <input
+                                        type="text"
+                                        value={currentPost.category}
+                                        onChange={(e) => updateField('category', e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                        placeholder="e.g. AI Trends"
                                     />
                                 </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Author</label>
+                                    <input
+                                        type="text"
+                                        value={currentPost.author}
+                                        onChange={(e) => updateField('author', e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Read Time</label>
+                                    <input
+                                        type="text"
+                                        value={currentPost.readTime}
+                                        onChange={(e) => updateField('readTime', e.target.value)}
+                                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                        placeholder="e.g. 5 min read"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Tags</label>
+                                    <input
+                                        type="text"
+                                        value={currentPost.tags?.join(', ')}
+                                        onChange={(e) => updateField('tags', e.target.value.split(',').map((t: string) => t.trim()))}
+                                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                        placeholder="AI, Tech, Future..."
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Featured Image */}
+                            <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2 pb-2 border-b border-slate-200 dark:border-slate-700">
+                                    <Image size={18} className="text-violet-500" />
+                                    Featured Image
+                                </h3>
+
+                                <ImageUpload
+                                    label="Cover Image"
+                                    value={currentPost.image}
+                                    onChange={(url) => updateField('image', url)}
+                                    folder={`blog/${currentPost.id || 'new'}`}
+                                />
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4">
@@ -327,8 +476,9 @@ const AdminBlog = () => {
                                     <div className="flex justify-between items-start mb-2 gap-4">
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-md">
-                                                    {post.category}
+                                                <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${post.status === 'published' ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400' : 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400'
+                                                    }`}>
+                                                    {post.status === 'published' ? 'Published' : 'Draft'}
                                                 </span>
                                                 <span className="text-xs text-slate-400 flex items-center gap-1">
                                                     <Calendar size={10} />
