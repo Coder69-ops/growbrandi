@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { getLocalizedField, SupportedLanguage } from '../utils/localization';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { getLocalizedField } from '../utils/localization';
 
 interface SiteContentHook {
     content: any;
     loading: boolean;
     error: Error | null;
-    getText: (path: string, language: SupportedLanguage) => string;
+    getText: (path: string, language: string) => string;
 }
 
 /**
- * Hook to fetch site-wide content from Firestore
+ * Hook to fetch site-wide content from Firestore with real-time updates
  * Falls back to translation.json if Firestore is unavailable
  * 
  * @param collection - 'site_content' or 'contact_settings'
@@ -26,30 +26,28 @@ export const useSiteContent = (
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        const fetchContent = async () => {
-            setLoading(true);
-            setError(null);
+        setLoading(true);
+        setError(null);
 
-            try {
-                const docRef = doc(db, collection, documentId);
-                const docSnap = await getDoc(docRef);
+        const docRef = doc(db, collection, documentId);
 
+        const unsubscribe = onSnapshot(docRef,
+            (docSnap) => {
                 if (docSnap.exists()) {
                     setContent(docSnap.data());
                 } else {
-                    // Document doesn't exist, will use translation.json fallback
                     setContent(null);
                 }
-            } catch (err) {
+                setLoading(false);
+            },
+            (err) => {
                 console.error(`Error fetching ${collection}:`, err);
                 setError(err as Error);
-                // On error, content stays null and components use translation.json
-            } finally {
                 setLoading(false);
             }
-        };
+        );
 
-        fetchContent();
+        return () => unsubscribe();
     }, [collection, documentId]);
 
     /**
@@ -60,7 +58,7 @@ export const useSiteContent = (
      * @param language - Language code
      * @returns Localized string or empty string if not found
      */
-    const getText = (path: string, language: SupportedLanguage): string => {
+    const getText = (path: string, language: string): string => {
         if (!content) return '';
 
         const keys = path.split('.');
@@ -75,17 +73,8 @@ export const useSiteContent = (
             }
         }
 
-        // If the final value is a localized object, get the language-specific text
-        if (value && typeof value === 'object' && language in value) {
-            return value[language] || '';
-        }
-
-        // If it's a direct string value (for non-localized fields like email, phone)
-        if (typeof value === 'string') {
-            return value;
-        }
-
-        return '';
+        // Use the robust helper to extract text (handling fallbacks like en-US -> en)
+        return getLocalizedField(value, language);
     };
 
     return { content, loading, error, getText };

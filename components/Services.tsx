@@ -9,6 +9,7 @@ import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { getIcon } from '../src/utils/icons';
 import { useContent } from '../src/hooks/useContent';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { Skeleton } from './ui/Skeleton';
@@ -46,18 +47,8 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
   // Helper to get text safely
   const txt = (field: any) => getLocalizedField(field, i18n.language);
 
-  // Get process steps from translation.json using service id
-  // Fallback to default process if specific process not found
-  const stepsData = service ? t(`services.${service.id}.process`, { returnObjects: true }) : null;
-  const defaultSteps = t('services.process.default', { returnObjects: true });
-
-  let steps: any[] = [];
-  if (stepsData && Array.isArray(stepsData)) {
-    steps = stepsData;
-  } else if (defaultSteps) {
-    // If defaultSteps is an object (step1, step2...), convert to array
-    steps = Object.values(defaultSteps);
-  }
+  // Get process steps from service data if available
+  const steps = service?.process || [];
 
   // Get why choose benefits from translation
   const benefitsData = t('services.ui.benefits', { returnObjects: true });
@@ -157,12 +148,12 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
 
                         <div className="bg-white dark:bg-white/5 p-5 rounded-xl border border-slate-200 dark:border-white/5 shadow-sm">
                           <div className="flex items-center justify-between mb-2">
-                            <h4 className="font-bold text-slate-900 dark:text-white">{step.step}</h4>
+                            <h4 className="font-bold text-slate-900 dark:text-white">{txt(step.step)}</h4>
                             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-1 rounded-full">
-                              {step.duration}
+                              {txt(step.duration)}
                             </span>
                           </div>
-                          <p className="text-sm text-slate-600 dark:text-zinc-400">{step.description}</p>
+                          <p className="text-sm text-slate-600 dark:text-zinc-400">{txt(step.description)}</p>
                         </div>
                       </div>
                     ))}
@@ -263,42 +254,30 @@ export const ServicesPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { getLocalizedPath } = useLocalizedPath();
+  const { getText } = useSiteContentData();
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: services, loading } = useContent<Service>('services');
   const [activeFilter, setActiveFilter] = useState('All');
   const [displayedServices, setDisplayedServices] = useState<Service[]>([]);
 
+  // Use translations or fallbacks for header content
+  const badge = getText('section_headers.services.badge', i18n.language as any) || t('services.hero.badge', 'Comprehensive Services');
+  const title = getText('section_headers.services.title', i18n.language as any) || t('services.hero.title', 'Premium Digital');
+  const highlight = getText('section_headers.services.highlight', i18n.language as any) || t('services.hero.highlight', 'Solutions');
+  const description = getText('section_headers.services.description', i18n.language as any) || t('services.hero.description', 'Transform your business with our comprehensive suite of services. From cutting-edge design and development to data-driven marketing strategies.');
+
   useEffect(() => {
     if (services) {
-      // Optimized filtering which respects both data IDs and English titles
       const filterServices = () => {
         if (activeFilter === 'All') return services;
-
-        const categoryIds = serviceCategories[activeFilter as keyof typeof serviceCategories] || [];
-        return services.filter(service => {
-          // Check exact ID match or contained in ID
-          const idMatch = categoryIds.some(cat => service.id.includes(cat) || (service as any).serviceId?.includes(cat));
-          // Check title match (safely get EN title)
-          const title = getLocalizedField(service.title, 'en');
-          const titleMatch = categoryIds.some(cat => title.includes(cat));
-
-          return idMatch || titleMatch;
-        });
+        return services.filter(service => service.category === activeFilter);
       };
-
       setDisplayedServices(filterServices());
     }
   }, [services, activeFilter]);
 
   const categories = ['All', 'Design', 'Development', 'Marketing', 'Strategy'];
-
-  const serviceCategories = {
-    'Design': ['UI/UX Design', 'Brand Strategy', 'ui_ux_design', 'creative_studio'],
-    'Development': ['Web Development', 'web_shopify_dev', 'web_development'],
-    'Marketing': ['SEO Optimization', 'Digital Marketing', 'Content Creation', 'performance_marketing', 'social_media_management'],
-    'Strategy': ['Brand Strategy', 'Digital Marketing', 'creative_studio', 'ecommerce_management']
-  };
 
   // Helper for title checking
   const getIsFeatured = (service: Service) => {
@@ -326,10 +305,10 @@ export const ServicesPage: React.FC = () => {
 
         <div className="container mx-auto max-w-7xl relative z-10">
           <SectionHeading
-            badge="Comprehensive Services"
-            title="Premium Digital"
-            highlight="Solutions"
-            description="Transform your business with our comprehensive suite of services. From cutting-edge design and development to data-driven marketing strategies."
+            badge={badge}
+            title={title}
+            highlight={highlight}
+            description={description}
           />
 
           {!loading && (

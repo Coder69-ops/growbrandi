@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 // import { PROJECTS } from '../../../constants'; // Removed
 import { Plus, Edit2, Trash2, Save, X, ChevronDown, CheckCircle2, TrendingUp, Settings, Image, FolderKanban, ArrowLeft, FileText } from 'lucide-react';
-import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
+import { LanguageTabs, LocalizedInput, LocalizedArrayInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -124,6 +124,8 @@ const AdminProjects = () => {
             client: ensureLocalizedFormat(project.client),
             completionTime: ensureLocalizedFormat(project.completionTime),
             growthMetrics: ensureLocalizedFormat(project.growthMetrics),
+            challenge: ensureLocalizedFormat(project.challenge),
+            solution: ensureLocalizedFormat(project.solution),
             results: (project.results || []).map((r: any) => ensureLocalizedFormat(r)),
             ...project,
         });
@@ -139,7 +141,7 @@ const AdminProjects = () => {
         currentProject,
         setCurrentProject,
         {
-            fields: ['title', 'description', 'client', 'completionTime', 'growthMetrics'],
+            fields: ['title', 'description', 'client', 'completionTime', 'growthMetrics', 'challenge', 'solution'],
             arrayFields: ['results']
         }
     );
@@ -235,7 +237,7 @@ const AdminProjects = () => {
                                         />
                                     </div>
 
-                                    <LocalizedInput
+                                    <LocalizedTextArea
                                         label="Description"
                                         value={currentProject.description}
                                         onChange={(v) => updateField('description', v)}
@@ -243,6 +245,25 @@ const AdminProjects = () => {
                                         type="textarea"
                                         rows={4}
                                     />
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                        <LocalizedTextArea
+                                            label="The Challenge (Case Study)"
+                                            value={currentProject.challenge}
+                                            onChange={(v) => updateField('challenge', v)}
+                                            activeLanguage={activeLanguage}
+                                            rows={4}
+                                            placeholder="What problem were we solving?"
+                                        />
+                                        <LocalizedTextArea
+                                            label="The Solution (Case Study)"
+                                            value={currentProject.solution}
+                                            onChange={(v) => updateField('solution', v)}
+                                            activeLanguage={activeLanguage}
+                                            rows={4}
+                                            placeholder="How did we solve it?"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">

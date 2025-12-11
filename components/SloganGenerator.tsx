@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaMagic, FaBolt, FaCopy } from 'react-icons/fa';
 import { generateSlogan } from '../services/geminiService';
 import LoadingSpinner from './LoadingSpinner';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -23,11 +24,13 @@ const itemVariants = {
 };
 
 const SloganGenerator: React.FC = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const { getText, content } = useSiteContentData();
     const [keywords, setKeywords] = useState('');
     const [slogans, setSlogans] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const lang = i18n.language as any; // Cast to avoid type issues or import SupportedLanguage
 
     const handleGenerate = async () => {
         if (!keywords.trim()) {
@@ -57,6 +60,19 @@ const SloganGenerator: React.FC = () => {
         >
             {/* Background Elements */}
             <div className="absolute inset-0 bg-slate-50 dark:bg-luxury-black transition-colors duration-300" />
+
+            {/* Dynamic Background Image */}
+            {content?.tools?.slogan?.bg_image && (
+                <div
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{ backgroundImage: `url(${content.tools.slogan.bg_image})` }}
+                />
+            )}
+            {/* Overlay if bg image is present */}
+            {content?.tools?.slogan?.bg_image && (
+                <div className="absolute inset-0 bg-white/90 dark:bg-black/80 backdrop-blur-sm" />
+            )}
+
             {/* Removed overlay gradient for dark luxury theme */}
             <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl" />
@@ -65,13 +81,15 @@ const SloganGenerator: React.FC = () => {
                 <motion.div variants={itemVariants} className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 glass-effect rounded-full px-6 py-2 mb-6">
                         <FaMagic className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">{t('slogan_generator.badge')}</span>
+                        <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                            {getText('tools.slogan.badge', lang) || t('slogan_generator.badge')}
+                        </span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 sm:mb-6 px-4 sm:px-0 text-slate-900 dark:text-white">
-                        {t('slogan_generator.title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">{t('slogan_generator.title_highlight')}</span>
+                        {getText('tools.slogan.title', lang) || t('slogan_generator.title_prefix')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">{getText('tools.slogan.highlight', lang) || t('slogan_generator.title_highlight')}</span>
                     </h2>
                     <p className="text-base sm:text-lg md:text-xl text-slate-600 dark:text-zinc-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-                        {t('slogan_generator.description')}
+                        {getText('tools.slogan.description', lang) || t('slogan_generator.description')}
                     </p>
                 </motion.div>
 

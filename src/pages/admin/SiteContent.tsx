@@ -18,6 +18,7 @@ const TABS = [
     { id: 'careers', label: 'Careers', icon: Briefcase },
     { id: 'team_page', label: 'Team Page', icon: Users },
     { id: 'contact', label: 'Contact', icon: Phone },
+    { id: 'tools', label: 'Tools', icon: Sparkles },
     { id: 'footer', label: 'Footer', icon: Layout },
 ];
 
@@ -43,6 +44,10 @@ const TRANSLATE_OPTIONS: Record<string, string[]> = {
         'section_headers.team.badge', 'section_headers.team.title', 'section_headers.team.highlight', 'section_headers.team.description',
         'section_headers.projects.badge', 'section_headers.projects.title', 'section_headers.projects.highlight', 'section_headers.projects.description',
         'section_headers.faq.badge', 'section_headers.faq.title', 'section_headers.faq.highlight', 'section_headers.faq.description'
+    ],
+    tools: [
+        'tools.slogan.badge', 'tools.slogan.title', 'tools.slogan.highlight', 'tools.slogan.description',
+        'tools.use_cases.badge', 'tools.use_cases.title', 'tools.use_cases.highlight', 'tools.use_cases.description'
     ]
 };
 
@@ -290,6 +295,25 @@ const AdminSiteContent = () => {
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <LocalizedInput label="Button 1 (Consultation)" value={content.hero?.cta_consultation} onChange={(val) => handleChange('hero', 'cta_consultation', val)} activeLanguage={activeLanguage} />
                                                     <LocalizedInput label="Button 2 (Showreel)" value={content.hero?.cta_showreel} onChange={(val) => handleChange('hero', 'cta_showreel', val)} activeLanguage={activeLanguage} />
+                                                </div>
+                                            </div>
+
+                                            <div className="glass-panel p-6 space-y-6">
+                                                <h3 className="font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                                                    <Users size={20} className="text-emerald-500" />
+                                                    Trusted By Logos
+                                                </h3>
+                                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                                                    {[1, 2, 3, 4, 5, 6].map(i => (
+                                                        <div key={i}>
+                                                            <ImageUpload
+                                                                label={`Partner Logo ${i}`}
+                                                                value={content.hero?.partners?.[`logo_${i}`]}
+                                                                onChange={(val) => handleChange('hero', 'partners', val, `logo_${i}`)}
+                                                                folder="site_content/partners"
+                                                            />
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
                                         </div>
@@ -579,6 +603,47 @@ const AdminSiteContent = () => {
                                                     />
                                                 </div>
                                             ))}
+                                        </div>
+                                    )
+                                }
+
+                                {/* --- TOOLS TAB --- */}
+                                {
+                                    activeTab === 'tools' && (
+                                        <div className="space-y-6">
+                                            {/* Slogan Generator */}
+                                            <div className="glass-panel p-6 space-y-6">
+                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
+                                                    <Sparkles size={18} /> Slogan Generator
+                                                </h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                    <LocalizedInput label="Badge" value={content.tools?.slogan?.badge} onChange={(val) => handleChange('tools', 'slogan', val, 'badge')} activeLanguage={activeLanguage} />
+                                                    <LocalizedInput label="Title" value={content.tools?.slogan?.title} onChange={(val) => handleChange('tools', 'slogan', val, 'title')} activeLanguage={activeLanguage} />
+                                                    <LocalizedInput label="Highlight" value={content.tools?.slogan?.highlight} onChange={(val) => handleChange('tools', 'slogan', val, 'highlight')} activeLanguage={activeLanguage} />
+                                                </div>
+                                                <LocalizedTextArea label="Description" value={content.tools?.slogan?.description} onChange={(val) => handleChange('tools', 'slogan', val, 'description')} activeLanguage={activeLanguage} rows={2} />
+                                                <div className="pt-2">
+                                                    <ImageUpload
+                                                        label="Background Image (Optional)"
+                                                        value={content.tools?.slogan?.bg_image}
+                                                        onChange={(val) => handleChange('tools', 'slogan', val, 'bg_image')}
+                                                        folder="site_content/tools"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* AI Use Cases */}
+                                            <div className="glass-panel p-6 space-y-6">
+                                                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
+                                                    <Sparkles size={18} /> AI Use Cases
+                                                </h3>
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                    <LocalizedInput label="Badge" value={content.tools?.use_cases?.badge} onChange={(val) => handleChange('tools', 'use_cases', val, 'badge')} activeLanguage={activeLanguage} />
+                                                    <LocalizedInput label="Title" value={content.tools?.use_cases?.title} onChange={(val) => handleChange('tools', 'use_cases', val, 'title')} activeLanguage={activeLanguage} />
+                                                    <LocalizedInput label="Highlight" value={content.tools?.use_cases?.highlight} onChange={(val) => handleChange('tools', 'use_cases', val, 'highlight')} activeLanguage={activeLanguage} />
+                                                </div>
+                                                <LocalizedTextArea label="Description" value={content.tools?.use_cases?.description} onChange={(val) => handleChange('tools', 'use_cases', val, 'description')} activeLanguage={activeLanguage} rows={2} />
+                                            </div>
                                         </div>
                                     )
                                 }

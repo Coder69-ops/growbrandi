@@ -126,6 +126,12 @@ const AdminServices = () => {
             price: ensureLocalizedFormat(service.price),
             features: (service.features || []).map((f: any) => ensureLocalizedFormat(f)),
             isPopular: service.isPopular || false,
+            category: service.category || 'Design',
+            process: (service.process || []).map((p: any) => ({
+                step: ensureLocalizedFormat(p.step),
+                description: ensureLocalizedFormat(p.description),
+                duration: ensureLocalizedFormat(p.duration)
+            })),
             ...service,
         });
         setActiveLanguage('en');
@@ -141,7 +147,10 @@ const AdminServices = () => {
         setCurrentService,
         {
             fields: ['title', 'description', 'price'],
-            arrayFields: ['features']
+            arrayFields: ['features'],
+            complexArrayFields: {
+                process: ['step', 'description', 'duration']
+            }
         }
     );
 
@@ -263,6 +272,79 @@ const AdminServices = () => {
                                         activeLanguage={activeLanguage}
                                         placeholder="e.g., Meta Ads Management"
                                     />
+                                </div>
+
+                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <List size={18} className="text-pink-500" />
+                                        Process Steps
+                                    </h3>
+
+                                    {(currentService.process || []).map((step: any, index: number) => (
+                                        <div key={index} className="p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 relative group">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const newProcess = [...(currentService.process || [])];
+                                                    newProcess.splice(index, 1);
+                                                    updateField('process', newProcess);
+                                                }}
+                                                className="absolute top-2 right-2 p-1 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                            <div className="space-y-4">
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <LocalizedInput
+                                                        label={`Step ${index + 1} Title`}
+                                                        value={step.step}
+                                                        onChange={(v) => {
+                                                            const newProcess = [...(currentService.process || [])];
+                                                            newProcess[index] = { ...step, step: v };
+                                                            updateField('process', newProcess);
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                        placeholder="Step Title"
+                                                    />
+                                                    <LocalizedInput
+                                                        label="Duration"
+                                                        value={step.duration}
+                                                        onChange={(v) => {
+                                                            const newProcess = [...(currentService.process || [])];
+                                                            newProcess[index] = { ...step, duration: v };
+                                                            updateField('process', newProcess);
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                        placeholder="e.g. 2 Weeks"
+                                                    />
+                                                </div>
+                                                <LocalizedInput
+                                                    label="Description"
+                                                    value={step.description}
+                                                    onChange={(v) => {
+                                                        const newProcess = [...(currentService.process || [])];
+                                                        newProcess[index] = { ...step, description: v };
+                                                        updateField('process', newProcess);
+                                                    }}
+                                                    activeLanguage={activeLanguage}
+                                                    type="textarea"
+                                                    rows={2}
+                                                    placeholder="Step description..."
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            const newProcess = [...(currentService.process || []), { step: {}, duration: {}, description: {} }];
+                                            updateField('process', newProcess);
+                                        }}
+                                        className="w-full py-2 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-lg text-slate-500 hover:text-blue-600 hover:border-blue-500 transition-colors flex items-center justify-center gap-2"
+                                    >
+                                        <Plus size={16} /> Add Process Step
+                                    </button>
                                 </div>
                             </div>
 

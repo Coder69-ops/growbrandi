@@ -13,6 +13,8 @@ import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import { useTranslation } from 'react-i18next';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 
 // --- Shared UI Components ---
 
@@ -949,6 +951,9 @@ const ConsultationPlanner = () => {
 
 const AIUseCases: React.FC = () => {
   const [activeTab, setActiveTab] = useState('estimator');
+  const { t, i18n } = useTranslation();
+  const { getText, content } = useSiteContentData();
+  const lang = i18n.language as any;
 
   const tabs = [
     { id: 'estimator', label: 'Project Estimator', icon: <FaCalculator /> },
@@ -963,10 +968,10 @@ const AIUseCases: React.FC = () => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <SectionHeading
-          badge="AI-Powered Tools"
-          title="Intelligent Business"
-          highlight="Insights"
-          description="Leverage our advanced AI tools to get instant estimates, strategic recommendations, and growth analysis for your business."
+          badge={getText('tools.use_cases.badge', lang) || "AI-Powered Tools"}
+          title={getText('tools.use_cases.title', lang) || "Intelligent Business"}
+          highlight={getText('tools.use_cases.highlight', lang) || "Insights"}
+          description={getText('tools.use_cases.description', lang) || "Leverage our advanced AI tools to get instant estimates, strategic recommendations, and growth analysis for your business."}
         />
 
         {/* Tabs */}

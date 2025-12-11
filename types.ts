@@ -20,6 +20,12 @@ export interface Service {
   price: string;
   color: string;
   isPopular?: boolean;
+  category?: string;
+  process?: {
+    step: string | LocalizedString;
+    description: string | LocalizedString;
+    duration: string | LocalizedString;
+  }[];
 }
 
 export interface Project {

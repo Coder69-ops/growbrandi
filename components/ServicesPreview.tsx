@@ -10,6 +10,7 @@ import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
 import { useContent } from '../src/hooks/useContent';
+import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { getIcon } from '../src/utils/icons';
@@ -568,7 +569,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
 const ServicesPreview: React.FC = () => {
     const navigate = useNavigate();
     const { getLocalizedPath } = useLocalizedPath();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const { getText } = useSiteContentData(); // Hook for dynamic content
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -581,6 +583,13 @@ const ServicesPreview: React.FC = () => {
         setIsModalOpen(true);
     };
 
+    // Dynamic Header Content
+    const badge = getText('section_headers.services.badge', i18n.language as any) || t('services.preview.badge', 'Our Services');
+    const title = getText('section_headers.services.title', i18n.language as any) || t('services.preview.title', 'What We Do');
+    const highlight = getText('section_headers.services.highlight', i18n.language as any) || t('services.preview.highlight', 'Best');
+    const description = getText('section_headers.services.description', i18n.language as any) || t('services.preview.description', 'We offer a wide range of services to help your business grow.');
+
+
     return (
         <>
             <section className="relative py-20 md:py-32 overflow-hidden bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
@@ -588,10 +597,10 @@ const ServicesPreview: React.FC = () => {
 
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <SectionHeading
-                        badge={t('services.preview.badge')}
-                        title={t('services.preview.title')}
-                        highlight={t('services.preview.highlight')}
-                        description={t('services.preview.description')}
+                        badge={badge}
+                        title={title}
+                        highlight={highlight}
+                        description={description}
                     />
 
                     {/* Enhanced Services Grid */}

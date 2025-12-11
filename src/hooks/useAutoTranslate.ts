@@ -35,6 +35,8 @@ interface UseAutoTranslateOptions {
     arrayFields?: string[];
     // Nested content keys using dot notation (e.g., 'page_text.title')
     deepKeys?: string[];
+    // Complex arrays of objects with localized fields (e.g., process -> [{step: {en: ..}, desc: {en: ..}}])
+    complexArrayFields?: Record<string, string[]>;
 }
 
 export const useAutoTranslate = (
@@ -68,14 +70,29 @@ export const useAutoTranslate = (
                 const array = data[arrayName];
                 if (Array.isArray(array)) {
                     array.forEach((item, index) => {
-                        // We expect item to be a LocalizedString (has 'en' property)
                         if (item?.en) {
-                            // Use a separator that is unlikely to be in a field name
                             contentToTranslate[`${arrayName}__ARRAY__${index}`] = item.en;
                         }
                     });
                 }
             });
+
+            // 4. Handle Complex Array Fields (e.g. Process Steps)
+            if (options.complexArrayFields) {
+                Object.entries(options.complexArrayFields).forEach(([arrayName, fields]) => {
+                    const array = data[arrayName];
+                    if (Array.isArray(array)) {
+                        array.forEach((item, index) => {
+                            fields.forEach(field => {
+                                const value = item[field]?.en;
+                                if (value) {
+                                    contentToTranslate[`${arrayName}__COMPLEX__${index}__${field}`] = value;
+                                }
+                            });
+                        });
+                    }
+                });
+            }
 
             if (Object.keys(contentToTranslate).length === 0) {
                 alert("No English content found to translate.");
@@ -107,12 +124,6 @@ export const useAutoTranslate = (
 
             // 3. Merge Array Fields
             options.arrayFields?.forEach(arrayName => {
-                /* 
-                   We need to be careful here. If we just map over newData[arrayName], 
-                   we are modifying the array in place if we are not careful with deep cloning.
-                   The setNestedValue or direct assignment 'newData[arrayName] = ...' handles the top level array reference,
-                   but we must ensure the items are new objects.
-                */
                 if (Array.isArray(newData[arrayName])) {
                     newData[arrayName] = newData[arrayName].map((item: any, index: number) => {
                         const translationKey = `${arrayName}__ARRAY__${index}`;
@@ -123,6 +134,28 @@ export const useAutoTranslate = (
                     });
                 }
             });
+
+            // 4. Merge Complex Array Fields
+            if (options.complexArrayFields) {
+                Object.entries(options.complexArrayFields).forEach(([arrayName, fields]) => {
+                    if (Array.isArray(newData[arrayName])) {
+                        newData[arrayName] = newData[arrayName].map((item: any, index: number) => {
+                            const updatedItem = { ...item };
+                            let hasUpdates = false;
+
+                            fields.forEach(field => {
+                                const translationKey = `${arrayName}__COMPLEX__${index}__${field}`;
+                                if (translations[translationKey]) {
+                                    updatedItem[field] = { ...updatedItem[field], ...translations[translationKey] };
+                                    hasUpdates = true;
+                                }
+                            });
+
+                            return hasUpdates ? updatedItem : item;
+                        });
+                    }
+                });
+            }
 
             setData(newData);
 

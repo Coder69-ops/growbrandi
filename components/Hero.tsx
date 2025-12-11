@@ -216,11 +216,18 @@ const HeroSection: React.FC = () => {
                             <div className="border-t border-slate-200 dark:border-white/10 pt-8">
                                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 font-medium uppercase tracking-wider">{getHeroText('trusted_by')}</p>
                                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-                                    <img src="/logos/amazon.svg" alt="Amazon" className="h-6 w-auto" />
-                                    <img src="/logos/google.svg" alt="Google" className="h-6 w-auto" />
-                                    <img src="/logos/netflix.svg" alt="Netflix" className="h-5 w-auto" />
-                                    <img src="/logos/spotify.svg" alt="Spotify" className="h-6 w-auto" />
-                                    <img src="/logos/shopify.svg" alt="Shopify" className="h-6 w-auto" />
+                                    {(Object.values(content?.hero?.partners || {}).length > 0
+                                        ? Object.values(content?.hero?.partners || {})
+                                        : [
+                                            "/logos/amazon.svg",
+                                            "/logos/google.svg",
+                                            "/logos/netflix.svg",
+                                            "/logos/spotify.svg",
+                                            "/logos/shopify.svg"
+                                        ]
+                                    ).map((logo: any, index) => (
+                                        <img key={index} src={logo} alt={`Partner ${index + 1}`} className="h-6 w-auto object-contain" />
+                                    ))}
                                 </div>
                             </div>
                         </motion.div>

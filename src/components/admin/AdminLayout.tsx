@@ -21,7 +21,9 @@ import {
     Search,
     Bell,
     Mail,
-    Shield
+    Shield,
+    BookOpen,
+    Target
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -64,6 +66,8 @@ const AdminLayout = () => {
         { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
         { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permission: 'manage_content' },
+        { path: '/admin/blog', icon: BookOpen, label: 'Blog', permission: 'manage_content' },
+        { path: '/admin/jobs', icon: Target, label: 'Jobs', permission: 'manage_content' },
         { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
         { path: '/admin/team', icon: Users, label: 'Public Team', permission: 'manage_team_profiles' },
         { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },

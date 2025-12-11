@@ -38,8 +38,14 @@ const AboutUsPage = React.lazy(() => import('./components/CompanyPages').then(mo
 const ProcessPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.ProcessPage })));
 const CaseStudiesPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.CaseStudiesPage })));
 const TeamPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.TeamPage })));
+const BlogPostPage = React.lazy(() => import('./components/BlogPostPage'));
+const JobDetailsPage = React.lazy(() => import('./components/JobDetailsPage'));
 const CareersPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.CareersPage })));
 const BlogPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.BlogPage })));
+
+// ... (existing code)
+
+// ... (existing code)
 
 // Legal Pages
 const PrivacyPolicyPage = React.lazy(() => import('./components/LegalPages').then(module => ({ default: module.PrivacyPolicyPage })));
@@ -63,6 +69,8 @@ import AdminSiteContent from './src/pages/admin/SiteContent';
 import AdminContactSettings from './src/pages/admin/ContactSettings';
 import AdminMessages from './src/pages/admin/Messages';
 import AdminTeamManagement from './src/pages/admin/TeamManagement';
+import AdminBlog from './src/pages/admin/Blog';
+import AdminJobs from './src/pages/admin/Jobs';
 
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
@@ -362,7 +370,9 @@ ${servicesDetails}
                 <Route path="/:lang/team" element={<LanguageWrapper><PageWrapper><TeamPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/team/:slug" element={<LanguageWrapper><PageWrapper><TeamMemberProfile /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/careers" element={<LanguageWrapper><PageWrapper><CareersPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/careers/:id" element={<LanguageWrapper><PageWrapper><JobDetailsPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/blog" element={<LanguageWrapper><PageWrapper><BlogPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/blog/:id" element={<LanguageWrapper><PageWrapper><BlogPostPage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Legal */}
                 <Route path="/:lang/legal/privacy-policy" element={<LanguageWrapper><PageWrapper><PrivacyPolicyPage /></PageWrapper></LanguageWrapper>} />
@@ -397,6 +407,8 @@ ${servicesDetails}
                     <Route path="contact-settings" element={<AdminContactSettings />} />
                     <Route path="messages" element={<AdminMessages />} />
                     <Route path="team-management" element={<AdminTeamManagement />} />
+                    <Route path="blog" element={<AdminBlog />} />
+                    <Route path="jobs" element={<AdminJobs />} />
                   </Route>
                 </Route>
               </Routes>

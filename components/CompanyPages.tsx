@@ -281,9 +281,10 @@ export const ProcessPage: React.FC = () => {
 
 // Case Studies Page
 export const CaseStudiesPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [selectedCase, setSelectedCase] = useState<number | null>(null);
-  const caseStudies = t('company.case_studies.items', { returnObjects: true }) as any[];
+  const { data: caseStudies, loading } = useContent('projects', { localizedFields: ['title', 'description', 'challenge', 'solution', 'results', 'category'] });
+  if (loading) return <div className="py-20 text-center">Loading...</div>;
 
   return (
     <>
@@ -309,13 +310,7 @@ export const CaseStudiesPage: React.FC = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {caseStudies.map((study, index) => {
-              // Add static images back since they are not in translation
-              const images = [
-                "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
-                "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&h=400&fit=crop",
-                "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop"
-              ];
-              const image = images[index] || images[0];
+              const image = study.image || "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop";
 
               return (
                 <motion.div
@@ -357,21 +352,25 @@ export const CaseStudiesPage: React.FC = () => {
                           <div className="space-y-4">
                             <div>
                               <h4 className="text-slate-900 dark:text-white font-semibold mb-2 text-sm uppercase tracking-wider">{t('company.case_studies.common.challenge')}</h4>
-                              <p className="text-slate-600 dark:text-zinc-400 text-sm font-light">{study.challenge}</p>
+                              <p className="text-slate-600 dark:text-zinc-400 text-sm font-light">{study.challenge || "No challenge detailed."}</p>
                             </div>
                             <div>
                               <h4 className="text-slate-900 dark:text-white font-semibold mb-2 text-sm uppercase tracking-wider">{t('company.case_studies.common.solution')}</h4>
-                              <p className="text-slate-600 dark:text-zinc-400 text-sm font-light">{study.solution}</p>
+                              <p className="text-slate-600 dark:text-zinc-400 text-sm font-light">{study.solution || "No solution detailed."}</p>
                             </div>
                             <div>
                               <h4 className="text-slate-900 dark:text-white font-semibold mb-2 text-sm uppercase tracking-wider">{t('company.case_studies.common.key_results')}</h4>
                               <ul className="space-y-2">
-                                {study.metrics.map((metric: string, metricIndex: number) => (
-                                  <li key={metricIndex} className="text-slate-600 dark:text-zinc-400 text-sm flex items-center gap-2 font-light">
-                                    <FaCheckCircle className="w-4 h-4 text-green-500" />
-                                    {metric}
-                                  </li>
-                                ))}
+                                {study.results ? (
+                                  Array.isArray(study.results) ? study.results.map((metric: any, metricIndex: number) => (
+                                    <li key={metricIndex} className="text-slate-600 dark:text-zinc-400 text-sm flex items-center gap-2 font-light">
+                                      <FaCheckCircle className="w-4 h-4 text-green-500" />
+                                      {typeof metric === 'string' ? metric : getLocalizedField(metric, i18n.language)}
+                                    </li>
+                                  )) : null
+                                ) : (
+                                  <li className="text-slate-500 text-sm">Results pending...</li>
+                                )}
                               </ul>
                             </div>
                           </div>
@@ -394,7 +393,10 @@ export const CareersPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { getText, content } = useSiteContentData();
   const lang = i18n.language as SupportedLanguage;
-  const jobOpenings = t('company.careers.openings', { returnObjects: true }) as any[];
+  const { data: jobOpenings, loading } = useContent('jobs', { localizedFields: ['title', 'description'] });
+  const { getLocalizedPath } = useLocalizedPath();
+
+  if (loading) return <div className="py-20 text-center">Loading...</div>;
 
   return (
     <>
@@ -459,13 +461,15 @@ export const CareersPage: React.FC = () => {
                         <span className="flex items-center gap-1"><FaClock className="text-blue-500" /> {job.type}</span>
                       </div>
                     </div>
-                    <motion.button
-                      className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {t('company.careers.apply_now')}
-                    </motion.button>
+                    <Link to={getLocalizedPath(`/careers/${job.id}`)}>
+                      <motion.button
+                        className="bg-gradient-to-r from-blue-600 to-blue-500 text-white px-6 py-3 rounded-full font-bold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 mt-4 md:mt-0 shadow-lg"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {t('company.careers.apply_now')}
+                      </motion.button>
+                    </Link>
                   </div>
                   <p className="text-slate-600 dark:text-zinc-300 font-light">{job.description}</p>
                 </GlassCard>
@@ -681,7 +685,10 @@ export const TeamPage: React.FC = () => {
 // Blog Page
 export const BlogPage: React.FC = () => {
   const { t } = useTranslation();
-  const blogPosts = t('company.blog.posts', { returnObjects: true }) as any[];
+  const { getLocalizedPath } = useLocalizedPath();
+  const { data: blogPosts, loading } = useContent('blog_posts', { localizedFields: ['title', 'excerpt', 'category'] });
+
+  if (loading) return <div className="py-20 text-center">Loading...</div>;
 
   return (
     <>
@@ -707,13 +714,7 @@ export const BlogPage: React.FC = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => {
-              // Add static images back
-              const images = [
-                "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
-                "https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=600&h=400&fit=crop",
-                "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop"
-              ];
-              const image = images[index] || images[0];
+              const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop";
 
               return (
                 <motion.article
@@ -724,24 +725,26 @@ export const BlogPage: React.FC = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <GlassCard className="p-0 overflow-hidden h-full flex flex-col" hoverEffect={true}>
-                    <div className="h-48 overflow-hidden relative">
+                    <Link to={getLocalizedPath(`/blog/${post.id}`)} className="h-48 overflow-hidden relative block">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
                       <img src={image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                       <div className="absolute bottom-4 left-4 z-20">
                         <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">{post.category}</span>
                       </div>
-                    </div>
+                    </Link>
                     <div className="p-6 flex-grow flex flex-col">
                       <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
                         <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
                         <span>{post.date}</span>
                       </div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.title}</h3>
+                      <Link to={getLocalizedPath(`/blog/${post.id}`)}>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.title}</h3>
+                      </Link>
                       <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow">{post.excerpt}</p>
                       <div className="mt-auto">
-                        <button className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
+                        <Link to={getLocalizedPath(`/blog/${post.id}`)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
                           {t('company.blog.common.read_more')} <FaArrowRight className="w-3 h-3" />
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </GlassCard>
