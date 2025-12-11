@@ -58,7 +58,16 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
     // Check if processStepsData is an object and has keys (not just the key string returned if missing)
     let steps: any[] = [];
 
-    if (processStepsData && typeof processStepsData === 'object' && !Array.isArray(processStepsData)) {
+    // Priority 1: Use dynamic process steps from Firestore if available
+    if (service.process && Array.isArray(service.process) && service.process.length > 0) {
+        steps = service.process.map((step: any) => ({
+            step: localized(step.step),
+            description: localized(step.description),
+            duration: localized(step.duration)
+        }));
+    }
+    // Priority 2: Try to get process steps from translation
+    else if (processStepsData && typeof processStepsData === 'object' && !Array.isArray(processStepsData)) {
         steps = Object.values(processStepsData).map((step: any) => ({
             step: step.title,
             description: step.desc,
@@ -221,16 +230,20 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
     const { t, i18n } = useTranslation();
     const localized = (field: any) => getLocalizedField(field, i18n.language);
 
-    // Check service types for specific visuals based on IDs
-    // Support both static ID (id) and seeded ID (serviceId)
-    const serviceId = (service as any).serviceId || service.id;
+    // Check service types for specific visuals based on Title keywords (more robust than IDs)
+    const getEnTitle = (val: any) => {
+        if (typeof val === 'object' && val !== null && 'en' in val) return val.en;
+        return typeof val === 'string' ? val : '';
+    };
+    const titleEn = getEnTitle(service.title);
+    const titleLower = typeof titleEn === 'string' ? titleEn.toLowerCase() : '';
 
-    const isSocialMedia = serviceId === 'creative_studio';
-    const isBrandGrowth = serviceId === 'performance_marketing';
-    const isUIUX = serviceId === 'ui_ux_design_full';
-    const isWebDev = serviceId === 'web_shopify_dev';
-    const isVA = serviceId === 'ecommerce_management';
-    const isSupport = serviceId === 'social_media_management';
+    const isSocialMedia = titleLower.includes('social') || titleLower.includes('creative') || titleLower.includes('content');
+    const isBrandGrowth = titleLower.includes('brand') || titleLower.includes('marketing') || titleLower.includes('growth') || titleLower.includes('ads');
+    const isUIUX = titleLower.includes('ui/ux') || titleLower.includes('design') || titleLower.includes('interface');
+    const isWebDev = titleLower.includes('web') || titleLower.includes('dev') || titleLower.includes('shopify') || titleLower.includes('app');
+    const isVA = titleLower.includes('virtual') || titleLower.includes('admin') || titleLower.includes('assistant');
+    const isSupport = titleLower.includes('support') || titleLower.includes('customer') || titleLower.includes('service');
 
     return (
         <GlassCard

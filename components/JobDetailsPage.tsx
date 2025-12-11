@@ -46,7 +46,7 @@ const JobDetailsPage: React.FC = () => {
 
     const title = getLocalizedField(job.title, lang);
     const description = getLocalizedField(job.description, lang);
-    const requirements = getLocalizedField(job.requirements, lang); // Assuming requirements is also localized text
+    const requirements = job.requirements || [];
     // If requirements is an array of strings/localized strings, handle accordingly.
     // Admin Jobs.tsx might save it as LocalizedTextArea (string) or LocalizedArrayInput.
     // Let's assume text area for now or check Jobs.tsx later. 
@@ -102,15 +102,16 @@ const JobDetailsPage: React.FC = () => {
                                 </div>
                             </section>
 
-                            {requirements && (
+                            {requirements && requirements.length > 0 && (
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wide">
                                         {t('company.careers.requirements', 'Requirements')}
                                     </h2>
-                                    <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-zinc-300 whitespace-pre-wrap font-light">
-                                        {/* If requirements is just a text block, allow pre-wrap. If it's rich, need parsing. */}
-                                        {requirements}
-                                    </div>
+                                    <ul className="list-disc pl-5 space-y-2 text-slate-600 dark:text-zinc-300 font-light prose prose-lg dark:prose-invert max-w-none">
+                                        {requirements.map((req: any, index: number) => (
+                                            <li key={index}>{getLocalizedField(req, lang)}</li>
+                                        ))}
+                                    </ul>
                                 </section>
                             )}
                         </div>

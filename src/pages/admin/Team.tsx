@@ -13,6 +13,7 @@ import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
+import { logAction } from '../../services/auditService';
 
 const AdminTeam = () => {
     const [team, setTeam] = useState<any[]>([]);
@@ -97,6 +98,7 @@ const AdminTeam = () => {
         if (!window.confirm("Are you sure you want to delete this member?")) return;
         try {
             await deleteDoc(doc(db, 'team_members', id));
+            await logAction('delete', 'team', `Deleted team member: ${id}`, { memberId: id });
             showSuccess('Member Deleted', 'The team member has been successfully removed.');
             setTeam(team.filter(t => t.id !== id));
         } catch (error) {
@@ -118,10 +120,12 @@ const AdminTeam = () => {
             if (currentMember.id) {
                 const { id, ...data } = memberData;
                 await updateDoc(doc(db, 'team_members', id), data);
+                await logAction('update', 'team', `Updated team member: ${data.name}`, { memberId: id });
             } else {
                 memberData.createdAt = serverTimestamp();
                 memberData.order = team.length + 1; // Add order
-                await addDoc(collection(db, 'team_members'), memberData);
+                const docRef = await addDoc(collection(db, 'team_members'), memberData);
+                await logAction('create', 'team', `Created team member: ${memberData.name}`, { memberId: docRef.id });
             }
             await fetchTeam();
             setIsEditing(false);

@@ -49,6 +49,28 @@ export const AboutEditor: React.FC<AboutEditorProps> = ({ content, handleChange,
 
             <div className="glass-panel p-6 space-y-6">
                 <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
+                    <Sparkles size={18} /> Company Stats
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+                        <h4 className="font-medium mb-3 text-sm uppercase tracking-wider">Stat 1 (Projects)</h4>
+                        <div className="space-y-3">
+                            <LocalizedInput label="Value (e.g. 200+)" value={content.about?.stats?.projects_value} onChange={(val) => handleChange('about', 'stats', val, 'projects_value')} activeLanguage={activeLanguage} />
+                            <LocalizedInput label="Label" value={content.about?.stats?.projects_label} onChange={(val) => handleChange('about', 'stats', val, 'projects_label')} activeLanguage={activeLanguage} />
+                        </div>
+                    </div>
+                    <div className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+                        <h4 className="font-medium mb-3 text-sm uppercase tracking-wider">Stat 2 (Clients)</h4>
+                        <div className="space-y-3">
+                            <LocalizedInput label="Value (e.g. 50+)" value={content.about?.stats?.clients_value} onChange={(val) => handleChange('about', 'stats', val, 'clients_value')} activeLanguage={activeLanguage} />
+                            <LocalizedInput label="Label" value={content.about?.stats?.clients_label} onChange={(val) => handleChange('about', 'stats', val, 'clients_label')} activeLanguage={activeLanguage} />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="glass-panel p-6 space-y-6">
+                <h3 className="font-semibold text-lg text-blue-600 flex items-center gap-2">
                     <Sparkles size={18} /> Company Values
                 </h3>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

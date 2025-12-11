@@ -131,8 +131,19 @@
                     // Handle copyright with year placeholder
                     if (data.footer.copyright) {
                         const year = new Date().getFullYear();
-                        const copyrightText = data.footer.copyright.replace('{{year}}', year);
-                        updateElement('footer-copyright', copyrightText);
+                        const lang = getCurrentLanguage();
+                        let copyrightText = '';
+
+                        if (typeof data.footer.copyright === 'object' && data.footer.copyright[lang]) {
+                            copyrightText = data.footer.copyright[lang];
+                        } else if (typeof data.footer.copyright === 'string') {
+                            copyrightText = data.footer.copyright;
+                        }
+
+                        if (copyrightText) {
+                            copyrightText = copyrightText.replace('{{year}}', year);
+                            updateElement('footer-copyright', copyrightText);
+                        }
                     }
                 }
 

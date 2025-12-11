@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { Save, Loader2, Layout, LayoutTemplate, Globe, Info, Users, Briefcase, Phone, FileText, List, Sparkles, Box } from 'lucide-react';
+import { Save, Loader2, Layout, LayoutTemplate, Globe, Info, Users, Briefcase, Phone, FileText, List, Sparkles, Box, Megaphone, Shield } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { LanguageTabs, LocalizedInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
@@ -20,6 +20,8 @@ import { TeamPageEditor } from '../../components/admin/site-content/TeamPageEdit
 import { ContactEditor } from '../../components/admin/site-content/ContactEditor';
 import { ToolsEditor } from '../../components/admin/site-content/ToolsEditor';
 import { FooterEditor } from '../../components/admin/site-content/FooterEditor';
+import { BlogSettingsEditor } from '../../components/admin/site-content/BlogSettingsEditor';
+import { LegalEditor } from '../../components/admin/site-content/LegalEditor';
 
 const TABS = [
     { id: 'hero', label: 'Home Hero', icon: LayoutTemplate },
@@ -30,6 +32,8 @@ const TABS = [
     { id: 'team_page', label: 'Team Page', icon: Users },
     { id: 'contact', label: 'Contact', icon: Phone },
     { id: 'tools', label: 'Tools', icon: Sparkles },
+    { id: 'blog_settings', label: 'Blog & Funnels', icon: Megaphone },
+    { id: 'legal', label: 'Legal Pages', icon: Shield },
     { id: 'footer', label: 'Footer', icon: Layout },
 ];
 
@@ -57,7 +61,13 @@ const TRANSLATE_OPTIONS: Record<string, string[]> = {
     tools: [
         'tools.slogan.badge', 'tools.slogan.title', 'tools.slogan.highlight', 'tools.slogan.description',
         'tools.use_cases.badge', 'tools.use_cases.title', 'tools.use_cases.highlight', 'tools.use_cases.description'
-    ]
+    ],
+    blog_settings: [
+        'blog_settings.sidebar_cta.title', 'blog_settings.sidebar_cta.body', 'blog_settings.sidebar_cta.button_text', 'blog_settings.sidebar_cta.button_url',
+        'blog_settings.inline_cta.title', 'blog_settings.inline_cta.body', 'blog_settings.inline_cta.button_text', 'blog_settings.inline_cta.button_url',
+        'blog_settings.lead_magnet.title', 'blog_settings.lead_magnet.description', 'blog_settings.lead_magnet.button_text', 'blog_settings.lead_magnet.button_url'
+    ],
+    legal: ['legal.privacy.title', 'legal.privacy.last_updated', 'legal.terms.title', 'legal.terms.last_updated', 'legal.cookies.title', 'legal.cookies.last_updated']
 };
 
 const AdminSiteContent = () => {
@@ -156,6 +166,32 @@ const AdminSiteContent = () => {
             details[detailIndex] = value;
 
             newArray[stepIndex] = { ...newArray[stepIndex], details };
+            newContent[section][arrayName] = newArray;
+            return newContent;
+        });
+    };
+
+    // Generic handler to ADD an item to an array
+    const handleAddArrayItem = (section: string, arrayName: string, newItem: any) => {
+        setContent((prev: any) => {
+            const newContent = { ...prev };
+            if (!newContent[section]) newContent[section] = {};
+            if (!newContent[section][arrayName]) newContent[section][arrayName] = [];
+
+            newContent[section][arrayName] = [...newContent[section][arrayName], newItem];
+            return newContent;
+        });
+    };
+
+    // Generic handler to REMOVE an item from an array
+    const handleRemoveArrayItem = (section: string, arrayName: string, index: number) => {
+        setContent((prev: any) => {
+            const newContent = { ...prev };
+            if (!newContent[section]?.[arrayName]) return prev;
+
+            const newArray = [...newContent[section][arrayName]];
+            newArray.splice(index, 1);
+
             newContent[section][arrayName] = newArray;
             return newContent;
         });
@@ -262,6 +298,12 @@ const AdminSiteContent = () => {
                                                 handleArrayChange={handleArrayChange}
                                                 handleArrayDetailChange={handleArrayDetailChange}
                                                 activeLanguage={activeLanguage}
+                                                onAddStep={() => handleAddArrayItem('process', 'steps', {
+                                                    title: { en: 'New Step', nl: 'Nieuwe Stap' },
+                                                    description: { en: 'Description here', nl: 'Beschrijving hier' },
+                                                    details: ['Detail 1', 'Detail 2']
+                                                })}
+                                                onRemoveStep={(index) => handleRemoveArrayItem('process', 'steps', index)}
                                             />
                                         )}
                                         {activeTab === 'careers' && <CareersEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
@@ -269,6 +311,19 @@ const AdminSiteContent = () => {
                                         {activeTab === 'contact' && <ContactEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
                                         {activeTab === 'tools' && <ToolsEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
                                         {activeTab === 'footer' && <FooterEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'legal' && <LegalEditor content={content} handleChange={handleChange} activeLanguage={activeLanguage} />}
+                                        {activeTab === 'blog_settings' && (
+                                            <BlogSettingsEditor
+                                                initialData={content}
+                                                onSave={async (newData) => {
+                                                    // Merge new blog settings into content state and save
+                                                    setContent(newData);
+                                                    await handleSave();
+                                                }}
+                                                saving={saving}
+                                                activeLanguage={activeLanguage}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </PreviewLayout>

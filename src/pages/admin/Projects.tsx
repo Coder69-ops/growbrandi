@@ -13,6 +13,7 @@ import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, createEmptyLocalizedString, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
 import { SortableItem } from '../../components/admin/SortableItem';
+import { logAction } from '../../services/auditService';
 
 const CATEGORIES = [
     { id: 'web_shopify_dev', label: 'Web & Shopify Dev' },
@@ -56,6 +57,7 @@ const AdminProjects = () => {
         if (!window.confirm("Are you sure you want to delete this project?")) return;
         try {
             await deleteDoc(doc(db, 'projects', id));
+            await logAction('delete', 'projects', `Deleted project: ${id}`, { projectId: id });
             showSuccess('Project Deleted', 'The project has been permanently deleted.');
             setProjects(projects.filter(p => p.id !== id));
         } catch (error) {
@@ -76,12 +78,14 @@ const AdminProjects = () => {
             if (currentProject.id) {
                 const { id, ...data } = projectData;
                 await updateDoc(doc(db, 'projects', id), data);
+                await logAction('update', 'projects', `Updated project: ${data.title?.en || 'Untitled'}`, { projectId: id });
                 showSuccess('Project Updated', 'The project has been successfully updated.');
             } else {
                 projectData.createdAt = serverTimestamp();
                 // Add order for new project (last)
                 projectData.order = projects.length + 1;
-                await addDoc(collection(db, 'projects'), projectData);
+                const docRef = await addDoc(collection(db, 'projects'), projectData);
+                await logAction('create', 'projects', `Created project: ${projectData.title?.en || 'Untitled'}`, { projectId: docRef.id });
                 showSuccess('Project Created', 'New project has been successfully created.');
             }
             await fetchProjects();

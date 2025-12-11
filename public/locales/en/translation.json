@@ -10,6 +10,16 @@
         "rated_agency": "Top Rated Agency",
         "verified": "Verified"
     },
+    "admin": {
+        "common": {
+            "save_changes": "Save Changes",
+            "saving": "Saving..."
+        },
+        "blog": {
+            "title": "Blog",
+            "description": "Manage your blog posts"
+        }
+    },
     "app": {
         "name": "GrowBrandi",
         "tagline": "GrowBrandi - Full-Stack Digital Growth Agency",
@@ -633,6 +643,18 @@
         }
     },
     "company": {
+        "blog": {
+            "title": "Blog",
+            "description": "Insights and expertise",
+            "heading": {
+                "title": "Latest",
+                "highlight": "Insights",
+                "description": "Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.",
+                "badge": "Our Blog"
+            },
+            "hero_read_article": "Read Article",
+            "card_read_more": "Read More"
+        },
         "about_us": {
             "title": "About Us",
             "description": "Learn about our mission and team",

@@ -23,7 +23,8 @@ import {
     Mail,
     Shield,
     BookOpen,
-    Target
+    Target,
+    History
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -59,9 +60,6 @@ const AdminLayout = () => {
         }
     };
 
-    // Helper to check permission is done inline in the map
-    // We used to have a helper here, but it's cleaner inline with the item.
-
     const menuItems = [
         { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
@@ -73,8 +71,9 @@ const AdminLayout = () => {
         { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
         { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
         { path: '/admin/contact-settings', icon: Contact, label: 'Contact Settings', permission: 'manage_settings' },
-        { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' }, // New
+        { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' },
         { path: '/admin/messages', icon: Mail, label: 'Messages', permission: 'view_messages' },
+        { path: '/admin/audit', icon: History, label: 'Audit Logs', permission: 'view_logs' },
         { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
         { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
     ];

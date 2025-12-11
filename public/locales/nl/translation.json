@@ -5,6 +5,16 @@
         "view_project": "Bekijk Project",
         "verified": "Geverifieerd"
     },
+    "admin": {
+        "common": {
+            "save_changes": "Wijzigingen opslaan",
+            "saving": "Opslaan..."
+        },
+        "blog": {
+            "title": "Blog",
+            "description": "Beheer je blogberichten"
+        }
+    },
     "app": {
         "name": "GrowBrandi",
         "tagline": "GrowBrandi - Full-Stack Digitaal Groeibureau",
@@ -703,9 +713,8 @@
                 "description": "Insights, tips, and industry trends from our team of digital experts. Stay informed about the latest in web development, design, and digital marketing.",
                 "badge": "Our Blog"
             },
-            "common": {
-                "read_more": "Read More"
-            },
+            "hero_read_article": "Lees Artikel",
+            "card_read_more": "Lees Meer",
             "posts": [
                 {
                     "title": "The Future of AI in Web Development",

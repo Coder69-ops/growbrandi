@@ -1,79 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
-import { Plus, Edit2, Trash2, Save, ArrowLeft, FileText, Image, Tag, Calendar, User } from 'lucide-react';
-import { LanguageTabs, LocalizedInput, LocalizedTextArea, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
-import { useAutoTranslate } from '../../hooks/useAutoTranslate';
-import { Sparkles } from 'lucide-react';
+import { collection, doc, getDocs, getDoc, addDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
+import { useAuth } from '../../context/AuthContext';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { Plus, Search, Filter, MoreVertical, Edit2, Trash2, Eye, Calendar, User, FileText, Image, Tag, ArrowLeft, Save, X, Sparkles, Wand2 } from 'lucide-react';
+import { useContent } from '../../hooks/useContent';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
+import { LanguageTabs, LocalizedInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
+import { getLocalizedField, ensureLocalizedFormat, SupportedLanguage } from '../../utils/localization';
 import { ImageUpload } from '../../components/admin/ImageUpload';
-import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
-import { Reorder } from 'framer-motion';
-import { SortableItem } from '../../components/admin/SortableItem';
+import { logAction } from '../../services/auditService';
 
 const AdminBlog = () => {
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
-    const [currentPost, setCurrentPost] = useState<any>(null);
-    const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+    const [currentPost, setCurrentPost] = useState<any>({});
     const [activeTab, setActiveTab] = useState<'content' | 'seo'>('content');
+    const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+    const [teamMembers, setTeamMembers] = useState<any[]>([]);
+    const { showError, showSuccess, StatusModal } = useStatusModal();
 
     const fetchPosts = async () => {
-        setLoading(true);
         try {
-            const querySnapshot = await getDocs(collection(db, 'blog_posts'));
+            const q = query(collection(db, 'blog_posts'), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
             const postsData = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
-            })).sort((a: any, b: any) => (b.date || 0) - (a.date || 0)); // Sort by date desc
+            }));
             setPosts(postsData);
         } catch (error) {
-            console.error("Error fetching blog posts:", error);
+            console.error("Error fetching posts:", error);
+            showError('Error', 'Failed to load blog posts');
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchTeam = async () => {
+        try {
+            const q = query(collection(db, 'team_members'));
+            const querySnapshot = await getDocs(q);
+            const teamData = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            setTeamMembers(teamData);
+        } catch (error) {
+            console.error("Error fetching team:", error);
+        }
+    };
+
     useEffect(() => {
         fetchPosts();
+        fetchTeam();
     }, []);
-
-    const { showSuccess, showError, StatusModal } = useStatusModal();
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this post?")) return;
         try {
             await deleteDoc(doc(db, 'blog_posts', id));
+            await logAction('delete', 'blog', `Deleted blog post: ${id}`, { postId: id });
             showSuccess('Post Deleted', 'The blog post has been permanently deleted.');
             setPosts(posts.filter(p => p.id !== id));
         } catch (error) {
-            console.error("Error deleting post:", error);
-            showError('Delete Failed', 'There was an error deleting the post. Please try again.');
+            showError('Delete Failed', 'Could not delete the post.');
         }
     };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+
         try {
-            // Ensure slug is unique if possible (basic check)
-            // Ideally we'd do a server-side check or a more robust one here, but for now we rely on user manually checking or simple collision in real-time
+            // Ensure we have a valid slug
+            let slug = currentPost.slug || '';
+            if (!slug && currentPost.title?.en) {
+                slug = generateSlug(currentPost.title.en);
+            }
 
             const postData = {
                 ...currentPost,
+                slug,
                 updatedAt: serverTimestamp(),
+                // Ensure author is correct format if needed
+                author: typeof currentPost.author === 'object' ? currentPost.author :
+                    (teamMembers.find(m => m.id === currentPost.author || m.name === currentPost.author) || currentPost.author)
             };
 
             if (currentPost.id) {
                 const { id, ...data } = postData;
                 await updateDoc(doc(db, 'blog_posts', id), data);
+                await logAction('update', 'blog', `Updated blog post: ${data.title?.en || 'Untitled'}`, { postId: id, status: data.status });
                 showSuccess('Post Updated', 'The blog post has been successfully updated.');
             } else {
                 postData.createdAt = serverTimestamp();
-                await addDoc(collection(db, 'blog_posts'), postData);
+                const docRef = await addDoc(collection(db, 'blog_posts'), postData);
+                await logAction('create', 'blog', `Created new blog post: ${postData.title?.en || 'Untitled'}`, { postId: docRef.id });
                 showSuccess('Post Created', 'New blog post has been successfully created.');
             }
             await fetchPosts();
@@ -94,7 +120,6 @@ const AdminBlog = () => {
     };
 
     const openEdit = (post: any = {}) => {
-        const defaultTitle = { en: '' };
         setCurrentPost({
             image: post.image || '',
             date: post.date || new Date().toISOString().split('T')[0],
@@ -122,8 +147,6 @@ const AdminBlog = () => {
     const updateField = (field: string, value: any) => {
         setCurrentPost((prev: any) => {
             const newState = { ...prev, [field]: value };
-
-            // Auto-generate slug if title changes and slug hasn't been manually set (or is empty) (only for main language 'en' usually, or handle localized slugs? simpler to keep one slug)
             if (field === 'title' && activeLanguage === 'en' && (!prev.slug || prev.slug === generateSlug(getLocalizedField(prev.title, 'en')))) {
                 newState.slug = generateSlug(getLocalizedField(value, 'en'));
             }
@@ -391,12 +414,31 @@ const AdminBlog = () => {
 
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Author</label>
-                                    <input
-                                        type="text"
-                                        value={currentPost.author}
-                                        onChange={(e) => updateField('author', e.target.value)}
+                                    <select
+                                        value={typeof currentPost.author === 'string' ? currentPost.author : currentPost.author?.id || ''}
+                                        onChange={(e) => {
+                                            const selectedMember = teamMembers.find(m => m.id === e.target.value);
+                                            if (selectedMember) {
+                                                updateField('author', {
+                                                    id: selectedMember.id,
+                                                    name: selectedMember.name,
+                                                    role: selectedMember.role,
+                                                    image: selectedMember.image
+                                                });
+                                            } else {
+                                                // Fallback for "GrowBrandi Team" or unselected
+                                                updateField('author', 'GrowBrandi Team');
+                                            }
+                                        }}
                                         className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
-                                    />
+                                    >
+                                        <option value="">GrowBrandi Team (Default)</option>
+                                        {teamMembers.map((member) => (
+                                            <option key={member.id} value={member.id}>
+                                                {member.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div>

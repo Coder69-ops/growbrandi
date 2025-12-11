@@ -10,9 +10,11 @@ interface ProcessEditorProps {
     handleArrayChange: (section: string, arrayName: string, index: number, field: string, value: any) => void;
     handleArrayDetailChange: (section: string, arrayName: string, stepIndex: number, detailIndex: number, value: any) => void;
     activeLanguage: SupportedLanguage;
+    onAddStep: () => void;
+    onRemoveStep: (index: number) => void;
 }
 
-export const ProcessEditor: React.FC<ProcessEditorProps> = ({ content, handleChange, handleArrayChange, handleArrayDetailChange, activeLanguage }) => {
+export const ProcessEditor: React.FC<ProcessEditorProps> = ({ content, handleChange, handleArrayChange, handleArrayDetailChange, activeLanguage, onAddStep, onRemoveStep }) => {
     const [expandedStep, setExpandedStep] = useState<number | null>(0);
 
     return (
@@ -77,11 +79,27 @@ export const ProcessEditor: React.FC<ProcessEditorProps> = ({ content, handleCha
                                         ))}
                                     </div>
                                 </div>
+
+                                <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-700">
+                                    <button
+                                        onClick={() => onRemoveStep(index)}
+                                        className="text-red-500 hover:text-red-700 text-sm font-medium flex items-center gap-1 px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                    >
+                                        Remove Step
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
                 ))}
-            </div>
-        </div>
+
+                <button
+                    onClick={onAddStep}
+                    className="w-full py-4 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-500 dark:text-slate-400 font-bold hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all flex items-center justify-center gap-2"
+                >
+                    + Add Process Step
+                </button>
+            </div >
+        </div >
     );
 };

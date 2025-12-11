@@ -87,12 +87,16 @@ export const AboutUsPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-8 mt-10">
                 <GlassCard className="text-center p-6" hoverEffect={true}>
-                  <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">200+</div>
-                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.projects', lang) || t('company.about_us.stats.projects')}</div>
+                  <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400">
+                    {getText('about.stats.projects_value', lang) || "200+"}
+                  </div>
+                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.projects_label', lang) || t('company.about_us.stats.projects')}</div>
                 </GlassCard>
                 <GlassCard className="text-center p-6" hoverEffect={true}>
-                  <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">50+</div>
-                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.clients', lang) || t('company.about_us.stats.clients')}</div>
+                  <div className="text-4xl font-black text-slate-900 dark:text-white mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400">
+                    {getText('about.stats.clients_value', lang) || "50+"}
+                  </div>
+                  <div className="text-slate-500 dark:text-zinc-400 text-sm uppercase tracking-wider font-semibold">{getText('about.stats.clients_label', lang) || t('company.about_us.stats.clients')}</div>
                 </GlassCard>
               </div>
             </motion.div>
@@ -682,11 +686,47 @@ export const TeamPage: React.FC = () => {
   );
 };
 
+import { FaSearch, FaTag, FaMagnet } from 'react-icons/fa';
+
 // Blog Page
 export const BlogPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { getLocalizedPath } = useLocalizedPath();
   const { data: blogPosts, loading } = useContent('blog_posts', { localizedFields: ['title', 'excerpt', 'category'] });
+  // Fetch Global Site Content for Blog Settings
+  const { content, getText } = useSiteContentData();
+  const blogSettings = content?.blog_settings || {};
+  const lang = i18n.language as SupportedLanguage;
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  // Get unique categories
+  const categories = ['All', ...Array.from(new Set(blogPosts.map((post: any) => post.category).filter(Boolean)))];
+
+  // Filter posts
+  const filteredPosts = blogPosts.filter((post: any) => {
+    const matchesStatus = !post.status || post.status === 'published';
+    const matchesSearch = post.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.excerpt?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
+    return matchesStatus && matchesSearch && matchesCategory;
+  });
+
+  // Featured Post Logic
+  let featuredPost = null;
+  if (blogSettings.featured_post_mode === 'manual' && blogSettings.featured_post_id) {
+    featuredPost = blogPosts.find((p: any) => p.id === blogSettings.featured_post_id);
+  }
+  // Fallback to latest post if manual not found or mode is latest
+  if (!featuredPost && filteredPosts.length > 0) {
+    featuredPost = filteredPosts[0];
+  }
+
+  // Exclude featured post from grid if it's the latest one and we are showing it as hero
+  // BUT only if we are on the first page/default view (simplification: just don't duplicate it if possible, 
+  // but for now, let's keep it simple and maybe duplicate or just filter it out)
+  const gridPosts = filteredPosts.filter((p: any) => p.id !== featuredPost?.id);
 
   if (loading) return <div className="py-20 text-center">Loading...</div>;
 
@@ -696,65 +736,186 @@ export const BlogPage: React.FC = () => {
         title={t('company.blog.title')}
         description={t('company.blog.description')}
       />
-      {/* Hero Section */}
-      <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
+      {/* Featured Post Hero Section */}
+      <section className="pt-24 pb-12 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
         <div className="container mx-auto max-w-6xl relative z-10">
-          <SectionHeading
-            badge={t('company.blog.heading.badge')}
-            title={t('company.blog.heading.title')}
-            highlight={t('company.blog.heading.highlight')}
-            description={t('company.blog.heading.description')}
-          />
+
+          <div className="text-center mb-12">
+            <SectionHeading
+              badge={t('company.blog.heading.badge')}
+              title={t('company.blog.heading.title')}
+              highlight={t('company.blog.heading.highlight')}
+              description={t('company.blog.heading.description')}
+            />
+          </div>
+
+          {featuredPost && (
+            <div className="mb-16">
+              <Link to={getLocalizedPath(`/blog/${featuredPost.slug || featuredPost.id}`)}>
+                <GlassCard className="p-0 overflow-hidden group relative min-h-[400px] flex items-end" hoverEffect={true}>
+                  <div className="absolute inset-0 z-0">
+                    <img
+                      src={featuredPost.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=800&fit=crop"}
+                      alt={featuredPost.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                  </div>
+                  <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full uppercase tracking-wider">{featuredPost.category || 'Blog'}</span>
+                      <span className="text-slate-300 text-sm flex items-center gap-2"><FaClock className="w-3 h-3" /> {featuredPost.readTime}</span>
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-black text-white mb-4 font-heading leading-tight group-hover:text-blue-400 transition-colors">
+                      {featuredPost.title}
+                    </h2>
+                    <p className="text-slate-200 text-lg md:text-xl font-light line-clamp-2 mb-6 max-w-2xl">
+                      {featuredPost.excerpt}
+                    </p>
+                    <div className="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm">
+                      {getText('blog_settings.labels.hero_read_article', lang) || t('company.blog.hero_read_article')} <FaArrowRight />
+                    </div>
+                  </div>
+                </GlassCard>
+              </Link>
+            </div>
+          )}
+
+          {/* Search & Filters */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 bg-white dark:bg-white/5 p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-2 justify-center md:justify-start">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === cat
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10'
+                    }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative w-full md:w-72">
+              <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-black/20 border border-transparent focus:border-blue-500 rounded-xl outline-none text-slate-900 dark:text-white transition-all"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Blog Posts */}
-      <section className="py-20 px-4 bg-white dark:bg-[#09090b] transition-colors duration-300">
+      {/* Blog & Lead Magnet Grid */}
+      <section className="pb-24 px-4 bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts
-              .filter(post => !post.status || post.status === 'published')
-              .map((post, index) => {
-                const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop";
-                const linkUrl = `/blog/${post.slug || post.id}`;
 
-                return (
-                  <motion.article
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
-                    <GlassCard className="p-0 overflow-hidden h-full flex flex-col" hoverEffect={true}>
-                      <Link to={getLocalizedPath(linkUrl)} className="h-48 overflow-hidden relative block">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
-                        <img src={image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
-                        <div className="absolute bottom-4 left-4 z-20">
-                          <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">{post.category}</span>
-                        </div>
-                      </Link>
-                      <div className="p-6 flex-grow flex flex-col">
-                        <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
-                          <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
-                          <span>{post.date}</span>
-                        </div>
-                        <Link to={getLocalizedPath(linkUrl)}>
-                          <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.title}</h3>
-                        </Link>
-                        <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow">{post.excerpt}</p>
-                        <div className="mt-auto">
-                          <Link to={getLocalizedPath(linkUrl)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2">
-                            {t('company.blog.common.read_more')} <FaArrowRight className="w-3 h-3" />
-                          </Link>
-                        </div>
+            {/* Dynamic Lead Magnet Card - Injected at position 2 (index 1) */}
+            {blogSettings.lead_magnet?.enabled && gridPosts.length > 0 && (
+              <motion.div
+                className="md:col-span-2 lg:col-span-1 lg:row-span-1 order-2 lg:order-none"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="h-full rounded-3xl p-8 bg-gradient-to-br from-blue-600 to-purple-700 text-white flex flex-col justify-center items-center text-center shadow-xl relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                      <FaMagnet className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-3 font-heading">
+                      {getText('blog_settings.lead_magnet.title', lang) || "Free Growth Checklist"}
+                    </h3>
+                    <p className="text-blue-100 mb-8 leading-relaxed">
+                      {getText('blog_settings.lead_magnet.description', lang) || "Download our ultimate guide to 10x your business growth."}
+                    </p>
+                    <a
+                      href={getLocalizedField(blogSettings.lead_magnet?.button_url, lang) || blogSettings.lead_magnet?.button_url || "#"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-block bg-white text-blue-600 font-bold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg"
+                    >
+                      {getText('blog_settings.lead_magnet.button_text', lang) || "Download Free"}
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {gridPosts.map((post: any, index: number) => {
+              const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop";
+              const linkUrl = `/blog/${post.slug || post.id}`;
+
+              // Adjust order if needed to flow around lead magnet
+              return (
+                <motion.article
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
+                >
+                  <GlassCard className="p-0 overflow-hidden h-full flex flex-col" hoverEffect={true}>
+                    <Link to={getLocalizedPath(linkUrl)} className="h-48 overflow-hidden relative block">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                      <img src={image} alt={post.title} loading="lazy" width="800" height="400" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <div className="absolute bottom-4 left-4 z-20">
+                        <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">{post.category}</span>
                       </div>
-                    </GlassCard>
-                  </motion.article>
-                );
-              })}
+                    </Link>
+                    <div className="p-6 flex-grow flex flex-col">
+                      <div className="flex items-center justify-between mb-3 text-sm text-slate-500 dark:text-zinc-400">
+                        <span className="flex items-center gap-1"><FaClock className="w-3 h-3" /> {post.readTime}</span>
+                        <span>{post.date}</span>
+                      </div>
+                      <Link to={getLocalizedPath(linkUrl)}>
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 font-heading group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">{post.title}</h3>
+                      </Link>
+                      <p className="text-slate-600 dark:text-zinc-400 mb-4 font-light flex-grow line-clamp-3">{post.excerpt}</p>
+                      <div className="mt-auto pt-4 border-t border-slate-100 dark:border-white/5">
+                        <Link to={getLocalizedPath(linkUrl)} className="text-slate-900 dark:text-white font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-2 text-sm">
+                          {getText('blog_settings.labels.card_read_more', lang) || t('company.blog.card_read_more')} <FaArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </motion.article>
+              );
+            })}
           </div>
+
+          {gridPosts.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="col-span-full py-20 text-center"
+            >
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-100 dark:bg-white/5 rounded-full mb-6 text-slate-400 dark:text-zinc-500">
+                <FaSearch className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 font-heading">No articles found</h3>
+              <p className="text-slate-500 dark:text-zinc-400 text-lg mb-8 max-w-md mx-auto">
+                We couldn't find any articles matching "{searchTerm}" in {selectedCategory}.
+              </p>
+              <button
+                onClick={() => { setSearchTerm(''); setSelectedCategory('All'); }}
+                className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
+              >
+                Clear Filters
+              </button>
+            </motion.div>
+          )}
         </div>
       </section>
     </>

@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { db, auth, createTeamMemberAuth } from '../../lib/firebase';
 import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { sendPasswordResetEmail } from 'firebase/auth';
+import { logAction } from '../../services/auditService';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
@@ -16,6 +17,7 @@ const AVAILABLE_PERMISSIONS = [
     { id: 'manage_users', label: 'Manage Admin Users' }, // Vital: self-referential
     { id: 'manage_settings', label: 'Manage Settings' },
     { id: 'view_messages', label: 'View Messages' },
+    { id: 'view_logs', label: 'View Audit Logs' },
 ];
 
 const AdminTeamManagement = () => {
@@ -140,6 +142,7 @@ const AdminTeamManagement = () => {
                 // UPDATE existing user (Firestore only)
                 const userRef = doc(db, 'users', formData.id);
                 await updateDoc(userRef, dataToSave);
+                await logAction('update', 'users', `Updated user permissions for: ${dataToSave.displayName}`, { userId: formData.id });
                 showSuccess("Updated", "User permissions updated successfully.");
             } else {
                 // CREATE new user
@@ -158,6 +161,8 @@ const AdminTeamManagement = () => {
                     ...dataToSave,
                     createdAt: serverTimestamp(),
                 });
+
+                await logAction('create', 'users', `Created new admin user: ${formData.email}`, { userId: newUser.uid });
 
                 showSuccess("Created", "New team member account created successfully.");
             }
@@ -182,6 +187,7 @@ const AdminTeamManagement = () => {
 
         try {
             await deleteDoc(doc(db, 'users', userId));
+            await logAction('delete', 'users', `Deleted admin user access: ${userId}`, { userId });
             setUsers(prev => prev.filter(u => u.id !== userId));
             showSuccess("Deleted", "User removed from management list.");
         } catch (error) {
@@ -194,6 +200,7 @@ const AdminTeamManagement = () => {
         if (!window.confirm(`Send password reset email to ${email}?`)) return;
         try {
             await sendPasswordResetEmail(auth, email);
+            await logAction('update', 'users', `Sent password reset email to: ${email}`);
             showSuccess("Sent", "Password reset email sent.");
         } catch (error) {
             console.error("Reset error:", error);

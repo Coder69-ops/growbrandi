@@ -71,6 +71,7 @@ import AdminMessages from './src/pages/admin/Messages';
 import AdminTeamManagement from './src/pages/admin/TeamManagement';
 import AdminBlog from './src/pages/admin/Blog';
 import AdminJobs from './src/pages/admin/Jobs';
+import AdminAuditLog from './src/pages/admin/AuditLog';
 
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
@@ -409,6 +410,7 @@ ${servicesDetails}
                     <Route path="team-management" element={<AdminTeamManagement />} />
                     <Route path="blog" element={<AdminBlog />} />
                     <Route path="jobs" element={<AdminJobs />} />
+                    <Route path="audit" element={<AdminAuditLog />} />
                   </Route>
                 </Route>
               </Routes>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
-// import { SERVICES } from '../../../constants'; (removed)
-import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Tag, DollarSign, List, Briefcase, GripVertical } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Briefcase, List, DollarSign, Check } from 'lucide-react';
+import * as FaIcons from 'react-icons/fa';
 
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -13,6 +13,73 @@ import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
 import { Sparkles } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
+import { logAction } from '../../services/auditService';
+
+// Icon Picker Component
+const IconPicker = ({ value, onChange }: { value: string, onChange: (icon: string) => void }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const commonIcons = [
+        'FaCode', 'FaPaintBrush', 'FaBullhorn', 'FaChartLine', 'FaMobileAlt',
+        'FaSearch', 'FaServer', 'FaRobot', 'FaPenNib', 'FaHandshake',
+        'FaLaptopCode', 'FaPalette', 'FaRocket', 'FaCogs', 'FaGlobe'
+    ];
+
+    const filteredIcons = commonIcons.filter(icon =>
+        icon.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const CurrentIcon = (FaIcons as any)[value] || FaIcons.FaBriefcase;
+
+    return (
+        <div className="relative">
+            <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Service Icon</label>
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors text-left"
+            >
+                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                    <CurrentIcon size={18} />
+                </div>
+                <span className="flex-1 font-medium text-slate-700 dark:text-slate-200">{value || 'Select Icon'}</span>
+                {isOpen ? <X size={16} className="text-slate-400" /> : <div className="text-xs text-slate-400">Change</div>}
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 z-50 w-full mt-2 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xl p-4">
+                    <input
+                        type="text"
+                        placeholder="Search icons..."
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-sm mb-3"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        autoFocus
+                    />
+                    <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar">
+                        {filteredIcons.map(iconName => {
+                            const Icon = (FaIcons as any)[iconName];
+                            return (
+                                <button
+                                    key={iconName}
+                                    type="button"
+                                    onClick={() => {
+                                        onChange(iconName);
+                                        setIsOpen(false);
+                                    }}
+                                    className={`p-2 rounded-lg flex flex-col items-center gap-1 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors ${value === iconName ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600' : 'text-slate-600 dark:text-slate-400'}`}
+                                >
+                                    <Icon size={20} />
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
 
 const AdminServices = () => {
     const [services, setServices] = useState<any[]>([]);
@@ -30,7 +97,7 @@ const AdminServices = () => {
                 return {
                     ...data,
                     id: doc.id,
-                    serviceId: data.serviceId || data.id // Handle both data structures (legacy/new)
+                    serviceId: data.serviceId || data.id
                 };
             }).sort((a: any, b: any) => (a.order || 0) - (b.order || 0));
             setServices(servicesData);
@@ -55,30 +122,83 @@ const AdminServices = () => {
         batch.commit().catch(console.error);
     };
 
+    const { showSuccess, showError, StatusModal } = useStatusModal();
+
     const handleSeedData = async () => {
-        alert("Seed data functionality has been disabled as constants.ts data was migrated.");
-        /*
-        if (!window.confirm("This will add all services from constants.ts to Firestore. Continue?")) return;
+        if (!window.confirm("This will add default services to your database. Continue?")) return;
         setLoading(true);
         try {
-            for (const [index, service] of SERVICES.entries()) {
-               // ...
-            }
+            const sampleServices = [
+                {
+                    title: { en: "Web Development" },
+                    description: { en: "Custom websites and web applications built with modern technologies." },
+                    price: { en: "Starting at $2,500" },
+                    category: "Development",
+                    icon: "FaCode",
+                    color: "from-blue-500 to-cyan-500",
+                    isPopular: true,
+                    features: [
+                        { en: "React & Next.js" },
+                        { en: "Responsive Design" },
+                        { en: "SEO Optimization" }
+                    ],
+                    process: [
+                        { step: { en: "Discovery" }, duration: { en: "1 Week" }, description: { en: "We analyze your needs." } },
+                        { step: { en: "Build" }, duration: { en: "3 Weeks" }, description: { en: "We develop your site." } }
+                    ]
+                },
+                {
+                    title: { en: "UI/UX Design" },
+                    description: { en: "User-centric design that converts visitors into customers." },
+                    price: { en: "Starting at $1,500" },
+                    category: "Design",
+                    icon: "FaPaintBrush",
+                    color: "from-purple-500 to-pink-500",
+                    isPopular: false,
+                    features: [
+                        { en: "Figma Prototypes" },
+                        { en: "User Research" },
+                        { en: "Brand System" }
+                    ]
+                },
+                {
+                    title: { en: "Digital Marketing" },
+                    description: { en: "Data-driven strategies to grow your audience." },
+                    price: { en: "Starting at $1,000/mo" },
+                    category: "Marketing",
+                    icon: "FaBullhorn",
+                    color: "from-orange-500 to-red-500",
+                    isPopular: false,
+                    features: [
+                        { en: "Social Media" },
+                        { en: "PPC Campaigns" },
+                        { en: "Content Strategy" }
+                    ]
+                }
+            ];
+
+            const batch = writeBatch(db);
+            sampleServices.forEach((service, index) => {
+                const docRef = doc(collection(db, 'services'));
+                batch.set(docRef, { ...service, order: index + 1, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+            });
+            await batch.commit();
+
             await fetchServices();
-            alert("Data seeded successfully!");
+            showSuccess('Data Seeded', 'Default services have been added.');
         } catch (error) {
             console.error("Error seeding data:", error);
-            alert("Failed to seed data.");
+            showError('Seed Failed', 'Failed to seed data.');
         } finally {
             setLoading(false);
         }
-        */
     };
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this service?")) return;
         try {
             await deleteDoc(doc(db, 'services', id));
+            await logAction('delete', 'services', `Deleted service: ${id}`, { serviceId: id });
             showSuccess('Service Deleted', 'The service has been permanently deleted.');
             setServices(services.filter(s => s.id !== id));
         } catch (error) {
@@ -99,19 +219,20 @@ const AdminServices = () => {
             if (currentService.id) {
                 const { id, ...data } = serviceData;
                 await updateDoc(doc(db, 'services', id), data);
+                await logAction('update', 'services', `Updated service: ${data.title?.en || 'Untitled'}`, { serviceId: id });
                 showSuccess('Service Updated', 'The service has been successfully updated.');
             } else {
                 serviceData.createdAt = serverTimestamp();
-                // Assign new service to end of list
                 serviceData.order = services.length + 1;
-                await addDoc(collection(db, 'services'), serviceData);
+                const docRef = await addDoc(collection(db, 'services'), serviceData);
+                await logAction('create', 'services', `Created service: ${serviceData.title?.en || 'Untitled'}`, { serviceId: docRef.id });
                 showSuccess('Service Created', 'New service has been successfully created.');
             }
             await fetchServices();
             setIsEditing(false);
         } catch (error) {
             console.error("Error saving service:", error);
-            alert("Failed to save service.");
+            showError('Save Failed', 'Failed to save service.');
         } finally {
             setLoading(false);
         }
@@ -121,6 +242,7 @@ const AdminServices = () => {
         setCurrentService({
             serviceId: service.serviceId || '',
             color: service.color || 'from-blue-500 to-cyan-500',
+            icon: service.icon || 'FaCode',
             title: ensureLocalizedFormat(service.title),
             description: ensureLocalizedFormat(service.description),
             price: ensureLocalizedFormat(service.price),
@@ -153,11 +275,6 @@ const AdminServices = () => {
             }
         }
     );
-
-    const { showSuccess, showError, StatusModal } = useStatusModal();
-
-    // Move this logic inside the render return to keep the layout visible
-    // if (loading && !isEditing) return <div className="p-12 text-center text-slate-500 animate-pulse">Loading services...</div>;
 
     return (
         <AdminPageLayout
@@ -242,13 +359,29 @@ const AdminServices = () => {
                                         Service Details
                                     </h3>
 
-                                    <LocalizedInput
-                                        label="Title"
-                                        value={currentService.title}
-                                        onChange={(v) => updateField('title', v)}
-                                        activeLanguage={activeLanguage}
-                                        required
-                                    />
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <LocalizedInput
+                                            label="Title"
+                                            value={currentService.title}
+                                            onChange={(v) => updateField('title', v)}
+                                            activeLanguage={activeLanguage}
+                                            required
+                                        />
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Category</label>
+                                            <select
+                                                value={currentService.category}
+                                                onChange={(e) => updateField('category', e.target.value)}
+                                                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                            >
+                                                <option value="Design">Design</option>
+                                                <option value="Development">Development</option>
+                                                <option value="Marketing">Marketing</option>
+                                                <option value="Strategy">Strategy</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <LocalizedInput
                                         label="Description"
                                         value={currentService.description}
@@ -353,8 +486,13 @@ const AdminServices = () => {
                                 <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
                                     <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                                         <DollarSign size={18} className="text-emerald-500" />
-                                        Pricing & Config
+                                        Config & Styles
                                     </h3>
+
+                                    <IconPicker
+                                        value={currentService.icon}
+                                        onChange={(icon) => updateField('icon', icon)}
+                                    />
 
                                     <LocalizedInput
                                         label="Price Display"
@@ -429,53 +567,61 @@ const AdminServices = () => {
                 </div>
             ) : (
                 <Reorder.Group axis="y" values={services} onReorder={handleReorder} className="flex flex-col gap-4">
-                    {services.map((service) => (
-                        <SortableItem key={service.id} item={service}>
-                            <div className="glass-card flex flex-col sm:flex-row h-full sm:h-32 overflow-hidden hover:scale-[1.01] transition-all duration-300 group pl-0">
-                                {/* Visual Color Stripe/Icon Area */}
-                                <div className={`w-full sm:w-24 h-32 sm:h-full bg-gradient-to-br ${service.color || 'from-blue-500 to-cyan-500'} shrink-0 flex items-center justify-center`}>
-                                    <Briefcase className="text-white opacity-80" size={32} />
-                                </div>
+                    {services.map((service) => {
+                        const Icon = (FaIcons as any)[service.icon] || FaIcons.FaBriefcase;
+                        return (
+                            <SortableItem key={service.id} item={service}>
+                                <div className="glass-card flex flex-col sm:flex-row h-full sm:h-32 overflow-hidden hover:scale-[1.01] transition-all duration-300 group pl-0">
+                                    {/* Visual Color Stripe/Icon Area */}
+                                    <div className={`w-full sm:w-24 h-32 sm:h-full bg-gradient-to-br ${service.color || 'from-blue-500 to-cyan-500'} shrink-0 flex items-center justify-center`}>
+                                        <Icon className="text-white opacity-80" size={32} />
+                                    </div>
 
-                                <div className="flex-1 p-5 flex flex-col justify-center min-w-0">
-                                    <div className="flex justify-between items-start mb-2 gap-4">
-                                        <div>
-                                            <h3 className="font-bold text-xl text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                                {getLocalizedField(service.title, 'en')}
-                                            </h3>
-                                            <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md mt-1 inline-block">
-                                                {getLocalizedField(service.price, 'en')}
-                                            </span>
+                                    <div className="flex-1 p-5 flex flex-col justify-center min-w-0">
+                                        <div className="flex justify-between items-start mb-2 gap-4">
+                                            <div>
+                                                <h3 className="font-bold text-xl text-slate-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                                    {getLocalizedField(service.title, 'en')}
+                                                </h3>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
+                                                        {service.category}
+                                                    </span>
+                                                    <span className="text-xs font-bold text-slate-400">
+                                                        {getLocalizedField(service.price, 'en')}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-1.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                                <button
+                                                    onClick={() => openEdit(service)}
+                                                    className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                                                >
+                                                    <Edit2 size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(service.id)}
+                                                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="flex gap-1.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <button
-                                                onClick={() => openEdit(service)}
-                                                className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                                            >
-                                                <Edit2 size={18} />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(service.id)}
-                                                className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-3">
+                                            {getLocalizedField(service.description, 'en')}
+                                        </p>
+                                        <div className="flex flex-wrap gap-2 mt-auto">
+                                            {service.features?.slice(0, 3).map((f: any, i: number) => (
+                                                <span key={i} className="text-[10px] font-medium px-2 py-1 rounded-md bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400">
+                                                    {getLocalizedField(f, 'en')}
+                                                </span>
+                                            ))}
                                         </div>
-                                    </div>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-1 mb-3">
-                                        {getLocalizedField(service.description, 'en')}
-                                    </p>
-                                    <div className="flex flex-wrap gap-2 mt-auto">
-                                        {service.features?.slice(0, 3).map((f: any, i: number) => (
-                                            <span key={i} className="text-[10px] font-medium px-2 py-1 rounded-md bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400">
-                                                {getLocalizedField(f, 'en')}
-                                            </span>
-                                        ))}
                                     </div>
                                 </div>
-                            </div>
-                        </SortableItem>
-                    ))}
+                            </SortableItem>
+                        );
+                    })}
 
                     {services.length === 0 && (
                         <div className="col-span-full py-16 text-center glass-panel border-dashed border-2 border-slate-300 dark:border-slate-700">
@@ -486,12 +632,20 @@ const AdminServices = () => {
                             <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-sm mx-auto">
                                 Start offering value to your clients by creating your first service package.
                             </p>
-                            <button
-                                onClick={() => openEdit()}
-                                className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 font-medium"
-                            >
-                                Create First Service
-                            </button>
+                            <div className="flex justify-center gap-4">
+                                <button
+                                    onClick={handleSeedData}
+                                    className="px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium"
+                                >
+                                    Seed Defaults
+                                </button>
+                                <button
+                                    onClick={() => openEdit()}
+                                    className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25 font-medium"
+                                >
+                                    Create Service
+                                </button>
+                            </div>
                         </div>
                     )}
                 </Reorder.Group>

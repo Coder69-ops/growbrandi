@@ -12,6 +12,7 @@ import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
 import { SortableItem } from '../../components/admin/SortableItem';
+import { logAction } from '../../services/auditService';
 
 const AdminTestimonials = () => {
     const [testimonials, setTestimonials] = useState<any[]>([]);
@@ -44,6 +45,7 @@ const AdminTestimonials = () => {
         if (!window.confirm("Are you sure you want to delete this testimonial?")) return;
         try {
             await deleteDoc(doc(db, 'testimonials', id));
+            await logAction('delete', 'testimonials', `Deleted testimonial: ${id}`, { testimonialId: id });
             showSuccess('Testimonial Deleted', 'Testimonial deleted successfully.');
             setTestimonials(testimonials.filter(t => t.id !== id));
         } catch (error) {
@@ -66,11 +68,13 @@ const AdminTestimonials = () => {
             if (currentTestimonial.id) {
                 const { id, ...data } = testimonialData;
                 await updateDoc(doc(db, 'testimonials', id), data);
+                await logAction('update', 'testimonials', `Updated testimonial by: ${data.author?.en || 'Unknown'}`, { testimonialId: id });
                 showSuccess('Testimonial Updated', 'Testimonial updated successfully.');
             } else {
                 testimonialData.createdAt = serverTimestamp();
                 testimonialData.order = testimonials.length + 1;
-                await addDoc(collection(db, 'testimonials'), testimonialData);
+                const docRef = await addDoc(collection(db, 'testimonials'), testimonialData);
+                await logAction('create', 'testimonials', `Created testimonial by: ${testimonialData.author?.en || 'Unknown'}`, { testimonialId: docRef.id });
             }
             await fetchTestimonials();
             setIsEditing(false);
