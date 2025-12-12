@@ -127,7 +127,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
     };
 
     return (
-        <div className="w-80 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-900/50 h-full">
+        <div className="w-64 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-slate-50/50 dark:bg-slate-900/50 h-full">
             {/* Search & Header */}
             <div className="p-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="relative mb-4">
@@ -168,19 +168,30 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
                         </form>
                     )}
 
-                    {publicChannels.map(channel => (
-                        <button
-                            key={channel.id}
-                            onClick={() => onSelectChannel(channel.id)}
-                            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all group ${activeChannelId === channel.id
-                                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                                }`}
-                        >
-                            <Hash size={18} className={activeChannelId === channel.id ? 'text-indigo-300' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'} />
-                            <span className="font-medium truncate">{channel.name}</span>
-                        </button>
-                    ))}
+                    {publicChannels.map(channel => {
+                        const lastMsg = (channel as any).lastMessage;
+                        const lastSeen = (channel as any).lastSeen?.[currentUser?.uid || ''] || 0;
+                        const hasUnread = lastMsg && lastMsg.senderId !== currentUser?.uid && lastMsg.timestamp > lastSeen;
+
+                        return (
+                            <button
+                                key={channel.id}
+                                onClick={() => onSelectChannel(channel.id)}
+                                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all group ${activeChannelId === channel.id
+                                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                    }`}
+                            >
+                                <Hash size={18} className={activeChannelId === channel.id ? 'text-indigo-300' : hasUnread ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'} />
+                                <span className={`font-medium truncate flex-1 text-left ${hasUnread && activeChannelId !== channel.id ? 'font-bold text-slate-900 dark:text-white' : ''}`}>
+                                    {channel.name}
+                                </span>
+                                {hasUnread && activeChannelId !== channel.id && (
+                                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Direct Messages */}
@@ -244,6 +255,11 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
                             // If it is a DM, show Avatar. 
                             const isDM = channel.type === 'dm';
 
+                            // Unread Logic
+                            const lastMsg = (channel as any).lastMessage;
+                            const lastSeen = (channel as any).lastSeen?.[currentUser?.uid || ''] || 0;
+                            const hasUnread = lastMsg && lastMsg.senderId !== currentUser?.uid && lastMsg.timestamp > lastSeen;
+
                             return (
                                 <button
                                     key={channel.id}
@@ -267,12 +283,15 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
                                         )}
 
                                         {isOnline && (
-                                            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white dark:border-slate-900"></span>
+                                            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white dark:border-slate-900 shadow-sm"></span>
                                         )}
                                     </div>
-                                    <span className="font-medium truncate">
+                                    <span className={`font-medium truncate flex-1 text-left ${hasUnread && activeChannelId !== channel.id ? 'font-bold text-slate-900 dark:text-white' : ''}`}>
                                         {isDM && otherUser ? otherUser.name : channel.name}
                                     </span>
+                                    {hasUnread && activeChannelId !== channel.id && (
+                                        <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
+                                    )}
                                 </button>
                             );
                         })}

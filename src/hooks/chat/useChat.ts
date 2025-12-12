@@ -14,6 +14,8 @@ export interface Message {
     imageUrl?: string;
     deletedFor?: Record<string, boolean>;
     isUnsent?: boolean;
+    deliveredTo?: Record<string, number>; // userId -> timestamp
+    seenBy?: Record<string, number>; // userId -> timestamp
 }
 
 export interface Channel {
@@ -32,11 +34,13 @@ export const useChat = (currentChannelId: string | null) => {
 
     // 1. Fetch Channels
     useEffect(() => {
+        if (!currentUser) return;
+
         const channelsRef = ref(database, 'channels');
         const unsubscribe = onValue(channelsRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                const loadedChannels = Object.entries(data)
+                const channelList = Object.entries(data)
                     .map(([key, val]: [string, any]) => ({
                         id: key,
                         ...val,
@@ -44,25 +48,27 @@ export const useChat = (currentChannelId: string | null) => {
                     }))
                     .filter((channel: any) => {
                         if (channel.type === 'public') return true;
-                        if (channel.type === 'dm' || channel.type === 'private') {
-                            const isMember = channel.members?.includes(currentUser?.uid);
-                            if (!isMember) {
-                                // console.log(`[useChat] Hidden channel ${channel.id} (${channel.name}) - User ${currentUser?.uid} is not in members [${channel.members}]`);
-                            }
-                            return isMember;
-                        }
-                        return false;
+                        return channel.members?.includes(currentUser.uid);
                     });
 
-                setChannels(loadedChannels);
+                setChannels(channelList);
             } else {
-                createChannel('general', 'public', 'General discussion');
+                setChannels([{ id: 'general', name: 'general', type: 'public', description: 'General discussion' }]);
             }
             setLoading(false);
         });
 
         return () => unsubscribe();
     }, [currentUser]);
+
+    // Mark channel as read when active
+    useEffect(() => {
+        if (currentChannelId && currentUser) {
+            // Update lastSeen for this channel
+            const lastSeenRef = ref(database, `channels/${currentChannelId}/lastSeen/${currentUser.uid}`);
+            set(lastSeenRef, Date.now());
+        }
+    }, [currentChannelId, currentUser, messages]);
 
     // 2. Fetch Messages for Current Channel
     useEffect(() => {
@@ -77,7 +83,7 @@ export const useChat = (currentChannelId: string | null) => {
             limitToLast(50)
         );
 
-        const unsubscribe = onValue(messagesRef, (snapshot) => {
+        const unsubscribe = onValue(messagesRef, async (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 const loadedMessages = Object.entries(data)
@@ -88,6 +94,31 @@ export const useChat = (currentChannelId: string | null) => {
                     // Filter out messages deleted for this user
                     .filter((msg: any) => !msg.deletedFor || !msg.deletedFor[currentUser.uid]);
                 setMessages(loadedMessages);
+
+                // Mark messages as delivered and seen
+                for (const msg of loadedMessages) {
+                    if (msg.senderId !== currentUser.uid) {
+                        const updates: any = {};
+                        let needsUpdate = false;
+
+                        // Mark as delivered if not already
+                        if (!msg.deliveredTo || !msg.deliveredTo[currentUser.uid]) {
+                            updates[`deliveredTo/${currentUser.uid}`] = Date.now();
+                            needsUpdate = true;
+                        }
+
+                        // Mark as seen if not already (immediate since we are viewing)
+                        if (!msg.seenBy || !msg.seenBy[currentUser.uid]) {
+                            updates[`seenBy/${currentUser.uid}`] = Date.now();
+                            needsUpdate = true;
+                        }
+
+                        if (needsUpdate) {
+                            const msgRef = ref(database, `messages/${currentChannelId}/${msg.id}`);
+                            await update(msgRef, updates);
+                        }
+                    }
+                }
             } else {
                 setMessages([]);
             }
@@ -96,7 +127,9 @@ export const useChat = (currentChannelId: string | null) => {
         return () => unsubscribe();
     }, [currentChannelId, currentUser]);
 
-    const [typingUsers, setTypingUsers] = useState<string[]>([]);
+    // Seen logic merged into fetch loop for reliability
+
+    const [typingUsers, setTypingUsers] = useState<{ id: string, name: string }[]>([]);
 
     useEffect(() => {
         if (!currentChannelId || !currentUser) return;
@@ -110,9 +143,11 @@ export const useChat = (currentChannelId: string | null) => {
                     .filter(([uid, val]: [string, any]) => {
                         return uid !== currentUser.uid && val.timestamp && (now - val.timestamp) < 5000;
                     })
-                    .map(([uid, val]: [string, any]) => val.name || 'Someone');
+                    .map(([uid, val]: [string, any]) => ({ id: uid, name: val.name || 'Someone' }));
 
-                setTypingUsers([...new Set(activeTypers)]);
+                // Deduplicate by ID
+                const uniqueTypers = activeTypers.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
+                setTypingUsers(uniqueTypers);
             } else {
                 setTypingUsers([]);
             }
@@ -141,13 +176,15 @@ export const useChat = (currentChannelId: string | null) => {
 
         const messagesRef = ref(database, `messages/${currentChannelId}`);
         const newMessageRef = push(messagesRef);
+        const messageId = newMessageRef.key;
+        const timestamp = Date.now();
 
         const messagePayload: any = {
             text,
             senderId: currentUser.uid,
             senderName: currentUser.displayName || currentUser.email?.split('@')[0] || 'Anonymous',
             senderPhoto: currentUser.photoURL || '',
-            timestamp: serverTimestamp(),
+            timestamp, // Client timestamp for immediate UI feedback
             type
         };
 
@@ -157,6 +194,20 @@ export const useChat = (currentChannelId: string | null) => {
 
         await set(newMessageRef, messagePayload);
         setTyping(false);
+
+        // Update Channel Last Message (for sidebar unread status)
+        const channelRef = ref(database, `channels/${currentChannelId}`);
+        await update(channelRef, {
+            lastMessage: {
+                ...messagePayload,
+                id: messageId
+            },
+            lastActive: timestamp
+        });
+
+        // Mark as read for sender immediately
+        const lastSeenRef = ref(database, `channels/${currentChannelId}/lastSeen/${currentUser.uid}`);
+        await set(lastSeenRef, timestamp);
     };
 
     const createChannel = async (name: string, type: 'public' | 'private' | 'dm', description: string = '', members: string[] = []) => {
@@ -183,8 +234,13 @@ export const useChat = (currentChannelId: string | null) => {
         const messageRef = ref(database, `messages/${currentChannelId}/${messageId}`);
 
         if (forEveryone) {
-            // Hard delete
-            await remove(messageRef);
+            // Unsend - Update message to mark it as unsent
+            await update(messageRef, {
+                text: '',
+                imageUrl: null,
+                type: 'text',
+                isUnsent: true
+            });
         } else {
             // Soft delete for me only
             const deletedForRef = ref(database, `messages/${currentChannelId}/${messageId}/deletedFor/${currentUser.uid}`);

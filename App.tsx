@@ -82,6 +82,7 @@ import AdminAIConfig from './src/pages/admin/AIConfig';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
+import { ToastProvider } from './src/context/ToastContext';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -474,9 +475,11 @@ function App() {
     <HelmetProvider>
       <ThemeProvider>
         <AuthProvider>
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <AppContent />
-          </BrowserRouter>
+          <ToastProvider>
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <AppContent />
+            </BrowserRouter>
+          </ToastProvider>
         </AuthProvider>
       </ThemeProvider>
     </HelmetProvider>

@@ -33,12 +33,17 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+import { useChatNotifications } from '../../hooks/chat/useNotifications';
+
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
+
+    // Add Global Chat Notifications Hook
+    const { unreadCount } = useChatNotifications();
 
     // Handle scroll effect
     useEffect(() => {
@@ -48,8 +53,6 @@ const AdminLayout = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-
 
     const user = currentUser as any;
     const displayName = user?.displayName || user?.email?.split('@')[0] || 'Admin';
@@ -135,7 +138,7 @@ const AdminLayout = () => {
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
     return (
-        <div className="flex min-h-screen bg-slate-50 dark:bg-[#0B1120] text-slate-900 dark:text-white font-sans transition-colors duration-300 relative overflow-hidden">
+        <div className={`flex bg-slate-50 dark:bg-[#0B1120] text-slate-900 dark:text-white font-sans transition-colors duration-300 relative overflow-hidden ${location.pathname === '/admin/chat' ? 'h-screen' : 'min-h-screen'}`}>
             {/* Ambient Background Mesh */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse-slow" />
@@ -253,7 +256,7 @@ const AdminLayout = () => {
             )}
 
             {/* Main Content Area */}
-            <main className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${isSidebarOpen ? 'md:ml-80' : 'md:ml-28'} mr-4`}>
+            <main className={`flex-1 flex flex-col transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${isSidebarOpen ? 'md:ml-80' : 'md:ml-28'} mr-4 ${location.pathname === '/admin/chat' ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
 
                 {/* Admin Top Bar */}
                 <header
@@ -296,7 +299,9 @@ const AdminLayout = () => {
 
                             <button className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full relative transition-colors">
                                 <Bell size={20} />
-                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></span>
+                                )}
                             </button>
 
                             {/* User Avatar - Image or Initials */}
@@ -325,7 +330,7 @@ const AdminLayout = () => {
                 </header>
 
                 {/* Page Content */}
-                <div className="p-8 flex-1 overflow-x-hidden relative z-10">
+                <div className={`flex-1 overflow-x-hidden relative z-10 ${location.pathname === '/admin/chat' ? 'h-full overflow-hidden' : 'p-8 min-h-0'}`}>
                     <Outlet />
                 </div>
             </main>

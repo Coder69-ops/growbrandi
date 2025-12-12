@@ -53,23 +53,13 @@ const AdminChat = () => {
     const activeChannel = channels.find(c => c.id === activeChannelId);
 
     return (
-        <AdminPageLayout
-            title="Team Chat"
-            description="Collaborate with your team in real-time."
-            actions={
-                <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2 mr-2">
-                        {/* Placeholder for active users avatars if needed */}
-                    </div>
-                </div>
-            }
-        >
+        <div className="h-full w-full overflow-hidden bg-slate-50 dark:bg-slate-950">
             {chatLoading ? (
-                <div className="flex items-center justify-center h-[600px]">
+                <div className="flex items-center justify-center h-full">
                     <Loader2 size={40} className="animate-spin text-indigo-500" />
                 </div>
             ) : (
-                <div className="flex h-[calc(100vh-180px)] bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl">
+                <div className="flex h-full bg-white dark:bg-slate-900">
                     <ChatSidebar
                         channels={channels}
                         activeChannelId={activeChannelId}
@@ -90,7 +80,7 @@ const AdminChat = () => {
                     />
                 </div>
             )}
-        </AdminPageLayout>
+        </div>
     );
 };
 

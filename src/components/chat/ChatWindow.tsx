@@ -11,12 +11,13 @@ interface ChatWindowProps {
     messages: Message[];
     onSendMessage: (text: string, type: 'text' | 'image', imageUrl?: string) => Promise<void>;
     onTyping?: (isTyping: boolean) => void;
-    typingUsers?: string[];
+    typingUsers?: { id: string, name: string }[];
     onDeleteMessage?: (messageId: string, forEveryone: boolean) => Promise<void>;
     onDeleteChannel?: (channelId: string) => Promise<void>;
     userMap?: Record<string, any>;
 }
 
+// Force Rebuild
 export const ChatWindow: React.FC<ChatWindowProps> = ({
     activeChannel,
     messages,
@@ -33,9 +34,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
 
     // Auto-scroll to bottom
     // We add typingUsers length to dependency to scroll when someone starts typing (optional, but nice)
+    // Auto-scroll to bottom
+    // We add typingUsers length to dependency to scroll when someone starts typing (optional, but nice)
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages, typingUsers]);
+    }, [messages.length, typingUsers, activeChannel?.id]);
 
     const handleDeleteChannel = async () => {
         if (activeChannel && onDeleteChannel && confirm('Are you sure you want to delete this conversation? This cannot be undone.')) {
@@ -151,17 +154,77 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             </div>
 
             {/* Messages List */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar" onClick={() => setShowMenu(false)}>
+            <div className="flex-1 overflow-y-auto p-4 custom-scrollbar" onClick={() => setShowMenu(false)}>
                 {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
-                        <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
-                            <Hash size={40} />
+                    activeChannel.type === 'dm' && otherUserIdForHook && userMap[otherUserIdForHook] ? (
+                        // DM Profile Card
+                        <div className="h-full flex flex-col items-center justify-center space-y-4 max-w-md mx-auto">
+                            {/* Profile Picture */}
+                            <div className="relative">
+                                {userMap[otherUserIdForHook].image ? (
+                                    <img
+                                        src={userMap[otherUserIdForHook].image}
+                                        alt={userMap[otherUserIdForHook].name}
+                                        className="w-32 h-32 rounded-full object-cover shadow-2xl ring-4 ring-white dark:ring-slate-800"
+                                    />
+                                ) : (
+                                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-5xl shadow-2xl ring-4 ring-white dark:ring-slate-800">
+                                        {userMap[otherUserIdForHook].name[0]?.toUpperCase()}
+                                    </div>
+                                )}
+                                {/* Online Status Badge */}
+                                {userStatus?.state === 'online' && (
+                                    <div className="absolute bottom-2 right-2 w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
+                                )}
+                            </div>
+
+                            {/* User Info */}
+                            <div className="text-center space-y-2">
+                                <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+                                    {userMap[otherUserIdForHook].name}
+                                </h2>
+
+                                {userMap[otherUserIdForHook].role && (
+                                    <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400">
+                                        {typeof userMap[otherUserIdForHook].role === 'object'
+                                            ? userMap[otherUserIdForHook].role.en || Object.values(userMap[otherUserIdForHook].role)[0]
+                                            : userMap[otherUserIdForHook].role
+                                        }
+                                    </p>
+                                )}
+
+                                {userMap[otherUserIdForHook].company && (
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2">
+                                        <span>@</span>
+                                        <span className="font-semibold">
+                                            {typeof userMap[otherUserIdForHook].company === 'object'
+                                                ? userMap[otherUserIdForHook].company.en || Object.values(userMap[otherUserIdForHook].company)[0]
+                                                : userMap[otherUserIdForHook].company
+                                            }
+                                        </span>
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Conversation Start Message */}
+                            <div className="text-center pt-4">
+                                <p className="text-sm text-slate-400 dark:text-slate-500">
+                                    This is the beginning of your conversation
+                                </p>
+                            </div>
                         </div>
-                        <div className="text-center">
-                            <h3 className="font-bold text-slate-900 dark:text-white mb-1">Welcome to #{activeChannel.name}!</h3>
-                            <p>This is the start of your conversation.</p>
+                    ) : (
+                        // Public Channel Empty State
+                        <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
+                            <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center">
+                                <Hash size={40} />
+                            </div>
+                            <div className="text-center">
+                                <h3 className="font-bold text-slate-900 dark:text-white mb-1">Welcome to #{activeChannel.name}!</h3>
+                                <p>This is the start of your conversation.</p>
+                            </div>
                         </div>
-                    </div>
+                    )
                 ) : (
                     messages.map((msg, index) => {
                         const isMe = msg.senderId === currentUser?.uid;
@@ -171,28 +234,48 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             (msg.timestamp - messages[index - 1].timestamp > 300000);
 
                         return (
-                            <MessageBubble
-                                key={msg.id}
-                                message={msg}
-                                isMe={isMe}
-                                showHeader={showHeader}
-                                onDelete={onDeleteMessage ? (forEveryone) => onDeleteMessage(msg.id, forEveryone) : undefined}
-                            />
+                            <div key={msg.id} className={showHeader ? 'mt-4' : 'mt-1'}>
+                                <MessageBubble
+                                    message={msg}
+                                    isMe={isMe}
+                                    showHeader={showHeader}
+                                    onDelete={onDeleteMessage ? (forEveryone) => onDeleteMessage(msg.id, forEveryone) : undefined}
+                                />
+                            </div>
                         );
                     })
                 )}
 
                 {/* Typing Indicator */}
+                {/* Typing Indicator */}
                 {typingUsers.length > 0 && (
-                    <div className="flex items-center gap-2 text-xs text-slate-400 ml-2 animate-pulse">
-                        <div className="flex gap-1">
-                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-0"></span>
-                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></span>
-                            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-300"></span>
+                    <div className="flex items-end gap-2 ml-1 mt-2 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                        {/* Avatar */}
+                        {userMap[typingUsers[0].id]?.image ? (
+                            <img
+                                src={userMap[typingUsers[0].id].image}
+                                alt={typingUsers[0].name}
+                                className="w-8 h-8 rounded-full object-cover shadow-sm mb-1 ring-2 ring-white dark:ring-slate-800"
+                            />
+                        ) : (
+                            <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-500 text-xs font-bold mb-1 ring-2 ring-white dark:ring-slate-800">
+                                {typingUsers[0].name[0]?.toUpperCase()}
+                            </div>
+                        )}
+
+                        {/* Bubble */}
+                        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm flex items-center gap-1.5">
+                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></span>
                         </div>
-                        <span>
-                            {typingUsers.join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing...
-                        </span>
+
+                        {/* Multiple Typers Count */}
+                        {typingUsers.length > 1 && (
+                            <span className="text-xs text-slate-400 mb-3 ml-1">
+                                +{typingUsers.length - 1}
+                            </span>
+                        )}
                     </div>
                 )}
 
