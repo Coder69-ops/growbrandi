@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, User, Briefcase, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { createPortal } from 'react-dom'; // Import portal
+import { X, Calendar, User, Briefcase, FileText, ChevronDown, Layout } from 'lucide-react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { Task } from '../../hooks/useTasks'; // Import Task type
@@ -37,16 +38,13 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                 setPriority(task.priority);
                 setAssigneeId(task.assigneeId || '');
                 setProjectId(task.projectId || '');
-                // Handle dueDate. If it's a timestamp, convert to YYYY-MM-DD
                 if (task.dueDate) {
-                    // Check if it's a Firestore Timestamp (has toDate)
                     const date = task.dueDate.toDate ? task.dueDate.toDate() : new Date(task.dueDate);
                     setDueDate(date.toISOString().split('T')[0]);
                 } else {
                     setDueDate('');
                 }
             } else {
-                // Reset form for new task
                 setTitle('');
                 setDescription('');
                 setStatus(initialStatus);
@@ -64,7 +62,7 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
         try {
             const [projectsSnap, teamSnap] = await Promise.all([
                 getDocs(collection(db, 'projects')),
-                getDocs(collection(db, 'team_members')) // Adjust collection name if different
+                getDocs(collection(db, 'team_members'))
             ]);
 
             setProjects(projectsSnap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -89,7 +87,7 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                 priority,
                 assigneeId: assigneeId || null,
                 projectId: projectId || null,
-                dueDate: dueDate ? new Date(dueDate) : null, // Store as Date object or Timestamp logic upstream
+                dueDate: dueDate ? new Date(dueDate) : null,
             });
             onClose();
         } catch (error) {
@@ -101,61 +99,106 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
 
     if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col">
-                <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 sticky top-0 z-10">
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        {task ? <Edit2Icon /> : <PlusIcon />}
-                        {task ? 'Edit Task' : 'New Task'}
-                    </h2>
-                    <button onClick={onClose} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors">
-                        <X size={24} />
-                    </button>
-                </div>
+    // Use createPortal to mount the modal directly into document.body
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 isolate">
+            <div
+                className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
+                onClick={onClose}
+            />
 
-                <form onSubmit={handleSave} className="p-6 space-y-6 flex-1">
-                    <div>
-                        <input
-                            type="text"
-                            placeholder="Task Title"
-                            value={title}
-                            onChange={e => setTitle(e.target.value)}
-                            className="w-full text-2xl font-bold bg-transparent border-0 border-b-2 border-slate-200 dark:border-slate-700 focus:border-blue-500 focus:ring-0 px-0 py-2 placeholder-slate-400 dark:placeholder-slate-500 text-slate-900 dark:text-white transition-colors"
-                            autoFocus
-                            required
-                        />
+            <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800">
+                {/* Header */}
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-20">
+                    <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+                        <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+                            <Layout size={18} className="text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <span className="text-sm font-medium">
+                            {task ? 'Edit Task' : 'Create New Task'}
+                        </span>
+                        {task && <span className="text-slate-300 dark:text-slate-700">/</span>}
+                        {task && <span className="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500">#{task.id.slice(0, 5)}</span>}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Status & Priority */}
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
-                                <select
-                                    value={status}
-                                    onChange={(e) => setStatus(e.target.value as any)}
-                                    className="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-blue-500"
-                                >
-                                    <option value="todo">To Do</option>
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="review">Review</option>
-                                    <option value="done">Done</option>
-                                </select>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={onClose}
+                            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                        >
+                            <X size={20} />
+                        </button>
+                    </div>
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    <form id="task-form" onSubmit={handleSave} className="flex flex-col lg:flex-row min-h-full">
+
+                        {/* Main Column (Left) */}
+                        <div className="flex-1 p-6 lg:p-8 space-y-8 border-r border-slate-100 dark:border-slate-800">
+                            <div className="space-y-6">
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={e => setTitle(e.target.value)}
+                                        placeholder="Task Title"
+                                        className="w-full text-2xl lg:text-3xl font-bold text-slate-900 dark:text-white bg-transparent border-none p-0 focus:ring-0 placeholder-slate-300 dark:placeholder-slate-600"
+                                        autoFocus
+                                        required
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-slate-400">
+                                        <FileText size={16} /> Description
+                                    </label>
+                                    <textarea
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                        placeholder="Add a detailed description..."
+                                        className="w-full min-h-[300px] p-4 text-base leading-relaxed rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-y text-slate-700 dark:text-slate-300 placeholder-slate-400"
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Priority</label>
-                                <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                        </div>
+
+                        {/* Sidebar (Right) */}
+                        <div className="w-full lg:w-80 p-6 lg:p-8 bg-slate-50/50 dark:bg-slate-900/50 space-y-8 flex flex-col shrink-0">
+
+                            {/* Status Section */}
+                            <div className="space-y-3">
+                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Status</label>
+                                <div className="relative">
+                                    <select
+                                        value={status}
+                                        onChange={(e) => setStatus(e.target.value as any)}
+                                        className="w-full appearance-none pl-3 pr-10 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer text-slate-700 dark:text-slate-200"
+                                    >
+                                        <option value="todo">To Do</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="review">Review</option>
+                                        <option value="done">Done</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                                </div>
+                            </div>
+
+                            {/* Priority Section */}
+                            <div className="space-y-3">
+                                <label className="text-xs font-bold text-slate-400 uppercase tracking-wider">Priority</label>
+                                <div className="flex gap-2">
                                     {(['low', 'medium', 'high'] as const).map((p) => (
                                         <button
-                                            type="button"
                                             key={p}
+                                            type="button"
                                             onClick={() => setPriority(p)}
-                                            className={`flex-1 py-1.5 text-sm font-medium rounded-md capitalize transition-all ${priority === p
-                                                    ? p === 'high' ? 'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400 shadow-sm'
-                                                        : p === 'medium' ? 'bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400 shadow-sm'
-                                                            : 'bg-white text-slate-900 dark:bg-slate-700 dark:text-white shadow-sm'
-                                                    : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                            className={`flex-1 py-2 px-1 text-xs font-bold rounded-lg uppercase tracking-wide border transition-all ${priority === p ?
+                                                    (p === 'high' ? 'bg-red-50 border-red-200 text-red-600 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400' :
+                                                        p === 'medium' ? 'bg-amber-50 border-amber-200 text-amber-600 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400' :
+                                                            'bg-slate-200 border-slate-300 text-slate-700 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-200')
+                                                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600'
                                                 }`}
                                         >
                                             {p}
@@ -163,96 +206,96 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                                     ))}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Assignee & Due Date */}
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-2">
-                                    <User size={14} /> Assignee
-                                </label>
-                                <select
-                                    value={assigneeId}
-                                    onChange={(e) => setAssigneeId(e.target.value)}
-                                    className="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-blue-500"
+                            {/* Details Group */}
+                            <div className="space-y-5 pt-5 border-t border-slate-200 dark:border-slate-800">
+
+                                {/* Assignee */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                                        <User size={16} className="text-slate-400" /> Assignee
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            value={assigneeId}
+                                            onChange={(e) => setAssigneeId(e.target.value)}
+                                            className="w-full appearance-none pl-3 pr-10 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+                                        >
+                                            <option value="">Unassigned</option>
+                                            {teamMembers.map(member => (
+                                                <option key={member.id} value={member.id}>{member.name}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                                    </div>
+                                </div>
+
+                                {/* Due Date */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                                        <Calendar size={16} className="text-slate-400" /> Due Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={dueDate}
+                                        onChange={(e) => setDueDate(e.target.value)}
+                                        className="w-full px-3 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                    />
+                                </div>
+
+                                {/* Project */}
+                                <div className="space-y-2">
+                                    <label className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                                        <Briefcase size={16} className="text-slate-400" /> Project
+                                    </label>
+                                    <div className="relative">
+                                        <select
+                                            value={projectId}
+                                            onChange={(e) => setProjectId(e.target.value)}
+                                            className="w-full appearance-none pl-3 pr-10 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all cursor-pointer"
+                                        >
+                                            <option value="">No Project</option>
+                                            {projects.map(p => (
+                                                <option key={p.id} value={p.id}>{p.title?.en || p.title || 'Untitled'}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={16} />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex-1"></div>
+
+                            {/* Actions */}
+                            <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+                                <button
+                                    type="submit"
+                                    form="task-form"
+                                    disabled={saving}
+                                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-600/20 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    <option value="">Unassigned</option>
-                                    {loadingData ? <option disabled>Loading...</option> : teamMembers.map(member => (
-                                        <option key={member.id} value={member.id}>{member.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-2">
-                                    <Calendar size={14} /> Due Date
-                                </label>
-                                <input
-                                    type="date"
-                                    value={dueDate}
-                                    onChange={(e) => setDueDate(e.target.value)}
-                                    className="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-blue-500"
-                                />
+                                    {saving ? (
+                                        <>
+                                            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+                                            Saving...
+                                        </>
+                                    ) : (
+                                        'Save Changes'
+                                    )}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="w-full py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors"
+                                >
+                                    Cancel
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Project Link */}
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-2">
-                            <Briefcase size={14} /> Link to Project
-                        </label>
-                        <select
-                            value={projectId}
-                            onChange={(e) => setProjectId(e.target.value)}
-                            className="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-blue-500"
-                        >
-                            <option value="">No Project</option>
-                            {loadingData ? <option disabled>Loading...</option> : projects.map(p => (
-                                <option key={p.id} value={p.id}>{p.title?.en || p.title || 'Untitled Project'}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Description */}
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-2">
-                            <FileText size={14} /> Description
-                        </label>
-                        <textarea
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                            rows={5}
-                            className="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-blue-500"
-                            placeholder="Add more details about this task..."
-                        />
-                    </div>
-                </form>
-
-                <div className="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-end gap-3 sticky bottom-0 z-10 rounded-b-2xl">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="px-4 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700/50 rounded-lg transition-colors font-medium"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-bold shadow-lg shadow-blue-500/20 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {saving ? 'Saving...' : 'Save Task'}
-                    </button>
+                    </form>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
-
-// Simple icons for header
-const Edit2Icon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-);
-const PlusIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
-);

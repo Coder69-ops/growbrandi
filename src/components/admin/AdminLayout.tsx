@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { ThemeToggle } from '../../../components/ThemeToggle';
+import { formatDistanceToNow } from 'date-fns';
 import {
     LayoutDashboard,
     FolderKanban,
@@ -37,13 +38,14 @@ import { useChatNotifications } from '../../hooks/chat/useNotifications';
 
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const { currentUser } = useAuth();
 
     // Add Global Chat Notifications Hook
-    const { unreadCount } = useChatNotifications();
+    const { unreadCount, notifications } = useChatNotifications();
 
     // Handle scroll effect
     useEffect(() => {
@@ -78,11 +80,19 @@ const AdminLayout = () => {
         }
     };
 
+    const formatNotificationsTime = (timestamp: number) => {
+        try {
+            return formatDistanceToNow(timestamp, { addSuffix: true });
+        } catch (e) {
+            return 'recently';
+        }
+    };
+
     type MenuItem = {
         path: string;
         icon: any;
         label: string;
-        permission?: string;
+        permissions?: string[]; // Array of allowed permissions (OR logic)
         adminOnly?: boolean;
     };
 
@@ -91,46 +101,46 @@ const AdminLayout = () => {
             title: 'Overview',
             items: [
                 { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-                { path: '/admin/online-users', icon: Zap, label: 'Online Users', permission: 'view_users' },
+                { path: '/admin/online-users', icon: Zap, label: 'Online Users', permissions: ['view_users', 'manage_settings'] },
             ]
         },
         {
             title: 'Content Management',
             items: [
-                { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
-                { path: '/admin/blog', icon: BookOpen, label: 'Blog', permission: 'manage_content' },
-                { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permission: 'manage_content' },
-                { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
-                { path: '/admin/jobs', icon: Target, label: 'Jobs', permission: 'manage_content' },
-                { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
-                { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
-                { path: '/admin/assets', icon: FolderKanban, label: 'Asset Library', permission: 'manage_content' },
-                { path: '/admin/contact-settings', icon: Contact, label: 'Contact Info', permission: 'manage_settings' },
-                { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
+                { path: '/admin/site-content', icon: FileText, label: 'Site Content', permissions: ['manage_content'] },
+                { path: '/admin/blog', icon: BookOpen, label: 'Blog', permissions: ['manage_blog', 'manage_content'] },
+                { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permissions: ['manage_projects', 'manage_content'] },
+                { path: '/admin/services', icon: Briefcase, label: 'Services', permissions: ['manage_services', 'manage_content'] },
+                { path: '/admin/jobs', icon: Target, label: 'Jobs', permissions: ['manage_jobs', 'manage_content'] },
+                { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permissions: ['manage_testimonials', 'manage_content'] },
+                { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permissions: ['manage_faqs', 'manage_content'] },
+                { path: '/admin/assets', icon: FolderKanban, label: 'Asset Library', permissions: ['manage_assets', 'manage_content'] },
+                { path: '/admin/contact-settings', icon: Contact, label: 'Contact Info', permissions: ['manage_contact_info', 'manage_settings'] },
+                { path: '/admin/settings', icon: Settings, label: 'Settings', permissions: ['manage_settings'] },
             ]
         },
         {
             title: 'Work & Team',
             items: [
-                { path: '/admin/team', icon: Users, label: 'Team', permission: 'manage_team_profiles' },
-                { path: '/admin/team-management', icon: Shield, label: 'Team Roles', permission: 'manage_users' },
-                { path: '/admin/work', icon: Kanban, label: 'Work Board', permission: 'manage_content' },
-                { path: '/admin/timesheet', icon: Clock, label: 'Time Tracking', permission: 'manage_content' },
+                { path: '/admin/team', icon: Users, label: 'Team', permissions: ['manage_team_profiles', 'manage_settings'] },
+                { path: '/admin/team-management', icon: Shield, label: 'Team Roles', permissions: ['manage_users'] },
+                { path: '/admin/work', icon: Kanban, label: 'Work Board', permissions: ['manage_content'] },
+                { path: '/admin/timesheet', icon: Clock, label: 'Time Tracking', permissions: ['manage_content'] },
             ]
         },
         {
             title: 'Communication',
             items: [
-                { path: '/admin/messages', icon: Mail, label: 'Inquiries', permission: 'view_messages' },
-                { path: '/admin/chat', icon: MessageSquare, label: 'Team Chat', permission: 'view_messages' },
+                { path: '/admin/messages', icon: Mail, label: 'Inquiries', permissions: ['view_messages'] },
+                { path: '/admin/chat', icon: MessageSquare, label: 'Team Chat', permissions: ['access_chat', 'view_messages'] },
             ]
         },
         {
             title: 'System',
             items: [
-                { path: '/admin/audit', icon: History, label: 'Audit Logs', permission: 'view_logs' },
-                { path: '/admin/ai-config', icon: Bot, label: 'AI Configuration', permission: 'manage_settings' },
-                { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
+                { path: '/admin/audit', icon: History, label: 'Audit Logs', permissions: ['view_logs', 'manage_settings'] },
+                { path: '/admin/ai-config', icon: Bot, label: 'AI Configuration', permissions: ['manage_ai', 'manage_settings'] },
+                { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permissions: ['manage_settings'], adminOnly: true },
             ]
         }
     ];
@@ -174,11 +184,19 @@ const AdminLayout = () => {
                                 const user = currentUser as any;
                                 const isLegacyAdmin = !user?.role && !user?.permissions;
                                 if (item.adminOnly && user?.role !== 'admin') return false;
+
+                                // If no permissions required, allow
+                                if (!item.permissions || item.permissions.length === 0) {
+                                    return true;
+                                }
+
+                                // Check if user has ANY of the required permissions
+                                // This provides the fallback logic (e.g. manage_content OR manage_blog)
                                 const hasPermission =
                                     user?.role === 'admin' ||
-                                    !item.permission ||
-                                    user?.permissions?.includes(item.permission) ||
-                                    isLegacyAdmin;
+                                    isLegacyAdmin ||
+                                    (user?.permissions && item.permissions.some(p => user.permissions.includes(p)));
+
                                 return hasPermission;
                             });
 
@@ -297,12 +315,96 @@ const AdminLayout = () => {
                                 </span>
                             </div>
 
-                            <button className="p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full relative transition-colors">
-                                <Bell size={20} />
-                                {unreadCount > 0 && (
-                                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></span>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                                    className={`p-2 rounded-full relative transition-all duration-200 ${isNotificationsOpen ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400' : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'}`}
+                                >
+                                    <Bell size={20} />
+                                    {unreadCount > 0 && (
+                                        <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 animate-pulse"></span>
+                                    )}
+                                </button>
+
+                                {/* Notification Dropdown */}
+                                {isNotificationsOpen && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setIsNotificationsOpen(false)}></div>
+                                        <div className="absolute top-12 right-0 w-80 md:w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                                            <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                                                <h3 className="font-bold text-slate-800 dark:text-white">Notifications</h3>
+                                                <div className="flex gap-2 text-xs">
+                                                    <span className="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 font-medium">
+                                                        {unreadCount} Unread
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
+                                                {notifications.length === 0 ? (
+                                                    <div className="p-8 text-center text-slate-400">
+                                                        <Bell size={32} className="mx-auto mb-2 opacity-50" />
+                                                        <p className="text-sm">No notifications yet</p>
+                                                    </div>
+                                                ) : (
+                                                    <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                                                        {notifications.map((notif: any) => (
+                                                            <Link
+                                                                key={notif.id}
+                                                                to={`/admin/chat?channelId=${notif.channelId}`}
+                                                                onClick={() => setIsNotificationsOpen(false)}
+                                                                className={`block p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${!notif.isRead ? 'bg-indigo-50/40 dark:bg-indigo-900/10' : ''}`}
+                                                            >
+                                                                <div className="flex gap-3">
+                                                                    <div className="flex-shrink-0 relative">
+                                                                        {notif.senderPhoto ? (
+                                                                            <img src={notif.senderPhoto} alt="" className="w-10 h-10 rounded-full object-cover" />
+                                                                        ) : (
+                                                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs">
+                                                                                {notif.senderName?.[0]}
+                                                                            </div>
+                                                                        )}
+                                                                        {/* Unread Dot */}
+                                                                        {!notif.isRead && (
+                                                                            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <div className="flex justify-between items-start mb-0.5">
+                                                                            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate pr-2">
+                                                                                {notif.senderName}
+                                                                            </p>
+                                                                            <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                                                                                {formatNotificationsTime(notif.timestamp)}
+                                                                            </span>
+                                                                        </div>
+                                                                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                                                                            {notif.message}
+                                                                        </p>
+                                                                        <p className="text-[10px] text-indigo-600 dark:text-indigo-400 mt-1.5 font-medium">
+                                                                            {notif.channelId.startsWith('dm') ? 'Direct Message' : notif.title}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="p-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30 text-center">
+                                                <Link
+                                                    to="/admin/chat"
+                                                    onClick={() => setIsNotificationsOpen(false)}
+                                                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 transition-colors"
+                                                >
+                                                    View All Messages
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </>
                                 )}
-                            </button>
+                            </div>
 
                             {/* User Avatar - Image or Initials */}
                             <Link to="/admin/profile" className="relative group cursor-pointer block">

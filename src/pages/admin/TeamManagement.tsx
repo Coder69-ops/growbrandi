@@ -11,14 +11,43 @@ import { Plus, Trash2, Save, X, User, Shield, Check, Mail, Lock, Key } from 'luc
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Defined permissions that can be assigned
-const AVAILABLE_PERMISSIONS = [
-    { id: 'manage_content', label: 'Manage Content (Projects, Services, etc.)' },
-    { id: 'manage_team_profiles', label: 'Manage Public Team Profiles' },
-    { id: 'manage_users', label: 'Manage Admin Users' }, // Vital: self-referential
-    { id: 'manage_settings', label: 'Manage Settings' },
-    { id: 'view_messages', label: 'View Messages' },
-    { id: 'view_logs', label: 'View Audit Logs' },
+const PERMISSION_GROUPS = [
+    {
+        title: 'Content Management',
+        permissions: [
+            { id: 'manage_content', label: 'Manage All Content (Super)' },
+            { id: 'manage_blog', label: 'Manage Blog' },
+            { id: 'manage_projects', label: 'Manage Projects' },
+            { id: 'manage_services', label: 'Manage Services' },
+            { id: 'manage_jobs', label: 'Manage Jobs' },
+            { id: 'manage_testimonials', label: 'Manage Testimonials' },
+            { id: 'manage_faqs', label: 'Manage FAQs' },
+            { id: 'manage_assets', label: 'Manage Assets' },
+        ]
+    },
+    {
+        title: 'Communication',
+        permissions: [
+            { id: 'view_messages', label: 'View Inquiries' },
+            { id: 'access_chat', label: 'Access Team Chat' },
+        ]
+    },
+    {
+        title: 'Settings & System',
+        permissions: [
+            { id: 'manage_settings', label: 'Manage All Settings (Super)' },
+            { id: 'manage_contact_info', label: 'Manage Contact Info' },
+            { id: 'manage_ai', label: 'Manage AI Configuration' },
+            { id: 'manage_users', label: 'Manage Admin Users' },
+            { id: 'manage_team_profiles', label: 'Manage Public Team Profiles' },
+            { id: 'view_users', label: 'View Online Users' },
+            { id: 'view_logs', label: 'View Audit Logs' },
+        ]
+    }
 ];
+
+// Flatten for easy lookup if needed, though mostly used in UI loop
+const ALL_PERMISSIONS = PERMISSION_GROUPS.flatMap(g => g.permissions);
 
 const AdminTeamManagement = () => {
     const { currentUser } = useAuth();
@@ -322,28 +351,35 @@ const AdminTeamManagement = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800 md:col-span-2">
                                 <h3 className="font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                                     <Shield size={18} /> Access Permissions
                                 </h3>
 
-                                <div className="space-y-3">
-                                    {AVAILABLE_PERMISSIONS.map((perm) => (
-                                        <label key={perm.id} className="flex items-center gap-3 p-2 hover:bg-white dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-colors">
-                                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${formData.permissions.includes(perm.id)
-                                                ? 'bg-blue-600 border-blue-600 text-white'
-                                                : 'border-slate-300 dark:border-slate-600'
-                                                }`}>
-                                                {formData.permissions.includes(perm.id) && <Check size={14} />}
-                                            </div>
-                                            <input
-                                                type="checkbox"
-                                                className="hidden"
-                                                checked={formData.permissions.includes(perm.id)}
-                                                onChange={() => togglePermission(perm.id)}
-                                            />
-                                            <span className="text-sm text-slate-700 dark:text-slate-300">{perm.label}</span>
-                                        </label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {PERMISSION_GROUPS.map((group) => (
+                                        <div key={group.title} className="space-y-3">
+                                            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200 dark:border-slate-700 pb-1 mb-2">
+                                                {group.title}
+                                            </h4>
+                                            {group.permissions.map((perm) => (
+                                                <label key={perm.id} className="flex items-start gap-3 p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-lg cursor-pointer transition-colors">
+                                                    <div className={`mt-0.5 w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${formData.permissions.includes(perm.id)
+                                                        ? 'bg-blue-600 border-blue-600 text-white'
+                                                        : 'border-slate-300 dark:border-slate-600'
+                                                        }`}>
+                                                        {formData.permissions.includes(perm.id) && <Check size={14} />}
+                                                    </div>
+                                                    <input
+                                                        type="checkbox"
+                                                        className="hidden"
+                                                        checked={formData.permissions.includes(perm.id)}
+                                                        onChange={() => togglePermission(perm.id)}
+                                                    />
+                                                    <span className="text-sm text-slate-700 dark:text-slate-300 leading-tight pt-0.5">{perm.label}</span>
+                                                </label>
+                                            ))}
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -506,7 +542,7 @@ const AdminTeamManagement = () => {
                                             <div className="flex flex-wrap gap-2">
                                                 {user.permissions?.slice(0, 2).map((perm: string) => (
                                                     <span key={perm} className="text-xs px-2 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
-                                                        {AVAILABLE_PERMISSIONS.find(p => p.id === perm)?.label || perm}
+                                                        {ALL_PERMISSIONS.find(p => p.id === perm)?.label || perm}
                                                     </span>
                                                 ))}
                                                 {(user.permissions?.length || 0) > 2 && (

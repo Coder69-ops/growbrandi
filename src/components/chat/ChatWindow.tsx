@@ -9,7 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 interface ChatWindowProps {
     activeChannel: Channel | undefined;
     messages: Message[];
-    onSendMessage: (text: string, type: 'text' | 'image', imageUrl?: string) => Promise<void>;
+    onSendMessage: (text: string, type: 'text' | 'image', imageUrl?: string, mentions?: string[]) => Promise<void>;
     onTyping?: (isTyping: boolean) => void;
     typingUsers?: { id: string, name: string }[];
     onDeleteMessage?: (messageId: string, forEveryone: boolean) => Promise<void>;
@@ -32,8 +32,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showMenu, setShowMenu] = useState(false);
 
-    // Auto-scroll to bottom
-    // We add typingUsers length to dependency to scroll when someone starts typing (optional, but nice)
     // Auto-scroll to bottom
     // We add typingUsers length to dependency to scroll when someone starts typing (optional, but nice)
     useEffect(() => {
@@ -247,7 +245,6 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 )}
 
                 {/* Typing Indicator */}
-                {/* Typing Indicator */}
                 {typingUsers.length > 0 && (
                     <div className="flex items-end gap-2 ml-1 mt-2 mb-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
                         {/* Avatar */}
@@ -287,6 +284,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                 onSendMessage={onSendMessage}
                 onTyping={onTyping}
                 placeholder={`Message #${activeChannel.name}`}
+                userMap={userMap}
             />
         </div>
     );

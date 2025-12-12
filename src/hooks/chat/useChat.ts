@@ -16,6 +16,7 @@ export interface Message {
     isUnsent?: boolean;
     deliveredTo?: Record<string, number>; // userId -> timestamp
     seenBy?: Record<string, number>; // userId -> timestamp
+    mentions?: string[]; // Array of user IDs
 }
 
 export interface Channel {
@@ -171,7 +172,7 @@ export const useChat = (currentChannelId: string | null) => {
         }
     };
 
-    const sendMessage = async (text: string, type: 'text' | 'image' = 'text', imageUrl?: string) => {
+    const sendMessage = async (text: string, type: 'text' | 'image' = 'text', imageUrl?: string, mentions: string[] = []) => {
         if (!currentUser || !currentChannelId) return;
 
         const messagesRef = ref(database, `messages/${currentChannelId}`);
@@ -187,6 +188,10 @@ export const useChat = (currentChannelId: string | null) => {
             timestamp, // Client timestamp for immediate UI feedback
             type
         };
+
+        if (mentions && mentions.length > 0) {
+            messagePayload.mentions = mentions;
+        }
 
         if (type === 'image' && imageUrl) {
             messagePayload.imageUrl = imageUrl;

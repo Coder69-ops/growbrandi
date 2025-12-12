@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { Message } from '../../hooks/chat/useChat';
 import { Trash2, X, ZoomIn, Download } from 'lucide-react';
 import { useToast } from '../../context/ToastContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface MessageBubbleProps {
     message: Message;
@@ -17,12 +18,42 @@ const isOnlyEmojis = (text: string) => {
     return emojiRegex.test(text.trim());
 };
 
+const renderTextWithMentions = (text: string, mentions?: string[], currentUserId?: string) => {
+    // Simple heuristic: split by spacing but keep delimeters to preserve structure?
+    // Better: Regex to find @Name
+    // We assume names don't have special chars other than spaces/alphanumerics
+    const parts = text.split(/(@[\w]+(?: [\w]+)?)/g);
+
+    return parts.map((part, index) => {
+        if (part.startsWith('@') && part.length > 1) {
+            // Check if this is likely a mention (simple heuristic)
+            const isMention = true;
+
+            // Check if it's me
+            // Ideally we'd map name to ID, but for now we just style all mentions
+            // If I am mentioned, I want to see it highlighted differently? 
+            // Since we don't have userMap here, we render generic mention style.
+
+            return (
+                <span key={index} className="font-bold text-indigo-600 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-900/50 rounded px-1 py-0.5 mx-0.5">
+                    {part}
+                </span>
+            );
+        }
+        return part;
+    });
+};
+
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, showHeader, onDelete }) => {
     const [showDeleteMenu, setShowDeleteMenu] = useState(false);
     const [showImageModal, setShowImageModal] = useState(false);
     const { showConfirm } = useToast();
+    const { currentUser } = useAuth(); // To detect if I am mentioned
 
     const isEmojiOnly = message.text && isOnlyEmojis(message.text);
+
+    // Check if I am mentioned in this message
+    const amIMentioned = message.mentions && currentUser && message.mentions.includes(currentUser.uid);
 
     const handleDownloadImage = () => {
         if (message.imageUrl) {
@@ -35,7 +66,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
 
     return (
         <>
-            <div className={`group flex gap-3 ${isMe ? 'flex-row-reverse' : ''} transition-all duration-200 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] -mx-2 px-2 py-1 rounded-lg`}>
+            <div className={`group flex gap-3 ${isMe ? 'flex-row-reverse' : ''} transition-all duration-200 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] -mx-2 px-2 py-1 rounded-lg ${amIMentioned ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`}>
                 {/* Avatar */}
                 <div className="flex-shrink-0">
                     {showHeader ? (
@@ -68,7 +99,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                         ? 'text-5xl leading-none p-1'
                         : `px-4 py-2.5 rounded-2xl shadow-sm text-sm leading-relaxed overflow-visible transition-all duration-200 ${isMe
                             ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-md shadow-indigo-500/20'
-                            : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-md shadow-slate-200 dark:shadow-slate-800/50'
+                            : `bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-md shadow-slate-200 dark:shadow-slate-800/50 ${amIMentioned ? 'ring-2 ring-amber-400/50 dark:ring-amber-500/30' : ''}`
                         } hover:shadow-lg`
                         }`}>
 
@@ -152,7 +183,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
 
                                 {message.text && (
                                     <p className={`whitespace-pre-wrap break-words ${isEmojiOnly ? '' : 'pr-2'}`}>
-                                        {message.text}
+                                        {renderTextWithMentions(message.text, message.mentions)}
                                     </p>
                                 )}
 

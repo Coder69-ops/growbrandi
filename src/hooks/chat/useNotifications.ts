@@ -9,6 +9,7 @@ export const useChatNotifications = () => {
     const { currentUser } = useAuth();
     const { showNotification } = useToast();
     const [unreadCount, setUnreadCount] = useState(0);
+    const [notifications, setNotifications] = useState<any[]>([]);
     const notifiedRef = useRef(new Set<string>());
 
     useEffect(() => {
@@ -18,9 +19,14 @@ export const useChatNotifications = () => {
 
         const unsubscribe = onValue(channelsRef, (snapshot) => {
             const data = snapshot.val();
-            if (!data) return;
+            if (!data) {
+                setNotifications([]);
+                setUnreadCount(0);
+                return;
+            }
 
             let count = 0;
+            const tempNotifications: any[] = [];
 
             Object.entries(data).forEach(([channelId, channel]: [string, any]) => {
                 // Normalize members
@@ -32,13 +38,27 @@ export const useChatNotifications = () => {
                 if (isMember && channel.lastMessage) {
                     const lastMsg = channel.lastMessage;
                     const lastSeen = channel.lastSeen?.[currentUser.uid] || 0;
+                    const isRead = lastMsg.senderId === currentUser.uid || lastMsg.timestamp <= lastSeen;
+
+                    // Add to notifications list
+                    tempNotifications.push({
+                        id: channelId, // Use channel ID as notification group ID
+                        channelId: channelId,
+                        title: channel.type === 'dm' ? (lastMsg.senderName || 'DM') : `#${channel.name}`,
+                        message: lastMsg.text || (lastMsg.type === 'image' ? 'Sent an image' : 'New message'),
+                        timestamp: lastMsg.timestamp,
+                        senderName: lastMsg.senderName,
+                        senderPhoto: lastMsg.senderPhoto,
+                        isRead: isRead,
+                        type: 'message'
+                    });
 
                     // 1. Check Unread Count
-                    if (lastMsg.senderId !== currentUser.uid && lastMsg.timestamp > lastSeen) {
+                    if (!isRead && lastMsg.senderId !== currentUser.uid) {
                         count++;
 
                         // Rich Notification Trigger
-                        // logic: < 5s old AND not notified
+                        // logic: < 10s old AND not notified
                         const msgId = lastMsg.id || `${channelId}-${lastMsg.timestamp}`;
 
                         if (Date.now() - lastMsg.timestamp < 10000 && !notifiedRef.current.has(msgId)) {
@@ -52,7 +72,6 @@ export const useChatNotifications = () => {
 
                                 try {
                                     // Query Firestore for user with matching UID
-                                    // The doc ID might not be the UID, so we query by the 'uid' field
                                     const q = query(collection(db, 'team_members'), where('uid', '==', lastMsg.senderId));
                                     const querySnapshot = await getDocs(q);
 
@@ -66,13 +85,19 @@ export const useChatNotifications = () => {
                                     console.error("Error fetching notification user data", err);
                                 }
 
-                                // Show Rich Notification
+                                // Show Rich Notification with Mention Support
+                                const isMentioned = lastMsg.mentions && Array.isArray(lastMsg.mentions) && lastMsg.mentions.includes(currentUser.uid);
+                                const notificationTitle = isMentioned ? `Mentioned by ${senderName}` : senderName;
+                                const notificationSubtitle = isMentioned
+                                    ? `You were mentioned in ${channel.type === 'dm' ? 'a DM' : '#' + channel.name}`
+                                    : `Message in ${channel.type === 'dm' ? 'Direct Messages' : '#' + channel.name}`;
+
                                 showNotification({
-                                    title: senderName,
+                                    title: notificationTitle,
                                     message: lastMsg.text || (lastMsg.type === 'image' ? 'Sent an image' : 'New message'),
                                     avatar,
                                     role,
-                                    subtitle: `Message in ${channel.type === 'dm' ? 'Direct Messages' : channel.name}`,
+                                    subtitle: notificationSubtitle,
                                     // Inline Reply Handler
                                     onReply: async (text: string) => {
                                         // Logic to send message
@@ -120,11 +145,15 @@ export const useChatNotifications = () => {
                 }
             });
 
+            // Sort notifications by timestamp desc
+            tempNotifications.sort((a, b) => b.timestamp - a.timestamp);
+
+            setNotifications(tempNotifications);
             setUnreadCount(count);
         });
 
         return () => unsubscribe();
     }, [currentUser]);
 
-    return { unreadCount };
+    return { unreadCount, notifications };
 };
