@@ -162,6 +162,13 @@ const AdminTeamManagement = () => {
                     createdAt: serverTimestamp(),
                 });
 
+                // 3. Update Team Member Profile with UID if linked
+                if (dataToSave.teamMemberId) {
+                    await updateDoc(doc(db, 'team_members', dataToSave.teamMemberId), {
+                        uid: newUser.uid
+                    });
+                }
+
                 await logAction('create', 'users', `Created new admin user: ${formData.email}`, { userId: newUser.uid });
 
                 showSuccess("Created", "New team member account created successfully.");

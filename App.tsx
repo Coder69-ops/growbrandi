@@ -78,6 +78,7 @@ import AdminJobs from './src/pages/admin/Jobs';
 import AdminAuditLog from './src/pages/admin/AuditLog';
 import AdminOnlineUsers from './src/pages/admin/OnlineUsers';
 import AdminProfile from './src/pages/admin/Profile';
+import AdminAIConfig from './src/pages/admin/AIConfig';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
@@ -417,6 +418,7 @@ ${servicesDetails}
                     <Route path="audit" element={<AdminAuditLog />} />
                     <Route path="online-users" element={<AdminOnlineUsers />} />
                     <Route path="profile" element={<AdminProfile />} />
+                    <Route path="ai-config" element={<AdminAIConfig />} />
                   </Route>
                 </Route>
               </Routes>

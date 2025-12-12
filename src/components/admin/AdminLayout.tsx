@@ -28,7 +28,8 @@ import {
     Zap,
     MessageSquare,
     Kanban,
-    Clock
+    Clock,
+    Bot
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -74,27 +75,61 @@ const AdminLayout = () => {
         }
     };
 
-    const menuItems = [
-        { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-        { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
-        { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permission: 'manage_content' },
-        { path: '/admin/blog', icon: BookOpen, label: 'Blog', permission: 'manage_content' },
-        { path: '/admin/jobs', icon: Target, label: 'Jobs', permission: 'manage_content' },
-        { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
-        { path: '/admin/team', icon: Users, label: 'Team', permission: 'manage_team_profiles' },
-        { path: '/admin/work', icon: Kanban, label: 'Work Board', permission: 'manage_content' },
-        { path: '/admin/timesheet', icon: Clock, label: 'Time Tracking', permission: 'manage_content' },
-        { path: '/admin/assets', icon: FolderKanban, label: 'Asset Library', permission: 'manage_content' },
-        { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
-        { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
-        { path: '/admin/contact-settings', icon: Contact, label: 'Contact Settings', permission: 'manage_settings' },
-        { path: '/admin/team-management', icon: Shield, label: 'Team Management', permission: 'manage_users' },
-        { path: '/admin/messages', icon: Mail, label: 'Inquiries', permission: 'view_messages' },
-        { path: '/admin/chat', icon: MessageSquare, label: 'Team Chat', permission: 'view_messages' },
-        { path: '/admin/audit', icon: History, label: 'Audit Logs', permission: 'view_logs' },
-        { path: '/admin/online-users', icon: Zap, label: 'Online Users', permission: 'view_users' },
-        { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
-        { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
+    type MenuItem = {
+        path: string;
+        icon: any;
+        label: string;
+        permission?: string;
+        adminOnly?: boolean;
+    };
+
+    const menuGroups: { title: string; items: MenuItem[] }[] = [
+        {
+            title: 'Overview',
+            items: [
+                { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+                { path: '/admin/online-users', icon: Zap, label: 'Online Users', permission: 'view_users' },
+            ]
+        },
+        {
+            title: 'Content Management',
+            items: [
+                { path: '/admin/site-content', icon: FileText, label: 'Site Content', permission: 'manage_content' },
+                { path: '/admin/blog', icon: BookOpen, label: 'Blog', permission: 'manage_content' },
+                { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permission: 'manage_content' },
+                { path: '/admin/services', icon: Briefcase, label: 'Services', permission: 'manage_content' },
+                { path: '/admin/jobs', icon: Target, label: 'Jobs', permission: 'manage_content' },
+                { path: '/admin/testimonials', icon: MessageSquareQuote, label: 'Testimonials', permission: 'manage_content' },
+                { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs', permission: 'manage_content' },
+                { path: '/admin/assets', icon: FolderKanban, label: 'Asset Library', permission: 'manage_content' },
+                { path: '/admin/contact-settings', icon: Contact, label: 'Contact Info', permission: 'manage_settings' },
+                { path: '/admin/settings', icon: Settings, label: 'Settings', permission: 'manage_settings' },
+            ]
+        },
+        {
+            title: 'Work & Team',
+            items: [
+                { path: '/admin/team', icon: Users, label: 'Team', permission: 'manage_team_profiles' },
+                { path: '/admin/team-management', icon: Shield, label: 'Team Roles', permission: 'manage_users' },
+                { path: '/admin/work', icon: Kanban, label: 'Work Board', permission: 'manage_content' },
+                { path: '/admin/timesheet', icon: Clock, label: 'Time Tracking', permission: 'manage_content' },
+            ]
+        },
+        {
+            title: 'Communication',
+            items: [
+                { path: '/admin/messages', icon: Mail, label: 'Inquiries', permission: 'view_messages' },
+                { path: '/admin/chat', icon: MessageSquare, label: 'Team Chat', permission: 'view_messages' },
+            ]
+        },
+        {
+            title: 'System',
+            items: [
+                { path: '/admin/audit', icon: History, label: 'Audit Logs', permission: 'view_logs' },
+                { path: '/admin/ai-config', icon: Bot, label: 'AI Configuration', permission: 'manage_settings' },
+                { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permission: 'manage_settings', adminOnly: true },
+            ]
+        }
     ];
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -113,7 +148,7 @@ const AdminLayout = () => {
                     } hidden md:flex flex-col shadow-2xl shadow-indigo-500/5`}
             >
                 {/* Logo Area */}
-                <div className="h-24 flex items-center justify-center border-b border-slate-100/50 dark:border-slate-800/50 px-6">
+                <div className="h-24 flex items-center justify-center border-b border-slate-100/50 dark:border-slate-800/50 px-6 shrink-0">
                     {isSidebarOpen ? (
                         <div className="flex flex-col items-center">
                             <img src="/growbrandi-logo.png" alt="GrowBrandAI" className="h-12 w-auto object-contain mb-1" />
@@ -128,57 +163,75 @@ const AdminLayout = () => {
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto py-6 px-3 custom-scrollbar">
-                    <ul className="space-y-2">
-                        {menuItems.map((item: any) => {
-                            // Permission Check
-                            // 1. explicit admin role
-                            // 2. no restriction on item
-                            // 3. has specific permission
-                            // 4. FALLBACK: If user has NO role AND NO permissions defined (Legacy/Main Admin who hasn't been migrated), allow all.
-                            const user = currentUser as any;
-                            const isLegacyAdmin = !user?.role && !user?.permissions;
+                    <div className="space-y-6">
+                        {menuGroups.map((group, groupIndex) => {
+                            // Filter items based on permissions first
+                            const filteredItems = group.items.filter(item => {
+                                // Permission Check
+                                const user = currentUser as any;
+                                const isLegacyAdmin = !user?.role && !user?.permissions;
+                                if (item.adminOnly && user?.role !== 'admin') return false;
+                                const hasPermission =
+                                    user?.role === 'admin' ||
+                                    !item.permission ||
+                                    user?.permissions?.includes(item.permission) ||
+                                    isLegacyAdmin;
+                                return hasPermission;
+                            });
 
-                            // Strict Admin Check for specific items
-                            if (item.adminOnly && user?.role !== 'admin') return null;
+                            if (filteredItems.length === 0) return null;
 
-                            const hasPermission =
-                                user?.role === 'admin' ||
-                                !item.permission ||
-                                user?.permissions?.includes(item.permission) ||
-                                isLegacyAdmin;
-
-                            if (!hasPermission) return null;
-
-                            const isActive = location.pathname === item.path;
                             return (
-                                <li key={item.path}>
-                                    <Link
-                                        to={item.path}
-                                        className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 group relative overflow-hidden ${isActive
-                                            ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25'
-                                            : 'text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400'
-                                            }`}
-                                    >
-                                        <item.icon
-                                            size={22}
-                                            strokeWidth={isActive ? 2.5 : 2}
-                                            className={`relative z-10 transition-transform duration-300 ${!isActive && 'group-hover:scale-110'}`}
-                                        />
-                                        <span
-                                            className={`font-medium tracking-wide transition-all duration-300 relative z-10 ${!isSidebarOpen && 'opacity-0 hidden translate-x-10'
-                                                }`}
-                                        >
-                                            {item.label}
-                                        </span>
+                                <div key={group.title || groupIndex}>
+                                    {/* Group Title */}
+                                    {isSidebarOpen && group.title && (
+                                        <h3 className="px-4 mb-2 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                                            {group.title}
+                                        </h3>
+                                    )}
 
-                                        {!isActive && isSidebarOpen && (
-                                            <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition-colors duration-300" />
-                                        )}
-                                    </Link>
-                                </li>
+                                    {/* Group Divider for collapsed state if not first */}
+                                    {!isSidebarOpen && groupIndex > 0 && (
+                                        <div className="my-2 mx-auto w-8 h-px bg-slate-200 dark:bg-slate-700/50" />
+                                    )}
+
+                                    <ul className="space-y-1">
+                                        {filteredItems.map((item) => {
+                                            const isActive = location.pathname === item.path;
+                                            return (
+                                                <li key={item.path}>
+                                                    <Link
+                                                        to={item.path}
+                                                        title={!isSidebarOpen ? item.label : undefined}
+                                                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative overflow-hidden ${isActive
+                                                            ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/25'
+                                                            : 'text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 hover:text-indigo-600 dark:hover:text-indigo-400'
+                                                            } ${!isSidebarOpen && 'justify-center px-0'}`}
+                                                    >
+                                                        <item.icon
+                                                            size={22}
+                                                            strokeWidth={isActive ? 2.5 : 2}
+                                                            className={`relative z-10 transition-transform duration-300 ${!isActive && 'group-hover:scale-110'}`}
+                                                        />
+                                                        <span
+                                                            className={`font-medium tracking-wide transition-all duration-300 relative z-10 ${!isSidebarOpen && 'opacity-0 hidden translate-x-10'
+                                                                }`}
+                                                        >
+                                                            {item.label}
+                                                        </span>
+
+                                                        {!isActive && isSidebarOpen && (
+                                                            <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition-colors duration-300" />
+                                                        )}
+                                                    </Link>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
                             );
                         })}
-                    </ul>
+                    </div>
                 </nav>
 
                 {/* User Section */}
