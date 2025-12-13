@@ -10,6 +10,7 @@ import { Sparkles } from 'lucide-react';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, createEmptyLocalizedString, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
@@ -53,19 +54,21 @@ const AdminProjects = () => {
     }, []);
 
     const { showSuccess, showError, StatusModal } = useStatusModal();
+    const { showConfirm } = useToast();
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this project?")) return;
-        try {
-            await deleteDoc(doc(db, 'projects', id));
-            await deleteDoc(doc(db, 'projects', id));
-            // await logAction('delete', 'projects', `Deleted project: ${id}`, { projectId: id });
-            showSuccess('Project Deleted', 'The project has been permanently deleted.');
-            setProjects(projects.filter(p => p.id !== id));
-        } catch (error) {
-            console.error("Error deleting project:", error);
-            showError('Delete Failed', 'There was an error deleting the project. Please try again.');
-        }
+        showConfirm("Are you sure you want to delete this project?", async () => {
+            try {
+                await deleteDoc(doc(db, 'projects', id));
+                await deleteDoc(doc(db, 'projects', id));
+                // await logAction('delete', 'projects', `Deleted project: ${id}`, { projectId: id });
+                showSuccess('Project Deleted', 'The project has been permanently deleted.');
+                setProjects(projects.filter(p => p.id !== id));
+            } catch (error) {
+                console.error("Error deleting project:", error);
+                showError('Delete Failed', 'There was an error deleting the project. Please try again.');
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent) => {

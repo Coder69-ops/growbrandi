@@ -8,6 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { Plus, Search, Filter, MoreVertical, Edit2, Trash2, Eye, Calendar, User, FileText, Image, Tag, ArrowLeft, Save, X, Sparkles, Wand2 } from 'lucide-react';
 import { useContent } from '../../hooks/useContent';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
@@ -31,6 +32,7 @@ const AdminBlog = () => {
     const [aiPrompt, setAiPrompt] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const { showError, showSuccess, StatusModal } = useStatusModal();
+    const { showConfirm } = useToast();
 
     const fetchPosts = async () => {
         try {
@@ -69,16 +71,17 @@ const AdminBlog = () => {
     }, []);
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this post?")) return;
-        try {
-            await deleteDoc(doc(db, 'blog_posts', id));
-            await deleteDoc(doc(db, 'blog_posts', id));
-            // await logAction('delete', 'blog', `Deleted blog post: ${id}`, { postId: id });
-            showSuccess('Post Deleted', 'The blog post has been permanently deleted.');
-            setPosts(posts.filter(p => p.id !== id));
-        } catch (error) {
-            showError('Delete Failed', 'Could not delete the post.');
-        }
+        showConfirm("Are you sure you want to delete this post?", async () => {
+            try {
+                await deleteDoc(doc(db, 'blog_posts', id));
+                await deleteDoc(doc(db, 'blog_posts', id));
+                // await logAction('delete', 'blog', `Deleted blog post: ${id}`, { postId: id });
+                showSuccess('Post Deleted', 'The blog post has been permanently deleted.');
+                setPosts(posts.filter(p => p.id !== id));
+            } catch (error) {
+                showError('Delete Failed', 'Could not delete the post.');
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent) => {

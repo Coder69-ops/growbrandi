@@ -12,6 +12,7 @@ import { ImageUpload } from '../../components/admin/ImageUpload';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { SortableItem } from '../../components/admin/SortableItem';
 // import { logAction } from '../../services/auditService';
 
@@ -42,21 +43,23 @@ const AdminTestimonials = () => {
         fetchTestimonials();
     }, []);
 
-    const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this testimonial?")) return;
-        try {
-            await deleteDoc(doc(db, 'testimonials', id));
-            await deleteDoc(doc(db, 'testimonials', id));
-            // await logAction('delete', 'testimonials', `Deleted testimonial: ${id}`, { testimonialId: id });
-            showSuccess('Testimonial Deleted', 'Testimonial deleted successfully.');
-            setTestimonials(testimonials.filter(t => t.id !== id));
-        } catch (error) {
-            console.error("Error deleting testimonial:", error);
-            showError('Delete Failed', 'Failed to delete the testimonial.');
-        }
-    };
-
     const { showSuccess, showError, StatusModal } = useStatusModal();
+    const { showConfirm } = useToast();
+
+    const handleDelete = async (id: string) => {
+        showConfirm("Are you sure you want to delete this testimonial?", async () => {
+            try {
+                await deleteDoc(doc(db, 'testimonials', id));
+                await deleteDoc(doc(db, 'testimonials', id));
+                // await logAction('delete', 'testimonials', `Deleted testimonial: ${id}`, { testimonialId: id });
+                showSuccess('Testimonial Deleted', 'Testimonial deleted successfully.');
+                setTestimonials(testimonials.filter(t => t.id !== id));
+            } catch (error) {
+                console.error("Error deleting testimonial:", error);
+                showError('Delete Failed', 'Failed to delete the testimonial.');
+            }
+        });
+    };
 
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();

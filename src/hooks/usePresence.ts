@@ -22,7 +22,7 @@ export const usePresence = (user: User | null) => {
             }
 
             // When connected, set up disconnect logic first
-            onDisconnect(userStatusRef).set({
+            onDisconnect(userStatusRef).update({
                 state: 'offline',
                 last_changed: serverTimestamp(),
             }).then(() => {

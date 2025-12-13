@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { storage } from '../../lib/storage'; // Switched to local R2 storage service
 import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
 import { AssetPickerModal } from './assets/AssetPickerModal';
+import { useToast } from '../../context/ToastContext';
 
 interface ImageUploadProps {
     label: string;
@@ -20,6 +21,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const [progress, setProgress] = useState(0);
     const [isPickerOpen, setIsPickerOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { showToast } = useToast();
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -27,13 +29,13 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
-            alert('Please select an image file');
+            showToast('Please select an image file', 'error');
             return;
         }
 
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert('Image size should be less than 5MB');
+            showToast('Image size should be less than 5MB', 'error');
             return;
         }
 
@@ -57,7 +59,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         } catch (error) {
             clearInterval(progressInterval);
             console.error('Upload error:', error);
-            alert('Failed to upload image to R2');
+            showToast('Failed to upload image to R2', 'error');
             setUploading(false);
         }
     };

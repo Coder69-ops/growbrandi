@@ -34,7 +34,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     const userDocRef = doc(db, 'users', user.uid);
                     const userDocSnap = await getDoc(userDocRef);
 
-                    let enhancedUser: any = { ...user };
+                    let enhancedUser: any = {
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL,
+                        emailVerified: user.emailVerified,
+                        ...user
+                    };
 
                     if (userDocSnap.exists()) {
                         const userData = userDocSnap.data();

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Smile, X, Loader2, User } from 'lucide-react';
 import { storage } from '../../lib/storage';
 import EmojiPicker from 'emoji-picker-react';
+import { useToast } from '../../context/ToastContext';
 
 interface MessageInputProps {
     onSendMessage: (text: string, type: 'text' | 'image', imageUrl?: string, mentions?: string[]) => Promise<void>;
@@ -16,6 +17,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onTyp
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const { showToast } = useToast();
 
     // Mentions Logic
     const [showMentions, setShowMentions] = useState(false);
@@ -142,17 +144,17 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, onTyp
 
         e.target.value = '';
         if (file.size > 5 * 1024 * 1024) {
-            alert('Image must be less than 5MB');
+            showToast('Image must be less than 5MB', 'error');
             return;
         }
 
         setUploading(true);
         try {
             const url = await storage.uploadFile(file, 'chat-images');
-            await onSendMessage('Sent an image', 'image', url);
+            await onSendMessage('', 'image', url);
         } catch (error) {
             console.error('Failed to upload image:', error);
-            alert('Failed to upload image. Please try again.');
+            showToast('Failed to upload image. Please try again.', 'error');
         } finally {
             setUploading(false);
         }

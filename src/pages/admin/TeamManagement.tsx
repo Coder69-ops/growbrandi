@@ -7,6 +7,7 @@ import { logAction } from '../../services/auditService';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { Plus, Trash2, Save, X, User, Shield, Check, Mail, Lock, Key } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -55,6 +56,7 @@ const AdminTeamManagement = () => {
     const [publicTeam, setPublicTeam] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
+    const { showConfirm } = useToast();
 
     // Form State
     const [formData, setFormData] = useState({
@@ -218,30 +220,31 @@ const AdminTeamManagement = () => {
         }
     };
 
-    const handleDelete = async (userId: string) => {
-        if (!window.confirm("Are you sure? This only removes their access in Firestore. You may need to disable them in Firebase Console manually as well.")) return;
-
-        try {
-            await deleteDoc(doc(db, 'users', userId));
-            await logAction('delete', 'users', `Deleted admin user access: ${userId}`, { userId });
-            setUsers(prev => prev.filter(u => u.id !== userId));
-            showSuccess("Deleted", "User removed from management list.");
-        } catch (error) {
-            console.error("Delete error:", error);
-            showError("Error", "Failed to remove user.");
-        }
+    const handleDelete = (userId: string) => {
+        showConfirm("Are you sure? This only removes their access in Firestore. You may need to disable them in Firebase Console manually as well.", async () => {
+            try {
+                await deleteDoc(doc(db, 'users', userId));
+                await logAction('delete', 'users', `Deleted admin user access: ${userId}`, { userId });
+                setUsers(prev => prev.filter(u => u.id !== userId));
+                showSuccess("Deleted", "User removed from management list.");
+            } catch (error) {
+                console.error("Delete error:", error);
+                showError("Error", "Failed to remove user.");
+            }
+        });
     };
 
-    const handlePasswordReset = async (email: string) => {
-        if (!window.confirm(`Send password reset email to ${email}?`)) return;
-        try {
-            await sendPasswordResetEmail(auth, email);
-            await logAction('update', 'users', `Sent password reset email to: ${email}`);
-            showSuccess("Sent", "Password reset email sent.");
-        } catch (error) {
-            console.error("Reset error:", error);
-            showError("Error", "Failed to send reset email.");
-        }
+    const handlePasswordReset = (email: string) => {
+        showConfirm(`Send password reset email to ${email}?`, async () => {
+            try {
+                await sendPasswordResetEmail(auth, email);
+                await logAction('update', 'users', `Sent password reset email to: ${email}`);
+                showSuccess("Sent", "Password reset email sent.");
+            } catch (error) {
+                console.error("Reset error:", error);
+                showError("Error", "Failed to send reset email.");
+            }
+        });
     };
 
     // Derived Logic: Split users into "Linked" and "Standalone"

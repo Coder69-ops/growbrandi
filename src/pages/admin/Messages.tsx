@@ -5,6 +5,7 @@ import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw } from 'lucide-react';
 import { format } from 'date-fns';
+import { useToast } from '../../context/ToastContext';
 
 interface Message {
     id: string;
@@ -22,6 +23,7 @@ const AdminMessages = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'unread'>('all');
+    const { showConfirm } = useToast();
 
     const fetchMessages = async () => {
         setLoading(true);
@@ -44,15 +46,16 @@ const AdminMessages = () => {
         fetchMessages();
     }, []);
 
-    const handleDelete = async (id: string, e: React.MouseEvent) => {
+    const handleDelete = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        if (!window.confirm("Are you sure you want to delete this message?")) return;
-        try {
-            await deleteDoc(doc(db, 'messages', id));
-            setMessages(messages.filter(m => m.id !== id));
-        } catch (error) {
-            console.error("Error deleting message:", error);
-        }
+        showConfirm("Are you sure you want to delete this message?", async () => {
+            try {
+                await deleteDoc(doc(db, 'messages', id));
+                setMessages(prev => prev.filter(m => m.id !== id));
+            } catch (error) {
+                console.error("Error deleting message:", error);
+            }
+        });
     };
 
     const handleMarkAsRead = async (id: string, currentStatus: boolean, e: React.MouseEvent) => {

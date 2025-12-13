@@ -9,6 +9,7 @@ import { Sparkles } from 'lucide-react';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 // import { logAction } from '../../services/auditService';
 
@@ -43,19 +44,21 @@ const AdminJobs = () => {
     }, []);
 
     const { showSuccess, showError, StatusModal } = useStatusModal();
+    const { showConfirm } = useToast();
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this job opening?")) return;
-        try {
-            await deleteDoc(doc(db, 'jobs', id));
-            await deleteDoc(doc(db, 'jobs', id));
-            // await logAction('delete', 'jobs', `Deleted job: ${id}`, { jobId: id });
-            showSuccess('Job Deleted', 'The job opening has been permanently deleted.');
-            setJobs(jobs.filter(j => j.id !== id));
-        } catch (error) {
-            console.error("Error deleting job:", error);
-            showError('Delete Failed', 'There was an error deleting the job. Please try again.');
-        }
+        showConfirm("Are you sure you want to delete this job opening?", async () => {
+            try {
+                await deleteDoc(doc(db, 'jobs', id));
+                await deleteDoc(doc(db, 'jobs', id));
+                // await logAction('delete', 'jobs', `Deleted job: ${id}`, { jobId: id });
+                showSuccess('Job Deleted', 'The job opening has been permanently deleted.');
+                setJobs(jobs.filter(j => j.id !== id));
+            } catch (error) {
+                console.error("Error deleting job:", error);
+                showError('Delete Failed', 'There was an error deleting the job. Please try again.');
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent) => {

@@ -66,7 +66,7 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
 
     if (toast.type === 'notification') {
         return (
-            <div className="w-full max-w-sm bg-white dark:bg-[#0f172a] border border-indigo-100 dark:border-slate-800 rounded-2xl shadow-2xl shadow-indigo-500/10 overflow-hidden pointer-events-auto animate-in slide-in-from-top-5 fade-in duration-300 ring-1 ring-black/5">
+            <div className="w-full max-w-md bg-white dark:bg-[#0f172a] border border-indigo-100 dark:border-slate-800 rounded-2xl shadow-2xl shadow-indigo-500/10 overflow-hidden pointer-events-auto animate-in slide-in-from-top-5 fade-in duration-300 ring-1 ring-black/5">
                 {/* Header */}
                 <div className="p-4 pb-3 flex items-start gap-3 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50">
                     <div className="relative shrink-0">
@@ -155,7 +155,7 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
 
     return (
         <div
-            className={`${getColors(toast.type)} border backdrop-blur-xl rounded-xl shadow-2xl p-4 flex items-start gap-3 pointer-events-auto transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl animate-in slide-in-from-top-5 fade-in duration-500 w-full max-w-sm`}
+            className={`${getColors(toast.type)} border backdrop-blur-xl rounded-xl shadow-2xl p-4 flex items-start gap-3 pointer-events-auto transition-all duration-300 hover:scale-[1.02] hover:shadow-3xl animate-in slide-in-from-top-5 fade-in duration-500 w-full max-w-md`}
         >
             <div className="mt-0.5">
                 {getIcon(toast.type)}
@@ -234,7 +234,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return (
         <ToastContext.Provider value={{ showToast, showConfirm, showNotification }}>
             {children}
-            <div className="fixed top-6 right-6 z-[999] flex flex-col gap-3 w-full max-w-sm pointer-events-none items-end">
+            <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[999] flex flex-col gap-3 w-full max-w-md pointer-events-none items-center">
                 {toasts.map(toast => (
                     <ToastItem key={toast.id} toast={toast} removeToast={removeToast} />
                 ))}

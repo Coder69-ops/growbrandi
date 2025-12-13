@@ -11,6 +11,7 @@ import { AdminLoader } from '../../components/admin/AdminLoader';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { SortableItem } from '../../components/admin/SortableItem';
 import { Sparkles } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
@@ -124,89 +125,102 @@ const AdminServices = () => {
     };
 
     const { showSuccess, showError, StatusModal } = useStatusModal();
+    const { showConfirm } = useToast();
 
     const handleSeedData = async () => {
-        if (!window.confirm("This will add default services to your database. Continue?")) return;
-        setLoading(true);
-        try {
-            const sampleServices = [
-                {
-                    title: { en: "Web Development" },
-                    description: { en: "Custom websites and web applications built with modern technologies." },
-                    price: { en: "Starting at $2,500" },
-                    category: "Development",
-                    icon: "FaCode",
-                    color: "from-blue-500 to-cyan-500",
-                    isPopular: true,
-                    features: [
-                        { en: "React & Next.js" },
-                        { en: "Responsive Design" },
-                        { en: "SEO Optimization" }
-                    ],
-                    process: [
-                        { step: { en: "Discovery" }, duration: { en: "1 Week" }, description: { en: "We analyze your needs." } },
-                        { step: { en: "Build" }, duration: { en: "3 Weeks" }, description: { en: "We develop your site." } }
-                    ]
-                },
-                {
-                    title: { en: "UI/UX Design" },
-                    description: { en: "User-centric design that converts visitors into customers." },
-                    price: { en: "Starting at $1,500" },
-                    category: "Design",
-                    icon: "FaPaintBrush",
-                    color: "from-purple-500 to-pink-500",
-                    isPopular: false,
-                    features: [
-                        { en: "Figma Prototypes" },
-                        { en: "User Research" },
-                        { en: "Brand System" }
-                    ]
-                },
-                {
-                    title: { en: "Digital Marketing" },
-                    description: { en: "Data-driven strategies to grow your audience." },
-                    price: { en: "Starting at $1,000/mo" },
-                    category: "Marketing",
-                    icon: "FaBullhorn",
-                    color: "from-orange-500 to-red-500",
-                    isPopular: false,
-                    features: [
-                        { en: "Social Media" },
-                        { en: "PPC Campaigns" },
-                        { en: "Content Strategy" }
-                    ]
-                }
-            ];
+        showConfirm("This will add default services to your database. Continue?", async () => {
+            setLoading(true);
+            try {
+                const sampleServices = [
+                    {
+                        title: { en: "Web Development" },
+                        description: { en: "Custom websites and web applications built with modern technologies." },
+                        price: { en: "Starting at $2,500" },
+                        category: "Development",
+                        icon: "FaCode",
+                        color: "from-blue-500 to-cyan-500",
+                        isPopular: true,
+                        features: [
+                            { en: "React & Next.js" },
+                            { en: "Responsive Design" },
+                            { en: "SEO Optimization" }
+                        ],
+                        process: [
+                            { step: { en: "Discovery" }, duration: { en: "1 Week" }, description: { en: "We analyze your needs." } },
+                            { step: { en: "Build" }, duration: { en: "3 Weeks" }, description: { en: "We develop your site." } }
+                        ]
+                    },
+                    {
+                        title: { en: "UI/UX Design" },
+                        description: { en: "User-centric design that converts visitors into customers." },
+                        price: { en: "Starting at $1,500" },
+                        category: "Design",
+                        icon: "FaPaintBrush",
+                        color: "from-purple-500 to-pink-500",
+                        isPopular: false,
+                        features: [
+                            { en: "Figma Prototypes" },
+                            { en: "User Research" },
+                            { en: "Brand System" }
+                        ]
+                    },
+                    {
+                        title: { en: "Digital Marketing" },
+                        description: { en: "Data-driven strategies to grow your audience." },
+                        price: { en: "Starting at $1,000/mo" },
+                        category: "Marketing",
+                        icon: "FaBullhorn",
+                        color: "from-orange-500 to-red-500",
+                        isPopular: false,
+                        features: [
+                            { en: "Social Media" },
+                            { en: "PPC Campaigns" },
+                            { en: "Content Strategy" }
+                        ]
+                    }
+                ];
 
-            const batch = writeBatch(db);
-            sampleServices.forEach((service, index) => {
-                const docRef = doc(collection(db, 'services'));
-                batch.set(docRef, { ...service, order: index + 1, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
-            });
-            await batch.commit();
+                // Clear existing services first
+                const existingDocs = await getDocs(collection(db, 'services'));
+                const deletePromises = existingDocs.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(deletePromises);
 
-            await fetchServices();
-            showSuccess('Data Seeded', 'Default services have been added.');
-        } catch (error) {
-            console.error("Error seeding data:", error);
-            showError('Seed Failed', 'Failed to seed data.');
-        } finally {
-            setLoading(false);
-        }
+                // Add seed data
+                const batch = writeBatch(db);
+                sampleServices.forEach((service, index) => {
+                    const docRef = doc(collection(db, 'services'));
+                    batch.set(docRef, {
+                        ...service,
+                        order: index + 1,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+                });
+
+                await batch.commit();
+                await fetchServices();
+                showSuccess('Data Seeded', 'Services have been reset to default data.');
+            } catch (error) {
+                console.error("Error seeding data:", error);
+                showError('Seed Failed', 'Failed to seed service data.');
+            } finally {
+                setLoading(false);
+            }
+        });
     };
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Are you sure you want to delete this service?")) return;
-        try {
-            await deleteDoc(doc(db, 'services', id));
-            await deleteDoc(doc(db, 'services', id));
-            // await logAction('delete', 'services', `Deleted service: ${id}`, { serviceId: id }); // Handled by wrapper
-            showSuccess('Service Deleted', 'The service has been permanently deleted.');
-            setServices(services.filter(s => s.id !== id));
-        } catch (error) {
-            console.error("Error deleting service:", error);
-            showError('Delete Failed', 'There was an error deleting the service. Please try again.');
-        }
+        showConfirm("Are you sure you want to delete this service?", async () => {
+            try {
+                await deleteDoc(doc(db, 'services', id));
+                // await logAction('delete', 'services', `Deleted service: ${id}`, { serviceId: id }); // Handled by wrapper
+                showSuccess('Service Deleted', 'The service has been permanently deleted.');
+                setServices(services.filter(s => s.id !== id));
+            } catch (error) {
+                console.error("Error deleting service:", error);
+                showError('Delete Failed', 'There was an error deleting the service. Please try again.');
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent) => {

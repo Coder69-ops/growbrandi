@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Hash, MoreVertical, Settings, UserPlus, LogOut, Trash2 } from 'lucide-react';
 import { Channel, Message } from '../../hooks/chat/useChat';
 import { useUserStatus, formatLastActive } from '../../hooks/chat/usePresence';
+import { format } from 'date-fns';
+import { useToast } from '../../context/ToastContext';
 import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';
 import { useAuth } from '../../context/AuthContext';
@@ -31,6 +33,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     const { currentUser } = useAuth();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [showMenu, setShowMenu] = useState(false);
+    const { showToast, showConfirm } = useToast();
 
     // Auto-scroll to bottom
     // We add typingUsers length to dependency to scroll when someone starts typing (optional, but nice)
@@ -38,10 +41,23 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages.length, typingUsers, activeChannel?.id]);
 
-    const handleDeleteChannel = async () => {
-        if (activeChannel && onDeleteChannel && confirm('Are you sure you want to delete this conversation? This cannot be undone.')) {
-            await onDeleteChannel(activeChannel.id);
+    const handleDeleteChannel = () => {
+        if (activeChannel && onDeleteChannel) {
+            showConfirm('Are you sure you want to delete this conversation?', async () => {
+                await onDeleteChannel(activeChannel.id);
+            });
+            setShowMenu(false);
         }
+    };
+
+    const handleChannelSettings = () => {
+        showToast('Channel settings are coming soon!', 'info');
+        setShowMenu(false);
+    };
+
+    const handleAddMembers = () => {
+        showToast('Group chat creation is coming soon!', 'info');
+        setShowMenu(false);
     };
 
     // Determine other user ID for Presence Hook (must be top level)
@@ -133,10 +149,16 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                     {/* Simplified Menu */}
                     {showMenu && (
                         <div className="absolute top-10 right-0 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 py-1 animate-in fade-in zoom-in-95 duration-200 z-50">
-                            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                            <button
+                                onClick={handleChannelSettings}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                            >
                                 <Settings size={16} /> Channel Settings
                             </button>
-                            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                            <button
+                                onClick={handleAddMembers}
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50"
+                            >
                                 <UserPlus size={16} /> Add Members
                             </button>
                             <div className="h-px bg-slate-100 dark:bg-slate-700 my-1"></div>

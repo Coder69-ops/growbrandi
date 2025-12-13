@@ -12,6 +12,7 @@ import { AdminLoader } from '../../components/admin/AdminLoader';
 import { SupportedLanguage, ensureLocalizedFormat, getLocalizedField } from '../../utils/localization';
 import { Reorder } from 'framer-motion';
 import { useStatusModal } from '../../hooks/useStatusModal';
+import { useToast } from '../../context/ToastContext';
 import { SortableItem } from '../../components/admin/SortableItem';
 // import { logAction } from '../../services/auditService';
 
@@ -24,6 +25,7 @@ const AdminFAQs = () => {
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     const { showSuccess, showError, StatusModal } = useStatusModal();
+    const { showConfirm, showToast } = useToast();
 
     const fetchFAQs = async () => {
         setLoading(true);
@@ -43,7 +45,7 @@ const AdminFAQs = () => {
     useEffect(() => { fetchFAQs(); }, []);
 
     const handleSeedData = async () => {
-        alert("Seed data functionality has been disabled as constants.ts data was migrated.");
+        showToast("Seed data functionality has been disabled as constants.ts data was migrated.", 'info');
         /*
        if (!window.confirm("Seed FAQ data?")) return;
        setLoading(true);
@@ -61,17 +63,18 @@ const AdminFAQs = () => {
     };
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Delete this FAQ?")) return;
-        try {
-            await deleteDoc(doc(db, 'faqs', id));
-            await deleteDoc(doc(db, 'faqs', id));
-            // await logAction('delete', 'faqs', `Deleted FAQ: ${id}`, { faqId: id });
-            showSuccess('FAQ Deleted', 'The FAQ has been deleted.');
-            setFaqs(faqs.filter(f => f.id !== id));
-        } catch (error) {
-            console.error("Error deleting FAQ:", error);
-            showError('Delete Failed', 'Failed to delete the FAQ.');
-        }
+        showConfirm("Delete this FAQ?", async () => {
+            try {
+                await deleteDoc(doc(db, 'faqs', id));
+                await deleteDoc(doc(db, 'faqs', id));
+                // await logAction('delete', 'faqs', `Deleted FAQ: ${id}`, { faqId: id });
+                showSuccess('FAQ Deleted', 'The FAQ has been deleted.');
+                setFaqs(faqs.filter(f => f.id !== id));
+            } catch (error) {
+                console.error("Error deleting FAQ:", error);
+                showError('Delete Failed', 'Failed to delete the FAQ.');
+            }
+        });
     };
 
     const handleSave = async (e: React.FormEvent) => {

@@ -96,17 +96,17 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                         </div>
                     )}
 
-                    <div className={`relative group/message ${isEmojiOnly
+                    <div className={`relative group/message transition-all duration-200 ${isEmojiOnly
                         ? 'text-5xl leading-none p-1'
-                        : `px-4 py-2.5 rounded-2xl shadow-sm text-sm leading-relaxed overflow-visible transition-all duration-200 ${isMe
+                        : `${message.imageUrl ? 'p-0' : 'px-4 py-2.5'} rounded-2xl shadow-sm text-sm leading-relaxed overflow-hidden ${isMe
                             ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-md shadow-indigo-500/20'
-                            : `bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-md shadow-slate-200 dark:shadow-slate-800/50 ${amIMentioned ? 'ring-2 ring-amber-400/50 dark:ring-amber-500/30' : ''}`
+                            : `bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-tl-md shadow-slate-200 dark:shadow-slate-800/50 ${amIMentioned ? 'ring-2 ring-amber-400/50 dark:ring-amber-500/30' : 'border'}`
                         } hover:shadow-lg`
                         }`}>
 
                         {message.isUnsent ? (
                             // Unsent placeholder
-                            <div className="flex items-center gap-2 text-xs italic opacity-60">
+                            <div className="flex items-center gap-2 text-xs italic opacity-60 px-3 py-2">
                                 <Trash2 size={12} />
                                 <span>{isMe ? 'You unsent a message' : `${message.senderName} unsent a message`}</span>
                             </div>
@@ -114,13 +114,13 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                             <>
                                 {/* Delete Menu for Own Messages */}
                                 {isMe && onDelete && !isEmojiOnly && (
-                                    <div className="absolute top-1 right-1 opacity-0 group-hover/message:opacity-100 transition-opacity">
+                                    <div className="absolute top-1 right-1 opacity-0 group-hover/message:opacity-100 transition-opacity z-10">
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setShowDeleteMenu(!showDeleteMenu);
                                             }}
-                                            className="p-1.5 text-indigo-200 hover:text-white bg-indigo-800/0 hover:bg-indigo-800/50 rounded-lg transition-all duration-200 active:scale-95"
+                                            className="p-1.5 text-white/80 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all duration-200 active:scale-95 shadow-sm backdrop-blur-sm"
                                         >
                                             <Trash2 size={12} />
                                         </button>
@@ -161,21 +161,23 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                                 )}
 
                                 {message.type === 'image' && message.imageUrl ? (
-                                    <div className="mb-1 group/image relative">
+                                    <div className="group/image relative">
                                         <div
                                             onClick={() => setShowImageModal(true)}
-                                            className="relative cursor-pointer overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 max-w-sm"
+                                            className="relative cursor-pointer overflow-hidden bg-black/5 dark:bg-white/5"
+                                            style={{ width: '280px', maxWidth: '100%' }}
                                         >
                                             <img
                                                 src={message.imageUrl}
                                                 alt="Shared image"
-                                                className="w-full h-auto object-cover transition-transform duration-300 group-hover/image:scale-105"
+                                                className={`w-full h-auto object-cover transition-transform duration-300 group-hover/image:scale-105 ${message.text ? 'rounded-t-lg mb-[-4px]' : 'rounded-lg'}`}
                                                 loading="lazy"
+                                                style={{ maxHeight: '300px' }}
                                             />
-                                            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/40 transition-all duration-300 flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/20 transition-all duration-300 flex items-center justify-center">
                                                 <ZoomIn
-                                                    className="text-white opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
-                                                    size={32}
+                                                    className="text-white opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 drop-shadow-md"
+                                                    size={24}
                                                 />
                                             </div>
                                         </div>
@@ -183,27 +185,29 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                                 ) : null}
 
                                 {message.text && (
-                                    <p className={`whitespace-pre-wrap break-words ${isEmojiOnly ? '' : 'pr-2'}`}>
-                                        {renderTextWithMentions(message.text, message.mentions)}
-                                    </p>
+                                    <div className={`${message.imageUrl ? 'p-3' : ''} ${isEmojiOnly ? '' : 'pr-1'}`}>
+                                        <p className="whitespace-pre-wrap break-words">
+                                            {renderTextWithMentions(message.text, message.mentions)}
+                                        </p>
+                                    </div>
                                 )}
 
                                 {/* Message Status Indicators - Only for sent messages */}
                                 {isMe && !message.isUnsent && (
-                                    <div className="flex items-center justify-end gap-0.5 mt-1">
+                                    <div className={`flex items-center justify-end gap-0.5 mt-0.5 ${message.imageUrl && !message.text ? 'absolute bottom-2 right-2 drop-shadow-md' : (message.imageUrl ? 'mr-2 mb-2' : '')}`}>
                                         {message.seenBy && Object.keys(message.seenBy).length > 0 ? (
-                                            // Seen - Double check (blue)
-                                            <svg width="16" height="12" viewBox="0 0 16 12" className="text-blue-400">
+                                            // Seen - Double check
+                                            <svg width="14" height="10" viewBox="0 0 16 12" className={message.imageUrl && !message.text ? "text-white" : "text-blue-200"}>
                                                 <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="currentColor" />
                                             </svg>
                                         ) : message.deliveredTo && Object.keys(message.deliveredTo).length > 0 ? (
-                                            // Delivered - Double check (gray)
-                                            <svg width="16" height="12" viewBox="0 0 16 12" className="text-gray-400 dark:text-gray-500">
+                                            // Delivered - Double check
+                                            <svg width="14" height="10" viewBox="0 0 16 12" className={message.imageUrl && !message.text ? "text-white/80" : "text-indigo-200"}>
                                                 <path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z" fill="currentColor" />
                                             </svg>
                                         ) : (
-                                            // Sent - Single check (gray)
-                                            <svg width="16" height="12" viewBox="0 0 16 12" className="text-gray-400 dark:text-gray-500">
+                                            // Sent - Single check
+                                            <svg width="14" height="10" viewBox="0 0 16 12" className={message.imageUrl && !message.text ? "text-white/80" : "text-indigo-200"}>
                                                 <path d="M11.071 1.429l-.372-.484a.365.365 0 0 0-.515-.006L4.184 7.77a.32.32 0 0 1-.484-.033l-1.32-1.266a.418.418 0 0 0-.541-.036l-.483.378a.319.319 0 0 0-.032.484l2.143 2.142c.14.143.361.125.484-.033l6.778-7.505a.365.365 0 0 0 .063-.51z" fill="currentColor" />
                                             </svg>
                                         )}
