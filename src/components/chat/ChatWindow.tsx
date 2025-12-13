@@ -61,9 +61,10 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     };
 
     // Determine other user ID for Presence Hook (must be top level)
+    // Robust logic to match ChatSidebar
     let otherUserIdForHook: string | undefined;
-    if (activeChannel?.type === 'dm' && activeChannel?.members && currentUser) {
-        otherUserIdForHook = activeChannel.members.find(id => id !== currentUser.uid);
+    if (activeChannel?.type === 'dm' && activeChannel?.members) {
+        otherUserIdForHook = activeChannel.members.find(id => id !== currentUser?.uid);
     }
 
     // Always call hook at top level
