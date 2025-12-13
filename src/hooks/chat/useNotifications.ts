@@ -54,8 +54,12 @@ export const useChatNotifications = () => {
 
                 if (isMember && channel.lastMessage) {
                     const lastMsg = channel.lastMessage;
+
+                    // Skip if I am the sender (don't notify me about my own messages)
+                    if (lastMsg.senderId === currentUser.uid) return;
+
                     const lastSeen = channel.lastSeen?.[currentUser.uid] || 0;
-                    const isRead = lastMsg.senderId === currentUser.uid || lastMsg.timestamp <= lastSeen;
+                    const isRead = lastMsg.timestamp <= lastSeen;
 
                     tempNotifications.push({
                         id: channelId,

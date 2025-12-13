@@ -10,8 +10,11 @@ import { db } from '../../lib/firebase';
 
 import { usePresence } from '../../hooks/chat/usePresence';
 
+import { useSearchParams } from 'react-router-dom';
+
 const AdminChat = () => {
     usePresence(); // Track my online status
+    const [searchParams] = useSearchParams();
     const [activeChannelId, setActiveChannelId] = useState<string | null>(null);
     const { messages, channels, loading: chatLoading, sendMessage, createChannel, typingUsers, setTyping, deleteMessage, deleteChannel } = useChat(activeChannelId);
 
@@ -37,9 +40,13 @@ const AdminChat = () => {
         fetchUsers();
     }, []);
 
-    // Auto-select first channel
+    // Auto-select channel based on URL or defaults
     useEffect(() => {
-        if (!activeChannelId && channels.length > 0) {
+        const channelIdFromUrl = searchParams.get('channelId');
+
+        if (channelIdFromUrl) {
+            setActiveChannelId(channelIdFromUrl);
+        } else if (!activeChannelId && channels.length > 0) {
             // Prefer #general if it exists, else first public one
             const general = channels.find(c => c.name === 'general');
             if (general) {
@@ -48,7 +55,7 @@ const AdminChat = () => {
                 setActiveChannelId(channels[0].id);
             }
         }
-    }, [channels, activeChannelId]);
+    }, [channels, activeChannelId, searchParams]);
 
     const activeChannel = channels.find(c => c.id === activeChannelId);
 
