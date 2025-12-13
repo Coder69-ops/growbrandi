@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, doc, getDocs, getDoc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
 import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
+import { generateBlogPost } from '../../services/ai';
 import { useAuth } from '../../context/AuthContext';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
@@ -22,6 +23,9 @@ const AdminBlog = () => {
     const [activeTab, setActiveTab] = useState<'content' | 'seo'>('content');
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
     const [teamMembers, setTeamMembers] = useState<any[]>([]);
+    const [showAiModal, setShowAiModal] = useState(false);
+    const [aiPrompt, setAiPrompt] = useState('');
+    const [isGenerating, setIsGenerating] = useState(false);
     const { showError, showSuccess, StatusModal } = useStatusModal();
 
     const fetchPosts = async () => {
@@ -175,6 +179,76 @@ const AdminBlog = () => {
         }
     );
 
+    const handleAiGenerate = async () => {
+        if (!aiPrompt.trim()) return;
+
+        setIsGenerating(true);
+        try {
+            // Fetch existing published posts for context
+            let existingPostsContext: { title: string; slug: string; }[] = [];
+            try {
+                const existingPostsQuery = query(
+                    collection(db, 'blog_posts'),
+                    where('status', '==', 'published'),
+                    limit(20)
+                );
+                const existingDocs = await getDocs(existingPostsQuery);
+                existingPostsContext = existingDocs.docs.map(doc => ({
+                    title: doc.data().title?.en || doc.data().title,
+                    slug: doc.data().slug || doc.id
+                }));
+            } catch (err) {
+                console.warn("Failed to fetch context posts:", err);
+            }
+
+            const generatedPost = await generateBlogPost(aiPrompt, { existingPosts: existingPostsContext });
+
+            // Construct new post object
+            const newPost = {
+                title: ensureLocalizedFormat(generatedPost.title),
+                excerpt: ensureLocalizedFormat(generatedPost.excerpt),
+                content: ensureLocalizedFormat(generatedPost.content),
+                category: generatedPost.category || 'Insights',
+                tags: generatedPost.tags || [],
+                slug: generatedPost.slug || generateSlug(generatedPost.title),
+                readTime: generatedPost.readTime || '5 min read',
+                seo: {
+                    metaTitle: ensureLocalizedFormat(generatedPost.seo?.metaTitle),
+                    metaDescription: ensureLocalizedFormat(generatedPost.seo?.metaDescription),
+                    keywords: ensureLocalizedFormat(generatedPost.seo?.keywords),
+                },
+                status: 'draft',
+                date: new Date().toISOString().split('T')[0],
+                author: 'GrowBrandi Team',
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+            };
+
+            // Save to Firestore immediately as Draft
+            const docRef = await addDoc(collection(db, 'blog_posts'), newPost);
+
+            // Populate form with saved data (including ID)
+            setCurrentPost({
+                ...newPost,
+                id: docRef.id
+            });
+
+            // Update local state to reflect new post in list
+            setPosts(prev => [{ id: docRef.id, ...newPost }, ...prev]);
+
+            setShowAiModal(false);
+            setAiPrompt('');
+            setActiveLanguage('en');
+            setIsEditing(true);
+            showSuccess('Draft Saved', 'Blog post generated and saved as draft.');
+        } catch (error) {
+            console.error("AI Generation failed:", error);
+            showError('Generation Failed', 'Could not generate the blog post. Please try again.');
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
     return (
         <AdminPageLayout
             title="Blog Posts"
@@ -182,6 +256,13 @@ const AdminBlog = () => {
             actions={
                 !loading && (
                     <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowAiModal(true)}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-violet-600 text-white rounded-xl hover:bg-violet-700 transition-all shadow-lg shadow-violet-500/25 hover:scale-105 active:scale-95"
+                        >
+                            <Wand2 size={20} />
+                            Generate with GrowAi
+                        </button>
                         <button
                             onClick={() => openEdit()}
                             className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 hover:scale-105 active:scale-95"
@@ -559,6 +640,69 @@ const AdminBlog = () => {
                             </div>
                         ))
                     )}
+                </div>
+            )}
+            {showAiModal && (
+                <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <Wand2 className="text-violet-500" />
+                                    Generate Blog Post
+                                </h3>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                                    Enter a topic or keywords, and AI will write the full article for you.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setShowAiModal(false)}
+                                className="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    Topic / Title Idea
+                                </label>
+                                <textarea
+                                    value={aiPrompt}
+                                    onChange={(e) => setAiPrompt(e.target.value)}
+                                    placeholder="e.g. The future of sustainable packaging in retail..."
+                                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-violet-500 resize-none h-32"
+                                />
+                            </div>
+
+                            <div className="flex gap-3 pt-2">
+                                <button
+                                    onClick={() => setShowAiModal(false)}
+                                    className="flex-1 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors font-medium"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleAiGenerate}
+                                    disabled={!aiPrompt.trim() || isGenerating}
+                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-violet-600 text-white rounded-xl hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-violet-500/25 font-medium"
+                                >
+                                    {isGenerating ? (
+                                        <>
+                                            <Sparkles size={18} className="animate-spin" />
+                                            Writing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Wand2 size={18} />
+                                            Generate
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
             <StatusModal />

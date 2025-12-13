@@ -18,6 +18,7 @@ import { SupportedLanguage, getLocalizedField } from '../src/utils/localization'
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { FaPaperPlane, FaListUl } from 'react-icons/fa'; // Added imports
 
 // Custom Link Component for Markdown
 const MarkdownLink = ({ href, children, ...props }: any) => {
@@ -34,6 +35,63 @@ const MarkdownLink = ({ href, children, ...props }: any) => {
             {children}
         </a>
     );
+};
+
+// --- Helper for ID Generation ---
+const generateId = (text: string) => {
+    return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-');
+};
+
+// --- Custom Components ---
+const CustomComponents = {
+    a: MarkdownLink,
+    h2: ({ children, ...props }: any) => {
+        const id = generateId(String(children));
+        return (
+            <h2 id={id} className="text-2xl font-bold text-slate-900 dark:text-white mt-12 mb-6 scroll-mt-24 relative group font-heading" {...props}>
+                <a href={`#${id}`} className="absolute -left-6 opacity-0 group-hover:opacity-100 text-slate-400 hover:text-blue-500 transition-opacity p-1">#</a>
+                {children}
+            </h2>
+        );
+    },
+    h3: ({ children, ...props }: any) => {
+        const id = generateId(String(children));
+        return (
+            <h3 id={id} className="text-xl font-bold text-slate-800 dark:text-slate-100 mt-8 mb-4 scroll-mt-24 font-heading" {...props}>
+                {children}
+            </h3>
+        );
+    },
+    blockquote: ({ children, ...props }: any) => (
+        <blockquote className="border-l-4 border-blue-500 pl-6 italic text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/50 py-4 px-4 rounded-r-lg my-8 shadow-sm" {...props}>
+            {children}
+        </blockquote>
+    ),
+    ul: ({ children, ...props }: any) => (
+        <ul className="list-disc list-outside ml-6 space-y-2 my-6 text-slate-700 dark:text-slate-300" {...props}>
+            {children}
+        </ul>
+    ),
+    ol: ({ children, ...props }: any) => (
+        <ol className="list-decimal list-outside ml-6 space-y-2 my-6 text-slate-700 dark:text-slate-300" {...props}>
+            {children}
+        </ol>
+    ),
+    img: ({ src, alt, ...props }: any) => (
+        <figure className="my-10">
+            <img
+                src={src}
+                alt={alt}
+                className="w-full rounded-2xl shadow-lg border border-slate-200 dark:border-white/10"
+                {...props}
+            />
+            {alt && <figcaption className="text-center text-sm text-slate-500 mt-3 italic">{alt}</figcaption>}
+        </figure>
+    ),
+    hr: () => <hr className="my-12 border-slate-200 dark:border-white/10" />
 };
 
 const BlogPostPage = () => {
@@ -55,6 +113,28 @@ const BlogPostPage = () => {
         damping: 30,
         restDelta: 0.001
     });
+
+    // Extract Headings for TOC (Moved before conditional returns)
+    const headings = React.useMemo(() => {
+        if (!post?.content) return [];
+        // Helper to get content without full render overhead
+        const rawContent = getLocalizedField(post.content, lang);
+        if (!rawContent || typeof rawContent !== 'string') return [];
+
+        const lines = rawContent.split('\n');
+        const matches: any[] = [];
+        lines.forEach((line: string) => {
+            const match = line.match(/^(#{2,3})\s+(.*)$/);
+            if (match) {
+                matches.push({
+                    level: match[1].length,
+                    text: match[2],
+                    id: generateId(match[2])
+                });
+            }
+        });
+        return matches;
+    }, [post, lang]);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -196,48 +276,16 @@ const BlogPostPage = () => {
                                         )}
                                     </div>
 
-                                    <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-zinc-300 whitespace-pre-wrap font-light">
-                                        {/* Render first half */}
+                                    <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-zinc-300 font-light">
                                         <ReactMarkdown
                                             remarkPlugins={[remarkGfm]}
-                                            components={{ a: MarkdownLink }}
+                                            components={CustomComponents as any}
                                         >
-                                            {content ? content.split('\n\n').slice(0, 3).join('\n\n') : ''}
+                                            {content || ''}
                                         </ReactMarkdown>
                                     </div>
 
-                                    {/* Inline CTA */}
-                                    {blogSettings.inline_cta?.enabled && (
-                                        <div className="my-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30 flex flex-col md:flex-row items-center gap-6">
-                                            <div className="p-4 bg-blue-100 dark:bg-blue-600/20 rounded-xl shrink-0">
-                                                <span className="w-8 h-8 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform"><FaRocket /></span>
-                                            </div>
-                                            <div className="flex-grow text-center md:text-left">
-                                                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-1">
-                                                    {getText('blog_settings.inline_cta.title', lang) || "Need help implementing this?"}
-                                                </h3>
-                                                <p className="text-slate-600 dark:text-blue-200 text-sm">
-                                                    {getText('blog_settings.inline_cta.body', lang) || "Our team of experts can guide you through every step."}
-                                                </p>
-                                            </div>
-                                            <a
-                                                href={getText('blog_settings.inline_cta.button_url', lang) || blogSettings.inline_cta?.button_url || "/services"}
-                                                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors whitespace-nowrap shadow-lg shadow-blue-500/30"
-                                            >
-                                                {getText('blog_settings.inline_cta.button_text', lang) || "Get Expert Help"}
-                                            </a>
-                                        </div>
-                                    )}
 
-                                    <div className="prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-zinc-300 whitespace-pre-wrap font-light mt-8">
-                                        {/* Render rest of content */}
-                                        <ReactMarkdown
-                                            remarkPlugins={[remarkGfm]}
-                                            components={{ a: MarkdownLink }}
-                                        >
-                                            {content ? content.split('\n\n').slice(3).join('\n\n') : ''}
-                                        </ReactMarkdown>
-                                    </div>
 
                                     {/* Social Share */}
                                     <div className="mt-16 pt-8 border-t border-slate-200 dark:border-white/10">
@@ -282,6 +330,51 @@ const BlogPostPage = () => {
                                         : t("blog.author_bio", "Sharing insights on technology, growth, and digital transformation.")}
                                 </p>
                             </GlassCard>
+
+                            {/* Table of Contents Widget */}
+                            {headings.length > 0 && (
+                                <GlassCard className="p-6 sticky top-24">
+                                    <h4 className="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                                        <FaListUl className="text-blue-500" />
+                                        Table of Contents
+                                    </h4>
+                                    <nav className="flex flex-col space-y-2 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                                        {headings.map((heading: any, index: number) => (
+                                            <a
+                                                key={index}
+                                                href={`#${heading.id}`}
+                                                className={`text-sm transition-colors hover:text-blue-600 dark:hover:text-blue-400 block truncate ${heading.level === 3 ? 'pl-4 text-slate-500 dark:text-slate-400' : 'text-slate-700 dark:text-slate-300 font-medium'
+                                                    }`}
+                                            >
+                                                {heading.text}
+                                            </a>
+                                        ))}
+                                    </nav>
+                                </GlassCard>
+                            )}
+
+                            {/* Newsletter / Lead Magnet Widget */}
+                            <div className="bg-gradient-to-br from-violet-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none" />
+                                <h3 className="text-xl font-bold mb-2 relative z-10">Get Growth Insights</h3>
+                                <p className="text-blue-100 text-sm mb-4 relative z-10">
+                                    Join 5,000+ founders receiving our weekly deep dives on AI & Branding.
+                                </p>
+                                <form onSubmit={(e) => e.preventDefault()} className="space-y-3 relative z-10">
+                                    <input
+                                        type="email"
+                                        placeholder="Your email address"
+                                        className="w-full px-4 py-2.5 rounded-xl bg-white/20 border border-white/20 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm"
+                                    />
+                                    <button className="w-full bg-white text-indigo-700 font-bold py-2.5 rounded-xl hover:bg-blue-50 transition-colors flex items-center justify-center gap-2 shadow-lg">
+                                        <FaPaperPlane size={14} />
+                                        Subscribe Free
+                                    </button>
+                                </form>
+                                <p className="text-[10px] text-blue-200 mt-3 text-center opacity-80">
+                                    No spam. Unsubscribe anytime.
+                                </p>
+                            </div>
 
                             {/* Sticky CTA Widget */}
                             {blogSettings.sidebar_cta?.enabled && (

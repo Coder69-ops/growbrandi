@@ -1,7 +1,18 @@
 {
-  "status": "init",
-  "scope": "codebase",
+  "status": "commited",
   "type": "frontend",
-  "localEndpoint": "http://localhost:3000/",
-  "serverPort": 54996
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "ovejit@growbrandi.com",
+  "loginPassword": "Avijit45231",
+  "executionArgs": {
+    "projectName": "growbrandaiapp",
+    "projectPath": "c:\\Users\\Avijit\\Desktop\\growbrandaiapp",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-PBMZkJgGJ3hugqA5Y_-jD-mzYNb7sRZdrHL3ZXT3re9y0YP6C2-YTyMW1y0RNdZsK5hLKl9JHumC8IQbTCQmdX9ZYnOyQtUqLujTS172Xe_YnX6pOMwgp00ezYYIJSwbz14"
+    }
+  },
+  "proxy": "http://2bc4cf81-0b92-4b8e-a0fb-1e26fa13f61c:KU0Ck28oIN4rHq71eowxpW1jkTEwPr7J@tun.testsprite.com:8080"
 }
