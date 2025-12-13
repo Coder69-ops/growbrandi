@@ -8,11 +8,13 @@ interface AssetPickerModalProps {
     onSelect: (url: string) => void;
 }
 
+import { createPortal } from 'react-dom';
+
 export const AssetPickerModal = ({ isOpen, onClose, onSelect }: AssetPickerModalProps) => {
     if (!isOpen) return null;
 
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    return createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6">
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
             <div className="relative w-full max-w-5xl h-[80vh] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
@@ -25,6 +27,7 @@ export const AssetPickerModal = ({ isOpen, onClose, onSelect }: AssetPickerModal
                     <AssetExplorer onSelect={(url) => { onSelect(url); onClose(); }} />
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };

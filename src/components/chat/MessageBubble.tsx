@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { format } from 'date-fns';
 import { Message } from '../../hooks/chat/useChat';
 import { Trash2, X, ZoomIn, Download } from 'lucide-react';
@@ -215,7 +216,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
             </div>
 
             {/* Image Modal/Lightbox */}
-            {showImageModal && message.imageUrl && (
+            {showImageModal && message.imageUrl && createPortal(
                 <div
                     className="fixed inset-0 bg-black/95 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300"
                     onClick={() => setShowImageModal(false)}
@@ -253,7 +254,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isMe, sho
                             <p className="text-xs text-slate-300">{format(message.timestamp, 'PPp')}</p>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );

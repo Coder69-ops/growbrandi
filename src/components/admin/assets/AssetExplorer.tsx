@@ -156,6 +156,7 @@ export const AssetExplorer = ({ onSelect }: AssetExplorerProps) => {
                         {assets.map(asset => (
                             <div
                                 key={asset.id}
+                                onClick={() => onSelect ? onSelect(asset.url) : window.open(asset.url, '_blank')}
                                 className="group aspect-square bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 rounded-xl hover:border-blue-400 dark:hover:border-blue-600 transition-all cursor-pointer relative overflow-hidden"
                             >
                                 <div className="absolute inset-0 flex items-center justify-center p-4">

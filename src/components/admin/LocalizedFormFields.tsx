@@ -37,6 +37,7 @@ interface LocalizedInputProps {
     required?: boolean;
     type?: 'text' | 'textarea';
     rows?: number;
+    textAreaRef?: React.RefObject<HTMLTextAreaElement>;
 }
 
 export const LocalizedInput: React.FC<LocalizedInputProps> = ({
@@ -144,7 +145,8 @@ export const LocalizedTextArea: React.FC<LocalizedInputProps> = ({
     placeholder,
     required = false,
     rows = 3,
-}) => {
+    textAreaRef,
+}: LocalizedInputProps & { textAreaRef?: React.RefObject<HTMLTextAreaElement> }) => {
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         onChange({
             ...(value || {}),
@@ -208,6 +210,7 @@ export const LocalizedTextArea: React.FC<LocalizedInputProps> = ({
                 )}
             </div>
             <textarea
+                ref={textAreaRef}
                 id={inputId}
                 className={baseClassName}
                 value={currentValue}

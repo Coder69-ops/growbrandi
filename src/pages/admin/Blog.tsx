@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { db } from '../../lib/firebase';
 import { collection, doc, getDocs, getDoc, serverTimestamp, query, orderBy, where, limit } from 'firebase/firestore';
 import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
@@ -13,6 +14,7 @@ import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { LanguageTabs, LocalizedInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
 import { getLocalizedField, ensureLocalizedFormat, SupportedLanguage } from '../../utils/localization';
 import { ImageUpload } from '../../components/admin/ImageUpload';
+import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
 // import { logAction } from '../../services/auditService';
 
 const AdminBlog = () => {
@@ -24,6 +26,8 @@ const AdminBlog = () => {
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
     const [teamMembers, setTeamMembers] = useState<any[]>([]);
     const [showAiModal, setShowAiModal] = useState(false);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const contentTextAreaRef = React.useRef<HTMLTextAreaElement>(null);
     const [aiPrompt, setAiPrompt] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const { showError, showSuccess, StatusModal } = useStatusModal();
@@ -178,6 +182,37 @@ const AdminBlog = () => {
             fields: ['title', 'excerpt', 'content', 'seo.metaTitle', 'seo.metaDescription', 'seo.keywords'],
         }
     );
+
+    const handleInsertImage = (url: string) => {
+        const imageMarkdown = `![Image Description](${url})`;
+        const textarea = contentTextAreaRef.current;
+
+        if (textarea) {
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const currentContent = currentPost.content?.[activeLanguage] || '';
+            const newContent = currentContent.substring(0, start) + imageMarkdown + currentContent.substring(end);
+
+            updateField('content', {
+                ...(currentPost.content || {}),
+                [activeLanguage]: newContent
+            });
+
+            // Restore cursor position after update (needs timeout to wait for re-render)
+            setTimeout(() => {
+                const newCursorPos = start + imageMarkdown.length;
+                textarea.setSelectionRange(newCursorPos, newCursorPos);
+                textarea.focus();
+            }, 0);
+        } else {
+            // Fallback if ref is not attached (e.g. initial load)
+            const newContent = (currentPost.content?.[activeLanguage] || '') + '\n' + imageMarkdown;
+            updateField('content', {
+                ...(currentPost.content || {}),
+                [activeLanguage]: newContent
+            });
+        }
+    };
 
     const handleAiGenerate = async () => {
         if (!aiPrompt.trim()) return;
@@ -370,12 +405,23 @@ const AdminBlog = () => {
                                             placeholder="A short summary for list views and social cards..."
                                         />
 
+                                        <div className="flex justify-end mb-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowImageModal(true)}
+                                                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors border border-slate-200 dark:border-slate-700"
+                                            >
+                                                <Image size={16} />
+                                                Insert Image
+                                            </button>
+                                        </div>
                                         <LocalizedTextArea
                                             label="Full Content (Markdown supported)"
                                             value={currentPost.content}
                                             onChange={(v) => updateField('content', v)}
                                             activeLanguage={activeLanguage}
                                             rows={20}
+                                            textAreaRef={contentTextAreaRef}
                                         />
                                     </div>
                                 </div>
@@ -642,8 +688,8 @@ const AdminBlog = () => {
                     )}
                 </div>
             )}
-            {showAiModal && (
-                <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            {showAiModal && createPortal(
+                <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-slate-200 dark:border-slate-800 animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-start mb-4">
                             <div>
@@ -703,8 +749,14 @@ const AdminBlog = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
+            <AssetPickerModal
+                isOpen={showImageModal}
+                onClose={() => setShowImageModal(false)}
+                onSelect={handleInsertImage}
+            />
             <StatusModal />
         </AdminPageLayout>
     );
