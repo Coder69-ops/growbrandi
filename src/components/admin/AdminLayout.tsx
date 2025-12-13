@@ -35,6 +35,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 
 import { useChatNotifications } from '../../hooks/chat/useNotifications';
+import { NotificationItem } from './NotificationItem';
 
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -45,7 +46,7 @@ const AdminLayout = () => {
     const { currentUser } = useAuth();
 
     // Add Global Chat Notifications Hook
-    const { unreadCount, notifications } = useChatNotifications();
+    const { unreadCount, notifications, markAsRead } = useChatNotifications();
 
     // Handle scroll effect
     useEffect(() => {
@@ -349,44 +350,26 @@ const AdminLayout = () => {
                                                 ) : (
                                                     <div className="divide-y divide-slate-100 dark:divide-slate-800">
                                                         {notifications.map((notif: any) => (
-                                                            <Link
+                                                            <NotificationItem
                                                                 key={notif.id}
-                                                                to={`/admin/chat?channelId=${notif.channelId}`}
-                                                                onClick={() => setIsNotificationsOpen(false)}
-                                                                className={`block p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${!notif.isRead ? 'bg-indigo-50/40 dark:bg-indigo-900/10' : ''}`}
-                                                            >
-                                                                <div className="flex gap-3">
-                                                                    <div className="flex-shrink-0 relative">
-                                                                        {notif.senderPhoto ? (
-                                                                            <img src={notif.senderPhoto} alt="" className="w-10 h-10 rounded-full object-cover" />
-                                                                        ) : (
-                                                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs">
-                                                                                {notif.senderName?.[0]}
-                                                                            </div>
-                                                                        )}
-                                                                        {/* Unread Dot */}
-                                                                        {!notif.isRead && (
-                                                                            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
-                                                                        )}
-                                                                    </div>
-                                                                    <div className="flex-1 min-w-0">
-                                                                        <div className="flex justify-between items-start mb-0.5">
-                                                                            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate pr-2">
-                                                                                {notif.senderName}
-                                                                            </p>
-                                                                            <span className="text-[10px] text-slate-400 whitespace-nowrap">
-                                                                                {formatNotificationsTime(notif.timestamp)}
-                                                                            </span>
-                                                                        </div>
-                                                                        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                                                                            {notif.message}
-                                                                        </p>
-                                                                        <p className="text-[10px] text-indigo-600 dark:text-indigo-400 mt-1.5 font-medium">
-                                                                            {notif.channelId.startsWith('dm') ? 'Direct Message' : notif.title}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </Link>
+                                                                notification={notif}
+                                                                onClick={() => {
+                                                                    setIsNotificationsOpen(false);
+                                                                    if (notif.type === 'message') {
+                                                                        navigate(`/admin/chat?channelId=${notif.channelId}`);
+                                                                    } else {
+                                                                        // Handle other types
+                                                                        // For now, if it has a taskId, maybe navigate to work board?
+                                                                        // But we don't have task deep linking yet.
+                                                                        // Just mark as read for now.
+                                                                    }
+                                                                    markAsRead(notif.id, notif.type === 'message' ? 'message' : 'system');
+                                                                }}
+                                                                onMarkAsRead={(e) => {
+                                                                    e.stopPropagation();
+                                                                    markAsRead(notif.id, notif.type === 'message' ? 'message' : 'system');
+                                                                }}
+                                                            />
                                                         ))}
                                                     </div>
                                                 )}

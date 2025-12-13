@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
-import { collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch, where } from 'firebase/firestore';
+import { collection, query, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, writeBatch, where, getDocs, orderBy } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
+import { NotificationService } from '../services/notificationService';
 
 export interface Task {
     id: string;
@@ -15,6 +16,16 @@ export interface Task {
     order: number;
     createdAt?: any;
     updatedAt?: any;
+    createdBy?: string;
+}
+
+export interface TaskActivity {
+    id: string;
+    taskId: string;
+    userId: string;
+    type: 'comment' | 'history';
+    content: string;
+    createdAt: any;
 }
 
 export const useTasks = () => {
@@ -48,13 +59,29 @@ export const useTasks = () => {
             const tasksInStatus = tasks.filter(t => t.status === task.status);
             const maxOrder = tasksInStatus.length > 0 ? Math.max(...tasksInStatus.map(t => t.order)) : 0;
 
-            await addDoc(collection(db, 'tasks'), {
+            const docRef = await addDoc(collection(db, 'tasks'), {
                 ...task,
                 order: maxOrder + 1,
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
                 createdBy: currentUser?.uid || 'system'
             });
+
+            // Log creation activity
+            await addTaskActivity(docRef.id, 'history', 'Task created');
+
+            // Notify Assignee
+            if (task.assigneeId && task.assigneeId !== currentUser?.uid) {
+                await NotificationService.sendNotification(
+                    task.assigneeId,
+                    'task_assigned',
+                    'New Task Assigned',
+                    `You have been assigned to task: ${task.title}`,
+                    { taskId: docRef.id }
+                );
+            }
+
+            return docRef.id;
         } catch (error) {
             console.error("Error adding task:", error);
             throw error;
@@ -64,10 +91,31 @@ export const useTasks = () => {
     const updateTask = async (id: string, updates: Partial<Task>) => {
         try {
             const taskRef = doc(db, 'tasks', id);
+            const currentTask = tasks.find(t => t.id === id);
+
             await updateDoc(taskRef, {
                 ...updates,
                 updatedAt: serverTimestamp()
             });
+
+            // Notifications & Activity Logging
+            if (updates.assigneeId && updates.assigneeId !== currentTask?.assigneeId) {
+                await addTaskActivity(id, 'history', `Assigned to user`); // Ideally we'd look up name, but simple for now
+                if (updates.assigneeId !== currentUser?.uid) {
+                    await NotificationService.sendNotification(
+                        updates.assigneeId,
+                        'task_assigned',
+                        'Task Assigned',
+                        `You have been assigned to task: ${currentTask?.title || 'Unknown Task'}`,
+                        { taskId: id }
+                    );
+                }
+            }
+
+            if (updates.status && updates.status !== currentTask?.status) {
+                await addTaskActivity(id, 'history', `Status changed to ${updates.status.replace('_', ' ')}`);
+            }
+
         } catch (error) {
             console.error("Error updating task:", error);
             throw error;
@@ -81,6 +129,45 @@ export const useTasks = () => {
             console.error("Error deleting task:", error);
             throw error;
         }
+    };
+
+    const addTaskActivity = async (taskId: string, type: 'comment' | 'history', content: string) => {
+        if (!currentUser) return;
+        try {
+            await addDoc(collection(db, 'task_activities'), {
+                taskId,
+                userId: currentUser.uid,
+                type,
+                content,
+                createdAt: serverTimestamp()
+            });
+
+            if (type === 'comment') {
+                // Determine who to notify? 
+                // For now, maybe notify the assignee if I am not the assignee.
+                const task = tasks.find(t => t.id === taskId);
+                if (task && task.assigneeId && task.assigneeId !== currentUser.uid) {
+                    await NotificationService.sendNotification(
+                        task.assigneeId,
+                        'task_comment',
+                        'New Comment',
+                        `New comment on task: ${task.title}`,
+                        { taskId, comment: content },
+                        currentUser.uid
+                    );
+                }
+            }
+
+        } catch (err) {
+            console.error("Error adding activity:", err);
+        }
+    };
+
+    const getTaskActivities = async (taskId: string) => {
+        // This might be better as a real-time hook in the modal, but function here is useful too.
+        // We will expose a query function or let the component use a hook.
+        // For simplicity, let's keep it minimal here.
+        return [];
     };
 
     const moveTask = async (taskId: string, newStatus: Task['status'], newIndex: number) => {
@@ -146,6 +233,7 @@ export const useTasks = () => {
         addTask,
         updateTask,
         deleteTask,
-        reorderColumn
+        reorderColumn,
+        addTaskActivity
     };
 };

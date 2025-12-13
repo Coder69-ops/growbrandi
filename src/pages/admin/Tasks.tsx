@@ -1,13 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { useTasks, Task } from '../../hooks/useTasks';
 import { useTimeTracking } from '../../hooks/useTimeTracking';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { Plus, Clock, AlignLeft, Play, Square, Search, X, User as UserIcon } from 'lucide-react';
+import { Plus, Clock, AlignLeft, Play, Square, Search, X, User as UserIcon, AlertTriangle, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 import { TaskDetailsModal } from '../../components/admin/TaskDetailsModal';
 import { useAuth } from '../../context/AuthContext';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 
 const COLUMNS = {
     todo: {
@@ -66,6 +68,30 @@ const AdminTasks = () => {
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
     const { activeEntry, startTimer, stopTimer } = useTimeTracking();
     const [modalInitialStatus, setModalInitialStatus] = useState<'todo' | 'in_progress' | 'review' | 'done'>('todo');
+
+    // Time Tracking Aggregation
+    const [taskDurations, setTaskDurations] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+        const q = query(collection(db, 'time_entries'));
+        const unsub = onSnapshot(q, (snap) => {
+            const durations: Record<string, number> = {};
+            snap.docs.forEach(doc => {
+                const data = doc.data();
+                if (data.taskId) {
+                    durations[data.taskId] = (durations[data.taskId] || 0) + (data.duration || 0);
+                }
+            });
+            setTaskDurations(durations);
+        });
+        return () => unsub();
+    }, []);
+
+    const formatDuration = (seconds: number) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        return `${h}h${m > 0 ? ` ${m}m` : ''}`;
+    };
 
     const filteredTasks = useMemo(() => {
         return tasks.filter(t => {
@@ -185,8 +211,8 @@ const AdminTasks = () => {
             <button
                 onClick={() => setFilterMyTasks(!filterMyTasks)}
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all border ${filterMyTasks
-                        ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-800'
+                    ? 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-800/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-800'
                     }`}
                 title="Filter My Tasks"
             >
@@ -297,97 +323,115 @@ const AdminTasks = () => {
                                                                 </form>
                                                             )}
 
-                                                            {columnTasks.map((task, index) => (
-                                                                // @ts-ignore
-                                                                <Draggable key={task.id} draggableId={task.id} index={index} isDragDisabled={!!searchQuery || filterMyTasks}>
-                                                                    {(provided, snapshot) => (
-                                                                        <div
-                                                                            ref={provided.innerRef}
-                                                                            {...provided.draggableProps}
-                                                                            {...provided.dragHandleProps}
-                                                                            onClick={() => openEditTaskModal(task)}
-                                                                            className={`group bg-white dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-md transition-all relative cursor-grab active:cursor-grabbing ${snapshot.isDragging ? 'rotate-2 shadow-2xl ring-2 ring-blue-500/20 z-10 scale-105' : ''
-                                                                                }`}
-                                                                            style={provided.draggableProps.style}
-                                                                        >
-                                                                            {/* Priority & Timer Header */}
-                                                                            <div className="flex justify-between items-center mb-3">
-                                                                                <div className={`flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800`}>
-                                                                                    <PriorityBadge priority={task.priority} />
-                                                                                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                                                                        {task.priority}
-                                                                                    </span>
+                                                            {columnTasks.map((task, index) => {
+                                                                const isOverdue = task.dueDate && new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate) < new Date() && task.status !== 'done';
+                                                                const totalTime = taskDurations[task.id] || 0;
+
+                                                                return (
+                                                                    // @ts-ignore
+                                                                    <Draggable key={task.id} draggableId={task.id} index={index} isDragDisabled={!!searchQuery || filterMyTasks}>
+                                                                        {(provided, snapshot) => (
+                                                                            <div
+                                                                                ref={provided.innerRef}
+                                                                                {...provided.draggableProps}
+                                                                                {...provided.dragHandleProps}
+                                                                                onClick={() => openEditTaskModal(task)}
+                                                                                className={`group bg-white dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 hover:border-blue-300 dark:hover:border-blue-700 shadow-sm hover:shadow-md transition-all relative cursor-grab active:cursor-grabbing ${snapshot.isDragging ? 'rotate-2 shadow-2xl ring-2 ring-blue-500/20 z-10 scale-105' : ''
+                                                                                    }`}
+                                                                                style={provided.draggableProps.style}
+                                                                            >
+                                                                                {/* Priority & Timer Header */}
+                                                                                <div className="flex justify-between items-center mb-3">
+                                                                                    <div className={`flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800`}>
+                                                                                        <PriorityBadge priority={task.priority} />
+                                                                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                                                                                            {task.priority}
+                                                                                        </span>
+                                                                                    </div>
+
+                                                                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                                        <button
+                                                                                            onClick={(e) => {
+                                                                                                e.stopPropagation();
+                                                                                                if (activeEntry?.taskId === task.id) {
+                                                                                                    stopTimer();
+                                                                                                } else {
+                                                                                                    startTimer(task.id, task.projectId, task.title);
+                                                                                                }
+                                                                                            }}
+                                                                                            className={`p-1.5 rounded-lg transition-colors ${activeEntry?.taskId === task.id
+                                                                                                ? 'bg-red-100 text-red-600 dark:bg-red-900/30'
+                                                                                                : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-blue-600'}`}
+                                                                                            title="Timer"
+                                                                                        >
+                                                                                            {activeEntry?.taskId === task.id ? (
+                                                                                                <Square size={14} className="fill-current animate-pulse" />
+                                                                                            ) : (
+                                                                                                <Play size={14} className="fill-current" />
+                                                                                            )}
+                                                                                        </button>
+                                                                                        <button
+                                                                                            onClick={(e) => {
+                                                                                                e.stopPropagation();
+                                                                                                deleteTask(task.id);
+                                                                                            }}
+                                                                                            className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 transition-colors"
+                                                                                        >
+                                                                                            <div className="sr-only">Delete</div>
+                                                                                            <X size={14} />
+                                                                                        </button>
+                                                                                    </div>
                                                                                 </div>
 
-                                                                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                                    <button
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            if (activeEntry?.taskId === task.id) {
-                                                                                                stopTimer();
-                                                                                            } else {
-                                                                                                startTimer(task.id, task.projectId, task.title);
-                                                                                            }
-                                                                                        }}
-                                                                                        className={`p-1.5 rounded-lg transition-colors ${activeEntry?.taskId === task.id
-                                                                                            ? 'bg-red-100 text-red-600 dark:bg-red-900/30'
-                                                                                            : 'hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 hover:text-blue-600'}`}
-                                                                                        title="Timer"
-                                                                                    >
-                                                                                        {activeEntry?.taskId === task.id ? (
-                                                                                            <Square size={14} className="fill-current animate-pulse" />
-                                                                                        ) : (
-                                                                                            <Play size={14} className="fill-current" />
-                                                                                        )}
-                                                                                    </button>
-                                                                                    <button
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            deleteTask(task.id);
-                                                                                        }}
-                                                                                        className="p-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-slate-400 hover:text-red-500 transition-colors"
-                                                                                    >
-                                                                                        <div className="sr-only">Delete</div>
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3 leading-snug line-clamp-2">
-                                                                                {task.title}
-                                                                            </h4>
-
-                                                                            <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                                                                                <div className="flex -space-x-2">
-                                                                                    {task.assigneeId ? (
-                                                                                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[9px] font-bold border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700 mx-0.5" title="Assignee">
-                                                                                            A
-                                                                                        </div>
-                                                                                    ) : (
-                                                                                        <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 border-2 border-white dark:border-slate-800 mx-0.5 border-dashed">
-                                                                                            <span className="sr-only">Unassigned</span>
-                                                                                        </div>
+                                                                                <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-3 leading-snug line-clamp-2">
+                                                                                    {task.title}
+                                                                                    {isOverdue && (
+                                                                                        <span className="inline-block ml-2 text-red-500" title="Overdue">
+                                                                                            <AlertTriangle size={12} className="inline" />
+                                                                                        </span>
                                                                                     )}
-                                                                                </div>
+                                                                                </h4>
 
-                                                                                <div className="flex items-center gap-3 text-slate-400">
-                                                                                    {task.description && <AlignLeft size={14} className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors" />}
+                                                                                <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+                                                                                    <div className="flex -space-x-2">
+                                                                                        {task.assigneeId ? (
+                                                                                            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[9px] font-bold border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-slate-100 dark:ring-slate-700 mx-0.5" title="Assignee">
+                                                                                                A
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 border-2 border-white dark:border-slate-800 mx-0.5 border-dashed">
+                                                                                                <span className="sr-only">Unassigned</span>
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
 
-                                                                                    {(task.dueDate) && (
-                                                                                        <div className={`flex items-center gap-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium ${new Date(task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate) < new Date() && task.status !== 'done'
+                                                                                    <div className="flex items-center gap-3 text-slate-400">
+                                                                                        {/* Time Spent */}
+                                                                                        {totalTime > 0 && (
+                                                                                            <div className="flex items-center gap-1 text-[10px] bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md font-medium text-slate-500 dark:text-slate-400">
+                                                                                                <Clock size={10} />
+                                                                                                {formatDuration(totalTime)}
+                                                                                            </div>
+                                                                                        )}
+
+                                                                                        {task.description && <AlignLeft size={14} className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors" />}
+
+                                                                                        {(task.dueDate) && (
+                                                                                            <div className={`flex items-center gap-1.5 px-1.5 py-0.5 rounded text-[10px] font-medium ${isOverdue
                                                                                                 ? 'bg-red-50 text-red-600 dark:bg-red-900/20'
                                                                                                 : 'bg-slate-50 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
-                                                                                            }`}>
-                                                                                            <Clock size={10} />
-                                                                                            {format(task.dueDate.toDate ? task.dueDate.toDate() : new Date(task.dueDate), 'MMM d')}
-                                                                                        </div>
-                                                                                    )}
+                                                                                                }`}>
+                                                                                                <Calendar size={10} />
+                                                                                                {format(task.dueDate.toDate ? task.dueDate.toDate() : new Date(task.dueDate), 'MMM d')}
+                                                                                            </div>
+                                                                                        )}
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    )}
-                                                                </Draggable>
-                                                            ))}
+                                                                        )}
+                                                                    </Draggable>
+                                                                );
+                                                            })}
 
                                                             {provided.placeholder}
 
