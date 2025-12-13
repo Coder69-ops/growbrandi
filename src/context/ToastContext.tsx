@@ -15,7 +15,7 @@ interface StandardToast extends ToastBase {
     };
 }
 
-export interface NotificationData extends ToastBase {
+interface NotificationData extends ToastBase {
     type: 'notification';
     title: string;
     subtitle?: string;
@@ -23,6 +23,7 @@ export interface NotificationData extends ToastBase {
     avatar?: string;
     role?: string;
     onReply?: (text: string) => Promise<void>;
+    onClick?: () => void;
 }
 
 type Toast = StandardToast | NotificationData;
@@ -47,6 +48,7 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
 
     const handleReply = async (e: React.FormEvent) => {
         e.preventDefault();
+        e.stopPropagation(); // Prevent navigation when replying
         if (!replyText.trim() || sending) return;
 
         if (toast.type === 'notification' && toast.onReply) {
@@ -64,9 +66,19 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
         }
     };
 
+    const handleClick = () => {
+        if (toast.type === 'notification' && toast.onClick) {
+            toast.onClick();
+            removeToast(toast.id);
+        }
+    };
+
     if (toast.type === 'notification') {
         return (
-            <div className="w-full max-w-md bg-white dark:bg-[#0f172a] border border-indigo-100 dark:border-slate-800 rounded-2xl shadow-2xl shadow-indigo-500/10 overflow-hidden pointer-events-auto animate-in slide-in-from-top-5 fade-in duration-300 ring-1 ring-black/5">
+            <div
+                onClick={handleClick}
+                className={`w-full max-w-md bg-white dark:bg-[#0f172a] border border-indigo-100 dark:border-slate-800 rounded-2xl shadow-2xl shadow-indigo-500/10 overflow-hidden pointer-events-auto animate-in slide-in-from-top-5 fade-in duration-300 ring-1 ring-black/5 ${toast.onClick ? 'cursor-pointer hover:ring-indigo-500/30 transition-shadow' : ''}`}
+            >
                 {/* Header */}
                 <div className="p-4 pb-3 flex items-start gap-3 bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-900 dark:to-slate-900/50">
                     <div className="relative shrink-0">
@@ -93,7 +105,7 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-medium truncate">{toast.subtitle || 'New Message'}</p>
                     </div>
                     <button
-                        onClick={() => removeToast(toast.id)}
+                        onClick={(e) => { e.stopPropagation(); removeToast(toast.id); }}
                         className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
                     >
                         <X size={16} />
@@ -109,7 +121,7 @@ const ToastItem: React.FC<{ toast: Toast, removeToast: (id: string) => void }> =
 
                 {/* Reply Footer */}
                 {toast.onReply && (
-                    <form onSubmit={handleReply} className="px-4 pb-4 flex gap-2">
+                    <form onSubmit={handleReply} className="px-4 pb-4 flex gap-2" onClick={e => e.stopPropagation()}>
                         <input
                             type="text"
                             value={replyText}

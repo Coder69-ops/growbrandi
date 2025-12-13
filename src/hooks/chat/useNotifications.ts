@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { database, db } from '../../lib/firebase';
 import { ref, onValue, update, push, set, serverTimestamp } from 'firebase/database';
 import { collection, query, where, getDocs, onSnapshot, orderBy, limit } from 'firebase/firestore';
@@ -9,6 +10,7 @@ import { NotificationService } from '../../services/notificationService';
 export const useChatNotifications = () => {
     const { currentUser } = useAuth();
     const { showNotification } = useToast();
+    const navigate = useNavigate();
     const [unreadCount, setUnreadCount] = useState(0);
     const [notifications, setNotifications] = useState<any[]>([]);
     const notifiedRef = useRef(new Set<string>());
@@ -72,11 +74,43 @@ export const useChatNotifications = () => {
                         const msgId = lastMsg.id || `${channelId}-${lastMsg.timestamp}`;
                         if (Date.now() - lastMsg.timestamp < 10000 && !notifiedRef.current.has(msgId)) {
                             notifiedRef.current.add(msgId);
-                            // Trigger Rich Notification (Simplified here, keeping core logic)
+                            // Trigger Rich Notification
                             showNotification({
                                 title: lastMsg.senderName || 'New Message',
                                 message: lastMsg.text || 'Sent an image',
                                 avatar: lastMsg.senderPhoto,
+                                onClick: () => {
+                                    navigate(`/admin/chat?channelId=${channelId}`);
+                                },
+                                onReply: async (text) => {
+                                    if (!currentUser) return;
+
+                                    // 1. Push Message
+                                    const messagesRef = ref(database, `messages/${channelId}`);
+                                    const newMessageRef = push(messagesRef);
+                                    const timestamp = Date.now();
+
+                                    const messagePayload = {
+                                        text,
+                                        senderId: currentUser.uid,
+                                        senderName: currentUser.displayName || 'Admin',
+                                        senderPhoto: currentUser.photoURL || '',
+                                        timestamp,
+                                        type: 'text'
+                                    };
+
+                                    await set(newMessageRef, messagePayload);
+
+                                    // 2. Update Channel
+                                    const channelRef = ref(database, `channels/${channelId}`);
+                                    await update(channelRef, {
+                                        lastMessage: {
+                                            ...messagePayload,
+                                            id: newMessageRef.key
+                                        },
+                                        lastActive: timestamp
+                                    });
+                                }
                             });
                         }
                     }

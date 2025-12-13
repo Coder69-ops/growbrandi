@@ -129,12 +129,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
                             <img src={headerImage} alt={headerTitle} className="w-8 h-8 rounded-full object-cover shadow-sm" />
                         ) : (
                             <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-xs">
-                                {headerTitle[0]?.toUpperCase()}
+                                {(headerTitle || '?')[0]?.toUpperCase()}
                             </div>
                         )
                     )}
                     <div>
-                        <h2 className="font-bold text-slate-900 dark:text-white capitalize">{headerTitle}</h2>
+                        <h2 className="font-bold text-slate-900 dark:text-white capitalize">{headerTitle || 'Unknown User'}</h2>
                         <div className="text-xs text-slate-500">{getStatusDisplay()}</div>
                     </div>
                 </div>
