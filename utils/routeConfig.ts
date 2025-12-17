@@ -11,10 +11,10 @@ export type Route =
     | 'contact'
     | 'web-development'
     | 'ui-ux-design'
-    | 'brand-strategy'
-    | 'seo-optimization'
-    | 'digital-marketing'
-    | 'ai-solutions'
+    | 'brand-growth'
+    | 'social-media-content'
+    | 'virtual-assistance'
+    | 'customer-support'
     | 'privacy-policy'
     | 'terms-of-service'
     | 'cookie-policy'
@@ -25,7 +25,7 @@ export type Route =
 // Route categories for better organization
 export const ROUTE_CATEGORIES = {
     MAIN: ['home', 'about', 'contact', 'services', 'portfolio', 'team'] as Route[],
-    SERVICES: ['web-development', 'ui-ux-design', 'brand-strategy', 'seo-optimization', 'digital-marketing', 'ai-solutions'] as Route[],
+    SERVICES: ['brand-growth', 'social-media-content', 'ui-ux-design', 'web-development', 'virtual-assistance', 'customer-support'] as Route[],
     COMPANY: ['about', 'process', 'careers', 'blog', 'team'] as Route[],
     LEGAL: ['privacy-policy', 'terms-of-service', 'cookie-policy'] as Route[],
 } as const;
@@ -44,15 +44,15 @@ export const routeConfig: Record<Route, RouteMetadata> = {
     'home': {
         title: 'Home',
         path: '/',
-        description: 'AI-Powered Digital Agency - Transform your business with cutting-edge solutions',
+        description: 'Growth Digital Agency - Transform your business with cutting-edge solutions',
         keywords: ['digital agency', 'AI solutions', 'web development', 'GrowBrandi'],
         category: 'main'
     },
     'about': {
         title: 'About Us',
         path: '/about',
-        description: 'Learn about GrowBrandi - Our mission, vision, and the team behind your success',
-        keywords: ['about GrowBrandi', 'digital agency team', 'company mission'],
+        description: 'Learn about Growth Digital Agency - Our mission, vision, and the team behind your success',
+        keywords: ['about Growth Digital Agency', 'digital agency team', 'company mission'],
         category: 'company',
         breadcrumb: ['Home', 'About']
     },
@@ -116,13 +116,21 @@ export const routeConfig: Record<Route, RouteMetadata> = {
         keywords: ['contact', 'get in touch', 'consultation', 'project inquiry'],
         category: 'main'
     },
-    'web-development': {
-        title: 'Web Development Services',
-        path: '/services/web-development',
-        description: 'Custom web development solutions using cutting-edge technologies',
-        keywords: ['web development', 'custom websites', 'React', 'Node.js'],
+    'brand-growth': {
+        title: 'Brand Growth Services',
+        path: '/services/brand-growth',
+        description: 'Accelerate your brand\'s growth with data-driven strategies and campaigns',
+        keywords: ['brand growth', 'growth marketing', 'scaling', 'business strategy'],
         category: 'services',
-        breadcrumb: ['Home', 'Services', 'Web Development']
+        breadcrumb: ['Home', 'Services', 'Brand Growth']
+    },
+    'social-media-content': {
+        title: 'Social Media Content',
+        path: '/services/social-media-content',
+        description: 'Engaging social media content creation and management',
+        keywords: ['social media', 'content creation', 'instagram', 'tiktok', 'marketing'],
+        category: 'services',
+        breadcrumb: ['Home', 'Services', 'Social Media Content']
     },
     'ui-ux-design': {
         title: 'UI/UX Design Services',
@@ -132,37 +140,29 @@ export const routeConfig: Record<Route, RouteMetadata> = {
         category: 'services',
         breadcrumb: ['Home', 'Services', 'UI/UX Design']
     },
-    'brand-strategy': {
-        title: 'Brand Strategy Services',
-        path: '/services/brand-strategy',
-        description: 'Strategic brand development and positioning for market success',
-        keywords: ['brand strategy', 'brand development', 'brand positioning', 'marketing'],
+    'web-development': {
+        title: 'Web Development Services',
+        path: '/services/web-development',
+        description: 'Custom web development solutions using cutting-edge technologies',
+        keywords: ['web development', 'custom websites', 'React', 'Node.js'],
         category: 'services',
-        breadcrumb: ['Home', 'Services', 'Brand Strategy']
+        breadcrumb: ['Home', 'Services', 'Web Development']
     },
-    'seo-optimization': {
-        title: 'SEO Optimization Services',
-        path: '/services/seo-optimization',
-        description: 'Advanced SEO strategies to improve your search engine rankings',
-        keywords: ['SEO', 'search optimization', 'Google ranking', 'organic traffic'],
+    'virtual-assistance': {
+        title: 'Virtual Assistance',
+        path: '/services/virtual-assistance',
+        description: 'Professional virtual assistance to streamline your business operations',
+        keywords: ['virtual assistant', 'admin support', 'business operations', 'remote help'],
         category: 'services',
-        breadcrumb: ['Home', 'Services', 'SEO Optimization']
+        breadcrumb: ['Home', 'Services', 'Virtual Assistance']
     },
-    'digital-marketing': {
-        title: 'Digital Marketing Services',
-        path: '/services/digital-marketing',
-        description: 'Comprehensive digital marketing strategies for business growth',
-        keywords: ['digital marketing', 'social media', 'PPC', 'content marketing'],
+    'customer-support': {
+        title: 'Customer Support Services',
+        path: '/services/customer-support',
+        description: 'Dedicated customer support teams to delight your users 24/7',
+        keywords: ['customer support', 'help desk', 'customer service', 'support team'],
         category: 'services',
-        breadcrumb: ['Home', 'Services', 'Digital Marketing']
-    },
-    'ai-solutions': {
-        title: 'AI Solutions Services',
-        path: '/services/ai-solutions',
-        description: 'Cutting-edge AI integration and automation solutions for businesses',
-        keywords: ['AI solutions', 'artificial intelligence', 'automation', 'machine learning'],
-        category: 'services',
-        breadcrumb: ['Home', 'Services', 'AI Solutions']
+        breadcrumb: ['Home', 'Services', 'Customer Support']
     },
     'privacy-policy': {
         title: 'Privacy Policy',

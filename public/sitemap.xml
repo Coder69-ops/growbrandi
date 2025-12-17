@@ -251,27 +251,52 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/web-development</loc>
+    <loc>https://www.growbrandi.com/en/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/de/services/web-development</loc>
+    <loc>https://www.growbrandi.com/de/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/es/services/web-development</loc>
+    <loc>https://www.growbrandi.com/es/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/fr/services/web-development</loc>
+    <loc>https://www.growbrandi.com/fr/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/nl/services/web-development</loc>
+    <loc>https://www.growbrandi.com/nl/services/brand-growth</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.growbrandi.com/en/services/social-media-content</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.growbrandi.com/de/services/social-media-content</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.growbrandi.com/es/services/social-media-content</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.growbrandi.com/fr/services/social-media-content</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.growbrandi.com/nl/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -301,102 +326,77 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/brand-strategy</loc>
+    <loc>https://www.growbrandi.com/en/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/de/services/brand-strategy</loc>
+    <loc>https://www.growbrandi.com/de/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/es/services/brand-strategy</loc>
+    <loc>https://www.growbrandi.com/es/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/fr/services/brand-strategy</loc>
+    <loc>https://www.growbrandi.com/fr/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/nl/services/brand-strategy</loc>
+    <loc>https://www.growbrandi.com/nl/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/seo-optimization</loc>
+    <loc>https://www.growbrandi.com/en/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/de/services/seo-optimization</loc>
+    <loc>https://www.growbrandi.com/de/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/es/services/seo-optimization</loc>
+    <loc>https://www.growbrandi.com/es/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/fr/services/seo-optimization</loc>
+    <loc>https://www.growbrandi.com/fr/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/nl/services/seo-optimization</loc>
+    <loc>https://www.growbrandi.com/nl/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/digital-marketing</loc>
+    <loc>https://www.growbrandi.com/en/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/de/services/digital-marketing</loc>
+    <loc>https://www.growbrandi.com/de/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/es/services/digital-marketing</loc>
+    <loc>https://www.growbrandi.com/es/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/fr/services/digital-marketing</loc>
+    <loc>https://www.growbrandi.com/fr/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/nl/services/digital-marketing</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.growbrandi.com/en/services/ai-solutions</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.growbrandi.com/de/services/ai-solutions</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.growbrandi.com/es/services/ai-solutions</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.growbrandi.com/fr/services/ai-solutions</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.growbrandi.com/nl/services/ai-solutions</loc>
+    <loc>https://www.growbrandi.com/nl/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
