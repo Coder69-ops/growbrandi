@@ -142,6 +142,7 @@ const Profile = () => {
                         <div className="shrink-0">
                             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Profile Photo</label>
                             <ImageUpload
+                                label="Profile Photo"
                                 value={formData.image}
                                 onChange={(url) => setFormData({ ...formData, image: url })}
                                 className="w-32 h-32 rounded-full"

@@ -17,6 +17,8 @@ interface SEOProps {
     twitterHandle?: string;
     schema?: string;
     additionalSchemas?: string[]; // For multiple schemas on one page
+    siteTitleSuffix?: string;
+    noIndex?: boolean;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -31,12 +33,13 @@ const SEO: React.FC<SEOProps> = ({
     twitterCard = 'summary_large_image',
     twitterHandle = '@growbrandi',
     schema,
-    additionalSchemas = []
+    additionalSchemas = [],
+    siteTitleSuffix = 'GrowBrandi',
+    noIndex = false
 }) => {
     const location = useLocation();
     const { content: contactContent } = useContactSettings();
-    const siteTitle = 'GrowBrandi';
-    const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+    const fullTitle = title === siteTitleSuffix ? title : `${title} | ${siteTitleSuffix}`;
     // Use window.location.href as default to capture the full localized URL
     const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
 
@@ -104,6 +107,9 @@ const SEO: React.FC<SEOProps> = ({
             ))}
 
             {/* Open Graph / Facebook */}
+            {/* Site Title Suffix is handled in fullTitle */}
+            <meta name="robots" content={noIndex ? "noindex, nofollow" : "index, follow"} />
+
             <meta property="og:type" content={ogType} />
             <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={description} />
@@ -111,7 +117,7 @@ const SEO: React.FC<SEOProps> = ({
             <meta property="og:image" content={ogImage} />
             <meta property="og:image:width" content={ogImageWidth} />
             <meta property="og:image:height" content={ogImageHeight} />
-            <meta property="og:site_name" content={siteTitle} />
+            <meta property="og:site_name" content={siteTitleSuffix} />
 
             {/* Twitter */}
             <meta name="twitter:card" content={twitterCard} />

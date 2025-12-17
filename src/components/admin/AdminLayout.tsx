@@ -30,7 +30,8 @@ import {
     MessageSquare,
     Kanban,
     Clock,
-    Bot
+    Bot,
+    Globe
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -140,6 +141,7 @@ const AdminLayout = () => {
             title: 'System',
             items: [
                 { path: '/admin/audit', icon: History, label: 'Audit Logs', permissions: ['view_logs', 'manage_settings'] },
+                { path: '/admin/seo-settings', icon: Globe, label: 'SEO & Sitemap', permissions: ['manage_settings'] },
                 { path: '/admin/ai-config', icon: Bot, label: 'AI Configuration', permissions: ['manage_ai', 'manage_settings'] },
                 { path: '/admin/seed-data', icon: Database, label: 'Seed Data', permissions: ['manage_settings'], adminOnly: true },
             ]

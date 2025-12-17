@@ -9,6 +9,7 @@ interface ImageUploadProps {
     value: string;
     onChange: (url: string) => void;
     folder?: string;
+    className?: string;
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -16,6 +17,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     value,
     onChange,
     folder = 'uploads',
+    className
 }) => {
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -83,7 +85,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
                         <img
                             src={value}
                             alt="Preview"
-                            className="w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                            className={`w-32 h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-700 ${className}`}
                         />
                         <button
                             type="button"

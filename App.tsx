@@ -12,6 +12,7 @@ import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeCo
 import { db } from './src/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { ThemeProvider } from './components/ThemeContext';
+import { SeoProvider, useSeo } from './src/context/SeoContext';
 
 // Lazy load components
 import { HomePage } from './components/Hero';
@@ -79,6 +80,7 @@ import AdminAuditLog from './src/pages/admin/AuditLog';
 import AdminOnlineUsers from './src/pages/admin/OnlineUsers';
 import AdminProfile from './src/pages/admin/Profile';
 import AdminAIConfig from './src/pages/admin/AIConfig';
+import AdminSeoSettings from './src/pages/admin/SeoSettings';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
@@ -115,8 +117,10 @@ function AppContent() {
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const currentRoute = getRouteFromPath(currentPath);
-  const metadata = getRouteMetadata(currentRoute, currentPath);
-  const { getLocalizedPath } = useLocalizedPath();
+  // Removed static metadata call
+  // const metadata = getRouteMetadata(currentRoute, currentPath);
+  const { getLocalizedPath, currentLang } = useLocalizedPath();
+  const { getSeoMetadata } = useSeo();
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isContactAssistantOpen, setIsContactAssistantOpen] = useState(false);
@@ -127,6 +131,10 @@ function AppContent() {
 
   const breadcrumbs = routeConfig[currentRoute]?.breadcrumb || ['Home'];
   const isAdminRoute = currentPath.startsWith('/admin');
+
+  // Fetch dynamic SEO metadata based on current language
+  const seoMetadata = getSeoMetadata(currentRoute, currentPath, currentLang);
+  // Replaces the static call: const metadata = getRouteMetadata(currentRoute, currentPath);
 
   // Fetch services for AI context
   useEffect(() => {
@@ -309,16 +317,24 @@ ${servicesDetails}
   }, [currentRoute]);
 
 
+  const metadata = seoMetadata; // Aligning with the instruction's implied `metadata` object
+
   return (
     <>
-      <SEO
-        title={metadata.title}
-        description={metadata.description || ''}
-        keywords={metadata.keywords}
-        canonicalUrl={`https://growbrandi.com${metadata.path}`}
-      />
+      {!isAdminRoute && (
+        <SEO
+          title={metadata.title}
+          description={metadata.description || ''}
+          keywords={metadata.keywords}
+          canonicalUrl={`https://growbrandi.com${currentPath}`} // Using currentPath as metadata.path is not available in SeoContext
+          siteTitleSuffix={metadata.titleSuffix}
+          noIndex={metadata.noIndex}
+          ogImage={metadata.ogImage}
+        />
+      )}
       <Suspense fallback={<PageLoader />}>
         <AnimatedBackground />
+
       </Suspense>
 
       <div className="text-slate-100 w-full relative z-10" style={{ minHeight: '100vh' }}>
@@ -419,7 +435,9 @@ ${servicesDetails}
                     <Route path="audit" element={<AdminAuditLog />} />
                     <Route path="online-users" element={<AdminOnlineUsers />} />
                     <Route path="profile" element={<AdminProfile />} />
+                    <Route path="profile" element={<AdminProfile />} />
                     <Route path="ai-config" element={<AdminAIConfig />} />
+                    <Route path="seo-settings" element={<AdminSeoSettings />} />
                   </Route>
                 </Route>
               </Routes>
@@ -476,9 +494,11 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <ToastProvider>
-            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <AppContent />
-            </BrowserRouter>
+            <SeoProvider>
+              <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <AppContent />
+              </BrowserRouter>
+            </SeoProvider>
           </ToastProvider>
         </AuthProvider>
       </ThemeProvider>

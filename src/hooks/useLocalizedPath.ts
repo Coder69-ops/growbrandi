@@ -1,28 +1,33 @@
-import { useTranslation } from 'react-i18next';
 import { useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { SupportedLanguage, SUPPORTED_LANGUAGES } from '../utils/localization';
 
 export const useLocalizedPath = () => {
+    const { lang } = useParams<{ lang: string }>();
     const { i18n } = useTranslation();
 
+    // Determine current language
+    const currentLang = (lang && SUPPORTED_LANGUAGES.includes(lang as any))
+        ? (lang as SupportedLanguage)
+        : 'en';
+
     const getLocalizedPath = useCallback((path: string) => {
-        // If path is external or anchor, return as is
+        // External or special links
         if (path.startsWith('http') || path.startsWith('#') || path.startsWith('mailto:') || path.startsWith('tel:')) {
             return path;
         }
 
-        // Clean any existing language prefix
-        // Matches /xx/ or /xx at start
+        // Clean existing prefix
         const cleanPath = path.replace(/^\/[a-z]{2}(\/|$)/, '/');
-
-        // Normalize
         const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
 
-        // Get current lang (fallback to en if missing)
-        const lang = (i18n.language || 'en').split('-')[0];
+        if (currentLang === 'en') {
+            return normalizedPath;
+        }
 
-        // Return /lang/path (avoid double slash if path is /)
-        return `/${lang}${normalizedPath === '/' ? '' : normalizedPath}`;
-    }, [i18n.language]);
+        return `/${currentLang}${normalizedPath === '/' ? '' : normalizedPath}`;
+    }, [currentLang]);
 
-    return { getLocalizedPath };
+    return { getLocalizedPath, currentLang };
 };

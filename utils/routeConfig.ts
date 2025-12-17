@@ -31,14 +31,16 @@ export const ROUTE_CATEGORIES = {
 } as const;
 
 // Enhanced route configuration with SEO-friendly URLs, metadata, and breadcrumbs
-export const routeConfig: Record<Route, {
+export interface RouteMetadata {
     title: string;
     path: string;
     description?: string;
     keywords?: string[];
     category?: string;
     breadcrumb?: string[];
-}> = {
+}
+
+export const routeConfig: Record<Route, RouteMetadata> = {
     'home': {
         title: 'Home',
         path: '/',
