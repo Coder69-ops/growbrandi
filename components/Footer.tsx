@@ -2,7 +2,7 @@ import React, { useState, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaLinkedin, FaTiktok, FaInstagram, FaBuilding, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
+import { FaLinkedin, FaTiktok, FaInstagram, FaBuilding, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar, FaGithub, FaGlobe } from 'react-icons/fa';
 // import { APP_NAME, APP_TAGLINE, CONTACT_INFO } from '../constants'; // Removed
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useContent } from '../src/hooks/useContent';
@@ -104,21 +104,34 @@ const Footer: React.FC = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 pt-2">
-              {settings?.social && Object.entries(settings.social).map(([platform, url]) => {
-                const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp'];
-                if (!url || !supportedPlatforms.includes(platform)) return null;
+              {settings?.social && Array.isArray(settings.social) && settings.social.map((link: any) => {
+                if (!link.url || !link.enabled) return null;
+
+                // Icon Component Helper
+                const getIcon = (iconName: string) => {
+                  switch (iconName) {
+                    case 'FaLinkedin': return <FaLinkedin className="w-4 h-4" />;
+                    case 'FaTiktok': return <FaTiktok className="w-4 h-4" />;
+                    case 'FaInstagram': return <FaInstagram className="w-4 h-4" />;
+                    case 'FaBuilding': return <FaBuilding className="w-4 h-4" />;
+                    case 'FaWhatsapp': return <FaWhatsapp className="w-4 h-4" />;
+                    case 'FaGithub': return <FaGithub className="w-4 h-4" />;
+                    case 'FaGlobe': return <FaGlobe className="w-4 h-4" />;
+                    default: return <FaGlobe className="w-4 h-4" />;
+                  }
+                };
 
                 return (
                   <a
-                    key={platform}
-                    href={url as string}
+                    key={link.id}
+                    href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-8 h-8 rounded-full bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/5 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300"
-                    aria-label={platform}
+                    aria-label={link.platform}
                   >
-                    <span className="sr-only">{platform}</span>
-                    {getSocialIcon(platform)}
+                    <span className="sr-only">{link.platform}</span>
+                    {getIcon(link.icon)}
                   </a>
                 )
               })}
