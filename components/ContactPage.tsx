@@ -2,7 +2,7 @@ import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone, FaGlobe } from 'react-icons/fa';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone, FaGlobe, FaTwitter, FaYoutube, FaFacebook } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
