@@ -515,22 +515,70 @@ const AdminServices = () => {
                                     />
 
                                     <div>
-                                        <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Visual Theme (Floating Logos)</label>
+                                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                            Visual Theme (Floating Logos)
+                                        </label>
                                         <select
                                             value={currentService.visualType || 'none'}
                                             onChange={(e) => updateField('visualType', e.target.value)}
-                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                            className="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         >
                                             <option value="none">None (Image Only)</option>
-                                            <option value="social">Social Media (Phone + Logos)</option>
-                                            <option value="marketing">Marketing (Chart + Ad Logos)</option>
-                                            <option value="design">Design (UI Elements + Tools)</option>
-                                            <option value="development">Development (Code + Tech Stack)</option>
-                                            <option value="assistant">Virtual Assistant (Checklist + Tools)</option>
-                                            <option value="support">Customer Support (Headset + Platforms)</option>
+                                            <option value="social">Social Media (IG, TikTok, YT)</option>
+                                            <option value="marketing">Marketing (Ads, Meta, TikTok)</option>
+                                            <option value="design">Design (Figma, React, Tailwind)</option>
+                                            <option value="development">Development (Next.js, Shopify, TS)</option>
+                                            <option value="assistant">Virtual Assistant (Google, OpenAi)</option>
+                                            <option value="support">Support (Salesforce, HubSpot, WA)</option>
                                         </select>
-                                        <p className="text-xs text-slate-500 mt-1">Select animation overlay to show on top of the image.</p>
                                     </div>
+
+                                    <div className="grid grid-cols-3 gap-4">
+                                        {[0, 1, 2].map((index) => (
+                                            <div key={index}>
+                                                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                                    Floating Logo {index + 1}
+                                                </label>
+                                                <select
+                                                    value={currentService.floatingLogos?.[index] || ''}
+                                                    onChange={(e) => {
+                                                        const newLogos = [...(currentService.floatingLogos || ['', '', ''])];
+                                                        newLogos[index] = e.target.value;
+                                                        updateField('floatingLogos', newLogos);
+                                                    }}
+                                                    className="w-full px-4 py-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                                                >
+                                                    <option value="">Select Logo...</option>
+                                                    <optgroup label="Social">
+                                                        <option value="/logos/instagram.svg">Instagram</option>
+                                                        <option value="/logos/tiktok.svg">TikTok</option>
+                                                        <option value="/logos/youtube.svg">YouTube</option>
+                                                        <option value="/logos/whatsapp.svg">WhatsApp</option>
+                                                    </optgroup>
+                                                    <optgroup label="Tech">
+                                                        <option value="/logos/react.svg">React</option>
+                                                        <option value="/logos/nextdotjs.svg">Next.js</option>
+                                                        <option value="/logos/typescript.svg">TypeScript</option>
+                                                        <option value="/logos/tailwindcss.svg">Tailwind</option>
+                                                    </optgroup>
+                                                    <optgroup label="Tools">
+                                                        <option value="/logos/figma.svg">Figma</option>
+                                                        <option value="/logos/google.svg">Google</option>
+                                                        <option value="/logos/microsoft.svg">Microsoft</option>
+                                                        <option value="/logos/openai.svg">OpenAI</option>
+                                                        <option value="/logos/salesforce.svg">Salesforce</option>
+                                                        <option value="/logos/hubspot.svg">HubSpot</option>
+                                                        <option value="/logos/shopify.svg">Shopify</option>
+                                                    </optgroup>
+                                                    <optgroup label="Ads">
+                                                        <option value="/logos/google-ads.svg">Google Ads</option>
+                                                        <option value="/logos/meta.svg">Meta</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                        ))}
+                                    </div>            <p className="text-xs text-slate-500 mt-1">Select animation overlay to show on top of the image.</p>
+
 
                                     <LocalizedInput
                                         label="Price Display"
@@ -650,7 +698,7 @@ const AdminServices = () => {
                             </div>
                         </div>
                     </form>
-                </div>
+                </div >
             ) : (
                 <Reorder.Group axis="y" values={services} onReorder={handleReorder} className="flex flex-col gap-4">
                     {services.map((service) => {

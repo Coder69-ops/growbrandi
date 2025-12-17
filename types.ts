@@ -22,6 +22,8 @@ export interface Service {
   isPopular?: boolean;
   category?: string;
   image?: string;
+  visualType?: 'social' | 'marketing' | 'design' | 'development' | 'assistant' | 'support' | 'none';
+  floatingLogos?: string[];
   process?: {
     step: string | LocalizedString;
     description: string | LocalizedString;
