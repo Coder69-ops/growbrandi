@@ -104,7 +104,7 @@ const ProjectsPreview: React.FC = () => {
                                             />
                                         )}
                                         <span className="relative z-10 flex items-center gap-2">
-                                            {category === 'All' ? t('projects_preview.filter_all') : t(category as any)}
+                                            {category === 'All' ? t('projects_preview.filter_all') : t(`services.${category}.title`)}
                                             <span className={`px-1.5 py-0.5 rounded-md text-[10px] ${activeFilter === category ? 'bg-white/20 text-white' : 'bg-slate-200 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400'}`}>
                                                 {category === 'All' ? projectsData.length : projectsData.filter(p => p.category === category).length}
                                             </span>
