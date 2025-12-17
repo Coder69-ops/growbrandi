@@ -220,8 +220,8 @@
     "section_headers": {
         "testimonials": {
             "badge": "Client Stories",
-            "title": "What Our Clients Say",
-            "highlight": "Amazing Clients Say",
+            "title": "What Our",
+            "highlight": "Clients Say",
             "description": "Don't just take our word for it. Hear from the visionary leaders we've had the privilege to work with.",
             "pager_text": "Testimonial {{current}} / {{total}}",
             "aria": {
@@ -232,7 +232,8 @@
         },
         "faq": {
             "badge": "FAQ",
-            "title": "Frequently Asked Questions",
+            "title": "Frequently Asked",
+            "highlight": "Questions",
             "description": "Find answers to common questions about our services and process.",
             "cta_title": "Still have questions?",
             "cta_desc": "Can't find the answer you're looking for? Our team is here to help you with any specific inquiries you may have.",
@@ -240,7 +241,7 @@
         },
         "team": {
             "badge": "Our Team",
-            "title": "Meet the Experts",
+            "title": "Meet the",
             "highlight": "Experts",
             "description": "A diverse team of strategists, designers, and developers united by a passion for growth.",
             "cta_title_prefix": "Ready to Work with",

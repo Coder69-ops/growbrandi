@@ -90,7 +90,7 @@ const FAQ: React.FC = () => {
         <SectionHeading
           badge={t('section_headers.faq.badge')}
           title={t('section_headers.faq.title')}
-          highlight="Questions"
+          highlight={t('section_headers.faq.highlight')}
           description={t('section_headers.faq.description')}
         />
 
