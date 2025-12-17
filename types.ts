@@ -21,6 +21,7 @@ export interface Service {
   color: string;
   isPopular?: boolean;
   category?: string;
+  image?: string;
   process?: {
     step: string | LocalizedString;
     description: string | LocalizedString;

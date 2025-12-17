@@ -76,10 +76,20 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Image/Gradient */}
-            <div className={`h-48 w-full bg-gradient-to-r ${service.color} relative overflow-hidden`}>
-              <div className="absolute inset-0 bg-black/20" />
-              <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-              <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+            <div className={`h-48 w-full ${service.image ? '' : `bg-gradient-to-r ${service.color}`} relative overflow-hidden`}>
+              {service.image && (
+                <>
+                  <img src={service.image} alt={txt(service.title)} className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                </>
+              )}
+              {!service.image && (
+                <>
+                  <div className="absolute inset-0 bg-black/20" />
+                  <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+                  <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+                </>
+              )}
 
               <button
                 onClick={onClose}
@@ -88,13 +98,13 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                 <FaTimes className="w-5 h-5" />
               </button>
 
-              <div className="absolute bottom-6 left-8 flex items-end gap-6">
+              <div className="absolute bottom-6 left-8 flex items-end gap-6 z-20">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-xl">
                   {getIcon(service.icon, "w-8 h-8")}
                 </div>
                 <div className="text-white mb-1">
-                  <h2 className="text-3xl md:text-4xl font-bold">{txt(service.title)}</h2>
-                  <p className="text-white/80 font-medium text-lg">{txt(service.price)}</p>
+                  <h2 className="text-3xl md:text-4xl font-bold text-shadow-sm">{txt(service.title)}</h2>
+                  <p className="text-white/90 font-medium text-lg text-shadow-sm">{txt(service.price)}</p>
                 </div>
               </div>
             </div>
@@ -227,6 +237,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, onLearnMore, feature
       </div>
 
       <div className="p-8 pt-4 flex-grow flex flex-col">
+        {service.image && (
+          <div className="mb-6 rounded-xl overflow-hidden h-40 relative shadow-md group-hover:shadow-lg transition-all">
+            <img
+              src={service.image}
+              alt={txt(service.title)}
+              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+        )}
         <p className="text-slate-600 dark:text-zinc-400 mb-6 leading-relaxed text-sm flex-grow">{txt(service.description)}</p>
 
         <div className="space-y-3 mb-8">

@@ -112,6 +112,17 @@ const ServiceModal: React.FC<ServiceModalProps> = ({ service, isOpen, onClose })
                     <span className="w-6 h-6"><FaTimes /></span>
                 </button>
 
+                {/* Service Image Banner - If available */}
+                {service.image && (
+                    <div className="w-full h-48 md:h-64 rounded-2xl overflow-hidden mb-8 shadow-lg">
+                        <img
+                            src={service.image}
+                            alt={localized(service.title)}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                )}
+
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Service Details */}
                     <div className="space-y-6">
@@ -282,259 +293,272 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                     {localized(service.description)}
                 </p>
 
-                {/* Priority 1: Social Media Visual Artifact */}
-                {isSocialMedia && (
+                {/* Service Image (Priority 0) */}
+                {service.image ? (
                     <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        {/* Floating 3D Mockups */}
-                        <div className="absolute inset-0 flex items-center justify-center perspective-1000">
-                            {/* Phone Mockup */}
-                            <motion.div
-                                animate={{ y: [0, -5, 0], rotate: [-2, 2, -2] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-24 h-40 bg-slate-900 rounded-[18px] border-4 border-slate-900 shadow-xl relative z-10 transform rotate-[-5deg]"
-                            >
-                                <div className="w-full h-full bg-slate-800 rounded-[14px] overflow-hidden relative">
-                                    <img src="/foriphonecard.jpg" alt="Content" className="w-full h-full object-cover opacity-80" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
-                                            <span className="w-3 h-3 text-white ml-0.5 flex items-center justify-center"><FaPlay /></span>
+                        <img
+                            src={service.image}
+                            alt={localized(service.title)}
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                        />
+                    </div>
+                ) : (
+                    <>
+                        {/* Priority 1: Social Media Visual Artifact */}
+                        {isSocialMedia && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                {/* Floating 3D Mockups */}
+                                <div className="absolute inset-0 flex items-center justify-center perspective-1000">
+                                    {/* Phone Mockup */}
+                                    <motion.div
+                                        animate={{ y: [0, -5, 0], rotate: [-2, 2, -2] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="w-24 h-40 bg-slate-900 rounded-[18px] border-4 border-slate-900 shadow-xl relative z-10 transform rotate-[-5deg]"
+                                    >
+                                        <div className="w-full h-full bg-slate-800 rounded-[14px] overflow-hidden relative">
+                                            <img src="/foriphonecard.jpg" alt="Content" className="w-full h-full object-cover opacity-80" />
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                                                    <span className="w-3 h-3 text-white ml-0.5 flex items-center justify-center"><FaPlay /></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Floating Logos */}
+                                    <motion.div
+                                        animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-4 right-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
+                                    >
+                                        <img src="/logos/instagram.svg" alt="IG" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-8 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
+                                    >
+                                        <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, -6, 0], x: [0, -3, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        className="absolute top-10 left-6 w-7 h-7 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-0"
+                                    >
+                                        <img src="/logos/youtube.svg" alt="YT" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Priority 2: Brand Growth Visual Artifact */}
+                        {isBrandGrowth && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Central Chart Element */}
+                                    <motion.div
+                                        animate={{ scale: [1, 1.05, 1] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                        className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-500/30"
+                                    >
+                                        <span className="w-8 h-8 text-blue-500"><FaChartLine /></span>
+                                    </motion.div>
+
+                                    {/* Floating Ad Platform Logos */}
+                                    <motion.div
+                                        animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-6 right-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
+                                    >
+                                        <img src="/logos/google-ads.svg" alt="Google Ads" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
+                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-6 left-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
+                                    >
+                                        <img src="/logos/meta.svg" alt="Meta" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, -8, 0], x: [0, -8, 0] }}
+                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        className="absolute top-8 left-10 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5"
+                                    >
+                                        <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Priority 3: UI/UX Design Visual Artifact */}
+                        {isUIUX && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Abstract UI Elements */}
+                                    <div className="absolute inset-0 opacity-20 dark:opacity-10">
+                                        <div className="absolute top-4 left-4 w-24 h-16 bg-blue-500 rounded-lg" />
+                                        <div className="absolute bottom-4 right-4 w-24 h-24 bg-purple-500 rounded-full" />
+                                    </div>
+
+                                    {/* Floating Design Tool Logos */}
+                                    <motion.div
+                                        animate={{ rotate: [0, 10, 0] }}
+                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center p-3 border border-slate-100 dark:border-white/5 z-10"
+                                    >
+                                        <img src="/logos/figma.svg" alt="Figma" className="w-full h-full object-contain" />
+                                    </motion.div>
+
+                                    <motion.div
+                                        animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/react.svg" alt="React" className="w-full h-full object-contain" />
+                                    </motion.div>
+
+                                    <motion.div
+                                        animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
+                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/tailwindcss.svg" alt="Tailwind" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Priority 4: Web Development Visual Artifact */}
+                        {isWebDev && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Code Window */}
+                                    <div className="w-32 h-24 bg-slate-900 rounded-lg shadow-xl border border-slate-700 p-2 relative z-10 transform -rotate-3">
+                                        <div className="flex gap-1 mb-2">
+                                            <div className="w-2 h-2 rounded-full bg-red-500" />
+                                            <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                                            <div className="w-2 h-2 rounded-full bg-green-500" />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <div className="h-1 w-16 bg-slate-700 rounded" />
+                                            <div className="h-1 w-12 bg-slate-700 rounded ml-2" />
+                                            <div className="h-1 w-20 bg-slate-700 rounded ml-2" />
                                         </div>
                                     </div>
-                                </div>
-                            </motion.div>
 
-                            {/* Floating Logos */}
-                            <motion.div
-                                animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-4 right-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
-                            >
-                                <img src="/logos/instagram.svg" alt="IG" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
-                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-8 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-20"
-                            >
-                                <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, -6, 0], x: [0, -3, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-10 left-6 w-7 h-7 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 z-0"
-                            >
-                                <img src="/logos/youtube.svg" alt="YT" className="w-full h-full object-contain" />
-                            </motion.div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Priority 2: Brand Growth Visual Artifact */}
-                {isBrandGrowth && (
-                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Central Chart Element */}
-                            <motion.div
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-500/30"
-                            >
-                                <span className="w-8 h-8 text-blue-500"><FaChartLine /></span>
-                            </motion.div>
-
-                            {/* Floating Ad Platform Logos */}
-                            <motion.div
-                                animate={{ y: [0, -10, 0], x: [0, 5, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-6 right-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
-                            >
-                                <img src="/logos/google-ads.svg" alt="Google Ads" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 10, 0], x: [0, -5, 0] }}
-                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-6 left-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
-                            >
-                                <img src="/logos/meta.svg" alt="Meta" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, -8, 0], x: [0, -8, 0] }}
-                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-8 left-10 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5"
-                            >
-                                <img src="/logos/tiktok.svg" alt="TikTok" className="w-full h-full object-contain" />
-                            </motion.div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Priority 3: UI/UX Design Visual Artifact */}
-                {isUIUX && (
-                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Abstract UI Elements */}
-                            <div className="absolute inset-0 opacity-20 dark:opacity-10">
-                                <div className="absolute top-4 left-4 w-24 h-16 bg-blue-500 rounded-lg" />
-                                <div className="absolute bottom-4 right-4 w-24 h-24 bg-purple-500 rounded-full" />
-                            </div>
-
-                            {/* Floating Design Tool Logos */}
-                            <motion.div
-                                animate={{ rotate: [0, 10, 0] }}
-                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center p-3 border border-slate-100 dark:border-white/5 z-10"
-                            >
-                                <img src="/logos/figma.svg" alt="Figma" className="w-full h-full object-contain" />
-                            </motion.div>
-
-                            <motion.div
-                                animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/react.svg" alt="React" className="w-full h-full object-contain" />
-                            </motion.div>
-
-                            <motion.div
-                                animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
-                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/tailwindcss.svg" alt="Tailwind" className="w-full h-full object-contain" />
-                            </motion.div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Priority 4: Web Development Visual Artifact */}
-                {isWebDev && (
-                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Code Window */}
-                            <div className="w-32 h-24 bg-slate-900 rounded-lg shadow-xl border border-slate-700 p-2 relative z-10 transform -rotate-3">
-                                <div className="flex gap-1 mb-2">
-                                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="h-1 w-16 bg-slate-700 rounded" />
-                                    <div className="h-1 w-12 bg-slate-700 rounded ml-2" />
-                                    <div className="h-1 w-20 bg-slate-700 rounded ml-2" />
+                                    {/* Floating Tech Logos */}
+                                    <motion.div
+                                        animate={{ y: [0, -10, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-4 right-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/nextdotjs.svg" alt="Next.js" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-4 left-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/shopify.svg" alt="Shopify" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ scale: [1, 1.1, 1] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
+                                    >
+                                        <img src="/logos/typescript.svg" alt="TS" className="w-full h-full object-contain" />
+                                    </motion.div>
                                 </div>
                             </div>
+                        )}
 
-                            {/* Floating Tech Logos */}
-                            <motion.div
-                                animate={{ y: [0, -10, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-4 right-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/nextdotjs.svg" alt="Next.js" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
-                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-4 left-6 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/shopify.svg" alt="Shopify" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
-                            >
-                                <img src="/logos/typescript.svg" alt="TS" className="w-full h-full object-contain" />
-                            </motion.div>
-                        </div>
-                    </div>
-                )}
+                        {/* Priority 5: Virtual Assistance Visual Artifact */}
+                        {isVA && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Central Task Element */}
+                                    <motion.div
+                                        animate={{ rotate: [0, 5, 0, -5, 0] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                        className="w-20 h-24 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-white/10 p-3 flex flex-col gap-2 relative z-10"
+                                    >
+                                        <div className="w-full h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                        <div className="w-3/4 h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                        <div className="flex items-center gap-2 mt-auto">
+                                            <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                                                <span className="w-3 h-3 text-green-500"><FaCheck /></span>
+                                            </div>
+                                            <div className="w-8 h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                        </div>
+                                    </motion.div>
 
-                {/* Priority 5: Virtual Assistance Visual Artifact */}
-                {isVA && (
-                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Central Task Element */}
-                            <motion.div
-                                animate={{ rotate: [0, 5, 0, -5, 0] }}
-                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-20 h-24 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-white/10 p-3 flex flex-col gap-2 relative z-10"
-                            >
-                                <div className="w-full h-2 bg-slate-100 dark:bg-white/10 rounded" />
-                                <div className="w-3/4 h-2 bg-slate-100 dark:bg-white/10 rounded" />
-                                <div className="flex items-center gap-2 mt-auto">
-                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
-                                        <span className="w-3 h-3 text-green-500"><FaCheck /></span>
-                                    </div>
-                                    <div className="w-8 h-2 bg-slate-100 dark:bg-white/10 rounded" />
+                                    {/* Floating Tool Logos */}
+                                    <motion.div
+                                        animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-6 right-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/google.svg" alt="Google" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
+                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-6 left-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/microsoft.svg" alt="Microsoft" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ scale: [1, 1.1, 1] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                        className="absolute top-10 left-6 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
+                                    >
+                                        <img src="/logos/openai.svg" alt="OpenAI" className="w-full h-full object-contain" />
+                                    </motion.div>
                                 </div>
-                            </motion.div>
+                            </div>
+                        )}
 
-                            {/* Floating Tool Logos */}
-                            <motion.div
-                                animate={{ y: [0, -8, 0], x: [0, 5, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-6 right-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/google.svg" alt="Google" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 8, 0], x: [0, -5, 0] }}
-                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-6 left-8 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/microsoft.svg" alt="Microsoft" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                className="absolute top-10 left-6 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0"
-                            >
-                                <img src="/logos/openai.svg" alt="OpenAI" className="w-full h-full object-contain" />
-                            </motion.div>
-                        </div>
-                    </div>
-                )}
+                        {/* Priority 6: Customer Support Visual Artifact */}
+                        {isSupport && (
+                            <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {/* Central Support Element */}
+                                    <motion.div
+                                        animate={{ scale: [1, 1.05, 1] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                                    >
+                                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 relative z-10">
+                                            <span className="w-8 h-8 text-white"><FaHeadset /></span>
+                                        </div>
+                                    </motion.div>
 
-                {/* Priority 6: Customer Support Visual Artifact */}
-                {isSupport && (
-                    <div className="mb-6 relative h-40 w-full bg-slate-100 dark:bg-slate-800/50 rounded-xl overflow-hidden border border-slate-200 dark:border-white/5 group-hover:border-blue-500/30 transition-colors">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            {/* Central Support Element */}
-                            <motion.div
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30 relative z-10">
-                                    <span className="w-8 h-8 text-white"><FaHeadset /></span>
+                                    {/* Floating Support Platform Logos */}
+                                    <motion.div
+                                        animate={{ y: [0, -10, 0], x: [0, 8, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                        className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/salesforce.svg" alt="Salesforce" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ y: [0, 10, 0], x: [0, -8, 0] }}
+                                        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                        className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
+                                    >
+                                        <img src="/logos/hubspot.svg" alt="HubSpot" className="w-full h-full object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        animate={{ scale: [1, 1.1, 1] }}
+                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                    >
+                                        <div className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0">
+                                            <span className="w-5 h-5 text-green-500"><FaWhatsapp /></span>
+                                        </div>
+                                    </motion.div>
                                 </div>
-                            </motion.div>
-
-                            {/* Floating Support Platform Logos */}
-                            <motion.div
-                                animate={{ y: [0, -10, 0], x: [0, 8, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute top-6 right-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/salesforce.svg" alt="Salesforce" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ y: [0, 10, 0], x: [0, -8, 0] }}
-                                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                className="absolute bottom-6 left-10 w-9 h-9 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-20"
-                            >
-                                <img src="/logos/hubspot.svg" alt="HubSpot" className="w-full h-full object-contain" />
-                            </motion.div>
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                            >
-                                <div className="absolute top-10 left-8 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5 z-0">
-                                    <span className="w-5 h-5 text-green-500"><FaWhatsapp /></span>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {/* Features Grid */}

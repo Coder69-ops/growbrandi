@@ -15,6 +15,8 @@ import { useToast } from '../../context/ToastContext';
 import { SortableItem } from '../../components/admin/SortableItem';
 import { Sparkles } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
+import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
+import { ImageIcon } from 'lucide-react';
 // import { logAction } from '../../services/auditService'; // Removed manual logging
 
 // Icon Picker Component
@@ -89,6 +91,7 @@ const AdminServices = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentService, setCurrentService] = useState<any>(null);
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+    const [isAssetPickerOpen, setIsAssetPickerOpen] = useState(false);
 
     const fetchServices = async () => {
         setLoading(true);
@@ -511,6 +514,24 @@ const AdminServices = () => {
                                         onChange={(icon) => updateField('icon', icon)}
                                     />
 
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-300">Visual Theme (Floating Logos)</label>
+                                        <select
+                                            value={currentService.visualType || 'none'}
+                                            onChange={(e) => updateField('visualType', e.target.value)}
+                                            className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            <option value="none">None (Image Only)</option>
+                                            <option value="social">Social Media (Phone + Logos)</option>
+                                            <option value="marketing">Marketing (Chart + Ad Logos)</option>
+                                            <option value="design">Design (UI Elements + Tools)</option>
+                                            <option value="development">Development (Code + Tech Stack)</option>
+                                            <option value="assistant">Virtual Assistant (Checklist + Tools)</option>
+                                            <option value="support">Customer Support (Headset + Platforms)</option>
+                                        </select>
+                                        <p className="text-xs text-slate-500 mt-1">Select animation overlay to show on top of the image.</p>
+                                    </div>
+
                                     <LocalizedInput
                                         label="Price Display"
                                         value={currentService.price}
@@ -576,6 +597,54 @@ const AdminServices = () => {
                                             <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${currentService.isPopular ? 'translate-x-4' : ''}`} />
                                         </div>
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Mark as Popular</span>
+                                    </div>
+                                </div>
+                                <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">
+                                    <h3 className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <ImageIcon size={18} className="text-pink-500" />
+                                        Service Image
+                                    </h3>
+
+                                    <div className="space-y-4">
+                                        {currentService.image ? (
+                                            <div className="relative aspect-video rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 group">
+                                                <img
+                                                    src={currentService.image}
+                                                    alt="Service cover"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => updateField('image', '')}
+                                                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="aspect-video rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 flex flex-col items-center justify-center text-slate-400 gap-2">
+                                                <ImageIcon size={24} />
+                                                <span className="text-sm">No image selected</span>
+                                            </div>
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsAssetPickerOpen(true)}
+                                            className="w-full py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex items-center justify-center gap-2"
+                                        >
+                                            <ImageIcon size={16} />
+                                            Select Image
+                                        </button>
+
+                                        <AssetPickerModal
+                                            isOpen={isAssetPickerOpen}
+                                            onClose={() => setIsAssetPickerOpen(false)}
+                                            onSelect={(url) => {
+                                                updateField('image', url);
+                                                setIsAssetPickerOpen(false);
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -668,7 +737,7 @@ const AdminServices = () => {
                 </Reorder.Group>
             )}
             <StatusModal />
-        </AdminPageLayout>
+        </AdminPageLayout >
     );
 };
 
