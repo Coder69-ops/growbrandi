@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { SUPPORTED_LANGUAGES } from '../src/utils/localization';
-import { useContactSettings } from '../src/hooks/useSiteContent';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 
 interface SEOProps {
     title: string;
@@ -38,7 +38,8 @@ const SEO: React.FC<SEOProps> = ({
     noIndex = false
 }) => {
     const location = useLocation();
-    const { content: contactContent } = useContactSettings();
+    const { settings } = useSiteSettings();
+
     const fullTitle = title === siteTitleSuffix ? title : `${title} | ${siteTitleSuffix}`;
     // Use window.location.href as default to capture the full localized URL
     const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
@@ -53,14 +54,14 @@ const SEO: React.FC<SEOProps> = ({
         "@context": "https://schema.org",
         "@type": "DigitalMarketingAgency",
         "name": "GrowBrandi",
-        "image": "https://growbrandi.com/growbrandi-logo.png",
+        "image": settings?.branding?.logoLight || "https://growbrandi.com/growbrandi-logo.png",
         "@id": "https://growbrandi.com",
         "url": "https://growbrandi.com",
-        "telephone": contactContent?.contact_info?.phone || "+8801755154194",
-        "email": contactContent?.contact_info?.email || "contact@growbrandi.com",
+        "telephone": settings?.contact?.phone || "+8801755154194",
+        "email": settings?.contact?.email || "contact@growbrandi.com",
         "address": {
             "@type": "PostalAddress",
-            "addressLocality": contactContent?.contact_info?.address || "Khulna",
+            "addressLocality": settings?.contact?.address || "Khulna",
             "addressCountry": "BD"
         },
         "priceRange": "$$$",
@@ -78,8 +79,8 @@ const SEO: React.FC<SEOProps> = ({
             "opens": "00:00",
             "closes": "23:59"
         },
-        "sameAs": contactContent?.social_links
-            ? Object.values(contactContent.social_links).filter(url => url && typeof url === 'string')
+        "sameAs": settings?.social
+            ? Object.values(settings.social).filter(url => url && typeof url === 'string')
             : [
                 "https://linkedin.com/company/growbrandi",
                 "https://twitter.com/growbrandi",
@@ -95,6 +96,9 @@ const SEO: React.FC<SEOProps> = ({
             <meta name="description" content={description} />
             {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
             <link rel="canonical" href={currentUrl} />
+
+            {/* Dynamic Favicon */}
+            {settings?.branding?.favicon && <link rel="icon" type="image/png" href={settings.branding.favicon} />}
 
             {/* Hreflang Tags */}
             {SUPPORTED_LANGUAGES.map(lang => (

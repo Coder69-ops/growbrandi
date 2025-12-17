@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import {
     FaCode, FaPalette, FaChartLine, FaBullhorn, FaVideo, FaHeadset, FaComments,
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
@@ -208,6 +209,7 @@ const Header: React.FC<HeaderProps> = () => {
     const location = useLocation();
     const { t } = useTranslation();
     const { getLocalizedPath } = useLocalizedPath();
+    const { settings } = useSiteSettings();
     const currentRoute = location.pathname;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<'services' | 'company' | null>(null);
@@ -256,13 +258,23 @@ const Header: React.FC<HeaderProps> = () => {
                             className="flex items-center gap-3 group hover:opacity-90 transition-all duration-200"
                             aria-label="GrowBrandi Home"
                         >
+                            {/* Light Mode Logo */}
                             <img
-                                src="/growbrandi-logo.png"
+                                src={settings?.branding?.logoLight || "/growbrandi-logo.png"}
                                 alt="GrowBrandi Logo"
                                 loading="eager"
                                 width="128"
                                 height="32"
-                                className="w-32 h-8 lg:w-48 lg:h-12 object-contain"
+                                className="w-32 h-8 lg:w-48 lg:h-12 object-contain block dark:hidden"
+                            />
+                            {/* Dark Mode Logo */}
+                            <img
+                                src={settings?.branding?.logoDark || "/growbrandi-logo.png"}
+                                alt="GrowBrandi Logo"
+                                loading="eager"
+                                width="128"
+                                height="32"
+                                className="w-32 h-8 lg:w-48 lg:h-12 object-contain hidden dark:block"
                             />
                         </button>
 
