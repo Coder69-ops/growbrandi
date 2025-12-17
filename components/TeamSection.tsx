@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaBriefcase, FaWhatsapp, FaCheckCircle } from 'react-icons/fa';
+import { FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaEnvelope, FaBriefcase, FaWhatsapp, FaCheckCircle } from 'react-icons/fa';
 // import { CONTACT_INFO } from '../constants'; // Removed
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
@@ -172,9 +172,9 @@ const TeamSection: React.FC = () => {
                                             {member.social && Object.entries(member.social).map(([platform, url]) => {
                                                 const icons: any = {
                                                     linkedin: <FaLinkedin className="w-4 h-4" />,
-                                                    twitter: <FaTwitter className="w-4 h-4" />,
+                                                    tiktok: <FaTiktok className="w-4 h-4" />,
                                                     github: <FaGithub className="w-4 h-4" />,
-                                                    dribbble: <FaDribbble className="w-4 h-4" />,
+                                                    goodfirms: <FaBuilding className="w-4 h-4" />,
                                                     instagram: <FaInstagram className="w-4 h-4" />,
                                                     email: <FaEnvelope className="w-4 h-4" />
                                                 };

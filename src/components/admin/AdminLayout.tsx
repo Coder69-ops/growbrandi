@@ -37,6 +37,7 @@ import { useAuth } from '../../context/AuthContext';
 
 import { useChatNotifications } from '../../hooks/chat/useNotifications';
 import { NotificationItem } from './NotificationItem';
+import { useSiteSettings } from '../../hooks/useSiteSettings';
 
 const AdminLayout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -48,6 +49,7 @@ const AdminLayout = () => {
 
     // Add Global Chat Notifications Hook
     const { unreadCount, notifications, markAsRead } = useChatNotifications();
+    const { settings } = useSiteSettings();
 
     // Handle scroll effect
     useEffect(() => {
@@ -167,13 +169,37 @@ const AdminLayout = () => {
                 <div className="h-24 flex items-center justify-center border-b border-slate-100/50 dark:border-slate-800/50 px-6 shrink-0">
                     {isSidebarOpen ? (
                         <div className="flex flex-col items-center">
-                            <img src="/growbrandi-logo.png" alt="GrowBrandAI" className="h-12 w-auto object-contain mb-1" />
+                            {/* Light Mode Logo */}
+                            <img
+                                src={settings?.branding?.logoLight || "/growbrandi-logo.png"}
+                                alt="GrowBrandAI"
+                                className="h-12 w-auto object-contain mb-1 block dark:hidden"
+                            />
+                            {/* Dark Mode Logo */}
+                            <img
+                                src={settings?.branding?.logoDark || "/growbrandi-logo.png"}
+                                alt="GrowBrandAI"
+                                className="h-12 w-auto object-contain mb-1 hidden dark:block"
+                            />
                             <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 font-semibold">
                                 Admin Console
                             </span>
                         </div>
                     ) : (
-                        <img src="/growbrandi-logo.png" alt="GB" className="w-10 h-10 object-contain" />
+                        <>
+                            {/* Light Mode Logo (Collapsed) */}
+                            <img
+                                src={settings?.branding?.logoLight || "/growbrandi-logo.png"}
+                                alt="GB"
+                                className="w-10 h-10 object-contain block dark:hidden"
+                            />
+                            {/* Dark Mode Logo (Collapsed) */}
+                            <img
+                                src={settings?.branding?.logoDark || "/growbrandi-logo.png"}
+                                alt="GB"
+                                className="w-10 h-10 object-contain hidden dark:block"
+                            />
+                        </>
                     )}
                 </div>
 

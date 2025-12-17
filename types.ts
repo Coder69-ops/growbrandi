@@ -79,9 +79,9 @@ export interface TeamMember {
   bookingUrl?: string;
   social: {
     linkedin?: string;
-    twitter?: string;
+    tiktok?: string;
     github?: string;
-    dribbble?: string;
+    goodfirms?: string;
     instagram?: string;
     email?: string;
     [key: string]: string | undefined;

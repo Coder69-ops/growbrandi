@@ -16,9 +16,9 @@ export interface SiteSettings {
     };
     social: {
         linkedin: string;
-        twitter: string;
+        tiktok: string;
         instagram: string;
-        dribbble: string;
+        goodfirms: string;
         whatsapp: string;
     };
     stats: Array<{

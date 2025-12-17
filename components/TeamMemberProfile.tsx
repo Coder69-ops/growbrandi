@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
+import { FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaArrowLeft, FaCheckCircle, FaMedal, FaUser, FaLightbulb, FaSearchPlus, FaCalendarCheck, FaBriefcase, FaEnvelope, FaInstagram } from 'react-icons/fa';
 import { useContent } from '../src/hooks/useContent';
 import { getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
@@ -160,10 +160,10 @@ const TeamMemberProfile: React.FC = () => {
                                             <FaLinkedin className="w-5 h-5" />
                                         </a>
                                     )}
-                                    {member.social.twitter && (
-                                        <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-white/5 hover:bg-[#1DA1F2] text-slate-500 dark:text-zinc-400 hover:text-white rounded-full transition-all duration-300 border border-slate-200 dark:border-white/5 hover:border-transparent">
-                                            <span className="sr-only">Twitter</span>
-                                            <FaTwitter className="w-5 h-5" />
+                                    {member.social.tiktok && (
+                                        <a href={member.social.tiktok} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-white/5 hover:bg-[#000000] text-slate-500 dark:text-zinc-400 hover:text-white rounded-full transition-all duration-300 border border-slate-200 dark:border-white/5 hover:border-transparent">
+                                            <span className="sr-only">TikTok</span>
+                                            <FaTiktok className="w-5 h-5" />
                                         </a>
                                     )}
                                     {member.social.github && (
@@ -172,10 +172,10 @@ const TeamMemberProfile: React.FC = () => {
                                             <FaGithub className="w-5 h-5" />
                                         </a>
                                     )}
-                                    {member.social.dribbble && (
-                                        <a href={member.social.dribbble} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-white/5 hover:bg-[#ea4c89] text-slate-500 dark:text-zinc-400 hover:text-white rounded-full transition-all duration-300 border border-slate-200 dark:border-white/5 hover:border-transparent">
-                                            <span className="sr-only">Dribbble</span>
-                                            <FaDribbble className="w-5 h-5" />
+                                    {member.social.goodfirms && (
+                                        <a href={member.social.goodfirms} target="_blank" rel="noopener noreferrer" className="p-3 bg-slate-100 dark:bg-white/5 hover:bg-[#ff6a00] text-slate-500 dark:text-zinc-400 hover:text-white rounded-full transition-all duration-300 border border-slate-200 dark:border-white/5 hover:border-transparent">
+                                            <span className="sr-only">GoodFirms</span>
+                                            <FaBuilding className="w-5 h-5" />
                                         </a>
                                     )}
                                     {member.social.instagram && (

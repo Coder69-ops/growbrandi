@@ -83,9 +83,9 @@ const SEO: React.FC<SEOProps> = ({
             ? Object.values(settings.social).filter(url => url && typeof url === 'string')
             : [
                 "https://linkedin.com/company/growbrandi",
-                "https://twitter.com/growbrandi",
+                "https://tiktok.com/@growbrandi",
                 "https://instagram.com/growbrandi",
-                "https://dribbble.com/growbrandi"
+                "https://www.goodfirms.co/company/growbrandi"
             ]
     });
 

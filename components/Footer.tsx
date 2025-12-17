@@ -2,14 +2,14 @@ import React, { useState, FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaLinkedin, FaTwitter, FaInstagram, FaDribbble, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
+import { FaLinkedin, FaTiktok, FaInstagram, FaBuilding, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar } from 'react-icons/fa';
 // import { APP_NAME, APP_TAGLINE, CONTACT_INFO } from '../constants'; // Removed
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useContent } from '../src/hooks/useContent';
 import { Service } from '../types';
 import { getLocalizedField } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
-import { useContactSettings } from '../src/hooks/useSiteContent';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 
 // --- Enhanced Footer Component ---
 const Footer: React.FC = () => {
@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const { getLocalizedPath } = useLocalizedPath();
-  const { content: contactContent } = useContactSettings();
+  const { settings } = useSiteSettings();
 
   const { data: services } = useContent<Service>('services');
 
@@ -48,9 +48,9 @@ const Footer: React.FC = () => {
   const getSocialIcon = (platform: string) => {
     switch (platform) {
       case 'linkedin': return <FaLinkedin className="w-4 h-4" />;
-      case 'twitter': return <FaTwitter className="w-4 h-4" />;
+      case 'tiktok': return <FaTiktok className="w-4 h-4" />;
       case 'instagram': return <FaInstagram className="w-4 h-4" />;
-      case 'dribbble': return <FaDribbble className="w-4 h-4" />;
+      case 'goodfirms': return <FaBuilding className="w-4 h-4" />;
       case 'whatsapp': return <FaWhatsapp className="w-4 h-4" />;
       default: return null;
     }
@@ -69,13 +69,23 @@ const Footer: React.FC = () => {
           {/* Brand Section - Spans full width on mobile, 4 cols on desktop */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-4 md:space-y-6">
             <Link to={getLocalizedPath('/')} className="flex items-center gap-3 group">
+              {/* Light Mode Logo */}
               <img
-                src="/growbrandi-logo.png"
+                src={settings?.branding?.logoLight || "/growbrandi-logo.png"}
                 alt="GrowBrandi Logo"
                 loading="lazy"
                 width="128"
                 height="32"
-                className="w-32 h-8 lg:w-48 lg:h-12 object-contain"
+                className="w-32 h-8 lg:w-48 lg:h-12 object-contain block dark:hidden"
+              />
+              {/* Dark Mode Logo */}
+              <img
+                src={settings?.branding?.logoDark || "/growbrandi-logo.png"}
+                alt="GrowBrandi Logo"
+                loading="lazy"
+                width="128"
+                height="32"
+                className="w-32 h-8 lg:w-48 lg:h-12 object-contain hidden dark:block"
               />
             </Link>
             <p className="text-slate-600 dark:text-zinc-400 text-sm leading-relaxed max-w-sm font-light">
@@ -94,8 +104,10 @@ const Footer: React.FC = () => {
 
             {/* Social Links */}
             <div className="flex gap-4 pt-2">
-              {contactContent?.social_links && Object.entries(contactContent.social_links).map(([platform, url]) => {
-                if (!url) return null;
+              {settings?.social && Object.entries(settings.social).map(([platform, url]) => {
+                const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp'];
+                if (!url || !supportedPlatforms.includes(platform)) return null;
+
                 return (
                   <a
                     key={platform}
@@ -161,18 +173,18 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 md:space-y-4">
               <li className="flex items-start gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaMapMarkerAlt className="w-4 h-4 text-slate-900 dark:text-white mt-0.5 shrink-0" />
-                <span>{contactContent?.contact_info?.address || 'San Francisco, CA'}</span>
+                <span>{settings?.contact?.address || 'San Francisco, CA'}</span>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaEnvelope className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href={`mailto:${contactContent?.contact_info?.email || 'contact@growbrandi.com'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  {contactContent?.contact_info?.email || 'contact@growbrandi.com'}
+                <a href={`mailto:${settings?.contact?.email || 'contact@growbrandi.com'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  {settings?.contact?.email || 'contact@growbrandi.com'}
                 </a>
               </li>
               <li className="flex items-center gap-3 text-slate-600 dark:text-zinc-400 text-sm font-light">
                 <FaPhone className="w-4 h-4 text-slate-900 dark:text-white shrink-0" />
-                <a href={`tel:${contactContent?.contact_info?.phone || '+15551234567'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  {contactContent?.contact_info?.phone || '+1 (555) 123-4567'}
+                <a href={`tel:${settings?.contact?.phone || '+15551234567'}`} className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                  {settings?.contact?.phone || '+1 (555) 123-4567'}
                 </a>
               </li>
             </ul>

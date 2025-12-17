@@ -2,7 +2,7 @@ import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone } from 'react-icons/fa';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
@@ -213,9 +213,9 @@ I would like to book this consultation.`;
     const getSocialIcon = (platform: string) => {
         switch (platform) {
             case 'linkedin': return FaLinkedin;
-            case 'twitter': return FaTwitter;
+            case 'tiktok': return FaTiktok;
             case 'instagram': return FaInstagram;
-            case 'dribbble': return FaDribbble;
+            case 'goodfirms': return FaBuilding;
             case 'whatsapp': return FaWhatsapp;
             default: return FaGithub;
         }

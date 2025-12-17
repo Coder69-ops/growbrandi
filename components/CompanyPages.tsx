@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { FaLightbulb, FaUsers, FaCheckCircle, FaLinkedin, FaTwitter, FaGithub, FaDribbble, FaInstagram, FaEnvelope, FaArrowRight, FaBriefcase, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { FaLightbulb, FaUsers, FaCheckCircle, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaEnvelope, FaArrowRight, FaBriefcase, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 // import { TEAM_MEMBERS } from '../constants'; // Removed
 import SEO from './SEO';
 import { BackgroundEffects } from './ui/BackgroundEffects';
@@ -183,9 +183,9 @@ export const AboutUsPage: React.FC = () => {
                           <span className="w-5 h-5"><FaLinkedin /></span>
                         </a>
                       )}
-                      {member.social.twitter && (
-                        <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" className="text-slate-500 dark:text-zinc-500 hover:text-blue-400 dark:hover:text-white transition-colors">
-                          <span className="w-5 h-5"><FaTwitter /></span>
+                      {member.social.tiktok && (
+                        <a href={member.social.tiktok} target="_blank" rel="noopener noreferrer" className="text-slate-500 dark:text-zinc-500 hover:text-blue-400 dark:hover:text-white transition-colors">
+                          <span className="w-5 h-5"><FaTiktok /></span>
                         </a>
                       )}
                     </div>
@@ -612,9 +612,9 @@ export const TeamPage: React.FC = () => {
                         if (!url) return null;
                         const icons = {
                           linkedin: <span className="w-4 h-4 inline-flex"><FaLinkedin /></span>,
-                          twitter: <span className="w-4 h-4 inline-flex"><FaTwitter /></span>,
+                          tiktok: <span className="w-4 h-4 inline-flex"><FaTiktok /></span>,
                           github: <span className="w-4 h-4 inline-flex"><FaGithub /></span>,
-                          dribbble: <span className="w-4 h-4 inline-flex"><FaDribbble /></span>,
+                          goodfirms: <span className="w-4 h-4 inline-flex"><FaBuilding /></span>,
                           instagram: <span className="w-4 h-4 inline-flex"><FaInstagram /></span>,
                           email: <span className="w-4 h-4 inline-flex"><FaEnvelope /></span>
                         };
