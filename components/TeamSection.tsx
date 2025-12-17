@@ -170,6 +170,9 @@ const TeamSection: React.FC = () => {
                                         {/* Social Links */}
                                         <div className="flex justify-center gap-3 pt-6 border-t border-slate-200 dark:border-white/10">
                                             {member.social && Object.entries(member.social).map(([platform, url]) => {
+                                                const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp', 'github', 'email'];
+                                                if (!url || !supportedPlatforms.includes(platform)) return null;
+
                                                 const icons: any = {
                                                     linkedin: <FaLinkedin className="w-4 h-4" />,
                                                     tiktok: <FaTiktok className="w-4 h-4" />,

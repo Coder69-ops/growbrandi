@@ -323,7 +323,8 @@ I would like to book this consultation.`;
 
                         <div className="flex space-x-4">
                             {contactContent?.social_links && Object.entries(contactContent.social_links).map(([platform, url], idx) => {
-                                if (!url) return null;
+                                const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp'];
+                                if (!url || !supportedPlatforms.includes(platform)) return null;
                                 const Icon = getSocialIcon(platform);
                                 return (
                                     <a key={idx} href={url as string} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">

@@ -609,7 +609,8 @@ export const TeamPage: React.FC = () => {
                     {/* Social Links */}
                     <div className="flex justify-center gap-3 mt-auto pt-6 border-t border-slate-200 dark:border-white/5 group-hover:border-slate-300 dark:group-hover:border-white/10 transition-colors duration-300">
                       {Object.entries(member.social).map(([platform, url]) => {
-                        if (!url) return null;
+                        const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp', 'email', 'github'];
+                        if (!url || !supportedPlatforms.includes(platform)) return null;
                         const icons = {
                           linkedin: <span className="w-4 h-4 inline-flex"><FaLinkedin /></span>,
                           tiktok: <span className="w-4 h-4 inline-flex"><FaTiktok /></span>,
