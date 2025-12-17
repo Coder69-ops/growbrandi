@@ -2,7 +2,7 @@ import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone } from 'react-icons/fa';
+import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone, FaGlobe } from 'react-icons/fa';
 import { generateProjectBrief } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
@@ -324,13 +324,25 @@ I would like to book this consultation.`;
                         </div>
 
                         <div className="flex space-x-4">
-                            {contactContent?.social_links && Object.entries(contactContent.social_links).map(([platform, url], idx) => {
-                                const supportedPlatforms = ['linkedin', 'tiktok', 'instagram', 'goodfirms', 'whatsapp'];
-                                if (!url || !supportedPlatforms.includes(platform)) return null;
-                                const Icon = getSocialIcon(platform);
+                            {settings?.social && Array.isArray(settings.social) && settings.social.map((link: any) => {
+                                if (!link.url || !link.enabled) return null;
+
+                                const getIcon = (iconName: string) => {
+                                    switch (iconName) {
+                                        case 'FaLinkedin': return <FaLinkedin className="w-4 h-4" />;
+                                        case 'FaTiktok': return <FaTiktok className="w-4 h-4" />;
+                                        case 'FaInstagram': return <FaInstagram className="w-4 h-4" />;
+                                        case 'FaBuilding': return <FaBuilding className="w-4 h-4" />;
+                                        case 'FaWhatsapp': return <FaWhatsapp className="w-4 h-4" />;
+                                        case 'FaGithub': return <FaGithub className="w-4 h-4" />;
+                                        case 'FaGlobe': return <FaGlobe className="w-4 h-4" />;
+                                        default: return <FaGlobe className="w-4 h-4" />;
+                                    }
+                                };
+
                                 return (
-                                    <a key={idx} href={url as string} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
-                                        <Icon className="w-4 h-4" />
+                                    <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white dark:bg-zinc-800/50 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-700 transition-all duration-300 shadow-sm dark:shadow-none">
+                                        {getIcon(link.icon)}
                                     </a>
                                 );
                             })}
