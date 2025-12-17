@@ -45,7 +45,7 @@ const AdminSettings = () => {
                         phone: '',
                         address: '',
                     },
-                    social: { linkedin: '', tiktok: '', instagram: '', goodfirms: '', whatsapp: '' },
+                    social: [],
                     stats: [
                         { number: '150+', icon: '🚀', label: { en: 'Projects Completed' } },
                         { number: '50+', icon: '🤝', label: { en: 'Happy Clients' } },
