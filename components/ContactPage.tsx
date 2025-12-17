@@ -16,6 +16,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 import { useContent } from '../src/hooks/useContent';
 import { useSiteContentData, useContactSettings } from '../src/hooks/useSiteContent';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import { SupportedLanguage } from '../src/utils/localization';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import SEO from './SEO';
@@ -28,6 +29,7 @@ export const ContactPage: React.FC = () => {
     const { t, i18n } = useTranslation();
     const { getText, content } = useSiteContentData();
     const { content: contactContent, getText: getContactText } = useContactSettings();
+    const { settings } = useSiteSettings();
     const { getLocalizedPath } = useLocalizedPath();
     const lang = i18n.language as SupportedLanguage;
     const location = useLocation();
