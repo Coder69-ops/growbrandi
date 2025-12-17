@@ -335,6 +335,9 @@ I would like to book this consultation.`;
                                         case 'FaBuilding': return <FaBuilding className="w-4 h-4" />;
                                         case 'FaWhatsapp': return <FaWhatsapp className="w-4 h-4" />;
                                         case 'FaGithub': return <FaGithub className="w-4 h-4" />;
+                                        case 'FaTwitter': return <FaTwitter className="w-4 h-4" />;
+                                        case 'FaYoutube': return <FaYoutube className="w-4 h-4" />;
+                                        case 'FaFacebook': return <FaFacebook className="w-4 h-4" />;
                                         case 'FaGlobe': return <FaGlobe className="w-4 h-4" />;
                                         default: return <FaGlobe className="w-4 h-4" />;
                                     }
