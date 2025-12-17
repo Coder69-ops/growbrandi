@@ -87,3 +87,11 @@ export interface TeamMember {
     [key: string]: string | undefined;
   };
 }
+
+export interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+  icon: string;
+  enabled: boolean;
+}

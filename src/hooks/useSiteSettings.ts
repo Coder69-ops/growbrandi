@@ -14,13 +14,13 @@ export interface SiteSettings {
         phone: string;
         address: string;
     };
-    social: {
-        linkedin: string;
-        tiktok: string;
-        instagram: string;
-        goodfirms: string;
-        whatsapp: string;
-    };
+    social: Array<{
+        id: string;
+        platform: string;
+        url: string;
+        icon: string;
+        enabled: boolean;
+    }>;
     stats: Array<{
         number: string;
         icon: string;
