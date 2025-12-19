@@ -346,7 +346,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                         type="text"
                                         value={formData.name}
                                         onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -361,7 +361,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                         type="email"
                                         value={formData.email}
                                         onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium"
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
                                         placeholder="john@company.com"
                                     />
                                 </div>
@@ -372,7 +372,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                 <textarea
                                     value={formData.notes}
                                     onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                                    className="w-full p-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all min-h-[120px] resize-none font-medium"
+                                    className="w-full p-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all min-h-[120px] resize-none font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
                                     placeholder="What are your growth goals?"
                                 />
                             </div>
