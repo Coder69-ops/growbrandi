@@ -74,13 +74,11 @@ const FreeGrowthCall = () => {
                     <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay brightness-100 contrast-150" />
 
                     {/* Top Glow - Blends with Header */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-blue-500/10 dark:bg-blue-500/5 blur-[120px] rounded-full" />
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-blue-500/5 dark:bg-blue-500/5 blur-[120px] rounded-full" />
 
-                    {/* Side Blobs */}
-                    <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-green-500/10 dark:bg-green-500/10 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen opacity-70" />
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-blue-600/10 dark:bg-blue-600/10 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen opacity-70" />
-
-                    {/* Animated Sparkles or subtle particles could go here */}
+                    {/* Side Blobs - Subtle */}
+                    <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-green-500/5 dark:bg-green-500/5 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen opacity-50" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/5 dark:bg-blue-600/5 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen opacity-50" />
                 </div>
 
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -247,14 +245,18 @@ const FreeGrowthCall = () => {
                             </div>
                         </div>
 
-                        <div className="w-full lg:w-3/5 grid sm:grid-cols-2 gap-8">
+                        <div className="w-full lg:w-3/5 grid sm:grid-cols-2 md:grid-cols-3 gap-6">
                             {(data?.whatToExpect || []).map((item: any, idx: number) => (
-                                <div key={idx} className="group bg-white dark:bg-slate-900/50 p-10 rounded-[2.5rem] border border-slate-200 dark:border-white/5 shadow-xl hover:-translate-y-2 transition-all duration-500 backdrop-blur-md">
-                                    <div className="w-16 h-16 bg-blue-600 text-white rounded-[1.5rem] flex items-center justify-center mb-8 shadow-lg shadow-blue-600/20 group-hover:rotate-6 transition-transform">
-                                        {idx % 2 === 0 ? <Zap size={32} /> : <TrendingUp size={32} />}
+                                <div key={idx} className="group bg-white dark:bg-slate-900/50 p-6 rounded-[2rem] border border-slate-200 dark:border-white/5 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 backdrop-blur-md">
+                                    <div className="w-14 h-14 bg-blue-600/10 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/20 group-hover:scale-110 transition-transform">
+                                        {item.icon ? (
+                                            <img src={item.icon} alt={t(item.title)} className="w-8 h-8 object-contain" />
+                                        ) : (
+                                            idx % 2 === 0 ? <Zap size={24} /> : <TrendingUp size={24} />
+                                        )}
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">{t(item.title)}</h3>
-                                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 tracking-tight">{t(item.title)}</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
                                         {t(item.description)}
                                     </p>
                                 </div>

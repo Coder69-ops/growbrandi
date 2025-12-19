@@ -6,7 +6,7 @@ import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { Save, Plus, Trash2, ArrowLeft, Loader2, Globe, Clock, MessageSquare, CheckCircle, Image as ImageIcon, Calendar, Briefcase, Sparkles, HelpCircle, Star, ShieldCheck } from 'lucide-react';
 import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
 import { useStatusModal } from '../../hooks/useStatusModal';
-import { LocalizedInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
+import { LocalizedInput, LocalizedTextArea, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { SupportedLanguage } from '../../utils/localization';
 import { AdminLoader } from '../../components/admin/AdminLoader';
 
@@ -45,7 +45,11 @@ const DEFAULT_DATA = {
     expect: {
         sectionTitle: { en: 'What happens on the call?' },
         sectionDescription: { en: 'No hard selling. This is a strategy session designed to uncover gaps and identify high-leverage opportunities.' },
-        checklist: ['30 min Discovery', 'Strategy Roadmap', 'Expert Insights']
+        checklist: [
+            { en: '30 min Discovery' },
+            { en: 'Strategy Roadmap' },
+            { en: 'Expert Insights' }
+        ]
     },
     whatToExpect: [
         { title: { en: 'Project Overview' }, description: { en: 'We analyze your current setup.' } },
@@ -83,7 +87,7 @@ const AdminFreeGrowthCallConfig = () => {
     // Image Picker State
     const [pickerOpen, setPickerOpen] = useState(false);
     const [activeImageField, setActiveImageField] = useState<{
-        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar';
+        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image';
         index: number;
     } | null>(null);
 
@@ -126,12 +130,20 @@ const AdminFreeGrowthCallConfig = () => {
                 newAvatars[activeImageField.index] = url;
             }
             setData({ ...data, hero: { ...data.hero, trustAvatars: newAvatars } });
+        } else if (activeImageField.type === 'expect_image') {
+            const newExpectItems = [...(data.whatToExpect || [])];
+            if (!newExpectItems[activeImageField.index]) {
+                newExpectItems[activeImageField.index] = { icon: url };
+            } else {
+                newExpectItems[activeImageField.index].icon = url;
+            }
+            setData({ ...data, whatToExpect: newExpectItems });
         }
         setPickerOpen(false);
         setActiveImageField(null);
     };
 
-    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar', index: number) => {
+    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image', index: number) => {
         setActiveImageField({ type, index });
         setPickerOpen(true);
     };
@@ -266,40 +278,38 @@ const AdminFreeGrowthCallConfig = () => {
                             <h3 className="text-lg font-semibold mb-4">Hero Section</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Tag Pill Text</label>
-                                    <input
-                                        type="text"
-                                        value={data.hero.tagPill?.[activeLanguage] || ''}
-                                        onChange={e => handleHeroChange('tagPill', e.target.value)}
-                                        className="w-full p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedInput
+                                        label="Tag Pill Text"
+                                        value={data.hero.tagPill}
+                                        onChange={(val) => setData({ ...data, hero: { ...data.hero, tagPill: val } })}
+                                        activeLanguage={activeLanguage}
                                         placeholder="Trusted by 500+ teams"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Headline</label>
                                     <p className="text-xs text-slate-500 mb-2">Use **text** to highlight in blue. Example: Schedule a **free growth call**</p>
-                                    <input
-                                        type="text"
-                                        value={data.hero.title?.[activeLanguage] || ''}
-                                        onChange={e => handleHeroChange('title', e.target.value)}
-                                        className="w-full p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedInput
+                                        label="Headline"
+                                        value={data.hero.title}
+                                        onChange={(val) => setData({ ...data, hero: { ...data.hero, title: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Subheadline</label>
-                                    <textarea
-                                        value={data.hero.description?.[activeLanguage] || ''}
-                                        onChange={e => handleHeroChange('description', e.target.value)}
-                                        className="w-full p-2 border rounded-lg h-24 dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedTextArea
+                                        label="Subheadline"
+                                        value={data.hero.description}
+                                        onChange={(val) => setData({ ...data, hero: { ...data.hero, description: val } })}
+                                        activeLanguage={activeLanguage}
+                                        rows={3}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">CTA Button Text</label>
-                                    <input
-                                        type="text"
-                                        value={data.hero.ctaText?.[activeLanguage] || ''}
-                                        onChange={e => handleHeroChange('ctaText', e.target.value)}
-                                        className="w-full p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedInput
+                                        label="CTA Button Text"
+                                        value={data.hero.ctaText}
+                                        onChange={(val) => setData({ ...data, hero: { ...data.hero, ctaText: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
 
@@ -356,18 +366,15 @@ const AdminFreeGrowthCallConfig = () => {
                                                         placeholder="500+"
                                                         className="w-full p-1.5 border rounded text-sm dark:bg-slate-800 dark:border-slate-600"
                                                     />
-                                                    <input
-                                                        value={stat.label?.[activeLanguage] || ''}
-                                                        onChange={(e) => {
+                                                    <LocalizedInput
+                                                        label="Label"
+                                                        value={stat.label}
+                                                        onChange={(val) => {
                                                             const newStats = [...(data.hero.stats || [])];
-                                                            newStats[index] = {
-                                                                ...newStats[index],
-                                                                label: { ...newStats[index].label, [activeLanguage]: e.target.value }
-                                                            };
+                                                            newStats[index] = { ...newStats[index], label: val };
                                                             setData({ ...data, hero: { ...data.hero, stats: newStats } });
                                                         }}
-                                                        placeholder="Label"
-                                                        className="w-full p-1.5 border rounded text-sm dark:bg-slate-800 dark:border-slate-600"
+                                                        activeLanguage={activeLanguage}
                                                     />
                                                 </div>
                                             </div>
@@ -450,12 +457,11 @@ const AdminFreeGrowthCallConfig = () => {
                                     <p className="text-xs text-slate-500 mt-1">Receive alerts when a booking is confirmed.</p>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1 dark:text-slate-300">Calendar Status Text</label>
-                                    <input
-                                        type="text"
-                                        value={data.booking?.statusText?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, booking: { ...data.booking, statusText: { ...data.booking.statusText, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600"
+                                    <LocalizedInput
+                                        label="Calendar Status Text"
+                                        value={data.booking?.statusText}
+                                        onChange={(val) => setData({ ...data, booking: { ...data.booking, statusText: val } })}
+                                        activeLanguage={activeLanguage}
                                         placeholder="Real-time availability • Verified"
                                     />
                                 </div>
@@ -469,50 +475,29 @@ const AdminFreeGrowthCallConfig = () => {
 
                             <div className="grid gap-4 p-4 border rounded-lg dark:border-slate-700 bg-blue-50/30 dark:bg-blue-900/10">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Section Title</label>
-                                    <input
-                                        value={data.expect?.sectionTitle?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, expect: { ...data.expect, sectionTitle: { ...data.expect.sectionTitle, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
+                                    <LocalizedInput
+                                        label="Section Title"
+                                        value={data.expect?.sectionTitle}
+                                        onChange={(val) => setData({ ...data, expect: { ...data.expect, sectionTitle: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Section Description</label>
-                                    <textarea
-                                        value={data.expect?.sectionDescription?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, expect: { ...data.expect, sectionDescription: { ...data.expect.sectionDescription, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 h-20"
+                                    <LocalizedTextArea
+                                        label="Section Description"
+                                        value={data.expect?.sectionDescription}
+                                        onChange={(val) => setData({ ...data, expect: { ...data.expect, sectionDescription: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Checklist Items</label>
-                                    <div className="space-y-2">
-                                        {(data.expect?.checklist || []).map((item: string, idx: number) => (
-                                            <div key={idx} className="flex gap-2">
-                                                <input
-                                                    value={item}
-                                                    onChange={(e) => {
-                                                        const newChecklist = [...data.expect.checklist];
-                                                        newChecklist[idx] = e.target.value;
-                                                        setData({ ...data, expect: { ...data.expect, checklist: newChecklist } });
-                                                    }}
-                                                    className="flex-1 p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
-                                                />
-                                                <button
-                                                    onClick={() => {
-                                                        const newChecklist = [...data.expect.checklist];
-                                                        newChecklist.splice(idx, 1);
-                                                        setData({ ...data, expect: { ...data.expect, checklist: newChecklist } });
-                                                    }}
-                                                    className="p-2 text-red-500"
-                                                ><Trash2 size={16} /></button>
-                                            </div>
-                                        ))}
-                                        <button
-                                            onClick={() => setData({ ...data, expect: { ...data.expect, checklist: [...(data.expect.checklist || []), 'New Item'] } })}
-                                            className="text-xs text-blue-600 font-medium"
-                                        >+ Add Item</button>
-                                    </div>
+                                    <LocalizedArrayInput
+                                        label="Checklist Items"
+                                        value={data.expect?.checklist || []}
+                                        onChange={(val) => setData({ ...data, expect: { ...data.expect, checklist: val } })}
+                                        activeLanguage={activeLanguage}
+                                        placeholder="Checklist Item"
+                                    />
                                 </div>
                             </div>
 
@@ -529,21 +514,47 @@ const AdminFreeGrowthCallConfig = () => {
                                     >
                                         <Trash2 size={16} />
                                     </button>
-                                    <div className="grid gap-4">
-                                        <input
-                                            value={item.title?.[activeLanguage] || ''}
-                                            onChange={(e) => handleChange('whatToExpect', 'title', e.target.value, index, activeLanguage)}
-                                            placeholder="Title"
-                                            className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 font-medium"
-                                        />
-                                        <textarea
-                                            value={item.description?.[activeLanguage] || ''}
-                                            onChange={(e) => handleChange('whatToExpect', 'description', e.target.value, index, activeLanguage)}
-                                            placeholder="Description"
-                                            className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm h-20"
-                                        />
+                                    <div className="flex gap-4">
+                                        <div
+                                            className="w-16 h-16 shrink-0 bg-slate-200 dark:bg-slate-800 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden relative border border-slate-300 dark:border-slate-700 hover:border-blue-500 transition-colors"
+                                            onClick={() => openPicker('expect_image', index)}
+                                        >
+                                            {item.icon ? (
+                                                <img src={item.icon} alt="Icon" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <ImageIcon className="text-slate-400" />
+                                            )}
+                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity text-white font-medium text-xs text-center p-1">
+                                                Add Icon
+                                            </div>
+                                        </div>
+                                        <div className="grid gap-4 flex-1">
+                                            <LocalizedInput
+                                                label="Title"
+                                                value={item.title}
+                                                onChange={(val) => {
+                                                    const newArray = [...data.whatToExpect];
+                                                    newArray[index] = { ...newArray[index], title: val };
+                                                    setData({ ...data, whatToExpect: newArray });
+                                                }}
+                                                activeLanguage={activeLanguage}
+                                            />
+                                            <LocalizedTextArea
+                                                label="Description"
+                                                value={item.description}
+                                                onChange={(val) => {
+                                                    const newArray = [...data.whatToExpect];
+                                                    newArray[index] = { ...newArray[index], description: val };
+                                                    setData({ ...data, whatToExpect: newArray });
+                                                }}
+                                                activeLanguage={activeLanguage}
+                                                rows={3}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
+
+
                             ))}
                             <button
                                 onClick={() => setData({ ...data, whatToExpect: [...(data.whatToExpect || []), { title: { en: 'New Item' }, description: { en: 'Description' } }] })}
@@ -560,20 +571,20 @@ const AdminFreeGrowthCallConfig = () => {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Section Badge</label>
-                                    <input
-                                        value={data.processBadge?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, processBadge: { ...data.processBadge, [activeLanguage]: e.target.value } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
+                                    <LocalizedInput
+                                        label="Section Badge"
+                                        value={data.processBadge}
+                                        onChange={(val) => setData({ ...data, processBadge: val })}
+                                        activeLanguage={activeLanguage}
                                         placeholder="Execution"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Section Title</label>
-                                    <input
-                                        value={data.processTitle?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, processTitle: { ...data.processTitle, [activeLanguage]: e.target.value } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
+                                    <LocalizedInput
+                                        label="Section Title"
+                                        value={data.processTitle}
+                                        onChange={(val) => setData({ ...data, processTitle: val })}
+                                        activeLanguage={activeLanguage}
                                         placeholder="From chaos to growth in 4 steps"
                                     />
                                 </div>
@@ -609,24 +620,41 @@ const AdminFreeGrowthCallConfig = () => {
 
                                         <div className="flex-1 grid gap-4">
                                             <div className="flex gap-4">
-                                                <input
-                                                    value={item.step?.[activeLanguage] || ''}
-                                                    onChange={(e) => handleChange('process', 'step', e.target.value, index, activeLanguage)}
-                                                    placeholder="Step Label"
-                                                    className="w-1/3 p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
-                                                />
-                                                <input
-                                                    value={item.title?.[activeLanguage] || ''}
-                                                    onChange={(e) => handleChange('process', 'title', e.target.value, index, activeLanguage)}
-                                                    placeholder="Step Title"
-                                                    className="w-2/3 p-2 border rounded dark:bg-slate-800 dark:border-slate-600 font-medium"
-                                                />
+                                                <div className="w-1/3">
+                                                    <LocalizedInput
+                                                        label="Step Label"
+                                                        value={item.step}
+                                                        onChange={(val) => {
+                                                            const newArray = [...data.process];
+                                                            newArray[index] = { ...newArray[index], step: val };
+                                                            setData({ ...data, process: newArray });
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                    />
+                                                </div>
+                                                <div className="w-2/3">
+                                                    <LocalizedInput
+                                                        label="Step Title"
+                                                        value={item.title}
+                                                        onChange={(val) => {
+                                                            const newArray = [...data.process];
+                                                            newArray[index] = { ...newArray[index], title: val };
+                                                            setData({ ...data, process: newArray });
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                    />
+                                                </div>
                                             </div>
-                                            <textarea
-                                                value={item.description?.[activeLanguage] || ''}
-                                                onChange={(e) => handleChange('process', 'description', e.target.value, index, activeLanguage)}
-                                                placeholder="Description"
-                                                className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm h-20"
+                                            <LocalizedTextArea
+                                                label="Description"
+                                                value={item.description}
+                                                onChange={(val) => {
+                                                    const newArray = [...data.process];
+                                                    newArray[index] = { ...newArray[index], description: val };
+                                                    setData({ ...data, process: newArray });
+                                                }}
+                                                activeLanguage={activeLanguage}
+                                                rows={3}
                                             />
                                         </div>
                                     </div>
@@ -645,11 +673,11 @@ const AdminFreeGrowthCallConfig = () => {
                         <div className="space-y-6">
                             <h3 className="text-lg font-semibold">Frequently Asked Questions</h3>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Section Title</label>
-                                <input
-                                    value={data.faqTitle?.[activeLanguage] || ''}
-                                    onChange={(e) => setData({ ...data, faqTitle: { ...data.faqTitle, [activeLanguage]: e.target.value } })}
-                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
+                                <LocalizedInput
+                                    label="Section Title"
+                                    value={data.faqTitle}
+                                    onChange={(val) => setData({ ...data, faqTitle: val })}
+                                    activeLanguage={activeLanguage}
                                     placeholder="Common questions"
                                 />
                             </div>
@@ -666,17 +694,26 @@ const AdminFreeGrowthCallConfig = () => {
                                         <Trash2 size={16} />
                                     </button>
                                     <div className="grid gap-4">
-                                        <input
-                                            value={item.question?.[activeLanguage] || ''}
-                                            onChange={(e) => handleChange('faq', 'question', e.target.value, index, activeLanguage)}
-                                            placeholder="Question"
-                                            className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 font-medium"
+                                        <LocalizedInput
+                                            label="Question"
+                                            value={item.question}
+                                            onChange={(val) => {
+                                                const newArray = [...data.faq];
+                                                newArray[index] = { ...newArray[index], question: val };
+                                                setData({ ...data, faq: newArray });
+                                            }}
+                                            activeLanguage={activeLanguage}
                                         />
-                                        <textarea
-                                            value={item.answer?.[activeLanguage] || ''}
-                                            onChange={(e) => handleChange('faq', 'answer', e.target.value, index, activeLanguage)}
-                                            placeholder="Answer"
-                                            className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm h-24"
+                                        <LocalizedTextArea
+                                            label="Answer"
+                                            value={item.answer}
+                                            onChange={(val) => {
+                                                const newArray = [...data.faq];
+                                                newArray[index] = { ...newArray[index], answer: val };
+                                                setData({ ...data, faq: newArray });
+                                            }}
+                                            activeLanguage={activeLanguage}
+                                            rows={4}
                                         />
                                     </div>
                                 </div>
@@ -721,24 +758,37 @@ const AdminFreeGrowthCallConfig = () => {
                                             </div>
                                         </div>
                                         <div className="grid gap-4">
-                                            <textarea
-                                                value={item.quote?.[activeLanguage] || ''}
-                                                onChange={(e) => handleChange('testimonials', 'quote', e.target.value, index, activeLanguage)}
-                                                placeholder="Client Quote"
-                                                className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm h-20"
+                                            <LocalizedTextArea
+                                                label="Client Quote"
+                                                value={item.quote}
+                                                onChange={(val) => {
+                                                    const newArray = [...data.testimonials];
+                                                    newArray[index] = { ...newArray[index], quote: val };
+                                                    setData({ ...data, testimonials: newArray });
+                                                }}
+                                                activeLanguage={activeLanguage}
+                                                rows={3}
                                             />
                                             <div className="grid grid-cols-2 gap-4">
-                                                <input
-                                                    value={item.author?.[activeLanguage] || ''}
-                                                    onChange={(e) => handleChange('testimonials', 'author', e.target.value, index, activeLanguage)}
-                                                    placeholder="Client Name"
-                                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
+                                                <LocalizedInput
+                                                    label="Client Name"
+                                                    value={item.author}
+                                                    onChange={(val) => {
+                                                        const newArray = [...data.testimonials];
+                                                        newArray[index] = { ...newArray[index], author: val };
+                                                        setData({ ...data, testimonials: newArray });
+                                                    }}
+                                                    activeLanguage={activeLanguage}
                                                 />
-                                                <input
-                                                    value={item.role?.[activeLanguage] || ''}
-                                                    onChange={(e) => handleChange('testimonials', 'role', e.target.value, index, activeLanguage)}
-                                                    placeholder="Role / Company"
-                                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
+                                                <LocalizedInput
+                                                    label="Role / Company"
+                                                    value={item.role}
+                                                    onChange={(val) => {
+                                                        const newArray = [...data.testimonials];
+                                                        newArray[index] = { ...newArray[index], role: val };
+                                                        setData({ ...data, testimonials: newArray });
+                                                    }}
+                                                    activeLanguage={activeLanguage}
                                                 />
                                             </div>
                                         </div>
@@ -755,11 +805,11 @@ const AdminFreeGrowthCallConfig = () => {
                             <div className="border-t border-slate-200 dark:border-slate-700 pt-6 mt-6">
                                 <h3 className="text-lg font-semibold mb-4">Featured Video Testimonial</h3>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Section Title</label>
-                                    <input
-                                        value={data.videoTestimonial?.sectionTitle?.[activeLanguage] || ''}
-                                        onChange={(e) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, sectionTitle: { ...data.videoTestimonial.sectionTitle, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 mb-4"
+                                    <LocalizedInput
+                                        label="Section Title"
+                                        value={data.videoTestimonial?.sectionTitle}
+                                        onChange={(val) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, sectionTitle: val } })}
+                                        activeLanguage={activeLanguage}
                                         placeholder="Why founders trust us"
                                     />
                                 </div>
@@ -792,25 +842,26 @@ const AdminFreeGrowthCallConfig = () => {
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-sm font-medium mb-1">Featured Quote</label>
-                                                <textarea
-                                                    value={data.videoTestimonial?.quote?.[activeLanguage] || ''}
-                                                    onChange={(e) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, quote: { ...data.videoTestimonial.quote, [activeLanguage]: e.target.value } } })}
-                                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm h-20"
+                                                <LocalizedTextArea
+                                                    label="Featured Quote"
+                                                    value={data.videoTestimonial?.quote}
+                                                    onChange={(val) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, quote: val } })}
+                                                    activeLanguage={activeLanguage}
+                                                    rows={3}
                                                 />
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
-                                                <input
-                                                    value={data.videoTestimonial?.author?.[activeLanguage] || ''}
-                                                    onChange={(e) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, author: { ...data.videoTestimonial.author, [activeLanguage]: e.target.value } } })}
-                                                    placeholder="Author Name"
-                                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
+                                                <LocalizedInput
+                                                    label="Author Name"
+                                                    value={data.videoTestimonial?.author}
+                                                    onChange={(val) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, author: val } })}
+                                                    activeLanguage={activeLanguage}
                                                 />
-                                                <input
-                                                    value={data.videoTestimonial?.role?.[activeLanguage] || ''}
-                                                    onChange={(e) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, role: { ...data.videoTestimonial.role, [activeLanguage]: e.target.value } } })}
-                                                    placeholder="Role"
-                                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
+                                                <LocalizedInput
+                                                    label="Role"
+                                                    value={data.videoTestimonial?.role}
+                                                    onChange={(val) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, role: val } })}
+                                                    activeLanguage={activeLanguage}
                                                 />
                                             </div>
                                         </div>
@@ -824,11 +875,11 @@ const AdminFreeGrowthCallConfig = () => {
                         <div className="space-y-6">
                             <h3 className="text-lg font-semibold">Trusted Brand Logos</h3>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Section Title</label>
-                                <input
-                                    value={data.logosTitle?.[activeLanguage] || ''}
-                                    onChange={(e) => setData({ ...data, logosTitle: { ...data.logosTitle, [activeLanguage]: e.target.value } })}
-                                    className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600"
+                                <LocalizedInput
+                                    label="Section Title"
+                                    value={data.logosTitle}
+                                    onChange={(val) => setData({ ...data, logosTitle: val })}
+                                    activeLanguage={activeLanguage}
                                     placeholder="TRUSTED BY INDUSTRY LEADERS"
                                 />
                             </div>
@@ -870,35 +921,33 @@ const AdminFreeGrowthCallConfig = () => {
                             <h3 className="text-lg font-semibold">Final CTA Section</h3>
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Headline</label>
-                                    <input
-                                        type="text"
-                                        value={data.finalCta?.title?.[activeLanguage] || ''}
-                                        onChange={e => setData({ ...data, finalCta: { ...data.finalCta, title: { ...data.finalCta.title, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedInput
+                                        label="Headline"
+                                        value={data.finalCta?.title}
+                                        onChange={(val) => setData({ ...data, finalCta: { ...data.finalCta, title: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Button Text</label>
-                                    <input
-                                        type="text"
-                                        value={data.finalCta?.buttonText?.[activeLanguage] || ''}
-                                        onChange={e => setData({ ...data, finalCta: { ...data.finalCta, buttonText: { ...data.finalCta.buttonText, [activeLanguage]: e.target.value } } })}
-                                        className="w-full p-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                                    <LocalizedInput
+                                        label="Button Text"
+                                        value={data.finalCta?.buttonText}
+                                        onChange={(val) => setData({ ...data, finalCta: { ...data.finalCta, buttonText: val } })}
+                                        activeLanguage={activeLanguage}
                                     />
                                 </div>
                             </div>
                         </div>
                     )}
                 </div>
-            </div>
+            </div >
             <StatusModal />
             <AssetPickerModal
                 isOpen={pickerOpen}
                 onClose={() => setPickerOpen(false)}
                 onSelect={handleImageSelect}
             />
-        </AdminPageLayout>
+        </AdminPageLayout >
     );
 };
 
