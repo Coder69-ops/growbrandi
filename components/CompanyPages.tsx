@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { FaLightbulb, FaUsers, FaCheckCircle, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaEnvelope, FaArrowRight, FaBriefcase, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 // import { TEAM_MEMBERS } from '../constants'; // Removed
-import SEO from './SEO';
 import { BackgroundEffects } from './ui/BackgroundEffects';
 import { GlassCard } from './ui/GlassCard';
 import { SectionHeading } from './ui/SectionHeading';
@@ -33,10 +32,7 @@ export const AboutUsPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title="About Us"
-        description="We're a passionate team of digital innovators, strategists, and creators dedicated to helping businesses thrive in the digital age."
-      />
+
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden min-h-[60vh] flex items-center justify-center transition-colors duration-300">
         <BackgroundEffects />
@@ -217,10 +213,7 @@ export const ProcessPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title={t('company.process.title')}
-        description={t('company.process.description')}
-      />
+
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
@@ -292,10 +285,7 @@ export const CaseStudiesPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title={t('company.case_studies.title')}
-        description={t('company.case_studies.description')}
-      />
+
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
@@ -404,10 +394,7 @@ export const CareersPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title={t('company.careers.title')}
-        description={t('company.careers.description')}
-      />
+
       {/* Hero Section */}
       <section className="py-24 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />
@@ -504,10 +491,7 @@ export const TeamPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title={t('company.team.title')}
-        description={t('company.team.description')}
-      />
+
       <section className="relative min-h-screen bg-slate-50 dark:bg-[#09090b] flex flex-col items-center justify-center overflow-hidden py-24 transition-colors duration-300">
         <BackgroundEffects />
         {/* Dynamic Background Image */}
@@ -734,10 +718,7 @@ export const BlogPage: React.FC = () => {
 
   return (
     <>
-      <SEO
-        title={t('company.blog.title')}
-        description={t('company.blog.description')}
-      />
+
       {/* Featured Post Hero Section */}
       <section className="pt-24 pb-12 px-4 bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300">
         <BackgroundEffects />

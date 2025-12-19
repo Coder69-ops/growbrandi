@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { PortfolioHero } from './portfolio/PortfolioHero';
 import { FeaturedProjects } from './portfolio/FeaturedProjects';
@@ -15,10 +14,7 @@ export const PortfolioPage: React.FC = () => {
 
     return (
         <>
-            <Helmet>
-                <title>{t('portfolio.meta.title', 'Portfolio | GrowBrandi - Digital Growth Agency')}</title>
-                <meta name="description" content={t('portfolio.meta.description', "Explore our portfolio of award-winning projects. We build digital empires with growth, content, and tech.")} />
-            </Helmet>
+
 
             <main className="bg-slate-50 dark:bg-black min-h-screen transition-colors duration-300">
                 <PortfolioHero />

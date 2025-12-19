@@ -19,6 +19,8 @@ import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FaPaperPlane, FaListUl } from 'react-icons/fa'; // Added imports
+import { createArticleSchema } from '../src/utils/schemas';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 
 // Custom Link Component for Markdown
 const MarkdownLink = ({ href, children, ...props }: any) => {
@@ -207,11 +209,30 @@ const BlogPostPage = () => {
     const excerpt = getLocalizedField(post.excerpt, lang);
     const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop";
 
+    const { settings } = useSiteSettings();
+
     // enhanced SEO
     const metaTitle = (getLocalizedField(post.seo?.metaTitle, lang) || title) as string;
     const metaDesc = (getLocalizedField(post.seo?.metaDescription, lang) || excerpt) as string;
     const keywordsRaw = getLocalizedField(post.seo?.keywords, lang);
     const keywords = typeof keywordsRaw === 'string' ? keywordsRaw.split(',').map(k => k.trim()) : [];
+
+    // Generate Article Schema
+    const articleSchema = createArticleSchema({
+        headline: metaTitle,
+        description: metaDesc,
+        image: image,
+        datePublished: post.date, // Assuming post.date is valid ISO string or simple date string
+        author: {
+            name: typeof post.author === 'object' ? post.author.name : (post.author || "GrowBrandi Team"),
+            url: typeof post.author === 'object' && post.author.role ? undefined : undefined // Could link to team page if we had slug
+        },
+        publisher: {
+            name: "GrowBrandi",
+            logoUrl: settings?.branding?.logoLight || "https://growbrandi.com/growbrandi-logo.png"
+        },
+        url: window.location.href
+    });
 
     return (
         <>
@@ -220,6 +241,7 @@ const BlogPostPage = () => {
                 description={metaDesc}
                 keywords={keywords}
                 ogImage={image}
+                schema={articleSchema}
             />
             <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300 pt-24 pb-20">
                 <BackgroundEffects />

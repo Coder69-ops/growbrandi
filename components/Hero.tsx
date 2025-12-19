@@ -11,10 +11,10 @@ import TestimonialsSlider from './TestimonialsSlider';
 import TeamSection from './TeamSection';
 import FAQ from './FAQ';
 import LazySection from './LazySection';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
-import SEO from './SEO';
 import { createOrganizationSchema } from '../src/utils/schemas';
 import { useContactSettings } from '../src/hooks/useSiteContent';
 
@@ -92,12 +92,11 @@ const HeroSection: React.FC = () => {
 
     return (
         <>
-            <SEO
-                title="GrowBrandi"
-                description={getHeroText('description') || "AI-Powered Digital Agency - Transform your business with cutting-edge solutions"}
-                keywords={['digital agency', 'web development', 'AI solutions', 'SEO', 'digital marketing', 'GrowBrandi']}
-                schema={organizationSchema}
-            />
+            <Helmet>
+                <script type="application/ld+json">
+                    {organizationSchema}
+                </script>
+            </Helmet>
             <div className="relative min-h-screen w-full overflow-hidden bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-white pt-24 lg:pt-32 pb-12 transition-colors duration-300">
                 {/* Background Effects */}
                 <div

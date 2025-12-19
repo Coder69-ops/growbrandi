@@ -184,3 +184,48 @@ export const createContactPageSchema = (contactInfo?: {
 
     return JSON.stringify(schema);
 };
+
+/**
+ * Create Article/BlogPosting schema
+ */
+export const createArticleSchema = (article: {
+    headline: string;
+    description: string;
+    image: string;
+    datePublished: string;
+    author: {
+        name: string;
+        url?: string;
+    };
+    publisher: {
+        name: string;
+        logoUrl: string;
+    };
+    url: string;
+}) => {
+    return JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": article.headline,
+        "description": article.description,
+        "image": article.image,
+        "datePublished": article.datePublished,
+        "author": {
+            "@type": "Person",
+            "name": article.author.name,
+            "url": article.author.url
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": article.publisher.name,
+            "logo": {
+                "@type": "ImageObject",
+                "url": article.publisher.logoUrl
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": article.url
+        }
+    });
+};
