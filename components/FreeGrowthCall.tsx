@@ -6,6 +6,7 @@ import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
 import { Calendar, CheckCircle, Clock, MapPin, MessageSquare, ArrowRight, Zap, Star, Play, Sparkles, TrendingUp, ChevronDown } from 'lucide-react';
 import BookingCalendar from './BookingCalendar';
 import TestimonialsSlider from './TestimonialsSlider';
+import HeroSocialSlider from './HeroSocialSlider';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 // Skeleton Component
@@ -153,28 +154,19 @@ const FreeGrowthCall = () => {
                                 </div>
                             )}
 
-                            {/* Author Quote - Glass Style */}
-                            {/* Author Quote - Glass Style */}
-                            {data?.testimonials?.[0] && (
-                                <div className="pt-6 lg:pt-10">
-                                    <div className="p-6 rounded-3xl bg-blue-500/5 dark:bg-white/5 border border-blue-200/20 dark:border-white/5 backdrop-blur-sm relative">
-                                        <Sparkles className="absolute -top-3 -left-3 text-blue-500 dark:text-blue-400 animate-pulse" size={24} />
-                                        <p className="text-slate-700 dark:text-slate-300 font-medium italic mb-4 leading-relaxed text-base lg:text-lg">"{t(data.testimonials[0].quote, 'They helped us grow 300% in 3 months.')}"</p>
-                                        <div className="flex items-center gap-3">
-                                            {data.testimonials[0].clientImage ? (
-                                                <img src={data.testimonials[0].clientImage} alt={t(data.testimonials[0].author)} className="w-10 h-10 rounded-full object-cover shadow-sm" />
-                                            ) : (
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs uppercase shadow-sm">
-                                                    {t(data.testimonials[0].author, 'J')?.[0]}
-                                                </div>
-                                            )}
-                                            <div>
-                                                <div className="font-bold text-slate-900 dark:text-white text-sm">{t(data.testimonials[0].author, 'Jane Doe')}</div>
-                                                <div className="text-xs text-slate-500 dark:text-slate-500 font-semibold uppercase tracking-wider">{t(data.testimonials[0].role, 'CEO, TechCorp')}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            {/* Hero Social Slider */}
+                            {data?.heroSlider && (
+                                <HeroSocialSlider
+                                    items={data.heroSlider.map((item: any) => ({
+                                        type: item.type || 'review',
+                                        content: t(item.content, 'Sample Content'),
+                                        author: t(item.author, 'Author Name'),
+                                        role: t(item.role, 'Role'),
+                                        image: item.image,
+                                        actionLabel: item.actionLabel,
+                                        actionUrl: item.actionUrl
+                                    }))}
+                                />
                             )}
                         </motion.div>
 

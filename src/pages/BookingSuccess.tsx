@@ -92,6 +92,20 @@ const BookingSuccess = () => {
                                     <span>{new Date(bookingData.date).toLocaleString()}</span>
                                 </div>
                             )}
+                            {/* Location Display */}
+                            {searchParams.get('location') && (
+                                <div className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                                    {searchParams.get('location') === 'whatsapp' ? (
+                                        // Simple icon placeholder if imports needed, or just text
+                                        <span className="text-green-500 font-bold">WA</span>
+                                    ) : (
+                                        <span className="text-blue-500 font-bold">GM</span>
+                                    )}
+                                    <span className="capitalize">
+                                        Location: {searchParams.get('location') === 'whatsapp' ? 'WhatsApp Call' : 'Google Meet'}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

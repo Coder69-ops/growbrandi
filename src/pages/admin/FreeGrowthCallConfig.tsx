@@ -41,6 +41,9 @@ const TRANSLATE_OPTIONS: Record<string, { fields?: string[], deepKeys?: string[]
     logos: {
         fields: ['logosTitle']
     },
+    heroSlider: {
+        complexArrayFields: { 'heroSlider': ['content', 'author', 'role', 'actionLabel'] }
+    },
     finalCta: {
         deepKeys: ['finalCta.title', 'finalCta.buttonText']
     }
@@ -59,6 +62,15 @@ const DEFAULT_DATA = {
             { number: '300%', label: { en: 'Avg. Growth' } }
         ]
     },
+    heroSlider: [
+        {
+            type: 'review',
+            content: { en: 'They helped us grow 300% in 3 months. Truly transformative.' },
+            author: { en: 'Jane Doe' },
+            role: { en: 'CEO, TechCorp' },
+            image: ''
+        }
+    ],
     booking: {
         enabled: true,
         notificationEmail: '',
@@ -119,20 +131,20 @@ const AdminFreeGrowthCallConfig = () => {
     const [data, setData] = useState<any>(DEFAULT_DATA);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'hero' | 'booking' | 'expect' | 'process' | 'faq' | 'social' | 'logos' | 'finalCta'>('hero');
+    const [activeTab, setActiveTab] = useState<'hero' | 'heroSlider' | 'booking' | 'expect' | 'process' | 'faq' | 'social' | 'logos' | 'finalCta'>('hero');
     const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
 
     // Image Picker State
     const [pickerOpen, setPickerOpen] = useState(false);
     const [activeImageField, setActiveImageField] = useState<{
-        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image';
+        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image';
         index: number;
     } | null>(null);
 
     const { isTranslating, handleAutoTranslate } = useAutoTranslate(
         data,
         setData,
-        TRANSLATE_OPTIONS[activeTab] || {}
+        TRANSLATE_OPTIONS[activeTab as keyof typeof TRANSLATE_OPTIONS] || {}
     );
 
     const {
@@ -162,13 +174,15 @@ const AdminFreeGrowthCallConfig = () => {
         fetchData();
     }, []);
 
+    // ... (rest of code) ...
+
     const handleImageSelect = (url: string) => {
         if (!activeImageField) return;
 
         if (activeImageField.type === 'logo') {
+            // ... existing logo logic ...
             const newLogos = [...(data.trustedLogos || [])];
             if (activeImageField.index === -1) {
-                // Add new
                 newLogos.push(url);
             } else {
                 newLogos[activeImageField.index] = url;
@@ -182,6 +196,14 @@ const AdminFreeGrowthCallConfig = () => {
                 newTestimonials[activeImageField.index].clientImage = url;
             }
             setData({ ...data, testimonials: newTestimonials });
+        } else if (activeImageField.type === 'hero_slider_image') {
+            const newSlider = [...(data.heroSlider || [])];
+            if (!newSlider[activeImageField.index]) {
+                newSlider[activeImageField.index] = { image: url };
+            } else {
+                newSlider[activeImageField.index].image = url;
+            }
+            setData({ ...data, heroSlider: newSlider });
         } else if (activeImageField.type === 'video_thumbnail') {
             setData({ ...data, videoTestimonial: { ...data.videoTestimonial, thumbnailUrl: url } });
         } else if (activeImageField.type === 'process_image') {
@@ -214,7 +236,7 @@ const AdminFreeGrowthCallConfig = () => {
         setActiveImageField(null);
     };
 
-    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image', index: number) => {
+    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image', index: number) => {
         setActiveImageField({ type, index });
         setPickerOpen(true);
     };
@@ -328,10 +350,11 @@ const AdminFreeGrowthCallConfig = () => {
                 <div className="w-full md:w-64 space-y-2">
                     {[
                         { id: 'hero', label: 'Hero Section', icon: Globe },
+                        { id: 'heroSlider', label: 'Hero Slider (Social)', icon: MessageSquare },
                         { id: 'booking', label: 'Booking Settings', icon: Calendar },
                         { id: 'expect', label: 'What to Expect', icon: Briefcase },
                         { id: 'process', label: 'Process Steps', icon: Sparkles },
-                        { id: 'social', label: 'Success Stories', icon: MessageSquare },
+                        { id: 'social', label: 'Success Stories', icon: Star },
                         { id: 'logos', label: 'Trusted Logos', icon: ShieldCheck },
                         { id: 'faq', label: 'FAQs', icon: HelpCircle },
                         { id: 'finalCta', label: 'Final CTA', icon: ArrowLeft },
@@ -473,6 +496,176 @@ const AdminFreeGrowthCallConfig = () => {
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'heroSlider' && (
+                        <div className="space-y-6">
+                            <div className="bg-yellow-50 dark:bg-yellow-900/10 p-4 rounded-lg flex gap-3 text-yellow-800 dark:text-yellow-200 text-sm mb-6 border border-yellow-200 dark:border-yellow-900/30">
+                                <Sparkles className="shrink-0" size={20} />
+                                <div>
+                                    <strong>Hero Auto-Slider</strong>
+                                    <p className="opacity-90 mt-1">
+                                        This slider replaces the static quote in the hero section. You can mix reviews, special offers, and service highlights.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                {(data.heroSlider || []).map((item: any, index: number) => (
+                                    <div key={index} className="p-4 border rounded-lg dark:border-slate-700 bg-white dark:bg-slate-900/50 relative group transition-all hover:shadow-md">
+                                        <button
+                                            onClick={() => {
+                                                const newArray = [...(data.heroSlider || [])];
+                                                newArray.splice(index, 1);
+                                                setData({ ...data, heroSlider: newArray });
+                                            }}
+                                            className="absolute top-2 right-2 p-1 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                            title="Remove Item"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+
+                                        <div className="flex flex-col md:flex-row gap-6">
+                                            {/* Image / Icon Picker */}
+                                            <div className="shrink-0">
+                                                <label className="block text-xs font-semibold text-slate-500 mb-2 uppercase">
+                                                    {item.type === 'review' ? 'Author Photo' : 'Icon / Image'}
+                                                </label>
+                                                <div
+                                                    className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden relative border border-slate-300 dark:border-slate-700 hover:border-blue-500 transition-colors group/img"
+                                                    onClick={() => {
+                                                        setActiveImageField({ type: 'testimonial_image', index }); // Reusing existing type logic, or need to add new type
+                                                        // Quick fix: let's reuse logic by adding a "hero_slider_image" type or similar.
+                                                        // Actually, I need to update handleImageSelect to support this new type.
+                                                        // Let's call it 'hero_slider_image' and update handleImageSelect separately.
+                                                        openPicker('hero_slider_image' as any, index);
+                                                    }}
+                                                >
+                                                    {item.image ? (
+                                                        <img src={item.image} alt="Item" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <ImageIcon className="text-slate-400" />
+                                                    )}
+                                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity text-white font-medium text-xs text-center p-1">
+                                                        Change
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex-1 space-y-4">
+                                                {/* Type Selector */}
+                                                <div>
+                                                    <label className="block text-xs font-semibold text-slate-500 mb-1 uppercase">Item Type</label>
+                                                    <div className="flex gap-2">
+                                                        {['review', 'offer', 'service'].map(t => (
+                                                            <button
+                                                                key={t}
+                                                                onClick={() => {
+                                                                    const newArray = [...(data.heroSlider || [])];
+                                                                    newArray[index] = { ...newArray[index], type: t };
+                                                                    setData({ ...data, heroSlider: newArray });
+                                                                }}
+                                                                className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border transition-all ${item.type === t
+                                                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                                                    : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300 dark:bg-slate-800 dark:border-slate-700'
+                                                                    }`}
+                                                            >
+                                                                {t}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <LocalizedTextArea
+                                                    label={item.type === 'review' ? "Review Content / Quote" : "Description / Content"}
+                                                    value={item.content}
+                                                    onChange={(val) => {
+                                                        const newArray = [...(data.heroSlider || [])];
+                                                        newArray[index] = { ...newArray[index], content: val };
+                                                        setData({ ...data, heroSlider: newArray });
+                                                    }}
+                                                    activeLanguage={activeLanguage}
+                                                    rows={2}
+                                                />
+
+                                                <div className="grid md:grid-cols-2 gap-4">
+                                                    <LocalizedInput
+                                                        label={item.type === 'review' ? "Author Name" : "Title / Heading"}
+                                                        value={item.author}
+                                                        onChange={(val) => {
+                                                            const newArray = [...(data.heroSlider || [])];
+                                                            newArray[index] = { ...newArray[index], author: val };
+                                                            setData({ ...data, heroSlider: newArray });
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                    />
+                                                    <LocalizedInput
+                                                        label={item.type === 'review' ? "Role / Company" : "Subtitle / Badge"}
+                                                        value={item.role}
+                                                        onChange={(val) => {
+                                                            const newArray = [...(data.heroSlider || [])];
+                                                            newArray[index] = { ...newArray[index], role: val };
+                                                            setData({ ...data, heroSlider: newArray });
+                                                        }}
+                                                        activeLanguage={activeLanguage}
+                                                    />
+                                                </div>
+
+                                                {item.type !== 'review' && (
+                                                    <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded border border-slate-100 dark:border-slate-700">
+                                                        <label className="block text-xs font-bold text-slate-400 mb-2 uppercase">Call to Action (Optional)</label>
+                                                        <div className="grid md:grid-cols-2 gap-4">
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    value={item.actionLabel || ''}
+                                                                    onChange={(e) => {
+                                                                        const newArray = [...(data.heroSlider || [])];
+                                                                        newArray[index] = { ...newArray[index], actionLabel: e.target.value };
+                                                                        setData({ ...data, heroSlider: newArray });
+                                                                    }}
+                                                                    placeholder="Button Text (e.g. Learn More)"
+                                                                    className="w-full text-sm p-2 border rounded dark:bg-slate-900 dark:border-slate-600"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    value={item.actionUrl || ''}
+                                                                    onChange={(e) => {
+                                                                        const newArray = [...(data.heroSlider || [])];
+                                                                        newArray[index] = { ...newArray[index], actionUrl: e.target.value };
+                                                                        setData({ ...data, heroSlider: newArray });
+                                                                    }}
+                                                                    placeholder="URL (e.g. /services)"
+                                                                    className="w-full text-sm p-2 border rounded dark:bg-slate-900 dark:border-slate-600"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                                <button
+                                    onClick={() => setData({
+                                        ...data,
+                                        heroSlider: [...(data.heroSlider || []), {
+                                            type: 'review',
+                                            content: { en: 'New Item' },
+                                            author: { en: 'Name' },
+                                            role: { en: 'Role' },
+                                            image: ''
+                                        }]
+                                    })}
+                                    className="w-full py-3 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-500 font-medium hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50/50 transition-all"
+                                >
+                                    <Plus size={18} /> Add Slider Item
+                                </button>
                             </div>
                         </div>
                     )}

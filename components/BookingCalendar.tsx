@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, addDays, startOfToday, isSameDay, parseISO, isBefore, setHours, setMinutes, addMinutes } from 'date-fns';
-import { ChevronLeft, ChevronRight, Clock, User, Mail, Calendar as CalendarIcon, CheckCircle, Loader2, Globe, MapPin } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Clock, User, Mail, Calendar as CalendarIcon, CheckCircle, Loader2, Globe, MapPin, MessageCircle, PenTool, Edit3 } from 'lucide-react';
 import { db } from '../src/lib/firebase';
 import { collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { FaWhatsapp } from 'react-icons/fa'; // Assuming react-icons is installed, if not fallback to Lucide
 
 interface BookingCalendarProps {
     className?: string;
 }
 
-const TIME_SLOTS_START = 9; // 9 AM
-const TIME_SLOTS_END = 17;   // 5 PM
-const SLOT_DURATION = 30;    // Minutes
+const TIME_SLOTS_START = 8; // Start a bit earlier for 1h slots
+const TIME_SLOTS_END = 20;   // Extend to evening
+const SLOT_DURATION = 60;    // 1 Hour
 
 const COMMON_TIMEZONES = [
     "UTC",
@@ -56,6 +57,13 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+
+    // Feature: Location Toggle
+    const [meetingType, setMeetingType] = useState<'google_meet' | 'whatsapp'>('google_meet');
+
+    // Feature: Custom Time
+    const [isCustomTime, setIsCustomTime] = useState(false);
+    const [customTimeValue, setCustomTimeValue] = useState('');
 
     // Timezone State
     const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
@@ -113,6 +121,20 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
 
     const slots = generateSlots();
 
+    // Handle Custom Time Input
+    const handleCustomTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value; // HH:mm
+        setCustomTimeValue(val);
+        if (val) {
+            const [hours, minutes] = val.split(':').map(Number);
+            const date = new Date(selectedDate);
+            date.setHours(hours, minutes, 0, 0);
+            setSelectedSlot(date.toISOString());
+        } else {
+            setSelectedSlot(null);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedSlot || !formData.name || !formData.email) return;
@@ -122,13 +144,15 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
             await addDoc(collection(db, 'bookings'), {
                 ...formData,
                 date: selectedSlot,
-                timezone: timezone, // Sacing Selected Timezone
+                timezone: timezone,
+                location: meetingType, // Storage of location preference
                 createdAt: serverTimestamp(),
                 status: 'scheduled',
                 source: 'Custom Calendar'
             });
 
-            navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}&date=${encodeURIComponent(selectedSlot)}`);
+            const locationQuery = meetingType === 'whatsapp' ? '&location=whatsapp' : '';
+            navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}&date=${encodeURIComponent(selectedSlot)}${locationQuery}`);
 
         } catch (error) {
             console.error("Booking failed:", error);
@@ -155,7 +179,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">Strategy Session</span>
                     </h2>
 
-                    <div className="space-y-5">
+                    <div className="space-y-4">
                         <div className="flex items-center gap-4 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
                             <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600 dark:text-blue-400">
                                 <Clock size={20} />
@@ -165,41 +189,62 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                 <span className="font-bold">30 Minutes</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
-                            <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg text-emerald-600 dark:text-emerald-400">
-                                <MapPin size={20} />
-                            </div>
-                            <div>
-                                <div className="text-xs text-slate-400 font-medium uppercase">Location</div>
-                                <span className="font-bold">Google Meet</span>
+
+                        {/* Location Selector */}
+                        <div className="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 space-y-3">
+                            <div className="text-xs text-slate-400 font-medium uppercase mb-1">Select Location</div>
+                            <div className="grid grid-cols-2 gap-2">
+                                <button
+                                    onClick={() => setMeetingType('google_meet')}
+                                    className={`flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border ${meetingType === 'google_meet'
+                                        ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shadow-sm'
+                                        : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500'}`}
+                                >
+                                    <MapPin size={16} /> Meet
+                                </button>
+                                <button
+                                    onClick={() => setMeetingType('whatsapp')}
+                                    className={`flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border ${meetingType === 'whatsapp'
+                                        ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 shadow-sm'
+                                        : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500'}`}
+                                >
+                                    <MessageCircle size={16} /> WhatsApp
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Selected Slot Preview */}
-                <div className="mt-10 lg:mt-0">
+                <div className="mt-8 lg:mt-0">
                     <AnimatePresence mode="wait">
                         {selectedSlot ? (
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className="p-5 bg-gradient-to-br from-blue-600 to-violet-600 rounded-2xl shadow-lg text-white relative overflow-hidden group"
+                                className={`p-5 rounded-2xl shadow-lg text-white relative overflow-hidden group ${meetingType === 'whatsapp'
+                                    ? 'bg-gradient-to-br from-green-500 to-emerald-600'
+                                    : 'bg-gradient-to-br from-blue-600 to-violet-600'
+                                    }`}
                             >
                                 <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                                     <Clock size={80} />
                                 </div>
                                 <div className="relative z-10">
-                                    <div className="text-blue-100 text-xs font-bold uppercase tracking-wider mb-1">Selected Time</div>
+                                    <div className="text-white/80 text-xs font-bold uppercase tracking-wider mb-1">Selected Time</div>
                                     <div className="text-2xl font-bold mb-1">
                                         {format(parseISO(selectedSlot), 'EEE, MMM d')}
                                     </div>
-                                    <div className="flex items-center gap-2 text-blue-50 font-medium text-lg">
+                                    <div className="flex items-center gap-2 text-white font-medium text-lg">
                                         {format(parseISO(selectedSlot), 'h:mm a')}
                                         <span className="text-xs opacity-70 bg-white/20 px-2 py-0.5 rounded-full">
                                             {timezone.split('/')[1] || timezone}
                                         </span>
+                                    </div>
+                                    <div className="mt-2 flex items-center gap-1.5 text-xs font-medium text-white/90">
+                                        {meetingType === 'whatsapp' ? <MessageCircle size={14} /> : <MapPin size={14} />}
+                                        via {meetingType === 'whatsapp' ? 'WhatsApp' : 'Google Meet'}
                                     </div>
                                 </div>
                             </motion.div>
@@ -226,7 +271,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         animate={{ opacity: 1, x: 0 }}
                         className="flex-1 flex flex-col"
                     >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                             <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Select Date & Time</h3>
 
                             {/* Timezone Selector */}
@@ -253,83 +298,103 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         </div>
 
                         {/* Date Strip */}
-                        <div className="mb-8">
-                            <div className="flex gap-3 overflow-x-auto pb-4 -mx-6 px-6 custom-scrollbar snap-x">
+                        <div className="mb-6">
+                            <div className="flex gap-2 overflow-x-auto pb-4 -mx-6 px-6 custom-scrollbar snap-x">
                                 {daysStub.map((day) => {
                                     const isSelected = isSameDay(day, selectedDate);
                                     return (
                                         <button
                                             key={day.toISOString()}
-                                            onClick={() => { setSelectedDate(day); setSelectedSlot(null); }}
-                                            className={`flex-shrink-0 snap-start w-[4.5rem] h-24 rounded-2xl flex flex-col items-center justify-center border transition-all duration-300 group relative overflow-hidden ${isSelected
-                                                ? 'bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/30 ring-2 ring-blue-200 dark:ring-blue-900 ring-offset-2 dark:ring-offset-[#09090b]'
+                                            onClick={() => { setSelectedDate(day); setSelectedSlot(null); setIsCustomTime(false); setCustomTimeValue(''); }}
+                                            className={`flex-shrink-0 snap-start w-16 h-20 rounded-xl flex flex-col items-center justify-center border transition-all duration-200 group relative overflow-hidden ${isSelected
+                                                ? 'bg-blue-600 border-blue-600 text-white shadow-lg ring-2 ring-blue-200 dark:ring-blue-900 ring-offset-2 dark:ring-offset-[#09090b]'
                                                 : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10'
                                                 }`}
                                         >
-                                            <span className={`text-xs font-semibold uppercase mb-1 tracking-wide ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>
+                                            <span className={`text-[10px] font-bold uppercase mb-0.5 tracking-wider ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>
                                                 {format(day, 'EEE')}
                                             </span>
-                                            <span className={`text-2xl font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
+                                            <span className={`text-xl font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                                                 {format(day, 'd')}
                                             </span>
-                                            {isSelected && (
-                                                <motion.div
-                                                    layoutId="activeIndicator"
-                                                    className="absolute bottom-1.5 w-1.5 h-1.5 bg-white rounded-full"
-                                                />
-                                            )}
                                         </button>
                                     );
                                 })}
                             </div>
                         </div>
 
-                        {/* Time Slots */}
-                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-[200px]">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                {loading ? (
-                                    <div className="col-span-full flex flex-col items-center justify-center py-16 text-slate-400 gap-3">
-                                        <Loader2 className="animate-spin text-blue-500" size={32} />
-                                        <span className="text-sm font-medium">Checking availability...</span>
-                                    </div>
-                                ) : slots.map((slot) => {
-                                    const isBooked = bookedSlots.includes(slot);
-                                    const isPast = isBefore(parseISO(slot), new Date());
-                                    const disabled = isBooked || isPast;
-                                    const isSelected = selectedSlot === slot;
+                        {/* Time Slots Area */}
+                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-[300px]">
+                            {/* Standard Slots Grid (Compact) */}
+                            {!isCustomTime ? (
+                                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+                                    {loading ? (
+                                        <div className="col-span-full flex flex-col items-center justify-center py-12 text-slate-400 gap-3">
+                                            <Loader2 className="animate-spin text-blue-500" size={28} />
+                                            <span className="text-sm font-medium">Loading slots...</span>
+                                        </div>
+                                    ) : slots.map((slot) => {
+                                        const isBooked = bookedSlots.includes(slot);
+                                        const isPast = isBefore(parseISO(slot), new Date());
+                                        const disabled = isBooked || isPast;
+                                        const isSelected = selectedSlot === slot;
 
-                                    return (
-                                        <button
-                                            key={slot}
-                                            disabled={disabled}
-                                            onClick={() => setSelectedSlot(slot)}
-                                            className={`py-4 px-4 rounded-xl border font-semibold text-sm transition-all duration-200 relative overflow-hidden group ${isSelected
-                                                ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/25 ring-2 ring-blue-200 dark:ring-blue-900'
-                                                : disabled
-                                                    ? 'bg-slate-50 dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed decoration-slice opacity-60'
-                                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-md hover:-translate-y-0.5'
-                                                }`}
-                                        >
-                                            <div className="relative z-10 flex items-center justify-center gap-2">
+                                        return (
+                                            <button
+                                                key={slot}
+                                                disabled={disabled}
+                                                onClick={() => setSelectedSlot(slot)}
+                                                className={`py-3 px-2 rounded-lg border font-semibold text-sm transition-all duration-200 relative overflow-hidden ${isSelected
+                                                    ? 'bg-blue-600 border-blue-600 text-white shadow-md'
+                                                    : disabled
+                                                        ? 'bg-slate-50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-60'
+                                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-sm'
+                                                    }`}
+                                            >
                                                 {format(parseISO(slot), 'h:mm a')}
-                                                {isSelected && <CheckCircle size={14} className="text-white" />}
-                                            </div>
-                                            {!disabled && !isSelected && (
-                                                <div className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            )}
-                                        </button>
-                                    );
-                                })}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-full py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/50">
+                                    <label className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-4 block">Pick a Specific Time</label>
+                                    <div className="relative">
+                                        <input
+                                            type="time"
+                                            value={customTimeValue}
+                                            onChange={handleCustomTimeChange}
+                                            className="px-6 py-4 text-2xl font-mono font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-black text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none shadow-sm"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-slate-500 mt-4 max-w-xs text-center">
+                                        Note: Custom times are subject to availability confirmation.
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Custom Time Toggle */}
+                            <div className="mt-6 flex justify-center">
+                                <button
+                                    onClick={() => { setIsCustomTime(!isCustomTime); setSelectedSlot(null); setCustomTimeValue(''); }}
+                                    className="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 transition"
+                                >
+                                    {isCustomTime ? (
+                                        <>Back to Slot Grid</>
+                                    ) : (
+                                        <>To Late? <Edit3 size={14} /> Set a Custom Time</>
+                                    )}
+                                </button>
                             </div>
                         </div>
 
-                        <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6 flex justify-end">
+                        <div className="mt-4 border-t border-slate-100 dark:border-slate-800 pt-6 flex justify-end">
                             <button
                                 disabled={!selectedSlot}
                                 onClick={() => setStep('details')}
-                                className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold shadow-xl shadow-slate-200/50 dark:shadow-none hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none transition-all flex items-center gap-3 text-lg"
+                                className="px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none transition-all flex items-center gap-2 text-base"
                             >
-                                Next Step <ChevronRight size={20} />
+                                Next Step <ChevronRight size={18} />
                             </button>
                         </div>
                     </motion.div>

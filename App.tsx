@@ -6,6 +6,7 @@ import Header from './components/Header';
 import SEO from './components/SEO';
 import PageLoader from './components/PageLoader';
 import FloatingActionButtons from './components/FloatingActionButtons';
+import GlobalOfferDisplay from './src/components/GlobalOfferDisplay';
 import Footer from './components/Footer';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
 // import { CONTACT_INFO } from './constants'; // Removed
@@ -325,6 +326,7 @@ ${servicesDetails}
 
   return (
     <>
+      {!isAdminRoute && <GlobalOfferDisplay />}
       {!isAdminRoute && (
         <SEO
           title={metadata.title}

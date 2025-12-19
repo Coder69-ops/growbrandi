@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { doc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { setDoc } from '../../lib/firestore-audit';
-import { Save, Globe, Phone, Mail, MapPin, BarChart3, Hash, Sticker, Loader2, Palette, Layout, Sparkles } from 'lucide-react';
+import { Save, Globe, Phone, Mail, MapPin, BarChart3, Hash, Sticker, Loader2, Palette, Layout, Sparkles, Megaphone } from 'lucide-react';
 import { LanguageTabs, LocalizedInput } from '../../components/admin/LocalizedFormFields';
 import { SupportedLanguage, ensureLocalizedFormat } from '../../utils/localization';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -15,6 +15,7 @@ const TABS = [
     { id: 'contact', label: 'Contact Info', icon: Phone },
     { id: 'social', label: 'Social Media', icon: Globe },
     { id: 'stats', label: 'Business Stats', icon: BarChart3 },
+    { id: 'promotions', label: 'Offer & Promotions', icon: Megaphone },
 ];
 
 const AdminSettings = () => {
@@ -349,6 +350,128 @@ const AdminSettings = () => {
                                                 </div>
                                             </div>
                                         ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Promotions / Offers */}
+                            {activeTab === 'promotions' && (
+                                <div className="glass-panel p-0 overflow-hidden">
+                                    <div className="p-6 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2.5 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-xl">
+                                                <Megaphone size={20} />
+                                            </div>
+                                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Promotion</h2>
+                                        </div>
+                                        <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
+                                    </div>
+
+                                    <div className="p-8 space-y-8">
+                                        {/* Master Toggle */}
+                                        <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                            <div>
+                                                <h3 className="font-bold text-slate-900 dark:text-white">Enable Promotion</h3>
+                                                <p className="text-sm text-slate-500">Show this offer on the website immediately.</p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    const newStatus = !settings.promotions?.enabled;
+                                                    setSettings({
+                                                        ...settings,
+                                                        promotions: {
+                                                            ...(settings.promotions || {}),
+                                                            enabled: newStatus,
+                                                            id: newStatus ? Date.now().toString() : settings.promotions?.id // Generate new ID on enable to reset dismissals
+                                                        }
+                                                    });
+                                                }}
+                                                className={`w-12 h-6 rounded-full transition-colors relative flex items-center ${settings.promotions?.enabled ? 'bg-green-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                            >
+                                                <div className={`w-4 h-4 rounded-full bg-white shadow-sm absolute transition-transform ${settings.promotions?.enabled ? 'translate-x-7' : 'translate-x-1'}`} />
+                                            </button>
+                                        </div>
+
+                                        {settings.promotions?.enabled && (
+                                            <div className="space-y-6 animate-in fade-in slide-in-from-top-4">
+                                                <div className="grid md:grid-cols-2 gap-6">
+                                                    <div className="space-y-6">
+                                                        <div>
+                                                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Display Type</label>
+                                                            <div className="grid grid-cols-3 gap-3">
+                                                                {['banner', 'widget', 'popup'].map(type => (
+                                                                    <button
+                                                                        key={type}
+                                                                        onClick={() => setSettings({ ...settings, promotions: { ...settings.promotions, type } })}
+                                                                        className={`p-3 rounded-lg border text-sm font-medium capitalize text-center transition-all ${settings.promotions?.type === type
+                                                                            ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-600 dark:text-blue-400 ring-1 ring-blue-500/20'
+                                                                            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                                                                            }`}
+                                                                    >
+                                                                        {type}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                            <p className="text-xs text-slate-400 mt-2">
+                                                                {settings.promotions?.type === 'banner' && "Shows at the very top of every page."}
+                                                                {settings.promotions?.type === 'widget' && "Floating card in bottom-left corner."}
+                                                                {settings.promotions?.type === 'popup' && "Centered modal overlay. High intrusion."}
+                                                            </p>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Target Link</label>
+                                                            <input
+                                                                type="text"
+                                                                value={settings.promotions?.link || ''}
+                                                                onChange={(e) => setSettings({ ...settings, promotions: { ...settings.promotions, link: e.target.value } })}
+                                                                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"
+                                                                placeholder="/contact or https://..."
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="glass-panel p-6 flex flex-col items-center justify-center">
+                                                        <ImageUpload
+                                                            label="Promotion Image / Icon"
+                                                            value={settings.promotions?.image || ''}
+                                                            onChange={(url) => setSettings({ ...settings, promotions: { ...settings.promotions, image: url } })}
+                                                            folder="promotions"
+                                                            className="aspect-video w-full max-w-[240px]"
+                                                        />
+                                                        <p className="text-[10px] text-slate-400 mt-2 text-center uppercase tracking-wider">
+                                                            Shown in Popups and Widgets. Banners use icons.
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                                                    <LocalizedInput
+                                                        label="Offer Headline"
+                                                        value={ensureLocalizedFormat(settings.promotions?.title)}
+                                                        onChange={(v) => setSettings({ ...settings, promotions: { ...settings.promotions, title: { ...(settings.promotions?.title || {}), ...v } } })} // Merging explicitly
+                                                        activeLanguage={activeLanguage}
+                                                        placeholder="e.g. Summer Sale: 50% Off!"
+                                                    />
+
+                                                    <LocalizedInput
+                                                        label="Description"
+                                                        value={ensureLocalizedFormat(settings.promotions?.description)}
+                                                        onChange={(v) => setSettings({ ...settings, promotions: { ...settings.promotions, description: { ...(settings.promotions?.description || {}), ...v } } })}
+                                                        activeLanguage={activeLanguage}
+                                                        placeholder="Short details about the offer..."
+                                                    />
+
+                                                    <LocalizedInput
+                                                        label="Button Text"
+                                                        value={ensureLocalizedFormat(settings.promotions?.buttonText)}
+                                                        onChange={(v) => setSettings({ ...settings, promotions: { ...settings.promotions, buttonText: { ...(settings.promotions?.buttonText || {}), ...v } } })}
+                                                        activeLanguage={activeLanguage}
+                                                        placeholder="Get Offer"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
