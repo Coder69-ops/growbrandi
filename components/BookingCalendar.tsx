@@ -125,7 +125,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
     return (
         <div className={`w-full max-w-5xl mx-auto bg-white dark:bg-[#09090b] rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col lg:flex-row ${className}`}>
             {/* Left Panel: Brand & Summary */}
-            <div className="w-full lg:w-1/3 bg-slate-50/50 dark:bg-slate-900/30 p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 backdrop-blur-sm">
+            <div className="w-full lg:w-1/3 bg-slate-50/50 dark:bg-slate-900/30 p-6 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 backdrop-blur-sm">
                 <div>
                     <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-violet-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20 mb-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
                         <CalendarIcon size={28} />

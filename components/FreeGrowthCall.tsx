@@ -69,7 +69,7 @@ const FreeGrowthCall = () => {
     return (
         <div className="min-h-screen bg-white dark:bg-[#09090b] font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 overflow-x-hidden">
             {/* Hero Section */}
-            <section className="relative overflow-visible pt-24 lg:pt-36 pb-20 lg:pb-32">
+            <section className="relative overflow-visible pt-12 lg:pt-10 pb-16 lg:pb-24">
                 {/* Background Gradients & Noise - Matches Hero.tsx */}
                 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                     <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay brightness-100 contrast-150" />
@@ -83,14 +83,14 @@ const FreeGrowthCall = () => {
                 </div>
 
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
-                    <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
+                    <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-start">
 
                         {/* Left Content */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="w-full lg:w-1/2 flex flex-col justify-start space-y-10 lg:pt-16"
+                            className="w-full lg:w-1/2 flex flex-col justify-start space-y-8 lg:space-y-10 lg:pt-4"
                         >
                             {/* Trust Pill */}
                             <motion.div
@@ -122,19 +122,19 @@ const FreeGrowthCall = () => {
                                 </div>
                             </motion.div>
 
-                            <div className="space-y-6">
-                                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.05] font-heading">
+                            <div className="space-y-4 lg:space-y-6">
+                                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.1] lg:leading-[1.05] font-heading">
                                     {renderTitle(t(data?.hero?.title, 'Schedule a **free growth call**'))}
                                 </h1>
-                                <p className="text-xl sm:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl font-medium">
+                                <p className="text-lg sm:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl font-medium">
                                     {t(data?.hero?.description, 'Talk with a growth expert and get a tailored roadmap.')}
                                 </p>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                            <div className="flex flex-col sm:flex-row gap-4 pt-2">
                                 <a
                                     href={getLocalizedPath('/free-growth-call#booking-calendar')}
-                                    className="inline-flex items-center justify-center px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[1.25rem] font-bold text-lg transition-all shadow-2xl shadow-blue-600/30 transform hover:-translate-y-1 hover:scale-105 active:scale-95"
+                                    className="inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[1.25rem] font-bold text-base lg:text-lg transition-all shadow-2xl shadow-blue-600/30 transform hover:-translate-y-1 hover:scale-105 active:scale-95 w-full sm:w-auto"
                                 >
                                     {t(data?.hero?.ctaText, 'Book your free call')}
                                     <ArrowRight className="ml-2 w-5 h-5" />
@@ -143,11 +143,11 @@ const FreeGrowthCall = () => {
 
                             {/* Stats Section */}
                             {(data?.hero?.stats && data.hero.stats.length > 0) && (
-                                <div className="flex flex-wrap gap-8 pt-8 border-t border-slate-200/50 dark:border-white/5 mt-2">
+                                <div className="flex flex-wrap gap-x-8 gap-y-4 pt-6 border-t border-slate-200/50 dark:border-white/5 mt-2">
                                     {data.hero.stats.map((stat: any, i: number) => (
                                         <div key={i} className="flex flex-col">
-                                            <div className="text-2xl font-bold text-slate-900 dark:text-white">{stat.number}</div>
-                                            <div className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t(stat.label)}</div>
+                                            <div className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">{stat.number}</div>
+                                            <div className="text-[10px] lg:text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{t(stat.label)}</div>
                                         </div>
                                     ))}
                                 </div>
@@ -156,10 +156,10 @@ const FreeGrowthCall = () => {
                             {/* Author Quote - Glass Style */}
                             {/* Author Quote - Glass Style */}
                             {data?.testimonials?.[0] && (
-                                <div className="pt-10">
+                                <div className="pt-6 lg:pt-10">
                                     <div className="p-6 rounded-3xl bg-blue-500/5 dark:bg-white/5 border border-blue-200/20 dark:border-white/5 backdrop-blur-sm relative">
                                         <Sparkles className="absolute -top-3 -left-3 text-blue-500 dark:text-blue-400 animate-pulse" size={24} />
-                                        <p className="text-slate-700 dark:text-slate-300 font-medium italic mb-4 leading-relaxed text-lg">"{t(data.testimonials[0].quote, 'They helped us grow 300% in 3 months.')}"</p>
+                                        <p className="text-slate-700 dark:text-slate-300 font-medium italic mb-4 leading-relaxed text-base lg:text-lg">"{t(data.testimonials[0].quote, 'They helped us grow 300% in 3 months.')}"</p>
                                         <div className="flex items-center gap-3">
                                             {data.testimonials[0].clientImage ? (
                                                 <img src={data.testimonials[0].clientImage} alt={t(data.testimonials[0].author)} className="w-10 h-10 rounded-full object-cover shadow-sm" />
@@ -208,13 +208,13 @@ const FreeGrowthCall = () => {
 
             {/* Trusted By Strip */}
             {(data?.trustedLogos || []).length > 0 && (
-                <section className="py-16 relative">
+                <section className="py-12 lg:py-16 relative">
                     <div className="absolute inset-0 bg-slate-50/50 dark:bg-white/[0.02] border-y border-slate-100 dark:border-white/5 -skew-y-1" />
                     <div className="container mx-auto px-4 relative z-10">
-                        <p className="text-center text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-10">
+                        <p className="text-center text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8 lg:mb-10">
                             {t(data?.logosTitle, 'TRUSTED BY INDUSTRY LEADERS')}
                         </p>
-                        <div className="flex flex-wrap justify-center items-center gap-10 md:gap-20">
+                        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10 lg:gap-20">
                             {data.trustedLogos.map((url: string, i: number) => (
                                 <img key={i} src={url} alt="Brand" className="h-6 md:h-8 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500" />
                             ))}
