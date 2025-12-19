@@ -161,7 +161,7 @@ const HeroSection: React.FC = () => {
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => navigate(getLocalizedPath('/contact'))}
+                                    onClick={() => navigate(getLocalizedPath('/free-growth-call'))}
                                     className="w-full sm:w-auto px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] dark:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all flex items-center justify-center gap-2"
                                 >
                                     <Zap className="w-5 h-5 fill-white dark:fill-black" />

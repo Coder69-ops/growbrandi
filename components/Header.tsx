@@ -328,7 +328,12 @@ const Header: React.FC<HeaderProps> = () => {
                         <div className="flex items-center gap-2 sm:gap-4">
                             <LanguageSwitcher />
                             <ThemeToggle />
-                            {/* Desktop CTA Button */}
+                            <button
+                                onClick={() => navigate(getLocalizedPath('/free-growth-call'))}
+                                className="hidden lg:flex items-center gap-2 text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 font-bold px-3 py-2.5 rounded-lg transition-colors duration-300"
+                            >
+                                {t('common.free_growth_call', 'Free Growth Call')}
+                            </button>
                             <button
                                 onClick={() => navigate(getLocalizedPath('/contact'))}
                                 className="hidden lg:flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-zinc-200 font-bold px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"

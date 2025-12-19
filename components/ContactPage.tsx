@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { FaMagic, FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaLinkedin, FaTiktok, FaGithub, FaBuilding, FaInstagram, FaCheckCircle, FaRobot, FaWhatsapp, FaArrowRight, FaPhone, FaGlobe, FaTwitter, FaYoutube, FaFacebook } from 'react-icons/fa';
+import { SiTrustpilot } from 'react-icons/si';
 import { generateProjectBrief } from '../services/geminiService';
 import { sendEmailData } from '../services/emailService';
 import LoadingSpinner from './LoadingSpinner';
@@ -338,6 +339,7 @@ I would like to book this consultation.`;
                                         case 'FaTwitter': return <FaTwitter className="w-4 h-4" />;
                                         case 'FaYoutube': return <FaYoutube className="w-4 h-4" />;
                                         case 'FaFacebook': return <FaFacebook className="w-4 h-4" />;
+                                        case 'SiTrustpilot': return <SiTrustpilot className="w-3.5 h-3.5" />;
                                         case 'FaGlobe': return <FaGlobe className="w-4 h-4" />;
                                         default: return <FaGlobe className="w-4 h-4" />;
                                     }

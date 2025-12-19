@@ -286,6 +286,7 @@ const AdminSettings = () => {
                                                         <option value="FaTwitter">Twitter/X</option>
                                                         <option value="FaYoutube">YouTube</option>
                                                         <option value="FaFacebook">Facebook</option>
+                                                        <option value="SiTrustpilot">Trustpilot</option>
                                                         <option value="FaGlobe">Website</option>
                                                     </select>
                                                 </div>

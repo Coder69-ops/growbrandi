@@ -16,6 +16,8 @@ import { SeoProvider, useSeo } from './src/context/SeoContext';
 
 // Lazy load components
 import { HomePage } from './components/Hero';
+import FreeGrowthCall from './components/FreeGrowthCall'; // Direct Import
+import BookingSuccess from './src/pages/BookingSuccess';
 const ServicesPage = React.lazy(() => import('./components/Services').then(module => ({ default: module.ServicesPage })));
 const PortfolioPage = React.lazy(() => import('./components/Portfolio').then(module => ({ default: module.PortfolioPage })));
 const ContactPage = React.lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
@@ -80,6 +82,7 @@ import AdminAuditLog from './src/pages/admin/AuditLog';
 import AdminOnlineUsers from './src/pages/admin/OnlineUsers';
 import AdminProfile from './src/pages/admin/Profile';
 import AdminAIConfig from './src/pages/admin/AIConfig';
+const AdminFreeGrowthCallConfig = React.lazy(() => import('./src/pages/admin/FreeGrowthCallConfig'));
 import AdminSeoSettings from './src/pages/admin/SeoSettings';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
@@ -373,6 +376,9 @@ ${servicesDetails}
 
                 {/* Localized Public Routes */}
                 <Route path="/:lang" element={<LanguageWrapper><PageWrapper><HomePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/free-growth-call" element={<PageWrapper><FreeGrowthCall /></PageWrapper>} />
+                <Route path="/:lang/free-growth-call" element={<LanguageWrapper><PageWrapper><FreeGrowthCall /></PageWrapper></LanguageWrapper>} />
+                <Route path="/booking-success" element={<PageWrapper><BookingSuccess /></PageWrapper>} />
 
                 {/* Services */}
                 <Route path="/:lang/services/brand-growth" element={<LanguageWrapper><PageWrapper><BrandGrowthPage /></PageWrapper></LanguageWrapper>} />
@@ -436,6 +442,7 @@ ${servicesDetails}
                     <Route path="online-users" element={<AdminOnlineUsers />} />
                     <Route path="profile" element={<AdminProfile />} />
                     <Route path="profile" element={<AdminProfile />} />
+                    <Route path="free-growth-call" element={<AdminFreeGrowthCallConfig />} />
                     <Route path="ai-config" element={<AdminAIConfig />} />
                     <Route path="seo-settings" element={<AdminSeoSettings />} />
                   </Route>

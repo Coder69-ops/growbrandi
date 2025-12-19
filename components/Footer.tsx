@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaLinkedin, FaTiktok, FaInstagram, FaBuilding, FaMapMarkerAlt, FaEnvelope, FaPhone, FaWhatsapp, FaStar, FaGithub, FaGlobe, FaTwitter, FaYoutube, FaFacebook } from 'react-icons/fa';
+import { SiTrustpilot } from 'react-icons/si';
 // import { APP_NAME, APP_TAGLINE, CONTACT_INFO } from '../constants'; // Removed
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useContent } from '../src/hooks/useContent';
@@ -119,6 +120,7 @@ const Footer: React.FC = () => {
                     case 'FaTwitter': return <FaTwitter className="w-4 h-4" />;
                     case 'FaYoutube': return <FaYoutube className="w-4 h-4" />;
                     case 'FaFacebook': return <FaFacebook className="w-4 h-4" />;
+                    case 'SiTrustpilot': return <SiTrustpilot className="w-3.5 h-3.5" />;
                     case 'FaGlobe': return <FaGlobe className="w-4 h-4" />;
                     default: return <FaGlobe className="w-4 h-4" />;
                   }
