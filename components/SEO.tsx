@@ -43,16 +43,15 @@ const SEO: React.FC<SEOProps> = ({
 
     const fullTitle = title === siteTitleSuffix ? title : `${title} | ${siteTitleSuffix}`;
 
-    // Base Origin
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://growbrandi.com';
+    // Base Origin - Hardcoded to master domain to prevent duplicates (www vs non-www, http vs https)
+    const origin = 'https://www.growbrandi.com';
 
     // Canonical Logic:
     // If provided, use it.
-    // Else, use current window location but ensure it's clean (no duplicates, absolute).
+    // Else, construct from master origin + current path (stripped of query params).
     // Note: User reported "Google chose different canonical than user". 
-    // This often happens when non-canonical pages self-reference. 
-    // Ideally, /fr/about should canonicalize to /fr/about.
-    const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href.split('?')[0] : '');
+    // This fixed by ensuring we ALWAYS point to https://www.growbrandi.com/...
+    const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? `${origin}${window.location.pathname}` : '');
 
     // Calculate generic path for hreflang (strip language prefix)
     const pathname = location.pathname;
