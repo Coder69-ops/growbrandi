@@ -234,12 +234,12 @@ const FreeGrowthCall = () => {
                                 {t(data?.expect?.sectionDescription, 'No hard selling. This is a strategy session designed to uncover gaps and identify high-leverage opportunities.')}
                             </p>
                             <div className="flex flex-col gap-4">
-                                {(data?.expect?.checklist || ['30 min Discovery', 'Strategy Roadmap', 'Expert Insights']).map((item: string, idx: number) => (
+                                {(data?.expect?.checklist || ['30 min Discovery', 'Strategy Roadmap', 'Expert Insights']).map((item: any, idx: number) => (
                                     <div key={idx} className="flex items-center gap-3 text-slate-700 dark:text-slate-300 font-bold bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-slate-100 dark:border-white/5 lg:self-start">
                                         <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white">
                                             <CheckCircle size={14} />
                                         </div>
-                                        {item}
+                                        {t(item)}
                                     </div>
                                 ))}
                             </div>
