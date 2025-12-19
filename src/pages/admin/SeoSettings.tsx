@@ -41,6 +41,10 @@ const SeoSettings = () => {
     const [teamRoutes, setTeamRoutes] = useState<Record<string, RouteMetadata>>({});
     const { showSuccess, showError, StatusModal } = useStatusModal(); // [NEW]
 
+    // New State for adding custom routes
+    const [newRoutePath, setNewRoutePath] = useState('');
+    const [newRouteTitle, setNewRouteTitle] = useState('');
+
     useEffect(() => {
         const init = async () => {
             setLoading(true);
@@ -230,7 +234,24 @@ const SeoSettings = () => {
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
         const baseUrl = 'https://www.growbrandi.com';
 
-        const allRoutes = { ...routeConfig, ...teamRoutes };
+        // Re-calculate custom routes inside here to be safe, or direct access if scope allows. 
+        // Scope allows access to settings.routes.
+        const dynamicCustomRoutes: Record<string, RouteMetadata> = {};
+        if (settings.routes) {
+            Object.keys(settings.routes).forEach(key => {
+                // Reuse same logic: if not in static config and starts with /, it's custom
+                if (!routeConfig[key] && !teamRoutes[key] && key.startsWith('/')) {
+                    dynamicCustomRoutes[key] = {
+                        path: key,
+                        title: 'Custom Page',
+                        description: '',
+                        keywords: []
+                    };
+                }
+            });
+        }
+
+        const allRoutes = { ...routeConfig, ...teamRoutes, ...dynamicCustomRoutes };
 
         Object.entries(allRoutes).forEach(([key, config]: [string, any]) => {
             const sitemapConfig = settings.sitemap?.[key];
@@ -281,10 +302,83 @@ const SeoSettings = () => {
     // Merge static routes and dynamic team routes
     const allRoutes = { ...routeConfig, ...teamRoutes };
 
-    const filteredRoutes = Object.entries(allRoutes).filter(([key, config]: [string, any]) =>
+    // [NEW] Add Custom Routes from Settings that are NOT in routeConfig or teamRoutes
+    const customRoutes: Record<string, RouteMetadata> = {};
+    if (settings.routes) {
+        Object.keys(settings.routes).forEach(key => {
+            // If key is not in allRoutes (and isn't a team key already merged), it's custom
+            if (!allRoutes[key] && key.startsWith('/')) { // Assumption: Custom routes start with /
+                customRoutes[key] = {
+                    path: key,
+                    title: settings.routes![key].title?.en || 'Custom Page', // Fallback to EN or default
+                    description: settings.routes![key].description?.en || '',
+                    keywords: []
+                };
+            }
+        });
+    }
+
+    const mergedRoutesForTable = { ...allRoutes, ...customRoutes };
+
+
+
+    const handleAddRoute = () => {
+        if (!newRoutePath.startsWith('/')) {
+            showError("Invalid Path", "Path must start with /");
+            return;
+        }
+        if (mergedRoutesForTable[newRoutePath]) {
+            showError("Duplicate Path", "This path already exists.");
+            return;
+        }
+
+        // Add to settings
+        setSettings(prev => ({
+            ...prev,
+            routes: {
+                ...prev.routes,
+                [newRoutePath]: {
+                    title: createEmptyLocalizedString(),
+                    description: createEmptyLocalizedString(),
+                    keywords: createEmptyLocalizedString(),
+                    noIndex: false
+                }
+            }
+        }));
+
+        // Update local customRoutes state/cache if needed, but easier to just let re-render handle it via settings dependency
+        // We'll initialize the EN title
+        handleRouteChange(newRoutePath, 'title', newRouteTitle);
+
+        setNewRoutePath('');
+        setNewRouteTitle('');
+        showSuccess("Route Added", "Custom route added. You can now configure its SEO.");
+    };
+
+    const handleDeleteRoute = (key: string) => {
+        if (!confirm(`Are you sure you want to delete settings for ${key}?`)) return;
+
+        setSettings(prev => {
+            const next = { ...prev };
+            if (next.routes) {
+                const newRoutes = { ...next.routes };
+                delete newRoutes[key];
+                next.routes = newRoutes;
+            }
+            // Also remove from sitemap if present
+            if (next.sitemap) {
+                const newSitemap = { ...next.sitemap };
+                delete newSitemap[key];
+                next.sitemap = newSitemap;
+            }
+            return next;
+        });
+    };
+
+    const filteredRoutes = Object.entries(mergedRoutesForTable).filter(([key, config]: [string, any]) =>
         key.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        config.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        config.path.toLowerCase().includes(searchTerm.toLowerCase())
+        (config.title && config.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (config.path && config.path.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const actionButtons = (
@@ -412,20 +506,49 @@ const SeoSettings = () => {
 
                     {(activeTab === 'pages' || activeTab === 'sitemap') && (
                         <div className="space-y-4">
-                            <div className="flex justify-between mb-4">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
-                                    <input
-                                        placeholder="Search pages..."
-                                        className="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 w-64 text-sm"
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
+                            <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
+                                <div className="flex gap-2 items-center flex-1">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+                                        <input
+                                            placeholder="Search pages..."
+                                            className="pl-9 pr-4 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 w-full md:w-64 text-sm"
+                                            value={searchTerm}
+                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                        />
+                                    </div>
+
+                                    {/* Add Custom Route UI */}
+                                    {activeTab === 'pages' && (
+                                        <div className="flex gap-2 items-center ml-4 border-l pl-4 border-slate-300 dark:border-slate-600">
+                                            <input
+                                                placeholder="/path/to/page"
+                                                className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-sm w-40"
+                                                value={newRoutePath}
+                                                onChange={(e) => setNewRoutePath(e.target.value)}
+                                            />
+                                            <input
+                                                placeholder="Page Title"
+                                                className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-sm w-40"
+                                                value={newRouteTitle}
+                                                onChange={(e) => setNewRouteTitle(e.target.value)}
+                                            />
+                                            <button
+                                                onClick={handleAddRoute}
+                                                disabled={!newRoutePath || !newRouteTitle}
+                                                className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+                                                title="Add Custom Page"
+                                            >
+                                                <div className="w-4 h-4 font-bold leading-none">+</div>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
+
                                 {activeTab === 'sitemap' && (
                                     <button
                                         onClick={generateSitemap}
-                                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition lg:text-sm"
+                                        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition lg:text-sm whitespace-nowrap"
                                     >
                                         <FileCode className="w-4 h-4" /> Generate & Preview XML
                                     </button>
@@ -447,6 +570,7 @@ const SeoSettings = () => {
                                                         Description ({activeLang.toUpperCase()})
                                                     </th>
                                                     <th className="p-3 text-sm font-semibold text-slate-500 dark:text-slate-400 text-center">No Index</th>
+                                                    <th className="p-3 text-sm font-semibold text-slate-500 dark:text-slate-400 w-10"></th>
                                                 </>
                                             ) : (
                                                 <>
@@ -500,6 +624,18 @@ const SeoSettings = () => {
                                                                     checked={routeSettings.noIndex || false}
                                                                     onChange={(e) => handleRouteChange(key, 'noIndex', e.target.checked)}
                                                                 />
+                                                            </td>
+                                                            <td className="p-3">
+                                                                {/* Only show delete for custom routes (start with /) */}
+                                                                {key.startsWith('/') && (
+                                                                    <button
+                                                                        onClick={() => handleDeleteRoute(key)}
+                                                                        className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                                                                        title="Delete Custom Page SEO"
+                                                                    >
+                                                                        <div className="w-4 h-4">×</div>
+                                                                    </button>
+                                                                )}
                                                             </td>
                                                         </>
                                                     ) : (

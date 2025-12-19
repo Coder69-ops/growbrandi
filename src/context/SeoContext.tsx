@@ -56,6 +56,7 @@ export const SeoProvider = ({ children }: { children: ReactNode }) => {
 
         // 2. Get Dynamic Overrides
         let routeKey = route;
+
         // Check for team route override
         if (pathname.startsWith('/team/')) {
             const teamId = pathname.split('/')[2];
@@ -67,7 +68,29 @@ export const SeoProvider = ({ children }: { children: ReactNode }) => {
             }
         }
 
-        const routeOverrides = seoSettings.routes?.[routeKey] || {};
+        // Custom Route Override Check (Exact Path Match)
+        // If the path exists in seoSettings.routes directly, use it.
+        // This supports manually added paths like "/services/special-offer"
+        // We strip the language prefix for the check: /en/landing -> /landing
+        const cleanPath = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/'); // /fr/foo -> /foo
+
+        // Logic:
+        // 1. Try routeKey (mapped from routeConfig)
+        // 2. If no setting for routeKey, or if we want to support custom pages that might be 404s in config
+        //    check key = cleanPath
+
+        let routeOverrides = seoSettings.routes?.[routeKey] || {};
+
+        // If no specifically configured override for the config-based key, 
+        // OR if the route is generic/catch-all, try the exact path.
+        if (!seoSettings.routes?.[routeKey] && seoSettings.routes?.[cleanPath]) {
+            routeOverrides = seoSettings.routes[cleanPath];
+        }
+        // Fallback: If cleanPath exists, it might be more specific than a generic routeKey check
+        if (seoSettings.routes?.[cleanPath]) {
+            routeOverrides = seoSettings.routes[cleanPath];
+        }
+
         const globalSettings = seoSettings.global || {};
 
         // 3. Merge

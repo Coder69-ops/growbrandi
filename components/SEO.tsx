@@ -21,6 +21,7 @@ interface SEOProps {
     noIndex?: boolean;
 }
 
+
 const SEO: React.FC<SEOProps> = ({
     title,
     description,
@@ -41,13 +42,29 @@ const SEO: React.FC<SEOProps> = ({
     const { settings } = useSiteSettings();
 
     const fullTitle = title === siteTitleSuffix ? title : `${title} | ${siteTitleSuffix}`;
-    // Use window.location.href as default to capture the full localized URL
-    const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href : '');
 
-    // Calculate base path for hreflang
-    const pathname = location.pathname;
-    const basePath = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/');
+    // Base Origin
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://growbrandi.com';
+
+    // Canonical Logic:
+    // If provided, use it.
+    // Else, use current window location but ensure it's clean (no duplicates, absolute).
+    // Note: User reported "Google chose different canonical than user". 
+    // This often happens when non-canonical pages self-reference. 
+    // Ideally, /fr/about should canonicalize to /fr/about.
+    const currentUrl = canonicalUrl || (typeof window !== 'undefined' ? window.location.href.split('?')[0] : '');
+
+    // Calculate generic path for hreflang (strip language prefix)
+    const pathname = location.pathname;
+    // Regex to remove leading slash + 2 chars + slash/end: e.g. /en/..., /en
+    const basePath = pathname.replace(/^\/[a-z]{2}(\/|$)/, '/');
+
+    // Helper to build URL for a specific lang
+    const getLangUrl = (lang: string) => {
+        // Handle root path edge case if needed, but basePath starts with /
+        const path = basePath === '/' ? '' : basePath;
+        return `${origin}/${lang}${path}`;
+    };
 
     // Enhanced default schema with Firebase contact info
     const defaultSchema = JSON.stringify({
@@ -95,20 +112,28 @@ const SEO: React.FC<SEOProps> = ({
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+
+            {/* Canonical Tag - Critical for SEO */}
             <link rel="canonical" href={currentUrl} />
 
             {/* Dynamic Favicon */}
             {settings?.branding?.favicon && <link rel="icon" type="image/png" href={settings.branding.favicon} />}
 
-            {/* Hreflang Tags */}
+            {/* Hreflang Tags - Critical for Localization */}
             {SUPPORTED_LANGUAGES.map(lang => (
                 <link
                     key={lang}
                     rel="alternate"
                     hrefLang={lang}
-                    href={`${origin}/${lang}${basePath === '/' ? '' : basePath}`}
+                    href={getLangUrl(lang)}
                 />
             ))}
+            {/* x-default: Point to English (or generic root if preferred, but usually 'en' for English-first sites) */}
+            <link
+                rel="alternate"
+                hrefLang="x-default"
+                href={getLangUrl('en')}
+            />
 
             {/* Open Graph / Facebook */}
             {/* Site Title Suffix is handled in fullTitle */}
