@@ -5,6 +5,7 @@ import { db } from '../src/lib/firebase';
 import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
 import { Calendar, CheckCircle, Clock, MapPin, MessageSquare, ArrowRight, Zap, Star, Play, Sparkles, TrendingUp, ChevronDown } from 'lucide-react';
 import BookingCalendar from './BookingCalendar';
+import TestimonialsSlider from './TestimonialsSlider';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 
 // Skeleton Component
@@ -265,6 +266,9 @@ const FreeGrowthCall = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Client Success Stories */}
+            <TestimonialsSlider />
 
             {/* Video Testimonial */}
             {data?.videoTestimonial?.videoUrl && (
