@@ -15,6 +15,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSiteContentData } from '../src/hooks/useSiteContent';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import { createOrganizationSchema } from '../src/utils/schemas';
 import { useContactSettings } from '../src/hooks/useSiteContent';
 
@@ -445,35 +446,55 @@ const HeroSection: React.FC = () => {
 };
 
 export const HomePage: React.FC = () => {
+    const { settings, loading } = useSiteSettings();
+    const sections = settings?.sections || {};
+
+    // Helper to check if a section should be shown (default to true)
+    const isVisible = (id: string) => sections[id as keyof typeof sections] !== false;
+
+    if (loading) return <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]" />;
+
     return (
         <div className="bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
             <HeroSection />
 
-            <LazySection fallback={<div className="min-h-screen bg-slate-50 dark:bg-[#09090b]" />}>
-                <ServicesPreview />
-            </LazySection>
+            {isVisible('services_preview') && (
+                <LazySection fallback={<div className="min-h-screen bg-slate-50 dark:bg-[#09090b]" />}>
+                    <ServicesPreview />
+                </LazySection>
+            )}
 
-            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <SloganGenerator />
-            </LazySection>
+            {isVisible('slogan_generator') && (
+                <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
+                    <SloganGenerator />
+                </LazySection>
+            )}
 
-            <LazySection fallback={<div className="min-h-[600px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <AIUseCases />
-            </LazySection>
+            {isVisible('ai_use_cases') && (
+                <LazySection fallback={<div className="min-h-[600px] bg-slate-50 dark:bg-[#09090b]" />}>
+                    <AIUseCases />
+                </LazySection>
+            )}
 
-            <LazySection fallback={<div className="min-h-[500px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <ProjectsPreview />
-            </LazySection>
+            {isVisible('projects_preview') && (
+                <LazySection fallback={<div className="min-h-[500px] bg-slate-50 dark:bg-[#09090b]" />}>
+                    <ProjectsPreview />
+                </LazySection>
+            )}
 
-            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <TestimonialsSlider />
-            </LazySection>
+            {isVisible('testimonials') && (
+                <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
+                    <TestimonialsSlider />
+                </LazySection>
+            )}
 
-            <TeamSection />
+            {isVisible('team') && <TeamSection />}
 
-            <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
-                <FAQ />
-            </LazySection>
+            {isVisible('faq') && (
+                <LazySection fallback={<div className="min-h-[400px] bg-slate-50 dark:bg-[#09090b]" />}>
+                    <FAQ />
+                </LazySection>
+            )}
         </div>
     );
 };

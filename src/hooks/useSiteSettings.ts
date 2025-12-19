@@ -26,6 +26,16 @@ export interface SiteSettings {
         icon: string;
         label: { [key: string]: string };
     }>;
+    sections?: {
+        ai_use_cases?: boolean;
+        services_preview?: boolean;
+        slogan_generator?: boolean;
+        projects_preview?: boolean;
+        testimonials?: boolean;
+        faq?: boolean;
+        team?: boolean;
+        floating_buttons?: boolean;
+    };
 }
 
 export const useSiteSettings = () => {

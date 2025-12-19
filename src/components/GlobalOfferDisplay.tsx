@@ -117,8 +117,12 @@ const GlobalOfferDisplay = () => {
                             </button>
 
                             <div className="flex items-start gap-4 mb-4">
-                                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
-                                    <Gift size={24} />
+                                <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center overflow-hidden w-12 h-12 shrink-0">
+                                    {offer.image ? (
+                                        <img src={offer.image} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <Gift size={24} />
+                                    )}
                                 </div>
                                 <div className="flex-1 pr-6">
                                     <h3 className="font-bold text-slate-900 dark:text-white mb-1">{title}</h3>
@@ -160,10 +164,19 @@ const GlobalOfferDisplay = () => {
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl relative overflow-hidden"
                         >
-                            <div className="h-32 bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden flex items-center justify-center">
-                                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
-                                <Sparkles className="text-white/20 absolute -top-10 -left-10 w-40 h-40 animate-pulse" />
-                                <Megaphone className="text-white relative z-10 drop-shadow-lg" size={48} />
+                            <div className="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 relative overflow-hidden flex items-center justify-center">
+                                {offer.image ? (
+                                    <>
+                                        <img src={offer.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-black/20" />
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+                                        <Sparkles className="text-white/20 absolute -top-10 -left-10 w-40 h-40 animate-pulse" />
+                                        <Megaphone className="text-white relative z-10 drop-shadow-lg" size={48} />
+                                    </>
+                                )}
 
                                 <button
                                     onClick={handleDismiss}

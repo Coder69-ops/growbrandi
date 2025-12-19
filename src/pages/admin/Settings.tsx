@@ -15,6 +15,7 @@ const TABS = [
     { id: 'contact', label: 'Contact Info', icon: Phone },
     { id: 'social', label: 'Social Media', icon: Globe },
     { id: 'stats', label: 'Business Stats', icon: BarChart3 },
+    { id: 'sections', label: 'Page Sections', icon: Layout },
     { id: 'promotions', label: 'Offer & Promotions', icon: Megaphone },
 ];
 
@@ -53,6 +54,16 @@ const AdminSettings = () => {
                         { number: '5+', icon: '🌍', label: { en: 'Years Experience' } },
                         { number: '24/7', icon: '🕑', label: { en: 'Support' } }
                     ],
+                    sections: {
+                        ai_use_cases: true,
+                        services_preview: true,
+                        slogan_generator: true,
+                        projects_preview: true,
+                        testimonials: true,
+                        faq: true,
+                        team: true,
+                        floating_buttons: true,
+                    },
                 });
             }
         } catch (error) {
@@ -530,6 +541,51 @@ const AdminSettings = () => {
                                                 </div>
                                             </div>
                                         ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Page Sections Visibility */}
+                            {activeTab === 'sections' && (
+                                <div className="glass-panel p-0 overflow-hidden">
+                                    <div className="p-6 border-b border-slate-200/50 dark:border-slate-800/50 flex items-center gap-3">
+                                        <div className="p-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
+                                            <Layout size={20} />
+                                        </div>
+                                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">Homepage Sections</h2>
+                                    </div>
+                                    <div className="p-8 space-y-4">
+                                        <p className="text-sm text-slate-500 mb-6">Toggle which sections appear on the main landing page.</p>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {[
+                                                { id: 'ai_use_cases', label: 'AI Use Cases', description: 'The interactive AI growth tools section.' },
+                                                { id: 'services_preview', label: 'Services Preview', description: 'Horizontal list of core services.' },
+                                                { id: 'slogan_generator', label: 'Slogan Generator', description: 'AI-powered branding tool.' },
+                                                { id: 'projects_preview', label: 'Projects Preview', description: 'Showcase of recent work.' },
+                                                { id: 'testimonials', label: 'Testimonials', description: 'Client reviews and social proof.' },
+                                                { id: 'faq', label: 'FAQ Section', description: 'Frequently asked questions.' },
+                                                { id: 'team', label: 'Team Section', description: 'Our experts and founders.' },
+                                                { id: 'floating_buttons', label: 'Floating Buttons', description: 'AI Chat and Contact buttons in the corner.' },
+                                            ].map((section) => (
+                                                <div key={section.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                    <div className="pr-4">
+                                                        <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">{section.label}</h3>
+                                                        <p className="text-xs text-slate-500 mt-1">{section.description}</p>
+                                                    </div>
+                                                    <button
+                                                        onClick={() => {
+                                                            const newSections = { ...(settings.sections || {}) };
+                                                            newSections[section.id as keyof typeof newSections] = !newSections[section.id as keyof typeof newSections];
+                                                            setSettings({ ...settings, sections: newSections });
+                                                        }}
+                                                        className={`w-12 h-6 rounded-full transition-colors relative flex items-center shrink-0 ${settings.sections?.[section.id] !== false ? 'bg-green-500' : 'bg-slate-300 dark:bg-slate-600'}`}
+                                                    >
+                                                        <div className={`w-4 h-4 rounded-full bg-white shadow-sm absolute transition-transform ${settings.sections?.[section.id] !== false ? 'translate-x-7' : 'translate-x-1'}`} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             )}

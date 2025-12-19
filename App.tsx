@@ -14,6 +14,7 @@ import { db } from './src/lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { ThemeProvider } from './components/ThemeContext';
 import { SeoProvider, useSeo } from './src/context/SeoContext';
+import { useSiteSettings } from './src/hooks/useSiteSettings';
 
 // Lazy load components
 import { HomePage } from './components/Hero';
@@ -118,6 +119,7 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => (
 
 // --- Main App Content Component ---
 function AppContent() {
+  const { settings } = useSiteSettings();
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
@@ -472,7 +474,7 @@ ${servicesDetails}
       </div>
 
       {/* Enhanced Floating Action Buttons */}
-      {!isAdminRoute && (
+      {!isAdminRoute && settings?.sections?.floating_buttons !== false && (
         <FloatingActionButtons
           onChatOpen={() => setIsChatOpen(true)}
           onContactOpen={() => setIsContactAssistantOpen(true)}
