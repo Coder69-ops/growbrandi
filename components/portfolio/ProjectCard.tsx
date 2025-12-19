@@ -24,10 +24,26 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, clas
     const { t, i18n } = useTranslation();
 
     // Helper to get text: if it's a translation key, use t(), otherwise use getLocalizedField
-    const getText = (field: any) => {
+    const getText = (field: any, isCategory: boolean = false) => {
         if (!field) return '';
-        if (typeof field === 'string') return t(field); // Legacy: translation key
-        return getLocalizedField(field, i18n.language); // New: multi-lang object
+
+        // If it's a multi-lang object, use it directly
+        if (typeof field === 'object') return getLocalizedField(field, i18n.language);
+
+        // If it's a string, it might be a key or raw text
+        if (typeof field === 'string') {
+            if (isCategory) {
+                // For categories, we know the prefix
+                const key = `services.${field}.title`;
+                const translated = t(key);
+                // If translation fails (returns key), return the capitalized raw string
+                return translated === key ? field.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : translated;
+            }
+            // For other strings, if it contains dots it's likely a key
+            if (field.includes('.')) return t(field);
+            return field; // Return as is to avoid missingKey warnings
+        }
+        return String(field);
     };
 
     return (
@@ -53,7 +69,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, clas
                 {/* Top Header: Tags & Metrics */}
                 <div className="flex justify-between items-start">
                     <span className="px-3 py-1 bg-white/90 dark:bg-white/10 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-full text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider shadow-sm">
-                        {getText(project.category)}
+                        {getText(project.category, true)}
                     </span>
 
                     {project.growthMetrics && (

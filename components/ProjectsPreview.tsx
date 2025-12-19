@@ -139,7 +139,7 @@ const ProjectsPreview: React.FC = () => {
                                 whileInView={{ opacity: 1 }}
                                 viewport={{ once: true }}
                             >
-                                <AnimatePresence mode="wait">
+                                <AnimatePresence>
                                     {displayedProjects.map((project, index) => (
                                         <motion.div
                                             key={project.title}

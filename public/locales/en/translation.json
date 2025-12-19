@@ -9,7 +9,8 @@
         "support_team": "24/7 Support Team",
         "rated_agency": "Top Rated Agency",
         "verified": "Verified",
-        "back": "Back to Blog"
+        "back": "Back to Blog",
+        "book_free_call": "Book Your Free Call"
     },
     "admin": {
         "common": {
@@ -881,6 +882,8 @@
                 "read_more": "Read More",
                 "hero_read_article": "Read Article"
             },
+            "card_read_more": "Read More",
+            "related_articles": "Related Articles",
             "posts": [
                 {
                     "title": "The Future of AI in Web Development",

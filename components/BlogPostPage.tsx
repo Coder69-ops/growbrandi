@@ -102,6 +102,7 @@ const BlogPostPage = () => {
     const navigate = useNavigate();
     const { getLocalizedPath } = useLocalizedPath();
     const { content: siteContent, getText } = useSiteContentData();
+    const { settings } = useSiteSettings();
     const blogSettings = siteContent?.blog_settings || {};
 
     const [post, setPost] = useState<any>(null);
@@ -208,8 +209,6 @@ const BlogPostPage = () => {
     const content = getLocalizedField(post.content, lang);
     const excerpt = getLocalizedField(post.excerpt, lang);
     const image = post.image || "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop";
-
-    const { settings } = useSiteSettings();
 
     // enhanced SEO
     const metaTitle = (getLocalizedField(post.seo?.metaTitle, lang) || title) as string;
