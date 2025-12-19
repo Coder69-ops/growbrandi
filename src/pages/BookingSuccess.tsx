@@ -33,12 +33,16 @@ const BookingSuccess = () => {
                     lastUpdated: new Date()
                 }, { merge: true });
 
-                // 2. Save Booking Details
-                if (bookingData.email) {
+                // 2. Save Booking Details ONLY for external integrations (e.g. Calendly)
+                // Internal bookings are already saved in BookingCalendar.tsx
+                const isExternalBooking = searchParams.get('invitee_email') !== null;
+
+                if (isExternalBooking && bookingData.email) {
                     await addDoc(collection(db, 'bookings'), {
                         ...bookingData,
                         createdAt: serverTimestamp(),
-                        status: 'scheduled'
+                        status: 'scheduled',
+                        source: 'Calendly/External'
                     });
                 }
 
