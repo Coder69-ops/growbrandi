@@ -88,6 +88,7 @@ import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
 import { ToastProvider } from './src/context/ToastContext';
+import { DeepLinkRedirect } from './src/components/DeepLinkRedirect';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -410,6 +411,18 @@ ${servicesDetails}
                 {/* Legacy/Redirects/Other */}
                 <Route path="/:lang/services" element={<LanguageWrapper><PageWrapper><ServicesPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/portfolio" element={<LanguageWrapper><PageWrapper><PortfolioPage /></PageWrapper></LanguageWrapper>} />
+
+                {/* GSC Fixes: Deep Link Redirects for non-localized paths */}
+                <Route path="/team/*" element={<DeepLinkRedirect />} />
+                <Route path="/services/*" element={<DeepLinkRedirect />} />
+                <Route path="/about" element={<DeepLinkRedirect />} />
+                <Route path="/process" element={<DeepLinkRedirect />} />
+                <Route path="/case-studies" element={<DeepLinkRedirect />} />
+                <Route path="/careers/*" element={<DeepLinkRedirect />} />
+                <Route path="/blog/*" element={<DeepLinkRedirect />} />
+                <Route path="/contact" element={<DeepLinkRedirect />} />
+                <Route path="/legal/*" element={<DeepLinkRedirect />} />
+                <Route path="/Home" element={<Navigate to="/" replace />} />
 
                 {/* 404 - Global catch-all should still work, but ideally we want localized 404 */}
                 <Route path="/:lang/*" element={<LanguageWrapper><PageWrapper><NotFoundPage /></PageWrapper></LanguageWrapper>} />
