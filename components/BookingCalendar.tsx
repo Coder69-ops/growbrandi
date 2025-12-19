@@ -24,6 +24,8 @@ const COMMON_TIMEZONES = [
     "Europe/London",
     "Europe/Paris",
     "Europe/Berlin",
+    "Europe/Amsterdam",
+    "Europe/Brussels",
     "Europe/Moscow",
     "Asia/Dubai",
     "Asia/Kolkata",
@@ -32,6 +34,19 @@ const COMMON_TIMEZONES = [
     "Australia/Sydney",
     "Pacific/Auckland"
 ];
+
+// Helper to format timezone with GMT offset
+const formatTimezoneOption = (timeZone: string) => {
+    try {
+        const date = new Date();
+        const offset = date.toLocaleTimeString('en-US', { timeZone, timeZoneName: 'longOffset' }).split(' ')[2]; // Extract GMT+X
+        // Clean up GMT prefix if needed, usually returns GMT+5 or similar
+        const cleanOffset = offset.replace('GMT', 'UTC');
+        return `(${cleanOffset}) ${timeZone.replace('_', ' ')}`;
+    } catch (e) {
+        return timeZone.replace('_', ' ');
+    }
+};
 
 const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
     const navigate = useNavigate();
@@ -224,9 +239,11 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                     onChange={(e) => setTimezone(e.target.value)}
                                     className="pl-9 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 appearance-none focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/80 transition-all min-w-[200px]"
                                 >
-                                    <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>Local Time ({Intl.DateTimeFormat().resolvedOptions().timeZone})</option>
+                                    <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
+                                        {formatTimezoneOption(Intl.DateTimeFormat().resolvedOptions().timeZone)} (Local)
+                                    </option>
                                     {COMMON_TIMEZONES.filter(tz => tz !== Intl.DateTimeFormat().resolvedOptions().timeZone).map(tz => (
-                                        <option key={tz} value={tz}>{tz.replace('_', ' ')}</option>
+                                        <option key={tz} value={tz}>{formatTimezoneOption(tz)}</option>
                                     ))}
                                 </select>
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400">
