@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
-import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Briefcase, List, DollarSign, Check } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Briefcase, List, DollarSign, Check, Wand2 } from 'lucide-react';
 import * as FaIcons from 'react-icons/fa';
 
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
@@ -17,7 +17,8 @@ import { Sparkles } from 'lucide-react';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
 import { ImageIcon } from 'lucide-react';
-// import { logAction } from '../../services/auditService'; // Removed manual logging
+import { ContentGeneratorModal } from '../../components/admin/ContentGeneratorModal';
+import { useContentGenerator } from '../../hooks/useContentGenerator';
 
 // Icon Picker Component
 const IconPicker = ({ value, onChange }: { value: string, onChange: (icon: string) => void }) => {
@@ -296,6 +297,14 @@ const AdminServices = () => {
         }
     );
 
+    const {
+        isGenerating,
+        generatorOpen,
+        handleOpenGenerator,
+        handleCloseGenerator,
+        handleGenerateContent
+    } = useContentGenerator(currentService, setCurrentService);
+
     return (
         <AdminPageLayout
             title="Services"
@@ -322,6 +331,12 @@ const AdminServices = () => {
                 )
             }
         >
+            <ContentGeneratorModal
+                isOpen={generatorOpen}
+                onClose={handleCloseGenerator}
+                onGenerate={handleGenerateContent}
+                isGenerating={isGenerating}
+            />
             {loading && !isEditing ? (
                 <AdminLoader message="Loading services..." />
             ) : isEditing ? (
@@ -339,6 +354,16 @@ const AdminServices = () => {
                             </h2>
                         </div>
                         <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={handleOpenGenerator}
+                                disabled={isGenerating}
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Auto-generate content with AI"
+                            >
+                                <Wand2 size={18} className={isGenerating ? "animate-pulse" : ""} />
+                                <span className="hidden sm:inline">Auto Generate</span>
+                            </button>
                             <button
                                 type="button"
                                 onClick={handleAutoTranslate}
@@ -370,6 +395,7 @@ const AdminServices = () => {
                     </div>
 
                     <form onSubmit={handleSave} className="space-y-8">
+                        {/* ... form content ... */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             {/* Main Content */}
                             <div className="lg:col-span-2 space-y-6">

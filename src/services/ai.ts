@@ -157,3 +157,57 @@ ${context.existingPosts.map(p => `          - [${p.title}](/blog/${p.slug})`).jo
     }
 };
 
+export const generatePageContent = async (
+    targetAudience: string,
+    tone: string,
+    context: string,
+    pageStructure: any
+): Promise<any> => {
+    const prompt = `
+    You are an expert Conversion Copywriter and UX Writer.
+    Your task is to generate high-converting, professional website content for the provided page structure.
+    
+    TARGET AUDIENCE: ${targetAudience}
+    TONE: ${tone}
+    ADDITIONAL CONTEXT: ${context}
+    
+    INPUT STRUCTURE (JSON):
+    ${JSON.stringify(pageStructure, null, 2)}
+    
+    INSTRUCTIONS:
+    1. Fill in the "en" (English) values for every field in the Input Structure.
+    2. Keep the exact same JSON structure. Do not add or remove keys.
+    3. The content must be tailored to the Target Audience and Tone.
+    4. Use persuasive, benefit-driven language.
+    5. For arrays (like checklists, features), generate relevant, high-impact items.
+    
+    STRICT RULES:
+    1. Return ONLY valid JSON.
+    2. Do NOT add ANY text outside the JSON.
+    3. Output the FULL JSON object with filled English content.
+    `;
+
+    try {
+        const genAI = new GoogleGenAI({ apiKey: API_KEY });
+        const result = await genAI.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: [{ parts: [{ text: prompt }] }]
+        });
+
+        const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!responseText) throw new Error("No response from AI");
+
+        const cleanJson = responseText.replace(/```json\n?|\n?```/g, "").trim();
+        return JSON.parse(cleanJson);
+
+    } catch (error) {
+        console.error("Content generation failed:", error);
+        // Fallback to OpenRouter if needed, or rethrow
+        try {
+            return await generateStructuredResponse<any>(prompt);
+        } catch (fallbackError) {
+            throw fallbackError;
+        }
+    }
+};
+

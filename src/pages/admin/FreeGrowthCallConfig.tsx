@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
@@ -6,9 +5,46 @@ import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { Save, Plus, Trash2, ArrowLeft, Loader2, Globe, Clock, MessageSquare, CheckCircle, Image as ImageIcon, Calendar, Briefcase, Sparkles, HelpCircle, Star, ShieldCheck } from 'lucide-react';
 import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
 import { useStatusModal } from '../../hooks/useStatusModal';
-import { LocalizedInput, LocalizedTextArea, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
+import { LocalizedInput, LocalizedTextArea, LocalizedArrayInput, LanguageTabs } from '../../components/admin/LocalizedFormFields';
+import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { SupportedLanguage } from '../../utils/localization';
 import { AdminLoader } from '../../components/admin/AdminLoader';
+import { useContentGenerator } from '../../hooks/useContentGenerator';
+import { ContentGeneratorModal } from '../../components/admin/ContentGeneratorModal';
+import { Wand2 } from 'lucide-react'; // Import Wand icon
+
+const TRANSLATE_OPTIONS: Record<string, { fields?: string[], deepKeys?: string[], arrayFields?: string[], complexArrayFields?: Record<string, string[]> }> = {
+    hero: {
+        deepKeys: ['hero.title', 'hero.description', 'hero.ctaText', 'hero.tagPill'],
+        complexArrayFields: { 'hero.stats': ['label'] }
+    },
+    booking: {
+        deepKeys: ['booking.statusText']
+    },
+    expect: {
+        deepKeys: ['expect.sectionTitle', 'expect.sectionDescription'],
+        arrayFields: ['expect.checklist'],
+        complexArrayFields: { 'whatToExpect': ['title', 'description'] }
+    },
+    process: {
+        fields: ['processBadge', 'processTitle'],
+        complexArrayFields: { 'process': ['step', 'title', 'description'] }
+    },
+    faq: {
+        fields: ['faqTitle'],
+        complexArrayFields: { 'faq': ['question', 'answer'] }
+    },
+    testimonials: {
+        complexArrayFields: { 'testimonials': ['quote', 'author', 'role'] },
+        deepKeys: ['videoTestimonial.sectionTitle', 'videoTestimonial.quote', 'videoTestimonial.author', 'videoTestimonial.role']
+    },
+    logos: {
+        fields: ['logosTitle']
+    },
+    finalCta: {
+        deepKeys: ['finalCta.title', 'finalCta.buttonText']
+    }
+};
 
 const DEFAULT_DATA = {
     hero: {
@@ -83,6 +119,8 @@ const AdminFreeGrowthCallConfig = () => {
     const [data, setData] = useState<any>(DEFAULT_DATA);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [activeTab, setActiveTab] = useState<'hero' | 'booking' | 'expect' | 'process' | 'faq' | 'social' | 'logos' | 'finalCta'>('hero');
+    const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
 
     // Image Picker State
     const [pickerOpen, setPickerOpen] = useState(false);
@@ -90,6 +128,39 @@ const AdminFreeGrowthCallConfig = () => {
         type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image';
         index: number;
     } | null>(null);
+
+    const { isTranslating, handleAutoTranslate } = useAutoTranslate(
+        data,
+        setData,
+        TRANSLATE_OPTIONS[activeTab] || {}
+    );
+
+    const {
+        isGenerating,
+        generatorOpen,
+        handleOpenGenerator,
+        handleCloseGenerator,
+        handleGenerateContent
+    } = useContentGenerator(data, setData);
+
+    const { showSuccess, showError, StatusModal } = useStatusModal();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const docRef = doc(db, 'pages', 'free-growth-call');
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    setData({ ...DEFAULT_DATA, ...docSnap.data() });
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleImageSelect = (url: string) => {
         if (!activeImageField) return;
@@ -147,26 +218,6 @@ const AdminFreeGrowthCallConfig = () => {
         setActiveImageField({ type, index });
         setPickerOpen(true);
     };
-    const [activeTab, setActiveTab] = useState<'hero' | 'booking' | 'expect' | 'process' | 'faq' | 'social' | 'logos' | 'finalCta'>('hero');
-    const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en'); // Simplified for now, can use LanguageTabs
-    const { showSuccess, showError, StatusModal } = useStatusModal();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const docRef = doc(db, 'pages', 'free-growth-call');
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    setData({ ...DEFAULT_DATA, ...docSnap.data() });
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
 
     const handleChange = (section: string, field: string, value: any, index?: number, subField?: string) => {
         setData((prev: any) => {
@@ -234,16 +285,44 @@ const AdminFreeGrowthCallConfig = () => {
             title="Free Growth Call Landing Page"
             description="Manage content for the consultation booking page."
             actions={
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                >
-                    {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-                    Save Changes
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        type="button"
+                        onClick={handleOpenGenerator}
+                        disabled={saving || isGenerating}
+                        className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+                        title="Auto-generate page content with AI"
+                    >
+                        <Wand2 size={18} className={isGenerating ? "animate-pulse" : ""} />
+                        <span className="hidden sm:inline">Auto Generate</span>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleAutoTranslate}
+                        disabled={saving || isTranslating}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-lg shadow-violet-500/20 disabled:opacity-50"
+                        title={`Auto-translate ${activeTab} section`}
+                    >
+                        <Sparkles size={18} className={isTranslating ? "animate-spin" : ""} />
+                        {isTranslating ? 'Translating...' : 'Auto Translate'}
+                    </button>
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    >
+                        {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                        Save Changes
+                    </button>
+                </div>
             }
         >
+            <ContentGeneratorModal
+                isOpen={generatorOpen}
+                onClose={handleCloseGenerator}
+                onGenerate={handleGenerateContent}
+                isGenerating={isGenerating}
+            />
             <div className="flex flex-col md:flex-row gap-6 h-full">
                 {/* Sidebar */}
                 <div className="w-full md:w-64 space-y-2">
@@ -273,6 +352,13 @@ const AdminFreeGrowthCallConfig = () => {
 
                 {/* Content */}
                 <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm overflow-y-auto">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-2">
+                            {/* Breadcrumb or Title if needed */}
+                        </div>
+                        <LanguageTabs activeLanguage={activeLanguage} onChange={setActiveLanguage} />
+                    </div>
+
                     {activeTab === 'hero' && (
                         <div className="space-y-6">
                             <h3 className="text-lg font-semibold mb-4">Hero Section</h3>

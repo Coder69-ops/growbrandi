@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 // import { PROJECTS } from '../../../constants'; // Removed
-import { Plus, Edit2, Trash2, Save, X, ChevronDown, CheckCircle2, TrendingUp, Settings, Image, FolderKanban, ArrowLeft, FileText } from 'lucide-react';
+import { Plus, Edit2, Trash2, Save, X, ChevronDown, CheckCircle2, TrendingUp, Settings, Image, FolderKanban, ArrowLeft, FileText, Wand2 } from 'lucide-react';
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput, LocalizedTextArea } from '../../components/admin/LocalizedFormFields';
 import { useAutoTranslate } from '../../hooks/useAutoTranslate';
 import { Sparkles } from 'lucide-react';
@@ -16,6 +16,8 @@ import { SupportedLanguage, createEmptyLocalizedString, ensureLocalizedFormat, g
 import { Reorder } from 'framer-motion';
 import { SortableItem } from '../../components/admin/SortableItem';
 // import { logAction } from '../../services/auditService'; // Removed
+import { ContentGeneratorModal } from '../../components/admin/ContentGeneratorModal';
+import { useContentGenerator } from '../../hooks/useContentGenerator';
 
 const CATEGORIES = [
     { id: 'web_shopify_dev', label: 'Web & Shopify Dev' },
@@ -156,6 +158,14 @@ const AdminProjects = () => {
         }
     );
 
+    const {
+        isGenerating,
+        generatorOpen,
+        handleOpenGenerator,
+        handleCloseGenerator,
+        handleGenerateContent
+    } = useContentGenerator(currentProject, setCurrentProject);
+
     return (
         <AdminPageLayout
             title="Projects"
@@ -174,6 +184,12 @@ const AdminProjects = () => {
                 )
             }
         >
+            <ContentGeneratorModal
+                isOpen={generatorOpen}
+                onClose={handleCloseGenerator}
+                onGenerate={handleGenerateContent}
+                isGenerating={isGenerating}
+            />
             {loading && !isEditing ? (
                 <AdminLoader message="Loading projects..." />
             ) : isEditing ? (
@@ -191,6 +207,16 @@ const AdminProjects = () => {
                             </h2>
                         </div>
                         <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={handleOpenGenerator}
+                                disabled={isGenerating}
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Auto-generate content with AI"
+                            >
+                                <Wand2 size={18} className={isGenerating ? "animate-pulse" : ""} />
+                                <span className="hidden sm:inline">Auto Generate</span>
+                            </button>
                             <button
                                 type="button"
                                 onClick={handleAutoTranslate}

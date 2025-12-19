@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, deleteDoc, doc, updateDoc, orderBy, query, Timestamp, getDoc } from 'firebase/firestore';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
-import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar } from 'lucide-react';
+import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar, Globe, Building, AlignLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '../../context/ToastContext';
 
@@ -19,9 +19,22 @@ interface Message {
     source?: string;
 }
 
+interface Booking {
+    id: string;
+    name: string;
+    email: string;
+    company?: string;
+    website?: string;
+    notes?: string;
+    date: string; // ISO string from BookingCalendar
+    timezone?: string;
+    status: 'scheduled' | 'pending' | 'completed' | 'cancelled';
+    createdAt: Timestamp;
+}
+
 const AdminMessages = () => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [bookings, setBookings] = useState<any[]>([]);
+    const [bookings, setBookings] = useState<Booking[]>([]);
     const [analytics, setAnalytics] = useState<any>({ views: 0, bookings: 0 });
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'inquiries' | 'bookings'>('inquiries');
@@ -39,7 +52,7 @@ const AdminMessages = () => {
             // 2. Fetch Bookings
             const qBookings = query(collection(db, 'bookings'), orderBy('createdAt', 'desc'));
             const bookingsSnapshot = await getDocs(qBookings);
-            setBookings(bookingsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setBookings(bookingsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Booking)));
 
             // 3. Fetch Analytics
             const analyticsDoc = await getDoc(doc(db, 'analytics', 'free-growth-call'));
@@ -90,6 +103,24 @@ const AdminMessages = () => {
         : "0.0";
 
     const filteredMessages = filter === 'all' ? messages : messages.filter(m => !m.read);
+
+    // Helper to format date in a specific timezone
+    const formatTimeInZone = (dateString: string, timeZone: string) => {
+        try {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                timeZone: timeZone,
+                timeZoneName: 'short'
+            }).format(date);
+        } catch (e) {
+            return 'Invalid Date';
+        }
+    };
 
     return (
         <AdminPageLayout
@@ -204,29 +235,99 @@ const AdminMessages = () => {
                                     <div className="text-center py-12 text-slate-400 italic">No bookings tracked yet.</div>
                                 ) : (
                                     bookings.map((booking) => (
-                                        <div key={booking.id} className="glass-card p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
-                                                    <Calendar size={24} />
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-slate-900 dark:text-white text-lg">{booking.name}</h3>
-                                                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                                                        <Mail size={14} /> {booking.email}
+                                        <div key={booking.id} className="glass-card p-6 flex flex-col gap-6 group relative overflow-hidden">
+                                            {/* Header */}
+                                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                                                        <Calendar size={24} />
                                                     </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-slate-900 dark:text-white text-lg">{booking.name}</h3>
+                                                        <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                                                            <div className="flex items-center gap-1.5">
+                                                                <Mail size={14} /> {booking.email}
+                                                            </div>
+                                                            {booking.website && (
+                                                                <a
+                                                                    href={booking.website.startsWith('http') ? booking.website : `https://${booking.website}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center gap-1.5 text-blue-600 hover:underline"
+                                                                    onClick={e => e.stopPropagation()}
+                                                                >
+                                                                    <ExternalLink size={14} /> Website
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${booking.status === 'scheduled' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                                                            booking.status === 'completed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                                                'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                                        }`}>
+                                                        {booking.status}
+                                                    </div>
+                                                    <button onClick={(e) => handleDelete(booking.id, 'bookings', e)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+                                                        <Trash2 size={16} />
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col md:items-end gap-1">
-                                                {booking.date && (
-                                                    <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-                                                        <Clock size={16} className="text-blue-500" />
-                                                        {new Date(booking.date).toLocaleString()}
-                                                    </div>
-                                                )}
-                                                <div className="flex items-center gap-2 text-xs text-slate-400">
-                                                    <span>Tracked: {booking.createdAt ? format(booking.createdAt.toDate(), 'MMM d, h:mm a') : 'Recently'}</span>
-                                                    <button onClick={(e) => handleDelete(booking.id, 'bookings', e)} className="text-red-400 hover:text-red-500 p-1 opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800">
+                                                {/* Time Details */}
+                                                <div className="space-y-3">
+                                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                                                        <Clock size={14} /> Session Time
+                                                    </h4>
+
+                                                    {booking.date ? (
+                                                        <div className="space-y-2">
+                                                            <div className="flex justify-between items-center p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                                                <span className="text-xs text-slate-500 font-medium">Their Time ({booking.timezone?.split('/')[1] || 'Local'})</span>
+                                                                <span className="text-sm font-bold text-slate-900 dark:text-white">
+                                                                    {booking.timezone ? formatTimeInZone(booking.date, booking.timezone) : format(new Date(booking.date), 'MMM d, h:mm a')}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-900/30">
+                                                                <span className="text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1"><Globe size={12} /> Your Time (BD)</span>
+                                                                <span className="text-sm font-bold text-blue-700 dark:text-blue-300">
+                                                                    {formatTimeInZone(booking.date, 'Asia/Dhaka')}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-sm text-slate-400 italic">Date not available</span>
+                                                    )}
                                                 </div>
+
+                                                {/* Details */}
+                                                <div className="space-y-3">
+                                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                                                        <AlignLeft size={14} /> Additional Details
+                                                    </h4>
+
+                                                    {booking.company && (
+                                                        <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                                                            <Building size={14} className="text-slate-400" />
+                                                            <span className="font-semibold">{booking.company}</span>
+                                                        </div>
+                                                    )}
+
+                                                    {booking.notes ? (
+                                                        <p className="text-sm text-slate-600 dark:text-slate-400 italic bg-white dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+                                                            "{booking.notes}"
+                                                        </p>
+                                                    ) : (
+                                                        <span className="text-xs text-slate-400">No additional notes provided.</span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-2 text-xs text-slate-400">
+                                                <span>Booked on: {booking.createdAt ? format(booking.createdAt.toDate(), 'MMM d, yyyy h:mm a') : 'Unknown'}</span>
                                             </div>
                                         </div>
                                     ))

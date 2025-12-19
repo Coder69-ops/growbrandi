@@ -65,13 +65,13 @@ export const useAutoTranslate = (
                 if (value) contentToTranslate[keyPath] = value;
             });
 
-            // 3. Handle Array Fields
-            options.arrayFields?.forEach(arrayName => {
-                const array = data[arrayName];
+            // 3. Handle Array Fields (support nested paths)
+            options.arrayFields?.forEach(arrayPath => {
+                const array = getNestedValue(data, arrayPath);
                 if (Array.isArray(array)) {
                     array.forEach((item, index) => {
                         if (item?.en) {
-                            contentToTranslate[`${arrayName}__ARRAY__${index}`] = item.en;
+                            contentToTranslate[`${arrayPath}__ARRAY__${index}`] = item.en;
                         }
                     });
                 }
@@ -124,15 +124,17 @@ export const useAutoTranslate = (
             });
 
             // 3. Merge Array Fields
-            options.arrayFields?.forEach(arrayName => {
-                if (Array.isArray(newData[arrayName])) {
-                    newData[arrayName] = newData[arrayName].map((item: any, index: number) => {
-                        const translationKey = `${arrayName}__ARRAY__${index}`;
+            options.arrayFields?.forEach(arrayPath => {
+                const currentArray = getNestedValue(newData, arrayPath);
+                if (Array.isArray(currentArray)) {
+                    const updatedArray = currentArray.map((item: any, index: number) => {
+                        const translationKey = `${arrayPath}__ARRAY__${index}`;
                         if (translations[translationKey]) {
                             return { ...item, ...translations[translationKey] };
                         }
                         return item;
                     });
+                    newData = setNestedValue(newData, arrayPath, updatedArray);
                 }
             });
 
