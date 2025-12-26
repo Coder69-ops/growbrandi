@@ -9,7 +9,7 @@ import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import {
     FaCode, FaPalette, FaChartLine, FaBullhorn, FaVideo, FaHeadset, FaComments,
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
-    FaChevronDown, FaBars, FaTimes, FaPaperPlane, FaPhoneAlt
+    FaChevronDown, FaBars, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
 
 interface HeaderProps {
@@ -332,7 +332,7 @@ const Header: React.FC<HeaderProps> = () => {
                                 onClick={() => navigate(getLocalizedPath('/free-growth-call'))}
                                 className="hidden lg:flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-zinc-200 font-bold px-5 py-2.5 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
                             >
-                                <FaPhoneAlt className="w-4 h-4" />
+                                <FaPaperPlane className="w-4 h-4" />
                                 {t('common.book_free_call', 'Book Your Free Call')}
                             </button>
 

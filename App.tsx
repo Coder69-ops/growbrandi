@@ -29,6 +29,7 @@ const AnimatedBackground = React.lazy(() => import('./components/AnimatedBackgro
 const ContactAssistant = React.lazy(() => import('./components/ContactAssistant'));
 const TeamMemberProfile = React.lazy(() => import('./components/TeamMemberProfile'));
 const NotFoundPage = React.lazy(() => import('./components/NotFoundPage'));
+const DynamicPage = React.lazy(() => import('./src/components/DynamicPage'));
 
 // Service Pages
 const BrandGrowthPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.BrandGrowthPage })));
@@ -86,6 +87,8 @@ import AdminProfile from './src/pages/admin/Profile';
 import AdminAIConfig from './src/pages/admin/AIConfig';
 const AdminFreeGrowthCallConfig = React.lazy(() => import('./src/pages/admin/FreeGrowthCallConfig'));
 import AdminSeoSettings from './src/pages/admin/SeoSettings';
+import AdminPageList from './src/pages/admin/PageList';
+import AdminPageBuilder from './src/pages/admin/PageBuilder';
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
@@ -428,6 +431,15 @@ ${servicesDetails}
                 <Route path="/legal/*" element={<DeepLinkRedirect />} />
                 <Route path="/Home" element={<Navigate to="/" replace />} />
 
+                {/* Custom Pages - Dynamic page routing */}
+                <Route path="/:lang/:customSlug" element={
+                  <LanguageWrapper>
+                    <PageWrapper>
+                      <DynamicPage />
+                    </PageWrapper>
+                  </LanguageWrapper>
+                } />
+
                 {/* 404 - Global catch-all should still work, but ideally we want localized 404 */}
                 <Route path="/:lang/*" element={<LanguageWrapper><PageWrapper><NotFoundPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
@@ -462,6 +474,9 @@ ${servicesDetails}
                     <Route path="free-growth-call" element={<AdminFreeGrowthCallConfig />} />
                     <Route path="ai-config" element={<AdminAIConfig />} />
                     <Route path="seo-settings" element={<AdminSeoSettings />} />
+                    <Route path="pages" element={<AdminPageList />} />
+                    <Route path="pages/new" element={<AdminPageBuilder />} />
+                    <Route path="pages/edit/:id" element={<AdminPageBuilder />} />
                   </Route>
                 </Route>
               </Routes>
