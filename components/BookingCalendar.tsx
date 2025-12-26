@@ -17,23 +17,38 @@ const SLOT_DURATION = 60;    // 1 Hour
 
 const COMMON_TIMEZONES = [
     "UTC",
-    "America/New_York",
-    "America/Chicago",
-    "America/Denver",
-    "America/Los_Angeles",
-    "America/Sao_Paulo",
-    "Europe/London",
-    "Europe/Paris",
-    "Europe/Berlin",
-    "Europe/Amsterdam",
-    "Europe/Brussels",
-    "Europe/Moscow",
-    "Asia/Dubai",
-    "Asia/Kolkata",
-    "Asia/Singapore",
-    "Asia/Tokyo",
-    "Australia/Sydney",
-    "Pacific/Auckland"
+    "Pacific/Midway",       // UTC-11:00
+    "Pacific/Honolulu",     // UTC-10:00
+    "America/Anchorage",    // UTC-09:00
+    "America/Los_Angeles",  // UTC-08:00
+    "America/Denver",       // UTC-07:00
+    "America/Chicago",      // UTC-06:00
+    "America/New_York",     // UTC-05:00
+    "America/Halifax",      // UTC-04:00
+    "America/St_Johns",     // UTC-03:30
+    "America/Sao_Paulo",    // UTC-03:00
+    "Atlantic/South_Georgia", // UTC-02:00
+    "Atlantic/Azores",      // UTC-01:00
+    "Europe/London",        // UTC+00:00
+    "Europe/Paris",         // UTC+01:00
+    "Europe/Helsinki",      // UTC+02:00
+    "Europe/Moscow",        // UTC+03:00
+    "Asia/Tehran",          // UTC+03:30
+    "Asia/Dubai",           // UTC+04:00
+    "Asia/Kabul",           // UTC+04:30
+    "Asia/Karachi",         // UTC+05:00
+    "Asia/Kolkata",         // UTC+05:30
+    "Asia/Kathmandu",       // UTC+05:45
+    "Asia/Dhaka",           // UTC+06:00
+    "Asia/Bangkok",         // UTC+07:00
+    "Asia/Singapore",       // UTC+08:00
+    "Asia/Tokyo",           // UTC+09:00
+    "Australia/Darwin",     // UTC+09:30
+    "Australia/Sydney",     // UTC+10:00
+    "Pacific/Noumea",       // UTC+11:00
+    "Pacific/Auckland",     // UTC+12:00
+    "Pacific/Apia",         // UTC+13:00
+    "Pacific/Kiritimati"    // UTC+14:00
 ];
 
 // Helper to format timezone with GMT offset
