@@ -59,7 +59,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
     const [bookedSlots, setBookedSlots] = useState<string[]>([]);
 
     // Feature: Location Toggle
-    const [meetingType, setMeetingType] = useState<'google_meet' | 'whatsapp'>('google_meet');
+    const [meetingType] = useState<'google_meet'>('google_meet');
 
     // Feature: Custom Time
     const [isCustomTime, setIsCustomTime] = useState(false);
@@ -77,7 +77,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
 
     const [step, setStep] = useState<'date' | 'details'>('date');
 
-    const daysStub = Array.from({ length: 14 }, (_, i) => addDays(today, i));
+    const daysStub = Array.from({ length: 90 }, (_, i) => addDays(today, i));
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -151,7 +151,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                 source: 'Custom Calendar'
             });
 
-            const locationQuery = meetingType === 'whatsapp' ? '&location=whatsapp' : '';
+            const locationQuery = '';
             navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}&date=${encodeURIComponent(selectedSlot)}${locationQuery}`);
 
         } catch (error) {
@@ -193,22 +193,12 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         {/* Location Selector */}
                         <div className="bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50 space-y-3">
                             <div className="text-xs text-slate-400 font-medium uppercase mb-1">Select Location</div>
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-1">
                                 <button
-                                    onClick={() => setMeetingType('google_meet')}
-                                    className={`flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border ${meetingType === 'google_meet'
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shadow-sm'
-                                        : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500'}`}
+                                    disabled
+                                    className="flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shadow-sm cursor-default"
                                 >
-                                    <MapPin size={16} /> Meet
-                                </button>
-                                <button
-                                    onClick={() => setMeetingType('whatsapp')}
-                                    className={`flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border ${meetingType === 'whatsapp'
-                                        ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-600 dark:text-green-400 shadow-sm'
-                                        : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500'}`}
-                                >
-                                    <MessageCircle size={16} /> WhatsApp
+                                    <MapPin size={16} /> Google Meet
                                 </button>
                             </div>
                         </div>
@@ -223,10 +213,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
-                                className={`p-5 rounded-2xl shadow-lg text-white relative overflow-hidden group ${meetingType === 'whatsapp'
-                                    ? 'bg-gradient-to-br from-green-500 to-emerald-600'
-                                    : 'bg-gradient-to-br from-blue-600 to-violet-600'
-                                    }`}
+                                className={`p-5 rounded-2xl shadow-lg text-white relative overflow-hidden group bg-gradient-to-br from-blue-600 to-violet-600`}
                             >
                                 <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                                     <Clock size={80} />
@@ -243,8 +230,8 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                         </span>
                                     </div>
                                     <div className="mt-2 flex items-center gap-1.5 text-xs font-medium text-white/90">
-                                        {meetingType === 'whatsapp' ? <MessageCircle size={14} /> : <MapPin size={14} />}
-                                        via {meetingType === 'whatsapp' ? 'WhatsApp' : 'Google Meet'}
+                                        <MapPin size={14} />
+                                        via Google Meet
                                     </div>
                                 </div>
                             </motion.div>
@@ -299,7 +286,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
 
                         {/* Date Strip */}
                         <div className="mb-6">
-                            <div className="flex gap-2 overflow-x-auto pb-4 -mx-6 px-6 custom-scrollbar snap-x">
+                            <div className="flex gap-2 overflow-x-auto pb-4 -mx-6 px-6 snap-x">
                                 {daysStub.map((day) => {
                                     const isSelected = isSameDay(day, selectedDate);
                                     return (
@@ -324,7 +311,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         </div>
 
                         {/* Time Slots Area */}
-                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-[300px]">
+                        <div className="flex-1 overflow-y-auto pr-2 min-h-[400px]">
                             {/* Standard Slots Grid (Compact) */}
                             {!isCustomTime ? (
                                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -377,7 +364,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                             <div className="mt-6 flex justify-center">
                                 <button
                                     onClick={() => { setIsCustomTime(!isCustomTime); setSelectedSlot(null); setCustomTimeValue(''); }}
-                                    className="flex items-center gap-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 transition"
+                                    className="flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                                 >
                                     {isCustomTime ? (
                                         <>Back to Slot Grid</>

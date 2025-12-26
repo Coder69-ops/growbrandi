@@ -155,19 +155,43 @@ const FreeGrowthCall = () => {
                             )}
 
                             {/* Hero Social Slider */}
-                            {data?.heroSlider && (
-                                <HeroSocialSlider
-                                    items={data.heroSlider.map((item: any) => ({
-                                        type: item.type || 'review',
-                                        content: t(item.content, 'Sample Content'),
-                                        author: t(item.author, 'Author Name'),
-                                        role: t(item.role, 'Role'),
-                                        image: item.image,
-                                        actionLabel: item.actionLabel,
-                                        actionUrl: item.actionUrl
-                                    }))}
-                                />
-                            )}
+                            <HeroSocialSlider
+                                items={data?.heroSlider?.length > 0 ? data.heroSlider.map((item: any) => ({
+                                    type: item.type || 'review',
+                                    content: t(item.content, 'Sample Content'),
+                                    author: t(item.author, 'Author Name'),
+                                    role: t(item.role, 'Role'),
+                                    image: item.image,
+                                    actionLabel: item.actionLabel,
+                                    actionUrl: item.actionUrl
+                                })) : [
+                                    {
+                                        type: 'offer',
+                                        content: "Enjoy 50% off on your first GrowBrandi project.",
+                                        author: "50% OFF",
+                                        role: "Available for new clients",
+                                        image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=150&q=80",
+                                        actionLabel: "Claim Discount",
+                                        actionUrl: "#booking-calendar"
+                                    },
+                                    {
+                                        type: 'service',
+                                        content: "AI Growth Engine: Automate your marketing and scale faster than ever.",
+                                        author: "Growth Engine",
+                                        role: "Signature Service",
+                                        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=150&q=80",
+                                        actionLabel: "Learn More",
+                                        actionUrl: "/services"
+                                    },
+                                    {
+                                        type: 'review',
+                                        content: "GrowBrandi helped us double our leads in just 30 days. The AI integration is a game changer!",
+                                        author: "Sarah J.",
+                                        role: "CMO @ TechFlow",
+                                        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80"
+                                    }
+                                ]}
+                            />
                         </motion.div>
 
                         {/* Right Content - Calendar Embed */}
