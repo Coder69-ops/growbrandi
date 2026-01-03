@@ -152,18 +152,41 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
                                     </form>
                                 </>
                             ) : (
-                                <div className="text-center py-10">
+                                <div className="text-center pt-2 pb-6">
                                     <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 relative">
                                         <CheckCircle size={40} className="text-green-600 dark:text-green-400" />
                                         <div className="absolute inset-0 bg-green-500/20 rounded-full animate-ping" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Discount Secured!</h3>
-                                    <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
-                                        Check your email for your priority booking link with the <strong>50% off</strong> applied automatically.
+                                    <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Discount Secured!</h3>
+                                    <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-8">
+                                        The <strong className="text-blue-600 dark:text-blue-400">50% OFF</strong> offer has been locked to your email.
                                     </p>
 
-                                    <div className="mt-8 p-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/10 text-xs text-slate-500">
-                                        <p>Redirecting to calendar in a moment...</p>
+                                    {/* Success Ticket */}
+                                    <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/10 p-6 relative overflow-hidden mb-6 group">
+                                        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500" />
+                                        <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-white dark:bg-[#0f172a] rounded-full border-r border-slate-200 dark:border-white/10" />
+                                        <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 bg-white dark:bg-[#0f172a] rounded-full border-l border-slate-200 dark:border-white/10" />
+
+                                        <div className="flex justify-between items-start mb-4 border-b border-slate-200 dark:border-white/10 pb-4 border-dashed">
+                                            <div className="text-left">
+                                                <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Claimed By</p>
+                                                <p className="font-bold text-slate-900 dark:text-white truncate max-w-[120px]">{formData.name}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Offer Code</p>
+                                                <p className="font-mono font-bold text-blue-600 dark:text-blue-400">LAUNCH50</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-between items-center text-xs text-slate-500">
+                                            <span>Valid for 48 hours</span>
+                                            <span className="flex items-center gap-1 text-green-600 font-bold"><CheckCircle size={10} /> Active</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-900/30 text-xs text-blue-700 dark:text-blue-300 flex items-center justify-center gap-2">
+                                        <Clock size={14} className="animate-spin-slow" />
+                                        Redirecting to calendar...
                                     </div>
                                 </div>
                             )}

@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, deleteDoc, doc, updateDoc, orderBy, query, Timestamp, getDoc } from 'firebase/firestore';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
-import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar, Globe, Building, AlignLeft, Zap } from 'lucide-react';
+import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar, Globe, Building, AlignLeft, Zap, Video } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '../../context/ToastContext';
 
@@ -316,6 +316,16 @@ const AdminMessages = () => {
                                                                     {booking.timezone ? formatTimeInZone(booking.date, booking.timezone) : format(new Date(booking.date), 'MMM d, h:mm a')}
                                                                 </span>
                                                             </div>
+
+                                                            {/* Meeting Type / Location Display */}
+                                                            <div className="flex justify-between items-center p-2 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                                                                <span className="text-xs text-slate-500 font-medium">Meeting Platform</span>
+                                                                <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1">
+                                                                    {(booking as any).location === 'whatsapp' ? <Globe size={12} className="text-green-500" /> : <Video size={12} className="text-blue-500" />}
+                                                                    <span className="capitalize">{(booking as any).location === 'whatsapp' ? 'WhatsApp' : 'Google Meet'}</span>
+                                                                </span>
+                                                            </div>
+
                                                             <div className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/10 rounded-lg border border-blue-100 dark:border-blue-900/30">
                                                                 <span className="text-xs text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1"><Globe size={12} /> Your Time (BD)</span>
                                                                 <span className="text-sm font-bold text-blue-700 dark:text-blue-300">

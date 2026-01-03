@@ -153,7 +153,16 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                 createdAt: serverTimestamp(), status: 'scheduled', source: 'Web Calendar'
             });
             setBookingSuccess(true);
-            setTimeout(() => navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&date=${encodeURIComponent(selectedSlot)}`), 2000);
+            setTimeout(() => {
+                const params = new URLSearchParams({
+                    name: formData.name,
+                    email: formData.email,
+                    date: selectedSlot || '',
+                    location: meetingType,
+                    notes: formData.notes
+                });
+                navigate(`/booking-success?${params.toString()}`);
+            }, 2000);
         } catch { setSubmitting(false); setErrors({ submit: "Booking failed. Try again." }); }
     };
 
