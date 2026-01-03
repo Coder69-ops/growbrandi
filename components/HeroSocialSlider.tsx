@@ -112,56 +112,69 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                         {renderBadge(currentItem.type)}
                     </div>
 
-                    <div className="flex flex-col h-full relative z-10 pt-4">
-                        {/* Content */}
-                        <div className="mb-auto relative">
-                            {currentItem.type === 'review' && (
-                                <Quote className="absolute -top-4 -left-2 w-10 h-10 text-slate-400/20 dark:text-slate-600/30 transform -scale-x-100" />
-                            )}
-                            <p className="text-slate-900 dark:text-white font-medium leading-relaxed text-xl lg:text-2xl tracking-tight">
-                                {currentItem.content}
-                            </p>
-                        </div>
-
-                        {/* Footer (Author + Image + CTA) */}
-                        <div className="flex items-center gap-5 mt-8 border-t border-slate-200/50 dark:border-white/5 pt-6">
+                    <div className="flex flex-col h-full relative z-10 pt-2">
+                        {/* Header: Image + Author + CTA */}
+                        <div className="flex items-center gap-6 pb-6 border-b border-slate-200/50 dark:border-white/5">
                             {/* Larger Image Display */}
                             <div className="relative shrink-0">
                                 {currentItem.image ? (
                                     <img
                                         src={currentItem.image}
                                         alt={currentItem.author}
-                                        className={`w-16 h-16 object-cover shadow-lg border-2 border-white dark:border-slate-700 ring-2 ring-transparent group-hover:ring-offset-2 group-hover:ring-blue-500/20 transition-all duration-300 ${currentItem.type === 'review' ? 'rounded-full' : 'rounded-2xl'}`}
+                                        className={`w-20 h-20 object-cover shadow-lg border-2 border-white dark:border-slate-700 ring-2 ring-transparent group-hover:ring-offset-2 group-hover:ring-blue-500/20 transition-all duration-300 ${currentItem.type === 'review' ? 'rounded-full' : 'rounded-2xl'}`}
                                     />
                                 ) : (
-                                    <div className={`w-16 h-16 flex items-center justify-center font-bold text-xl uppercase shadow-lg border-2 border-white dark:border-slate-700 ${currentItem.type === 'review' ? 'rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white' : 'rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
+                                    <div className={`w-20 h-20 flex items-center justify-center font-bold text-2xl uppercase shadow-lg border-2 border-white dark:border-slate-700 ${currentItem.type === 'review' ? 'rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white' : 'rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
                                         {currentItem.author?.charAt(0) || '?'}
                                     </div>
                                 )}
                                 {/* Online Indicator */}
-                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm animate-pulse" />
+                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-[3px] border-white dark:border-slate-900 rounded-full shadow-sm animate-pulse" />
                             </div>
 
                             <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                <div className="font-bold text-slate-900 dark:text-white text-lg truncate leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                <div className="font-bold text-slate-900 dark:text-white text-xl truncate leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                     {currentItem.author}
                                 </div>
                                 {currentItem.role && (
-                                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.1em] truncate mt-1">
+                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.1em] truncate mt-1.5 opacity-80">
                                         {currentItem.role}
                                     </div>
                                 )}
                             </div>
 
-                            {/* Prominent CTA Button */}
+                            {/* Prominent CTA Button - Top Right */}
                             {currentItem.actionLabel && (
                                 <a
                                     href={currentItem.actionUrl || '#'}
-                                    className="hidden sm:flex items-center gap-2.5 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 group/btn shrink-0"
+                                    className="hidden sm:flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 group/btn shrink-0 ml-auto"
                                 >
                                     {currentItem.actionLabel}
                                     <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                                 </a>
+                            )}
+                        </div>
+
+                        {/* Body Content - Bottom */}
+                        <div className="mt-8 relative flex-1 flex flex-col justify-center">
+                            {currentItem.type === 'review' && (
+                                <Quote className="absolute -top-6 -left-2 w-12 h-12 text-slate-400/10 dark:text-slate-600/20 transform -scale-x-100" />
+                            )}
+                            <p className="text-slate-800 dark:text-slate-100 font-medium leading-relaxed text-lg lg:text-xl tracking-tight relative z-10">
+                                "{currentItem.content}"
+                            </p>
+
+                            {/* Mobile CTA Fallback */}
+                            {currentItem.actionLabel && (
+                                <div className="mt-6 sm:hidden">
+                                    <a
+                                        href={currentItem.actionUrl || '#'}
+                                        className="flex w-full justify-center items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-all"
+                                    >
+                                        {currentItem.actionLabel}
+                                        <ArrowRight size={16} />
+                                    </a>
+                                </div>
                             )}
                         </div>
                     </div>
