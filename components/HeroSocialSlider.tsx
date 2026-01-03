@@ -88,7 +88,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
     const styles = getTypeStyles(currentItem.type);
 
     return (
-        <div className="pt-8 lg:pt-12 h-[240px] relative w-full max-w-lg mx-auto lg:mx-0">
+        <div className="pt-10 lg:pt-14 h-[320px] relative w-full max-w-xl mx-auto lg:mx-0 font-sans">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentIndex}
@@ -97,63 +97,70 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
-                    className={`absolute inset-0 p-8 rounded-[2.5rem] backdrop-blur-2xl border shadow-2xl transition-all duration-500 ${styles.container}`}
+                    className={`absolute inset-0 p-8 rounded-[2.5rem] backdrop-blur-2xl border-[1.5px] shadow-2xl transition-all duration-500 ${styles.container} group`}
                 >
                     {/* Background Shimmer Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
 
-                    {/* Decorative Icon */}
-                    <div className={`absolute -top-6 -left-6 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl border backdrop-blur-md transform -rotate-6 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 z-20 ${styles.iconBg}`}>
+                    {/* Decorative Icon - Floating Top Left */}
+                    <div className={`absolute -top-7 -left-7 w-16 h-16 rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border backdrop-blur-md transform -rotate-6 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 z-20 ${styles.iconBg}`}>
                         {renderIcon(currentItem.type)}
                     </div>
 
-                    {/* Badge */}
-                    <div className={`absolute top-6 right-8 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.1em] border ${styles.badge}`}>
+                    {/* Badge - Top Right */}
+                    <div className={`absolute top-6 right-8 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.15em] border backdrop-blur-md shadow-sm ${styles.badge}`}>
                         {renderBadge(currentItem.type)}
                     </div>
 
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col h-full relative z-10 pt-4">
                         {/* Content */}
-                        <div className="mt-2 mb-6 relative">
+                        <div className="mb-auto relative">
                             {currentItem.type === 'review' && (
-                                <Quote className="absolute -top-2 -left-2 w-8 h-8 text-slate-300 dark:text-slate-600 opacity-20 transform -scale-x-100" />
+                                <Quote className="absolute -top-4 -left-2 w-10 h-10 text-slate-400/20 dark:text-slate-600/30 transform -scale-x-100" />
                             )}
-                            <p className="text-slate-800 dark:text-slate-100 font-medium leading-relaxed text-xl line-clamp-3 relative z-10">
+                            <p className="text-slate-900 dark:text-white font-medium leading-relaxed text-xl lg:text-2xl tracking-tight">
                                 {currentItem.content}
                             </p>
                         </div>
 
-                        {/* Footer */}
-                        <div className="flex items-center gap-4 mt-auto">
-                            {currentItem.image ? (
-                                <img
-                                    src={currentItem.image}
-                                    alt={currentItem.author}
-                                    className={`w-12 h-12 object-cover shadow-md border-2 border-white dark:border-slate-700 ${currentItem.type === 'review' ? 'rounded-full' : 'rounded-xl'}`}
-                                />
-                            ) : (
-                                <div className={`w-12 h-12 flex items-center justify-center font-bold text-sm uppercase shadow-md border-2 border-white dark:border-slate-700 ${currentItem.type === 'review' ? 'rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white' : 'rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-500'}`}>
-                                    {currentItem.author?.charAt(0) || '?'}
-                                </div>
-                            )}
+                        {/* Footer (Author + Image + CTA) */}
+                        <div className="flex items-center gap-5 mt-8 border-t border-slate-200/50 dark:border-white/5 pt-6">
+                            {/* Larger Image Display */}
+                            <div className="relative shrink-0">
+                                {currentItem.image ? (
+                                    <img
+                                        src={currentItem.image}
+                                        alt={currentItem.author}
+                                        className={`w-16 h-16 object-cover shadow-lg border-2 border-white dark:border-slate-700 ring-2 ring-transparent group-hover:ring-offset-2 group-hover:ring-blue-500/20 transition-all duration-300 ${currentItem.type === 'review' ? 'rounded-full' : 'rounded-2xl'}`}
+                                    />
+                                ) : (
+                                    <div className={`w-16 h-16 flex items-center justify-center font-bold text-xl uppercase shadow-lg border-2 border-white dark:border-slate-700 ${currentItem.type === 'review' ? 'rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white' : 'rounded-2xl bg-slate-200 dark:bg-slate-800 text-slate-500'}`}>
+                                        {currentItem.author?.charAt(0) || '?'}
+                                    </div>
+                                )}
+                                {/* Online Indicator */}
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full shadow-sm animate-pulse" />
+                            </div>
 
-                            <div className="flex-1 min-w-0">
-                                <div className="font-bold text-slate-900 dark:text-white text-base truncate tabular-nums">{currentItem.author}</div>
+                            <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                <div className="font-bold text-slate-900 dark:text-white text-lg truncate leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    {currentItem.author}
+                                </div>
                                 {currentItem.role && (
-                                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-[0.15em] truncate opacity-70">
+                                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-[0.1em] truncate mt-1">
                                         {currentItem.role}
                                     </div>
                                 )}
                             </div>
 
-                            {/* CTA Button */}
+                            {/* Prominent CTA Button */}
                             {currentItem.actionLabel && (
                                 <a
                                     href={currentItem.actionUrl || '#'}
-                                    className="group flex items-center gap-2 px-5 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+                                    className="hidden sm:flex items-center gap-2.5 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 group/btn shrink-0"
                                 >
                                     {currentItem.actionLabel}
-                                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                    <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                                 </a>
                             )}
                         </div>
@@ -161,19 +168,25 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                 </motion.div>
             </AnimatePresence>
 
-            {/* Dots Indicator */}
+            {/* Pagination / Indicators */}
             {items.length > 1 && (
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                <div className="absolute -bottom-12 left-0 right-0 flex justify-center items-center gap-3">
                     {items.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => setCurrentIndex(idx)}
-                            className={`rounded-full transition-all duration-500 ${idx === currentIndex
-                                ? 'bg-blue-600 w-8 h-2'
-                                : 'bg-slate-300 dark:bg-slate-700 w-2 h-2 hover:bg-slate-400 dark:hover:bg-slate-600'
-                                }`}
+                            className={`rounded-full transition-all duration-500 relative ${idx === currentIndex ? 'w-12' : 'w-2.5 hover:bg-slate-400 dark:hover:bg-slate-600'
+                                } h-2.5 overflow-hidden bg-slate-200 dark:bg-slate-800`}
                             aria-label={`Go to slide ${idx + 1}`}
-                        />
+                        >
+                            {idx === currentIndex && (
+                                <motion.div
+                                    layoutId="slider-indicator"
+                                    className="absolute inset-0 bg-blue-600 dark:bg-blue-500 rounded-full"
+                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                />
+                            )}
+                        </button>
                     ))}
                 </div>
             )}
