@@ -21,6 +21,7 @@ import remarkGfm from 'remark-gfm';
 import { FaPaperPlane, FaListUl } from 'react-icons/fa'; // Added imports
 import { createArticleSchema } from '../src/utils/schemas';
 import { useSiteSettings } from '../src/hooks/useSiteSettings';
+import { useToast } from '../src/context/ToastContext';
 
 // Custom Link Component for Markdown
 const MarkdownLink = ({ href, children, ...props }: any) => {
@@ -103,6 +104,7 @@ const BlogPostPage = () => {
     const { getLocalizedPath } = useLocalizedPath();
     const { content: siteContent, getText } = useSiteContentData();
     const { settings } = useSiteSettings();
+    const { showToast } = useToast();
     const blogSettings = siteContent?.blog_settings || {};
 
     const [post, setPost] = useState<any>(null);
@@ -233,6 +235,30 @@ const BlogPostPage = () => {
         url: window.location.href
     });
 
+    const handleShare = (platform: 'facebook' | 'twitter' | 'linkedin' | 'copy') => {
+        const url = window.location.href;
+        const text = `Check out this article: ${title}`;
+
+        switch (platform) {
+            case 'facebook':
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                break;
+            case 'twitter':
+                window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank', 'width=600,height=400');
+                break;
+            case 'linkedin':
+                window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                break;
+            case 'copy':
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast(t('common.link_copied', 'Link copied to clipboard!'), 'success');
+                }).catch(() => {
+                    showToast(t('common.copy_failed', 'Failed to copy link'), 'error');
+                });
+                break;
+        }
+    };
+
     return (
         <>
             <SEO
@@ -312,10 +338,34 @@ const BlogPostPage = () => {
                                     <div className="mt-16 pt-8 border-t border-slate-200 dark:border-white/10">
                                         <p className="font-bold text-slate-900 dark:text-white mb-4 text-center uppercase tracking-wider text-sm">Share this article</p>
                                         <div className="flex justify-center gap-4">
-                                            <button className="p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"><FaFacebook /></button>
-                                            <button className="p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 transition-colors"><FaTwitter /></button>
-                                            <button className="p-3 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-colors"><FaLinkedin /></button>
-                                            <button className="p-3 bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white rounded-full hover:bg-slate-300 transition-colors"><FaLink /></button>
+                                            <button
+                                                onClick={() => handleShare('facebook')}
+                                                className="p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 hover:scale-110 transition-all duration-300"
+                                                title="Share on Facebook"
+                                            >
+                                                <FaFacebook />
+                                            </button>
+                                            <button
+                                                onClick={() => handleShare('twitter')}
+                                                className="p-3 bg-sky-500 text-white rounded-full hover:bg-sky-600 hover:scale-110 transition-all duration-300"
+                                                title="Share on Twitter"
+                                            >
+                                                <FaTwitter />
+                                            </button>
+                                            <button
+                                                onClick={() => handleShare('linkedin')}
+                                                className="p-3 bg-blue-700 text-white rounded-full hover:bg-blue-800 hover:scale-110 transition-all duration-300"
+                                                title="Share on LinkedIn"
+                                            >
+                                                <FaLinkedin />
+                                            </button>
+                                            <button
+                                                onClick={() => handleShare('copy')}
+                                                className="p-3 bg-slate-200 dark:bg-white/10 text-slate-600 dark:text-white rounded-full hover:bg-slate-300 dark:hover:bg-white/20 hover:scale-110 transition-all duration-300"
+                                                title="Copy Link"
+                                            >
+                                                <FaLink />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
