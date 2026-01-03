@@ -72,6 +72,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+    const [bookingSuccess, setBookingSuccess] = useState(false); // New Success State
 
     // Feature: Location Toggle
     const [meetingType] = useState<'google_meet'>('google_meet');
@@ -89,6 +90,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
         email: '',
         notes: ''
     });
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     const [step, setStep] = useState<'date' | 'details'>('date');
 
@@ -150,9 +152,28 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
         }
     };
 
+    const validateForm = () => {
+        const newErrors: { [key: string]: string } = {};
+        if (!formData.name.trim()) newErrors.name = "Full name is required";
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Please enter a valid email address";
+        }
+        return newErrors;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedSlot || !formData.name || !formData.email) return;
+        setErrors({});
+
+        const formErrors = validateForm();
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
+            return;
+        }
+
+        if (!selectedSlot) return;
 
         setSubmitting(true);
         try {
@@ -160,21 +181,44 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                 ...formData,
                 date: selectedSlot,
                 timezone: timezone,
-                location: meetingType, // Storage of location preference
+                location: meetingType,
                 createdAt: serverTimestamp(),
                 status: 'scheduled',
                 source: 'Custom Calendar'
             });
 
-            const locationQuery = '';
-            navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}&date=${encodeURIComponent(selectedSlot)}${locationQuery}`);
+            setBookingSuccess(true); // Show success animation
+
+            // Delay navigation slightly for animation
+            setTimeout(() => {
+                navigate(`/booking-success?name=${encodeURIComponent(formData.name)}&email=${encodeURIComponent(formData.email)}&date=${encodeURIComponent(selectedSlot)}&location=${meetingType}`);
+            }, 2000);
 
         } catch (error) {
             console.error("Booking failed:", error);
-            alert("Something went wrong. Please try again.");
+            setErrors({ submit: "Something went wrong. Please try again." });
             setSubmitting(false);
         }
     };
+
+    if (bookingSuccess) {
+        return (
+            <div className={`w-full max-w-5xl mx-auto min-h-[600px] bg-white dark:bg-[#09090b] rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-center p-10 ${className}`}>
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="text-center"
+                >
+                    <div className="w-24 h-24 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6 relative">
+                        <CheckCircle size={48} className="text-green-600 dark:text-green-400" />
+                        <div className="absolute inset-0 bg-green-500/20 rounded-full animate-ping" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Booking Confirmed!</h3>
+                    <p className="text-slate-500 dark:text-slate-400">Redirecting you to the success page...</p>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className={`w-full max-w-5xl mx-auto bg-white dark:bg-[#09090b] rounded-[2.5rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col lg:flex-row ${className}`}>
@@ -211,7 +255,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                             <div className="grid grid-cols-1">
                                 <button
                                     disabled
-                                    className="flex items-center justify-center gap-2 p-2 rounded-lg text-sm font-semibold transition-all border bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shadow-sm cursor-default"
+                                    className="flex items-center justify-center gap-2 p-3 rounded-lg text-sm font-semibold transition-all border bg-blue-50/50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shadow-sm cursor-default"
                                 >
                                     <MapPin size={16} /> Google Meet
                                 </button>
@@ -225,6 +269,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                     <AnimatePresence mode="wait">
                         {selectedSlot ? (
                             <motion.div
+                                key="selected"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: 10 }}
@@ -240,23 +285,26 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                     </div>
                                     <div className="flex items-center gap-2 text-white font-medium text-lg">
                                         {format(parseISO(selectedSlot), 'h:mm a')}
-                                        <span className="text-xs opacity-70 bg-white/20 px-2 py-0.5 rounded-full">
-                                            {timezone.split('/')[1] || timezone}
+                                        <span className="text-xs opacity-80 bg-white/20 px-2 py-0.5 rounded-full border border-white/10">
+                                            {timezone.split('/')[1]?.replace('_', ' ') || timezone}
                                         </span>
                                     </div>
-                                    <div className="mt-2 flex items-center gap-1.5 text-xs font-medium text-white/90">
-                                        <MapPin size={14} />
-                                        via Google Meet
+                                    <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-white/90 bg-black/10 w-fit px-2 py-1 rounded-md">
+                                        <MapPin size={12} />
+                                        Google Meet
                                     </div>
                                 </div>
                             </motion.div>
                         ) : (
                             <motion.div
+                                key="empty"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="p-5 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-400 text-center"
+                                className="p-5 border-2 border-dashed border-slate-200 dark:border-slate-700/50 rounded-2xl flex flex-col items-center justify-center text-slate-400 text-center bg-slate-50/30 dark:bg-slate-800/20"
                             >
-                                <Clock size={32} className="mb-2 opacity-50" />
+                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-2">
+                                    <Clock size={20} className="opacity-50" />
+                                </div>
                                 <span className="text-sm font-medium">Select a date & time<br />to continue</span>
                             </motion.div>
                         )}
@@ -271,14 +319,20 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         key="step-date"
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
                         className="flex-1 flex flex-col"
                     >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                             <div>
                                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Select Date & Time</h3>
-                                <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mt-1">
-                                    {format(selectedDate, 'MMMM yyyy')}
-                                </p>
+                                <div className="flex items-center gap-2 mt-1">
+                                    <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                                        {format(selectedDate, 'MMMM yyyy')}
+                                    </p>
+                                    {isSameDay(selectedDate, today) && (
+                                        <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full uppercase tracking-wider">Today</span>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Timezone Selector */}
@@ -289,7 +343,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                 <select
                                     value={timezone}
                                     onChange={(e) => setTimezone(e.target.value)}
-                                    className="pl-9 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 appearance-none focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/80 transition-all min-w-[200px]"
+                                    className="pl-9 pr-8 py-2.5 bg-slate-50 dark:bg-slate-800 border-none ring-1 ring-slate-200 dark:ring-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 appearance-none focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700/80 transition-all min-w-[200px]"
                                 >
                                     <option value={Intl.DateTimeFormat().resolvedOptions().timeZone}>
                                         {formatTimezoneOption(Intl.DateTimeFormat().resolvedOptions().timeZone)} (Local)
@@ -306,19 +360,22 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
 
                         {/* Date Strip */}
                         <div className="mb-6">
-                            <div className="flex gap-2 overflow-x-auto pb-4 -mx-6 px-6 snap-x">
+                            <div className="flex gap-2 overflow-x-auto pb-4 -mx-6 px-6 snap-x scrollbar-hide">
                                 {daysStub.map((day) => {
                                     const isSelected = isSameDay(day, selectedDate);
+                                    const isToday = isSameDay(day, today);
                                     return (
                                         <button
                                             key={day.toISOString()}
                                             onClick={() => { setSelectedDate(day); setSelectedSlot(null); setIsCustomTime(false); setCustomTimeValue(''); }}
-                                            className={`flex-shrink-0 snap-start w-16 h-20 rounded-xl flex flex-col items-center justify-center border transition-all duration-200 group relative overflow-hidden ${isSelected
+                                            className={`flex-shrink-0 snap-start w-16 h-20 rounded-2xl flex flex-col items-center justify-center border transition-all duration-200 group relative overflow-hidden ${isSelected
                                                 ? 'bg-blue-600 border-blue-600 text-white shadow-lg ring-2 ring-blue-200 dark:ring-blue-900 ring-offset-2 dark:ring-offset-[#09090b]'
-                                                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10'
+                                                : isToday
+                                                    ? 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300'
+                                                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-slate-50 dark:hover:bg-slate-800'
                                                 }`}
                                         >
-                                            <span className={`text-[10px] font-bold uppercase mb-0.5 tracking-wider ${isSelected ? 'text-blue-100' : 'text-slate-400'}`}>
+                                            <span className={`text-[10px] font-bold uppercase mb-0.5 tracking-wider ${isSelected ? 'text-blue-100' : 'text-slate-400 opacity-80'}`}>
                                                 {format(day, 'EEE')}
                                             </span>
                                             <span className={`text-xl font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
@@ -331,65 +388,72 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         </div>
 
                         {/* Time Slots Area */}
-                        <div className="flex-1 overflow-y-auto pr-2 min-h-[400px]">
+                        <div className="flex-1 overflow-y-auto pr-2 min-h-[400px] custom-scrollbar">
                             {/* Standard Slots Grid (Compact) */}
                             {!isCustomTime ? (
                                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
                                     {loading ? (
-                                        <div className="col-span-full flex flex-col items-center justify-center py-12 text-slate-400 gap-3">
-                                            <Loader2 className="animate-spin text-blue-500" size={28} />
-                                            <span className="text-sm font-medium">Loading slots...</span>
+                                        <div className="col-span-full flex flex-col items-center justify-center py-16 text-slate-400 gap-3">
+                                            <Loader2 className="animate-spin text-blue-500" size={32} />
+                                            <span className="text-sm font-medium animate-pulse">Checking availability...</span>
                                         </div>
-                                    ) : slots.map((slot) => {
-                                        const isBooked = bookedSlots.includes(slot);
-                                        const isPast = isBefore(parseISO(slot), new Date());
-                                        const disabled = isBooked || isPast;
-                                        const isSelected = selectedSlot === slot;
+                                    ) : slots.length > 0 ? (
+                                        slots.map((slot) => {
+                                            const isBooked = bookedSlots.includes(slot);
+                                            const isPast = isBefore(parseISO(slot), new Date());
+                                            const disabled = isBooked || isPast;
+                                            const isSelected = selectedSlot === slot;
 
-                                        return (
-                                            <button
-                                                key={slot}
-                                                disabled={disabled}
-                                                onClick={() => setSelectedSlot(slot)}
-                                                className={`py-3 px-2 rounded-lg border font-semibold text-sm transition-all duration-200 relative overflow-hidden ${isSelected
-                                                    ? 'bg-blue-600 border-blue-600 text-white shadow-md'
-                                                    : disabled
-                                                        ? 'bg-slate-50 dark:bg-slate-900/50 border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed opacity-60'
-                                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-sm'
-                                                    }`}
-                                            >
-                                                {format(parseISO(slot), 'h:mm a')}
-                                            </button>
-                                        );
-                                    })}
+                                            return (
+                                                <button
+                                                    key={slot}
+                                                    disabled={disabled}
+                                                    onClick={() => setSelectedSlot(slot)}
+                                                    className={`py-3 px-2 rounded-xl border font-semibold text-sm transition-all duration-200 relative overflow-hidden ${isSelected
+                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg scale-105'
+                                                        : disabled
+                                                            ? 'bg-slate-50 dark:bg-slate-900/40 border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 cursor-not-allowed'
+                                                            : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-blue-400 hover:text-blue-600 hover:shadow-md hover:-translate-y-0.5'
+                                                        }`}
+                                                >
+                                                    {format(parseISO(slot), 'h:mm a')}
+                                                    {isSelected && <motion.div layoutId="outline" className="absolute inset-0 border-2 border-white/20 rounded-xl" />}
+                                                </button>
+                                            );
+                                        })
+                                    ) : (
+                                        <div className="col-span-full text-center py-12 text-slate-400">
+                                            No slots available for this day.
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center h-full py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/50">
-                                    <label className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-4 block">Pick a Specific Time</label>
-                                    <div className="relative">
+                                <div className="flex flex-col items-center justify-center h-full py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50">
+                                    <label className="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-6 block">Pick a Specific Time</label>
+                                    <div className="relative group">
                                         <input
                                             type="time"
                                             value={customTimeValue}
                                             onChange={handleCustomTimeChange}
-                                            className="px-6 py-4 text-2xl font-mono font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-black text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none shadow-sm"
+                                            className="px-8 py-5 text-3xl font-mono font-bold rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-black text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none shadow-lg transition-all"
                                         />
                                     </div>
-                                    <p className="text-xs text-slate-500 mt-4 max-w-xs text-center">
-                                        Note: Custom times are subject to availability confirmation.
+                                    <p className="text-xs text-slate-500 mt-6 max-w-xs text-center font-medium">
+                                        Note: Custom times are subject to manual confirmation by our team.
                                     </p>
                                 </div>
                             )}
 
                             {/* Custom Time Toggle */}
-                            <div className="mt-6 flex justify-center">
+                            <div className="mt-8 flex justify-center">
                                 <button
                                     onClick={() => { setIsCustomTime(!isCustomTime); setSelectedSlot(null); setCustomTimeValue(''); }}
-                                    className="flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                                    className="flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 px-5 py-2.5 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-colors"
                                 >
                                     {isCustomTime ? (
-                                        <>Back to Slot Grid</>
+                                        <>Back to Available Slots</>
                                     ) : (
-                                        <>To Late? <Edit3 size={14} /> Set a Custom Time</>
+                                        <>Time not listed? <Edit3 size={14} /> Request Custom Time</>
                                     )}
                                 </button>
                             </div>
@@ -399,9 +463,9 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                             <button
                                 disabled={!selectedSlot}
                                 onClick={() => setStep('details')}
-                                className="px-8 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none transition-all flex items-center gap-2 text-base"
+                                className="px-8 py-3.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none transition-all flex items-center gap-2 text-base group"
                             >
-                                Next Step <ChevronRight size={18} />
+                                Next Step <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     </motion.div>
@@ -410,6 +474,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         key="step-details"
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
                         className="flex-1 flex flex-col"
                     >
                         <button
@@ -421,52 +486,65 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         </button>
 
                         <div className="mb-8">
-                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Almost Done!</h3>
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Final Step</h3>
                             <p className="text-slate-500 dark:text-slate-400">Enter your details to confirm your strategy session.</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-6">
                             <div className="space-y-1.5">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Full Name</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Full Name *</label>
                                 <div className="relative group">
-                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+                                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.name ? 'text-red-400' : 'text-slate-400 group-focus-within:text-blue-500'}`} size={20} />
                                     <input
-                                        required
+                                        autoFocus
                                         type="text"
                                         value={formData.name}
-                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
+                                        onChange={e => {
+                                            setFormData({ ...formData, name: e.target.value });
+                                            if (errors.name) setErrors({ ...errors, name: '' });
+                                        }}
+                                        className={`w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl focus:ring-4 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400 ${errors.name ? 'border-red-300 focus:ring-red-100 dark:border-red-900' : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/10 focus:border-blue-500'}`}
                                         placeholder="John Doe"
                                     />
+                                    {errors.name && <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-red-500">{errors.name}</span>}
                                 </div>
                             </div>
 
                             <div className="space-y-1.5">
-                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Work Email</label>
+                                <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Work Email *</label>
                                 <div className="relative group">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+                                    <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${errors.email ? 'text-red-400' : 'text-slate-400 group-focus-within:text-blue-500'}`} size={20} />
                                     <input
-                                        required
                                         type="email"
                                         value={formData.email}
-                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
-                                        placeholder="john@company.com"
+                                        onChange={e => {
+                                            setFormData({ ...formData, email: e.target.value })
+                                        }
+                                            if (errors.email) setErrors({...errors, email: ''});
+                                        }
+                                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl focus:ring-4 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400 ${errors.email ? 'border-red-300 focus:ring-red-100 dark:border-red-900' : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/10 focus:border-blue-500'}`}
+                                    placeholder="john@company.com"
                                     />
                                 </div>
+                                {errors.email && <span className="text-xs font-bold text-red-500 ml-1">{errors.email}</span>}
                             </div>
 
                             <div className="space-y-1.5">
                                 <label className="text-sm font-semibold text-slate-700 dark:text-slate-300 ml-1">Project Details (Optional)</label>
-                                <textarea
-                                    value={formData.notes}
-                                    onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                                    className="w-full p-4 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all min-h-[120px] resize-none font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
-                                    placeholder="What are your growth goals?"
-                                />
+                                <div className="relative">
+                                    <PenTool className="absolute left-4 top-4 text-slate-400" size={20} />
+                                    <textarea
+                                        value={formData.notes}
+                                        onChange={e => setFormData({ ...formData, notes: e.target.value })}
+                                        className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all min-h-[120px] resize-none font-medium text-slate-900 dark:text-white placeholder:text-slate-400"
+                                        placeholder="Briefly describe your goals..."
+                                    />
+                                </div>
                             </div>
 
                             <div className="flex-1"></div>
+
+                            {errors.submit && <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm font-bold text-center rounded-lg">{errors.submit}</div>}
 
                             <button
                                 type="submit"
@@ -493,5 +571,6 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
         </div>
     );
 };
+
 
 export default BookingCalendar;
