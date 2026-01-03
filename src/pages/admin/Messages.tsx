@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, deleteDoc, doc, updateDoc, orderBy, query, Timestamp, getDoc } from 'firebase/firestore';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
 import { AdminLoader } from '../../components/admin/AdminLoader';
-import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar, Globe, Building, AlignLeft } from 'lucide-react';
+import { Mail, Trash2, CheckCircle, Clock, Search, ExternalLink, RefreshCw, Calendar, Globe, Building, AlignLeft, Zap } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '../../context/ToastContext';
 
@@ -32,12 +32,24 @@ interface Booking {
     createdAt: Timestamp;
 }
 
+interface Lead {
+    id: string;
+    name: string;
+    email: string;
+    phone?: string;
+    offer: string;
+    source: string;
+    createdAt: Timestamp;
+    status: string;
+}
+
 const AdminMessages = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const [leads, setLeads] = useState<Lead[]>([]);
     const [analytics, setAnalytics] = useState<any>({ views: 0, bookings: 0 });
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'inquiries' | 'bookings'>('inquiries');
+    const [activeTab, setActiveTab] = useState<'inquiries' | 'bookings' | 'leads'>('leads');
     const [filter, setFilter] = useState<'all' | 'unread'>('all'); // for inquiries
     const { showConfirm } = useToast();
 
@@ -53,6 +65,11 @@ const AdminMessages = () => {
             const qBookings = query(collection(db, 'bookings'), orderBy('createdAt', 'desc'));
             const bookingsSnapshot = await getDocs(qBookings);
             setBookings(bookingsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Booking)));
+
+            // 3. Fetch Leads
+            const qLeads = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
+            const leadsSnapshot = await getDocs(qLeads);
+            setLeads(leadsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Lead)));
 
             // 3. Fetch Analytics
             const analyticsDoc = await getDoc(doc(db, 'analytics', 'free-growth-call'));
@@ -78,8 +95,10 @@ const AdminMessages = () => {
                 await deleteDoc(doc(db, collectionName, id));
                 if (collectionName === 'messages') {
                     setMessages(prev => prev.filter(m => m.id !== id));
-                } else {
+                } else if (collectionName === 'bookings') {
                     setBookings(prev => prev.filter(b => b.id !== id));
+                } else {
+                    setLeads(prev => prev.filter(l => l.id !== id));
                 }
             } catch (error) {
                 console.error("Error deleting item:", error);
@@ -182,6 +201,12 @@ const AdminMessages = () => {
                         >
                             <Calendar size={16} /> Bookings <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-xs">{bookings.length}</span>
                         </button>
+                        <button
+                            onClick={() => setActiveTab('leads')}
+                            className={`px-6 py-3 font-medium text-sm border-b-2 transition-colors flex items-center gap-2 ${activeTab === 'leads' ? 'border-amber-500 text-amber-600 dark:text-amber-400' : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
+                        >
+                            <Zap size={16} /> Discount Leads <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full text-xs">{leads.length}</span>
+                        </button>
                     </div>
 
                     {/* Content Area */}
@@ -265,8 +290,8 @@ const AdminMessages = () => {
 
                                                 <div className="flex items-center gap-2">
                                                     <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${booking.status === 'scheduled' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                            booking.status === 'completed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
-                                                                'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                                        booking.status === 'completed' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                                                            'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                                                         }`}>
                                                         {booking.status}
                                                     </div>
@@ -328,6 +353,52 @@ const AdminMessages = () => {
 
                                             <div className="flex items-center gap-2 text-xs text-slate-400">
                                                 <span>Booked on: {booking.createdAt ? format(booking.createdAt.toDate(), 'MMM d, yyyy h:mm a') : 'Unknown'}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === 'leads' && (
+                            <div className="space-y-4">
+                                {leads.length === 0 ? (
+                                    <div className="text-center py-12 text-slate-400 italic">No discount claims yet.</div>
+                                ) : (
+                                    leads.map((lead) => (
+                                        <div key={lead.id} className="glass-card p-6 flex flex-col md:flex-row justify-between items-center gap-6 group hover:border-amber-400/30 transition-all">
+                                            <div className="flex items-center gap-4 w-full md:w-auto">
+                                                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-900/20 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                                                    <Zap size={24} fill="currentColor" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-bold text-slate-900 dark:text-white text-lg">{lead.name}</h3>
+                                                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-sm text-slate-500 dark:text-slate-400">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <Mail size={14} /> {lead.email}
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="font-semibold text-amber-600 dark:text-amber-400">{lead.offer}</span> • {lead.source}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                                                <div className="text-right">
+                                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Claimed</div>
+                                                    <div className="text-sm font-medium text-slate-900 dark:text-white">
+                                                        {lead.createdAt ? format(lead.createdAt.toDate(), 'MMM d, yyyy h:mm a') : 'Unknown'}
+                                                    </div>
+                                                </div>
+                                                <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden md:block" />
+                                                <button
+                                                    onClick={(e) => handleDelete(lead.id, 'leads', e)}
+                                                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                                    title="Delete Lead"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
                                             </div>
                                         </div>
                                     ))

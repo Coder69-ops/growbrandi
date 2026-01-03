@@ -478,12 +478,25 @@ const FreeGrowthCall = () => {
                     <h2 className="text-3xl md:text-4xl font-bold font-heading">{t(data?.finalCta?.title, 'Ready to scale your business?')}</h2>
                     <a
                         href={getLocalizedPath('/free-growth-call#booking-calendar')}
-                        className="px-10 py-5 bg-white text-blue-600 rounded-xl font-bold hover:bg-slate-50 transition-all shadow-xl hover:scale-105 active:scale-95"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setShowDiscountModal(true);
+                        }}
+                        className="inline-flex items-center justify-center px-8 py-4 bg-white text-blue-600 rounded-xl font-bold hover:bg-white/90 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1"
                     >
-                        {t(data?.finalCta?.buttonText, 'Claim your free slot')}
+                        {t(data?.finalCta?.buttonText, 'Get My Strategy Plan')} <ArrowRight className="ml-2 w-5 h-5" />
                     </a>
                 </div>
             </section>
+
+            <DiscountBookingModal
+                isOpen={showDiscountModal}
+                onClose={() => setShowDiscountModal(false)}
+                offerImage={
+                    (data?.heroSlider?.find((item: any) => item.type === 'offer')?.image) ||
+                    "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=150&q=80"
+                }
+            />
         </div >
     );
 };

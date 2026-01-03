@@ -16,7 +16,18 @@ const TIME_SLOTS_END = 20;
 const SLOT_DURATION = 60;
 
 const COMMON_TIMEZONES = [
-    "UTC", "America/New_York", "America/Los_Angeles", "America/Chicago", "Europe/London", "Europe/Paris", "Asia/Dubai", "Asia/Singapore", "Asia/Tokyo", "Australia/Sydney"
+    "UTC",
+    "Pacific/Midway", "Pacific/Honolulu", "America/Anchorage", "America/Los_Angeles", "America/Vancouver", "America/Tijuana",
+    "America/Denver", "America/Phoenix", "America/Chicago", "America/Mexico_City", "America/New_York", "America/Toronto",
+    "America/Caracas", "America/Halifax", "America/Puerto_Rico", "America/Argentina/Buenos_Aires", "America/Sao_Paulo",
+    "Atlantic/Azores", "Atlantic/Cape_Verde", "Europe/London", "Europe/Dublin", "Europe/Lisbon", "Africa/Casablanca",
+    "Europe/Paris", "Europe/Berlin", "Europe/Rome", "Europe/Madrid", "Europe/Amsterdam", "Europe/Brussels", "Africa/Lagos",
+    "Europe/Athens", "Europe/Bucharest", "Europe/Helsinki", "Europe/Istanbul", "Africa/Cairo", "Africa/Johannesburg", "Asia/Jerusalem",
+    "Asia/Baghdad", "Asia/Riyadh", "Asia/Moscow", "Asia/Tehran", "Asia/Dubai", "Asia/Baku", "Asia/Kabul",
+    "Asia/Karachi", "Asia/Tashkent", "Asia/Kolkata", "Asia/Kathmandu", "Asia/Dhaka", "Asia/Almaty",
+    "Asia/Bangkok", "Asia/Jakarta", "Asia/Ho_Chi_Minh", "Asia/Singapore", "Asia/Shanghai", "Asia/Hong_Kong", "Asia/Taipei",
+    "Asia/Tokyo", "Asia/Seoul", "Australia/Darwin", "Australia/Adelaide", "Australia/Sydney", "Australia/Melbourne", "Australia/Brisbane",
+    "Pacific/Port_Moresby", "Pacific/Guam", "Pacific/Auckland", "Pacific/Fiji"
 ];
 
 // Helper for sleek timezone display
