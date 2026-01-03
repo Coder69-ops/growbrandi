@@ -45,9 +45,9 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
 
     const renderIcon = (type: string) => {
         switch (type) {
-            case 'offer': return <Zap className="text-amber-500 fill-amber-500 animate-pulse" size={24} />;
-            case 'service': return <Briefcase className="text-blue-500" size={24} />;
-            default: return <Star className="text-yellow-400 fill-yellow-400" size={24} />;
+            case 'offer': return <Zap className="animate-pulse" size={24} fill="currentColor" />;
+            case 'service': return <Briefcase size={24} />;
+            default: return <Star size={24} fill="currentColor" />;
         }
     };
 
@@ -63,21 +63,24 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
         switch (type) {
             case 'offer':
                 return {
-                    container: 'bg-gradient-to-br from-amber-50/90 to-orange-50/90 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200/50 dark:border-amber-500/30',
-                    iconBg: 'bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-500/30',
-                    badge: 'text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30'
+                    container: 'bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-transparent dark:from-amber-600/20 dark:via-orange-600/10 dark:to-transparent border-amber-500/30 dark:border-amber-400/20 shadow-amber-500/10',
+                    iconBg: 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/30 border-white/20',
+                    badge: 'text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-800/50',
+                    accentColor: 'text-amber-600 dark:text-amber-400'
                 };
             case 'service':
                 return {
-                    container: 'bg-gradient-to-br from-blue-50/90 to-indigo-50/90 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200/50 dark:border-blue-500/30',
-                    iconBg: 'bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-500/30',
-                    badge: 'text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30'
+                    container: 'bg-gradient-to-br from-blue-500/10 via-indigo-500/10 to-transparent dark:from-blue-600/20 dark:via-indigo-600/10 dark:to-transparent border-blue-500/30 dark:border-blue-400/20 shadow-blue-500/10',
+                    iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/30 border-white/20',
+                    badge: 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-800/50',
+                    accentColor: 'text-blue-600 dark:text-blue-400'
                 };
             default:
                 return {
-                    container: 'bg-gradient-to-br from-white/95 to-slate-50/90 dark:from-slate-800/60 dark:to-slate-900/60 border-slate-200/60 dark:border-slate-700/50',
-                    iconBg: 'bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600',
-                    badge: 'text-slate-500 dark:text-slate-400 bg-slate-100/50 dark:bg-slate-800/50'
+                    container: 'bg-white/80 dark:bg-slate-900/40 border-slate-200 dark:border-white/10 shadow-slate-200/50 dark:shadow-black/20',
+                    iconBg: 'bg-white dark:bg-slate-800 text-yellow-500 shadow-md border-slate-100 dark:border-slate-700',
+                    badge: 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700',
+                    accentColor: 'text-blue-600 dark:text-blue-400'
                 };
         }
     };
@@ -94,15 +97,18 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
-                    className={`absolute inset-0 p-8 rounded-[2rem] backdrop-blur-xl border shadow-2xl shadow-slate-200/50 dark:shadow-black/50 ${styles.container}`}
+                    className={`absolute inset-0 p-8 rounded-[2.5rem] backdrop-blur-2xl border shadow-2xl transition-all duration-500 ${styles.container}`}
                 >
+                    {/* Background Shimmer Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
+
                     {/* Decorative Icon */}
-                    <div className={`absolute -top-6 -left-6 p-4 rounded-2xl shadow-lg border backdrop-blur-md transform rotate-6 transition-all duration-500 group-hover:rotate-0 ${styles.iconBg}`}>
+                    <div className={`absolute -top-6 -left-6 w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl border backdrop-blur-md transform -rotate-6 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 z-20 ${styles.iconBg}`}>
                         {renderIcon(currentItem.type)}
                     </div>
 
                     {/* Badge */}
-                    <div className={`absolute top-6 right-6 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${styles.badge}`}>
+                    <div className={`absolute top-6 right-8 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.1em] border ${styles.badge}`}>
                         {renderBadge(currentItem.type)}
                     </div>
 
@@ -132,9 +138,9 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                             )}
 
                             <div className="flex-1 min-w-0">
-                                <div className="font-bold text-slate-900 dark:text-white text-base truncate">{currentItem.author}</div>
+                                <div className="font-bold text-slate-900 dark:text-white text-base truncate tabular-nums">{currentItem.author}</div>
                                 {currentItem.role && (
-                                    <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide truncate opacity-80">
+                                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-[0.15em] truncate opacity-70">
                                         {currentItem.role}
                                     </div>
                                 )}

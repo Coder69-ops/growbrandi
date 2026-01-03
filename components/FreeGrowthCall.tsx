@@ -167,11 +167,11 @@ const FreeGrowthCall = () => {
                                 })) : [
                                     {
                                         type: 'offer',
-                                        content: "Enjoy 50% off on your first GrowBrandi project.",
-                                        author: "50% OFF",
-                                        role: "Available for new clients",
-                                        image: "https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=150&q=80",
-                                        actionLabel: "Claim Discount",
+                                        content: "Enjoy 50% OFF on your first AI-Powered Growth project.",
+                                        author: "LAUNCH OFFER",
+                                        role: "Exclusive for new partners",
+                                        image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=150&q=80",
+                                        actionLabel: "Claim Now",
                                         actionUrl: "#booking-calendar"
                                     },
                                     {
