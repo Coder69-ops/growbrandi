@@ -274,7 +274,12 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                         className="flex-1 flex flex-col"
                     >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                            <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Select Date & Time</h3>
+                            <div>
+                                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Select Date & Time</h3>
+                                <p className="text-sm font-semibold text-blue-600 dark:text-blue-400 mt-1">
+                                    {format(selectedDate, 'MMMM yyyy')}
+                                </p>
+                            </div>
 
                             {/* Timezone Selector */}
                             <div className="relative group">
