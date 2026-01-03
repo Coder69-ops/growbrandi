@@ -19,6 +19,11 @@ interface SEOProps {
     additionalSchemas?: string[]; // For multiple schemas on one page
     siteTitleSuffix?: string;
     noIndex?: boolean;
+    articlePublishedTime?: string;
+    articleModifiedTime?: string;
+    articleAuthor?: string;
+    articleSection?: string;
+    articleTags?: string[];
 }
 
 
@@ -36,7 +41,12 @@ const SEO: React.FC<SEOProps> = ({
     schema,
     additionalSchemas = [],
     siteTitleSuffix = 'GrowBrandi',
-    noIndex = false
+    noIndex = false,
+    articlePublishedTime,
+    articleModifiedTime,
+    articleAuthor,
+    articleSection,
+    articleTags
 }) => {
     const location = useLocation();
     const { settings } = useSiteSettings();
@@ -154,6 +164,19 @@ const SEO: React.FC<SEOProps> = ({
             <meta name="twitter:title" content={fullTitle} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={ogImage} />
+
+            {/* Article Specific Metadata */}
+            {ogType === 'article' && (
+                <>
+                    {articlePublishedTime && <meta property="article:published_time" content={articlePublishedTime} />}
+                    {articleModifiedTime && <meta property="article:modified_time" content={articleModifiedTime} />}
+                    {articleAuthor && <meta property="article:author" content={articleAuthor} />}
+                    {articleSection && <meta property="article:section" content={articleSection} />}
+                    {articleTags && articleTags.map((tag, index) => (
+                        <meta key={index} property="article:tag" content={tag} />
+                    ))}
+                </>
+            )}
 
             {/* Schema.org JSON-LD */}
             <script type="application/ld+json">

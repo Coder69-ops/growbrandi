@@ -266,6 +266,11 @@ const BlogPostPage = () => {
                 description={metaDesc}
                 keywords={keywords}
                 ogImage={image}
+                ogType="article"
+                articlePublishedTime={post.date}
+                articleAuthor={typeof post.author === 'object' ? post.author.name : (post.author || "GrowBrandi Team")}
+                articleSection={post.category}
+                articleTags={keywords}
                 schema={articleSchema}
             />
             <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] relative overflow-hidden transition-colors duration-300 pt-24 pb-20">
@@ -460,7 +465,7 @@ const BlogPostPage = () => {
                                             {getText('blog_settings.sidebar_cta.body', lang) || "Book a free strategy call with our experts and let's discuss your growth."}
                                         </p>
                                         <a
-                                            href={getText('blog_settings.sidebar_cta.button_url', lang) || blogSettings.sidebar_cta?.button_url || "/contact"}
+                                            href={getLocalizedPath(getText('blog_settings.sidebar_cta.button_url', lang) || blogSettings.sidebar_cta?.button_url || "/free-growth-call")}
                                             className="block w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg hover:shadow-blue-500/25 relative z-10"
                                         >
                                             {getText('blog_settings.sidebar_cta.button_text', lang) || "Book Strategy Call"}
