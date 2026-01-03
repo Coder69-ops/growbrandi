@@ -5,7 +5,7 @@ import { db } from '../src/lib/firebase';
 import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
 import { Calendar, CheckCircle, Clock, MapPin, MessageSquare, ArrowRight, Zap, Star, Play, Sparkles, TrendingUp, ChevronDown, Volume2, VolumeX } from 'lucide-react';
 import BookingCalendar from './BookingCalendar';
-import TestimonialsSlider from './TestimonialsSlider';
+
 import HeroSocialSlider from './HeroSocialSlider';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import DiscountBookingModal from './DiscountBookingModal';
@@ -315,8 +315,7 @@ const FreeGrowthCall = () => {
                 </div>
             </section>
 
-            {/* Client Success Stories */}
-            <TestimonialsSlider />
+
 
             {/* Video Testimonial - Unchanged for brevity, assumed good */}
             {

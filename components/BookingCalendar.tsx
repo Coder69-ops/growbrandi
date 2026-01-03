@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, addDays, startOfToday, isSameDay, parseISO, isBefore, setHours, setMinutes, addMinutes } from 'date-fns';
 import { ChevronLeft, ChevronRight, Clock, User, Mail, Calendar as CalendarIcon, CheckCircle, Loader2, Globe, MapPin, PenTool, Edit3, ArrowRight, Star, Zap, Video } from 'lucide-react';
@@ -61,6 +61,35 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
     const [formData, setFormData] = useState({ name: '', email: '', notes: '' });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+    // Drag to scroll for Date Picker
+    const datePickerRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!datePickerRef.current) return;
+        setIsDragging(true);
+        setStartX(e.pageX - datePickerRef.current.offsetLeft);
+        setScrollLeft(datePickerRef.current.scrollLeft);
+    };
+
+    const handleMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging || !datePickerRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - datePickerRef.current.offsetLeft;
+        const walk = (x - startX) * 2; // Scroll-fast
+        datePickerRef.current.scrollLeft = scrollLeft - walk;
+    };
+
     // New Features State
     const [meetingType, setMeetingType] = useState<'google_meet' | 'whatsapp'>('google_meet');
     const [sliderIndex, setSliderIndex] = useState(0);
@@ -76,8 +105,8 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
         return () => clearInterval(timer);
     }, []);
 
-    // Generate next 90 days
-    const daysStub = Array.from({ length: 90 }, (_, i) => addDays(today, i));
+    // Generate next 30 days
+    const daysStub = Array.from({ length: 30 }, (_, i) => addDays(today, i));
 
     // Fetch Bookings
     useEffect(() => {
@@ -248,7 +277,14 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                                     <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">Select Date</label>
                                     <span className="text-xs font-semibold text-slate-900 dark:text-white">{format(selectedDate, 'MMMM yyyy')}</span>
                                 </div>
-                                <div className="flex gap-3 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide snap-x">
+                                <div
+                                    ref={datePickerRef}
+                                    onMouseDown={handleMouseDown}
+                                    onMouseLeave={handleMouseLeave}
+                                    onMouseUp={handleMouseUp}
+                                    onMouseMove={handleMouseMove}
+                                    className={`flex gap-3 overflow-x-auto pb-4 -mx-6 px-6 scrollbar-hide select-none transition-all ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                                >
                                     {daysStub.map((day) => {
                                         const isSelected = isSameDay(day, selectedDate);
                                         const isToday = isSameDay(day, today);
