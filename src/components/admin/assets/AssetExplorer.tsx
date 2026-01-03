@@ -4,7 +4,7 @@ import { useAssets, Asset, Folder } from '../../../hooks/useAssets';
 import {
     Folder as FolderIcon, File, Grid, List as ListIcon,
     Upload, Plus, Search, Home, ChevronRight, Trash2,
-    Download, Image as ImageIcon, CheckCircle2, Loader2
+    Download, Image as ImageIcon, CheckCircle2, Loader2, Video
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -339,6 +339,8 @@ export const AssetExplorer = ({ onSelect }: AssetExplorerProps) => {
                                     <div className="absolute inset-0 flex items-center justify-center p-2 bg-checkerboard dark:bg-checkerboard-dark bg-[length:20px_20px]">
                                         {asset.type.startsWith('image/') ? (
                                             <img src={asset.url} alt={asset.name} className="w-full h-full object-contain" />
+                                        ) : asset.type.startsWith('video/') ? (
+                                            <Video size={32} className="text-blue-500" />
                                         ) : (
                                             <File size={32} className="text-slate-400" />
                                         )}
@@ -416,6 +418,10 @@ export const AssetExplorer = ({ onSelect }: AssetExplorerProps) => {
                                                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 overflow-hidden flex-shrink-0 border border-slate-200 dark:border-slate-700">
                                                         <img src={asset.url} alt="" className="w-full h-full object-cover" />
                                                     </div>
+                                                ) : asset.type.startsWith('video/') ? (
+                                                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center border border-blue-200 dark:border-blue-800">
+                                                        <Video size={16} className="text-blue-500" />
+                                                    </div>
                                                 ) : (
                                                     <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-700">
                                                         <File size={16} className="text-slate-400" />
@@ -450,7 +456,7 @@ export const AssetExplorer = ({ onSelect }: AssetExplorerProps) => {
                                     <img src={selectedAsset.url} alt="" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center">
-                                        <File size={20} className="text-slate-400" />
+                                        {selectedAsset.type.startsWith('video/') ? <Video size={20} className="text-blue-500" /> : <File size={20} className="text-slate-400" />}
                                     </div>
                                 )}
                             </div>
@@ -480,7 +486,7 @@ export const AssetExplorer = ({ onSelect }: AssetExplorerProps) => {
                                     onClick={() => onSelect(selectedAsset.url)}
                                     className="px-6 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg shadow-blue-500/25 transition-all"
                                 >
-                                    Select Image
+                                    Select Asset
                                 </button>
                             )}
                         </div>

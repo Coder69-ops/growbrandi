@@ -16,9 +16,10 @@ interface SliderItem {
 
 interface HeroSocialSliderProps {
     items: SliderItem[];
+    onAction?: () => void;
 }
 
-const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
+const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onAction }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const { getLocalizedPath } = useLocalizedPath();
 
@@ -147,6 +148,12 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                             {currentItem.actionLabel && (
                                 <a
                                     href={currentItem.actionUrl || '#'}
+                                    onClick={(e) => {
+                                        if (onAction) {
+                                            e.preventDefault();
+                                            onAction();
+                                        }
+                                    }}
                                     className="hidden sm:flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 group/btn shrink-0 ml-auto"
                                 >
                                     {currentItem.actionLabel}
@@ -169,6 +176,12 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
                                 <div className="mt-6 sm:hidden">
                                     <a
                                         href={currentItem.actionUrl || '#'}
+                                        onClick={(e) => {
+                                            if (onAction) {
+                                                e.preventDefault();
+                                                onAction();
+                                            }
+                                        }}
                                         className="flex w-full justify-center items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-lg active:scale-95 transition-all"
                                     >
                                         {currentItem.actionLabel}
@@ -183,7 +196,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [] }) => {
 
             {/* Pagination / Indicators */}
             {items.length > 1 && (
-                <div className="absolute -bottom-12 left-0 right-0 flex justify-center items-center gap-3">
+                <div className="hidden sm:flex absolute -bottom-12 left-0 right-0 justify-center items-center gap-3">
                     {items.map((_, idx) => (
                         <button
                             key={idx}

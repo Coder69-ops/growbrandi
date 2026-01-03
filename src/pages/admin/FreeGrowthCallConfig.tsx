@@ -137,7 +137,7 @@ const AdminFreeGrowthCallConfig = () => {
     // Image Picker State
     const [pickerOpen, setPickerOpen] = useState(false);
     const [activeImageField, setActiveImageField] = useState<{
-        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image';
+        type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image' | 'video_file';
         index: number;
     } | null>(null);
 
@@ -231,12 +231,14 @@ const AdminFreeGrowthCallConfig = () => {
                 newExpectItems[activeImageField.index].icon = url;
             }
             setData({ ...data, whatToExpect: newExpectItems });
+        } else if (activeImageField.type === 'video_file') {
+            setData({ ...data, videoTestimonial: { ...data.videoTestimonial, videoUrl: url } });
         }
         setPickerOpen(false);
         setActiveImageField(null);
     };
 
-    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image', index: number) => {
+    const openPicker = (type: 'logo' | 'testimonial_image' | 'video_thumbnail' | 'process_image' | 'trust_avatar' | 'expect_image' | 'hero_slider_image' | 'video_file', index: number) => {
         setActiveImageField({ type, index });
         setPickerOpen(true);
     };
@@ -1111,14 +1113,22 @@ const AdminFreeGrowthCallConfig = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-4">
-                                            <div>
-                                                <label className="block text-sm font-medium mb-1">Video Link (YouTube/Vimeo)</label>
+                                            <div className="relative">
+                                                <label className="block text-sm font-medium mb-1">Video URL (Direct MP4/WebM Link)</label>
                                                 <input
                                                     value={data.videoTestimonial?.videoUrl || ''}
                                                     onChange={(e) => setData({ ...data, videoTestimonial: { ...data.videoTestimonial, videoUrl: e.target.value } })}
                                                     className="w-full p-2 border rounded dark:bg-slate-800 dark:border-slate-600 text-sm"
                                                     placeholder="https://..."
                                                 />
+                                                <button
+                                                    onClick={() => openPicker('video_file', -1)}
+                                                    className="absolute right-1 top-1 p-1 bg-slate-100 dark:bg-slate-700 rounded text-slate-500 hover:text-blue-600 transition-colors"
+                                                    title="Select Video"
+                                                >
+                                                    <ImageIcon size={16} />
+                                                </button>
+
                                             </div>
                                             <div>
                                                 <LocalizedTextArea

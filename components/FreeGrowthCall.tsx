@@ -1,13 +1,14 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { db } from '../src/lib/firebase';
 import { doc, onSnapshot, setDoc, increment } from 'firebase/firestore';
-import { Calendar, CheckCircle, Clock, MapPin, MessageSquare, ArrowRight, Zap, Star, Play, Sparkles, TrendingUp, ChevronDown } from 'lucide-react';
+import { Calendar, CheckCircle, Clock, MapPin, MessageSquare, ArrowRight, Zap, Star, Play, Sparkles, TrendingUp, ChevronDown, Volume2, VolumeX } from 'lucide-react';
 import BookingCalendar from './BookingCalendar';
 import TestimonialsSlider from './TestimonialsSlider';
 import HeroSocialSlider from './HeroSocialSlider';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import DiscountBookingModal from './DiscountBookingModal';
 
 // Skeleton Component
 const PageSkeleton = () => (
@@ -27,6 +28,34 @@ const FreeGrowthCall = () => {
     const { currentLang, getLocalizedPath } = useLocalizedPath();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [showDiscountModal, setShowDiscountModal] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const [volume, setVolume] = useState(0);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newVolume = parseFloat(e.target.value);
+        setVolume(newVolume);
+        if (videoRef.current) {
+            videoRef.current.volume = newVolume;
+            videoRef.current.muted = newVolume === 0;
+        }
+        setIsMuted(newVolume === 0);
+    };
+
+    const toggleMute = () => {
+        if (videoRef.current) {
+            const newMuted = !isMuted;
+            videoRef.current.muted = newMuted;
+            setIsMuted(newMuted);
+            if (newMuted) {
+                setVolume(0);
+            } else {
+                setVolume(1);
+                videoRef.current.volume = 1;
+            }
+        }
+    };
 
     useEffect(() => {
         // Track View
@@ -134,8 +163,12 @@ const FreeGrowthCall = () => {
 
                             <div className="flex flex-col sm:flex-row gap-4 pt-2">
                                 <a
-                                    href={getLocalizedPath('/free-growth-call#booking-calendar')}
-                                    className="inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[1.25rem] font-bold text-base lg:text-lg transition-all shadow-2xl shadow-blue-600/30 transform hover:-translate-y-1 hover:scale-105 active:scale-95 w-full sm:w-auto"
+                                    href="#booking-calendar"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setShowDiscountModal(true);
+                                    }}
+                                    className="inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-[1.25rem] font-bold text-base lg:text-lg transition-all shadow-2xl shadow-blue-600/30 transform hover:-translate-y-1 hover:scale-105 active:scale-95 w-full sm:w-auto ring-1 ring-blue-500/50 cursor-pointer"
                                 >
                                     {t(data?.hero?.ctaText, 'Book your free call')}
                                     <ArrowRight className="ml-2 w-5 h-5" />
@@ -156,6 +189,7 @@ const FreeGrowthCall = () => {
 
                             {/* Hero Social Slider */}
                             <HeroSocialSlider
+                                onAction={() => setShowDiscountModal(true)}
                                 items={data?.heroSlider?.length > 0 ? data.heroSlider.map((item: any) => ({
                                     type: item.type || 'review',
                                     content: t(item.content, 'Sample Content'),
@@ -202,13 +236,7 @@ const FreeGrowthCall = () => {
                             id="booking-calendar"
                             className="w-full lg:w-1/2 relative lg:pt-8"
                         >
-                            {/* Decorative Elements behind calendar */}
-                            <div className="absolute -inset-4 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-[3rem] opacity-30 blur-3xl -z-10" />
-                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-[80px] -z-10" />
-
-                            <div className="luxury-glass p-1 rounded-[2.5rem] relative z-10 transition-transform duration-500 hover:scale-[1.01]">
-                                <BookingCalendar />
-                            </div>
+                            <BookingCalendar onClaimDiscount={() => setShowDiscountModal(true)} />
 
                             <div className="text-center mt-6 flex items-center justify-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400">
                                 <span className="flex h-2 w-2 relative">
@@ -219,25 +247,29 @@ const FreeGrowthCall = () => {
                             </div>
                         </motion.div>
                     </div>
+
+                    <DiscountBookingModal isOpen={showDiscountModal} onClose={() => setShowDiscountModal(false)} />
                 </div>
             </section>
 
             {/* Trusted By Strip */}
-            {(data?.trustedLogos || []).length > 0 && (
-                <section className="py-12 relative">
-                    <div className="absolute inset-0 bg-slate-50/50 dark:bg-white/[0.02] border-y border-slate-100 dark:border-white/5 -skew-y-1" />
-                    <div className="container mx-auto px-4 relative z-10">
-                        <p className="text-center text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8">
-                            {t(data?.logosTitle, 'TRUSTED BY INDUSTRY LEADERS')}
-                        </p>
-                        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-                            {data.trustedLogos.map((url: string, i: number) => (
-                                <img key={i} src={url} alt="Brand" className="h-6 md:h-7 w-auto object-contain" />
-                            ))}
+            {
+                (data?.trustedLogos || []).length > 0 && (
+                    <section className="py-12 relative">
+                        <div className="absolute inset-0 bg-slate-50/50 dark:bg-white/[0.02] border-y border-slate-100 dark:border-white/5 -skew-y-1" />
+                        <div className="container mx-auto px-4 relative z-10">
+                            <p className="text-center text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8">
+                                {t(data?.logosTitle, 'TRUSTED BY INDUSTRY LEADERS')}
+                            </p>
+                            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
+                                {data.trustedLogos.map((url: string, i: number) => (
+                                    <img key={i} src={url} alt="Brand" className="h-6 md:h-7 w-auto object-contain" />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </section>
-            )}
+                    </section>
+                )
+            }
 
             {/* What To Expect */}
             <section className="py-24 relative">
@@ -287,39 +319,110 @@ const FreeGrowthCall = () => {
             <TestimonialsSlider />
 
             {/* Video Testimonial - Unchanged for brevity, assumed good */}
-            {data?.videoTestimonial?.videoUrl && (
-                <section className="py-24 bg-white dark:bg-[#0B1120] relative overflow-hidden">
-                    {/* ... (Existing Video Section Code) ... */}
-                    <div className="container mx-auto px-4 relative z-10">
-                        <h2 className="text-3xl md:text-4xl font-bold font-heading text-slate-900 dark:text-white mb-16 text-center tracking-tight">
-                            {t(data?.videoTestimonial?.sectionTitle, 'Why founders trust us')}
-                        </h2>
-                        <div className="max-w-6xl mx-auto bg-slate-900 dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden ring-1 ring-white/10">
-                            {/* ... (Existing Video Content) ... */}
-                            <div className="grid md:grid-cols-2">
-                                <div className="relative aspect-video md:aspect-auto bg-slate-800 group cursor-pointer overflow-hidden">
-                                    {/* ... */}
-                                    <img src={data.videoTestimonial.thumbnailUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80"} alt="Video" className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-700 group-hover:scale-105" />
-                                    {/* ... */}
-                                </div>
-                                <div className="p-10 md:p-16 flex flex-col justify-center bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-                                    {/* ... Content ... */}
-                                    <div className="flex gap-1.5 text-yellow-500 mb-8">
-                                        {[1, 2, 3, 4, 5].map(i => <Star key={i} size={18} fill="currentColor" />)}
-                                    </div>
-                                    <blockquote className="text-2xl md:text-4xl/snug font-medium mb-10 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">
-                                        "{t(data.videoTestimonial.quote)}"
-                                    </blockquote>
-                                    <div>
-                                        <div className="font-bold text-lg">{t(data.videoTestimonial.author)}</div>
-                                        <div className="text-slate-400">{t(data.videoTestimonial.role)}</div>
+            {
+                data?.videoTestimonial?.videoUrl && (
+                    <section className="py-24 bg-white dark:bg-[#0B1120] relative overflow-hidden">
+                        {/* ... (Existing Video Section Code) ... */}
+                        <div className="container mx-auto px-4 relative z-10">
+                            <h2 className="text-3xl md:text-4xl font-bold font-heading text-slate-900 dark:text-white mb-16 text-center tracking-tight">
+                                {t(data?.videoTestimonial?.sectionTitle, 'Why founders trust us')}
+                            </h2>
+                            <div className="max-w-7xl mx-auto">
+                                <div className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 dark:bg-black border border-slate-800 dark:border-white/10 shadow-2xl">
+                                    {/* Glass Overlay Effects */}
+                                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+                                    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+                                    <div className="grid lg:grid-cols-5 min-h-[500px]">
+                                        {/* Video Side (3/5 width on desktop) */}
+                                        <div className="lg:col-span-3 relative bg-black group overflow-hidden">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-black/0 via-black/0 to-slate-900/50 z-20 pointer-events-none lg:block hidden" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10 pointer-events-none" />
+
+                                            <video
+                                                ref={videoRef}
+                                                className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                                                src={data.videoTestimonial.videoUrl}
+                                                poster={data.videoTestimonial.thumbnailUrl}
+                                                autoPlay
+                                                playsInline
+                                                muted={isMuted}
+                                                loop
+                                                controls={false}
+                                            />
+
+                                            {/* Volume Control */}
+                                            <div className="absolute top-4 right-4 z-30 group/volume flex items-center gap-2 bg-black/40 backdrop-blur-md rounded-full p-2 border border-white/10 transition-all hover:bg-black/60 hover:pr-4 hover:border-white/20">
+                                                <button
+                                                    onClick={toggleMute}
+                                                    className="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors"
+                                                >
+                                                    {isMuted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                                                </button>
+
+                                                <div className="w-0 overflow-hidden group-hover/volume:w-24 transition-all duration-300 flex items-center">
+                                                    <input
+                                                        type="range"
+                                                        min="0"
+                                                        max="1"
+                                                        step="0.1"
+                                                        value={isMuted ? 0 : volume}
+                                                        onChange={handleVolumeChange}
+                                                        className="w-full h-1 bg-white/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            {/* Corner HUD Element */}
+                                            <div className="absolute bottom-6 left-6 z-30 flex items-center gap-3">
+                                                <div className="px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                                                    Success Story
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Text Side (2/5 width) */}
+                                        <div className="lg:col-span-2 relative flex flex-col justify-center p-8 md:p-12 lg:p-16 z-30">
+                                            {/* Background with noise texture or subtle gradient */}
+                                            <div className="absolute inset-0 bg-slate-900/90 backdrop-blur-xl lg:bg-transparent" />
+
+                                            <div className="relative z-10 space-y-8">
+                                                <div className="flex gap-1">
+                                                    {[1, 2, 3, 4, 5].map(i => (
+                                                        <Star key={i} size={20} className="fill-yellow-400 text-yellow-400 drop-shadow-lg" />
+                                                    ))}
+                                                </div>
+
+                                                <blockquote className="relative">
+                                                    {/* Decorative Quote Icon on background */}
+                                                    <div className="absolute -top-6 -left-4 text-white/5 pointer-events-none select-none text-8xl font-serif">"</div>
+
+                                                    <p className="text-xl md:text-3xl font-medium leading-relaxed text-slate-100 font-heading tracking-tight">
+                                                        {t(data.videoTestimonial.quote).replace(/^"|"$/g, '')}
+                                                    </p>
+                                                </blockquote>
+
+                                                <div className="flex items-center gap-4 pt-4 border-t border-white/10">
+                                                    {data.videoTestimonial.thumbnailUrl && (
+                                                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10 ring-2 ring-white/5">
+                                                            <img src={data.videoTestimonial.thumbnailUrl} alt={t(data.videoTestimonial.author)} className="w-full h-full object-cover" />
+                                                        </div>
+                                                    )}
+                                                    <div>
+                                                        <div className="font-bold text-white text-lg">{t(data.videoTestimonial.author)}</div>
+                                                        <div className="text-blue-400 text-sm font-medium uppercase tracking-wide">{t(data.videoTestimonial.role)}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-            )}
+                    </section>
+                )
+            }
 
             {/* Process Steps */}
             <section className="py-24 relative overflow-hidden">
@@ -381,7 +484,7 @@ const FreeGrowthCall = () => {
                     </a>
                 </div>
             </section>
-        </div>
+        </div >
     );
 };
 
