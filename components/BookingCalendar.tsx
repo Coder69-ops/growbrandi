@@ -518,12 +518,11 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className }) => {
                                         type="email"
                                         value={formData.email}
                                         onChange={e => {
-                                            setFormData({ ...formData, email: e.target.value })
-                                        }
-                                            if (errors.email) setErrors({...errors, email: ''});
-                                        }
-                                    className={`w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl focus:ring-4 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400 ${errors.email ? 'border-red-300 focus:ring-red-100 dark:border-red-900' : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/10 focus:border-blue-500'}`}
-                                    placeholder="john@company.com"
+                                            setFormData({ ...formData, email: e.target.value });
+                                            if (errors.email) setErrors({ ...errors, email: '' });
+                                        }}
+                                        className={`w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border rounded-xl focus:ring-4 outline-none transition-all font-medium text-slate-900 dark:text-white placeholder:text-slate-400 ${errors.email ? 'border-red-300 focus:ring-red-100 dark:border-red-900' : 'border-slate-200 dark:border-slate-800 focus:ring-blue-500/10 focus:border-blue-500'}`}
+                                        placeholder="john@company.com"
                                     />
                                 </div>
                                 {errors.email && <span className="text-xs font-bold text-red-500 ml-1">{errors.email}</span>}
