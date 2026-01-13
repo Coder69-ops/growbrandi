@@ -43,26 +43,29 @@ const Promotions = () => {
         if (!currentPromo.title || !currentPromo.discountCode) return alert('Title and Code are required');
 
         try {
+            console.log("Attempting to save promotion:", currentPromo);
             if (currentPromo.id) {
                 await updateDoc(doc(db, 'promotions', currentPromo.id), {
                     ...currentPromo,
                     updatedAt: serverTimestamp()
                 });
+                console.log("Promotion updated successfully");
             } else {
-                await addDoc(collection(db, 'promotions'), {
+                const docRef = await addDoc(collection(db, 'promotions'), {
                     ...currentPromo,
                     isActive: false, // Default inactive
                     position: currentPromo.position || 'popup',
                     style: currentPromo.style || 'luxury',
                     createdAt: serverTimestamp()
                 });
+                console.log("Promotion created with ID:", docRef.id);
             }
             setIsEditing(false);
             setCurrentPromo({});
             setActiveTab('content');
         } catch (error) {
             console.error("Error saving promo:", error);
-            alert("Failed to save promotion");
+            alert("Failed to save promotion: " + (error as any).message);
         }
     };
 
@@ -157,12 +160,14 @@ const Promotions = () => {
                             {/* Tabs */}
                             <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-8">
                                 <button
+                                    type="button"
                                     onClick={() => setActiveTab('content')}
                                     className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'content' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
                                 >
                                     Content & Details
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={() => setActiveTab('design')}
                                     className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'design' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
                                 >
@@ -278,6 +283,7 @@ const Promotions = () => {
                                                     {['luxury', 'amber', 'blue'].map((style) => (
                                                         <button
                                                             key={style}
+                                                            type="button"
                                                             onClick={() => setCurrentPromo({ ...currentPromo, style: style as any })}
                                                             className={`py-3 px-2 rounded-xl capitalize font-bold text-sm border-2 transition-all ${currentPromo.style === style
                                                                 ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-md'
@@ -310,6 +316,7 @@ const Promotions = () => {
                                 Cancel
                             </button>
                             <button
+                                type="button"
                                 onClick={() => {
                                     if (activeTab === 'content') setActiveTab('design');
                                     else handleSave();
