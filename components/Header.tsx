@@ -163,6 +163,12 @@ const MegaMenuSection: React.FC<{
     const { t } = useTranslation();
     const { getLocalizedPath } = useLocalizedPath();
 
+    const truncate = (text: string, length: number) => {
+        if (!text) return "";
+        const cleanText = t(text);
+        return cleanText.length > length ? cleanText.substring(0, length) + "..." : cleanText;
+    };
+
     return (
         <div>
             <h3 className="text-slate-900 dark:text-white font-bold text-lg mb-4 px-2">{title}</h3>
@@ -193,10 +199,10 @@ const MegaMenuSection: React.FC<{
                                 <div className="flex-1 min-w-0">
                                     <h4 className={`font-semibold text-sm mb-1 ${isActive ? 'text-blue-600 dark:text-white' : 'text-slate-700 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
                                         }`}>
-                                        {t(item.title)}
+                                        {truncate(item.title, 40)}
                                     </h4>
                                     <p className="text-xs text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
-                                        {t(item.description)}
+                                        {truncate(item.description, 70)}
                                     </p>
                                 </div>
                             </div>
@@ -259,6 +265,12 @@ const Header: React.FC<HeaderProps> = () => {
     const currentMegaMenuData = {
         services: dynamicServices.length > 0 ? dynamicServices : megaMenuData.services,
         company: megaMenuData.company
+    };
+
+    const truncate = (text: string, length: number) => {
+        if (!text) return "";
+        const cleanText = t(text);
+        return cleanText.length > length ? cleanText.substring(0, length) + "..." : cleanText;
     };
 
     const handleMouseEnter = (dropdown: 'services' | 'company') => {
@@ -445,10 +457,10 @@ const Header: React.FC<HeaderProps> = () => {
                                                     <div className="flex-1">
                                                         <h4 className={`font-bold text-base mb-2 ${currentRoute === getLocalizedPath(service.route) ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
                                                             }`}>
-                                                            {t(service.title)}
+                                                            {truncate(service.title, 40)}
                                                         </h4>
                                                         <p className="text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
-                                                            {t(service.description)}
+                                                            {truncate(service.description, 90)}
                                                         </p>
                                                     </div>
                                                 </div>

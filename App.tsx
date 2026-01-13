@@ -40,6 +40,7 @@ const UIUXDesignPage = React.lazy(() => import('./components/ServicePages').then
 const WebDevelopmentPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.WebDevelopmentPage })));
 const VirtualAssistancePage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.VirtualAssistancePage })));
 const CustomerSupportPage = React.lazy(() => import('./components/ServicePages').then(module => ({ default: module.CustomerSupportPage })));
+const DynamicServicePage = React.lazy(() => import('./components/DynamicServicePage'));
 
 // Company Pages
 const AboutUsPage = React.lazy(() => import('./components/CompanyPages').then(module => ({ default: module.AboutUsPage })));
@@ -406,6 +407,7 @@ ${servicesDetails}
                 <Route path="/:lang/services/web-development" element={<LanguageWrapper><PageWrapper><WebDevelopmentPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/services/virtual-assistance" element={<LanguageWrapper><PageWrapper><VirtualAssistancePage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/services/customer-support" element={<LanguageWrapper><PageWrapper><CustomerSupportPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang/services/:serviceId" element={<LanguageWrapper><PageWrapper><DynamicServicePage /></PageWrapper></LanguageWrapper>} />
 
                 {/* Company */}
                 <Route path="/:lang/about" element={<LanguageWrapper><PageWrapper><AboutUsPage /></PageWrapper></LanguageWrapper>} />
