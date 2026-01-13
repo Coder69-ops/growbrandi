@@ -4,7 +4,7 @@ import { X, CheckCircle, Clock, Zap, Star, ArrowRight, Calendar, Gift, Ticket, S
 import { db } from '../src/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-export interface DiscountBookingModalProps {
+interface DiscountBookingModalProps {
     isOpen: boolean;
     onClose: () => void;
     offerTitle?: string;
@@ -172,23 +172,22 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                         </button>
 
                         {/* --- LEFT COLUMN: MASSIVE IMAGE/OFFER --- */}
-                        <div className="relative lg:w-5/12 h-64 lg:h-auto overflow-hidden">
-                            <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-90 transition-all duration-700`} />
-
-                            {/* Image or Zap Icon */}
+                        <div className="relative lg:w-5/12 h-64 lg:h-auto overflow-hidden bg-slate-900 flex items-center justify-center">
+                            {/* 1. Base Image Layer (Full Opacity) */}
                             {(modalImageUrl || offerImage) ? (
                                 <motion.img
-                                    initial={{ scale: 1.1 }}
-                                    animate={{ scale: 1 }}
+                                    initial={{ scale: 1.1, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
                                     src={modalImageUrl || offerImage}
                                     alt="Offer"
-                                    className="w-full h-full object-cover mix-blend-overlay"
+                                    className="absolute inset-0 w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <Zap size={140} className="text-white opacity-20 fill-current animate-pulse" />
-                                </div>
+                                <Zap size={140} className="text-white opacity-20 fill-current animate-pulse" />
                             )}
+
+                            {/* 2. Gradient Overlay for Branding & Legibility (Lower Opacity) */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} ${modalImageUrl || offerImage ? 'opacity-60' : 'opacity-90'} transition-all duration-700`} />
 
                             {/* Animated Glows */}
                             <motion.div
