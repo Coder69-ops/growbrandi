@@ -163,7 +163,6 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 50 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
                         className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 dark:border-white/10 flex flex-col lg:flex-row min-h-0 sm:min-h-[600px]"
                     >
                         {step === 'success' && <ConfettiEffect />}

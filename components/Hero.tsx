@@ -244,7 +244,7 @@ const HeroSection: React.FC = () => {
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3, 4].map((_, i) => (
                                         <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-[#09090b] overflow-hidden">
-                                            <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="Client" className="w-full h-full object-cover" />
+                                            <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="Client" className="w-full h-full object-cover" loading="lazy" />
                                         </div>
                                     ))}
                                     <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-[#09090b] bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold">
@@ -262,7 +262,7 @@ const HeroSection: React.FC = () => {
                                     </div>
                                     <div className="flex items-center gap-1 opacity-80">
                                         <span className="text-[10px] font-medium text-slate-500 dark:text-zinc-400">{getHeroText('trustpilot_on')}</span>
-                                        <img src={content?.hero?.trustpilot_logo || "/logos/trustpilot--logo.png"} alt="Trustpilot" className="h-5 w-auto object-contain" />
+                                        <img src={content?.hero?.trustpilot_logo || "/logos/trustpilot--logo.png"} alt="Trustpilot" className="h-5 w-auto object-contain" loading="lazy" />
                                     </div>
                                 </div>
                             </motion.div>

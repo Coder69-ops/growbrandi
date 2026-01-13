@@ -303,6 +303,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                                 src={service.image}
                                 alt={localized(service.title)}
                                 className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 z-0"
+                                loading="lazy"
                             />
                         </>
                     )}
@@ -318,7 +319,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                                         className="absolute top-6 right-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
                                     >
-                                        <img src={service.floatingLogos[0]} alt="Logo 1" className="w-full h-full object-contain" />
+                                        <img src={service.floatingLogos[0]} alt="Logo 1" className="w-full h-full object-contain" loading="lazy" />
                                     </motion.div>
                                 )}
 
@@ -329,7 +330,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                                         className="absolute bottom-6 left-8 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl shadow-lg flex items-center justify-center p-2 border border-slate-100 dark:border-white/5"
                                     >
-                                        <img src={service.floatingLogos[1]} alt="Logo 2" className="w-full h-full object-contain" />
+                                        <img src={service.floatingLogos[1]} alt="Logo 2" className="w-full h-full object-contain" loading="lazy" />
                                     </motion.div>
                                 )}
 
@@ -340,7 +341,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, onLearnMore, 
                                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                                         className="absolute top-10 left-10 w-8 h-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg flex items-center justify-center p-1.5 border border-slate-100 dark:border-white/5"
                                     >
-                                        <img src={service.floatingLogos[2]} alt="Logo 3" className="w-full h-full object-contain" />
+                                        <img src={service.floatingLogos[2]} alt="Logo 3" className="w-full h-full object-contain" loading="lazy" />
                                     </motion.div>
                                 )}
                             </div>
