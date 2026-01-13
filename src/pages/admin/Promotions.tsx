@@ -129,201 +129,200 @@ const Promotions = () => {
             />
 
             {/* Edit/Create Modal */}
-            <AnimatePresence>
-                {isEditing && createPortal(
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
-                        >
-                            {/* Modal Header */}
-                            <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-black/20 backdrop-blur-md">
-                                <div>
-                                    <h2 className="text-xl font-black text-slate-900 dark:text-white">
-                                        {currentPromo.id ? 'Edit Promotion' : 'Create New Offer'}
-                                    </h2>
-                                    <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">
-                                        {activeTab === 'content' ? 'Step 1: Offer Details' : 'Step 2: Visuals & Settings'}
-                                    </p>
-                                </div>
-                                <button onClick={() => setIsEditing(false)} className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors text-slate-500">
-                                    <X size={20} />
+            {isEditing && createPortal(
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        className="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+                    >
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-slate-100 dark:border-white/10 flex justify-between items-center bg-slate-50/50 dark:bg-black/20 backdrop-blur-md">
+                            <div>
+                                <h2 className="text-xl font-black text-slate-900 dark:text-white">
+                                    {currentPromo.id ? 'Edit Promotion' : 'Create New Offer'}
+                                </h2>
+                                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">
+                                    {activeTab === 'content' ? 'Step 1: Offer Details' : 'Step 2: Visuals & Settings'}
+                                </p>
+                            </div>
+                            <button type="button" onClick={() => setIsEditing(false)} className="p-2 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors text-slate-500">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Modal Body */}
+                        <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                            {/* Tabs */}
+                            <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-8">
+                                <button
+                                    onClick={() => setActiveTab('content')}
+                                    className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'content' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+                                >
+                                    Content & Details
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('design')}
+                                    className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'design' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
+                                >
+                                    Design & Display
                                 </button>
                             </div>
 
-                            {/* Modal Body */}
-                            <div className="flex-1 overflow-y-auto p-6 md:p-8">
-                                {/* Tabs */}
-                                <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-8">
-                                    <button
-                                        onClick={() => setActiveTab('content')}
-                                        className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'content' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
-                                    >
-                                        Content & Details
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab('design')}
-                                        className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${activeTab === 'design' ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500 hover:text-slate-700 dark:text-slate-400'}`}
-                                    >
-                                        Design & Display
-                                    </button>
-                                </div>
+                            {activeTab === 'content' ? (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="space-y-6"
+                                >
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Offer Title</label>
+                                        <input
+                                            value={currentPromo.title || ''}
+                                            onChange={e => setCurrentPromo({ ...currentPromo, title: e.target.value })}
+                                            placeholder="e.g. 50% OFF Strategy Session"
+                                            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white font-medium text-lg placeholder:font-normal"
+                                        />
+                                    </div>
 
-                                {activeTab === 'content' ? (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-6"
-                                    >
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-3">
-                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Offer Title</label>
-                                            <input
-                                                value={currentPromo.title || ''}
-                                                onChange={e => setCurrentPromo({ ...currentPromo, title: e.target.value })}
-                                                placeholder="e.g. 50% OFF Strategy Session"
-                                                className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white font-medium text-lg placeholder:font-normal"
-                                            />
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="space-y-3">
-                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Discount Code</label>
-                                                <div className="relative">
-                                                    <input
-                                                        value={currentPromo.discountCode || ''}
-                                                        onChange={e => setCurrentPromo({ ...currentPromo, discountCode: e.target.value })}
-                                                        placeholder="e.g. SUMMER50"
-                                                        className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white font-mono font-bold uppercase tracking-wider"
-                                                    />
-                                                    <Tag className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                                                </div>
-                                            </div>
-                                            <div className="space-y-3">
-                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Button CTA</label>
+                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Discount Code</label>
+                                            <div className="relative">
                                                 <input
-                                                    value={currentPromo.buttonText || ''}
-                                                    onChange={e => setCurrentPromo({ ...currentPromo, buttonText: e.target.value })}
-                                                    placeholder="e.g. Claim Offer Now"
-                                                    className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                                                    value={currentPromo.discountCode || ''}
+                                                    onChange={e => setCurrentPromo({ ...currentPromo, discountCode: e.target.value })}
+                                                    placeholder="e.g. SUMMER50"
+                                                    className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white font-mono font-bold uppercase tracking-wider"
                                                 />
+                                                <Tag className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                             </div>
                                         </div>
-
                                         <div className="space-y-3">
-                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Description</label>
-                                            <textarea
-                                                value={currentPromo.description || ''}
-                                                onChange={e => setCurrentPromo({ ...currentPromo, description: e.target.value })}
-                                                placeholder="Brief details about the offer. Keep it punchy."
-                                                className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white h-32 resize-none"
+                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Button CTA</label>
+                                            <input
+                                                value={currentPromo.buttonText || ''}
+                                                onChange={e => setCurrentPromo({ ...currentPromo, buttonText: e.target.value })}
+                                                placeholder="e.g. Claim Offer Now"
+                                                className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
                                             />
                                         </div>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-8"
-                                    >
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                            {/* Left: Image Picker */}
-                                            <div className="space-y-3">
-                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex justify-between">
-                                                    Offer Image
-                                                    <span className="text-xs font-normal text-slate-500">Optional</span>
-                                                </label>
+                                    </div>
 
-                                                <div
-                                                    onClick={() => setShowAssetPicker(true)}
-                                                    className={`aspect-video rounded-2xl border-2 border-dashed transition-all cursor-pointer relative group overflow-hidden ${currentPromo.imageUrl
-                                                        ? 'border-blue-500/50 bg-slate-900'
-                                                        : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10'}`}
-                                                >
-                                                    {currentPromo.imageUrl ? (
-                                                        <>
-                                                            <img src={currentPromo.imageUrl} alt="Preview" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
-                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <span className="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Change Image</span>
-                                                            </div>
-                                                        </>
-                                                    ) : (
-                                                        <div className="flex flex-col items-center justify-center h-full text-slate-400 group-hover:text-blue-500">
-                                                            <ImageIcon size={32} className="mb-2" />
-                                                            <span className="font-medium text-sm">Select Image</span>
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Description</label>
+                                        <textarea
+                                            value={currentPromo.description || ''}
+                                            onChange={e => setCurrentPromo({ ...currentPromo, description: e.target.value })}
+                                            placeholder="Brief details about the offer. Keep it punchy."
+                                            className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white h-32 resize-none"
+                                        />
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="space-y-8"
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        {/* Left: Image Picker */}
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex justify-between">
+                                                Offer Image
+                                                <span className="text-xs font-normal text-slate-500">Optional</span>
+                                            </label>
+
+                                            <div
+                                                onClick={() => setShowAssetPicker(true)}
+                                                className={`aspect-video rounded-2xl border-2 border-dashed transition-all cursor-pointer relative group overflow-hidden ${currentPromo.imageUrl
+                                                    ? 'border-blue-500/50 bg-slate-900'
+                                                    : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10'}`}
+                                            >
+                                                {currentPromo.imageUrl ? (
+                                                    <>
+                                                        <img src={currentPromo.imageUrl} alt="Preview" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <span className="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Change Image</span>
                                                         </div>
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            {/* Right: Settings */}
-                                            <div className="space-y-6">
-                                                <div className="space-y-3">
-                                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Display Position</label>
-                                                    <select
-                                                        value={currentPromo.position || 'popup'}
-                                                        onChange={e => setCurrentPromo({ ...currentPromo, position: e.target.value as any })}
-                                                        className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white appearance-none cursor-pointer"
-                                                    >
-                                                        <option value="popup">General Popup (Modal)</option>
-                                                        <option value="hero">Hero Slider (Home)</option>
-                                                        <option value="banner">Top Sticky Banner</option>
-                                                        <option value="floating_corner">Floating Corner Widget</option>
-                                                    </select>
-                                                </div>
-
-                                                <div className="space-y-3">
-                                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Theme Style</label>
-                                                    <div className="grid grid-cols-3 gap-2">
-                                                        {['luxury', 'amber', 'blue'].map((style) => (
-                                                            <button
-                                                                key={style}
-                                                                onClick={() => setCurrentPromo({ ...currentPromo, style: style as any })}
-                                                                className={`py-3 px-2 rounded-xl capitalize font-bold text-sm border-2 transition-all ${currentPromo.style === style
-                                                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-md'
-                                                                    : 'border-transparent bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}`}
-                                                            >
-                                                                {style}
-                                                            </button>
-                                                        ))}
+                                                    </>
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-full text-slate-400 group-hover:text-blue-500">
+                                                        <ImageIcon size={32} className="mb-2" />
+                                                        <span className="font-medium text-sm">Select Image</span>
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
                                         </div>
 
-                                        {/* Preview Hint */}
-                                        <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 flex gap-3 text-sm text-blue-700 dark:text-blue-300">
-                                            <AlertCircle className="shrink-0" size={20} />
-                                            <p>This promotion will appear dynamically based on the priority logic. Use <strong>?promo=true</strong> in your URL to force-show it for testing.</p>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </div>
+                                        {/* Right: Settings */}
+                                        <div className="space-y-6">
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Display Position</label>
+                                                <select
+                                                    value={currentPromo.position || 'popup'}
+                                                    onChange={e => setCurrentPromo({ ...currentPromo, position: e.target.value as any })}
+                                                    className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white appearance-none cursor-pointer"
+                                                >
+                                                    <option value="popup">General Popup (Modal)</option>
+                                                    <option value="hero">Hero Slider (Home)</option>
+                                                    <option value="banner">Top Sticky Banner</option>
+                                                    <option value="floating_corner">Floating Corner Widget</option>
+                                                </select>
+                                            </div>
 
-                            {/* Modal Footer */}
-                            <div className="p-6 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black/20 flex justify-end gap-3 sticky bottom-0 backdrop-blur-md">
-                                <button
-                                    onClick={() => setIsEditing(false)}
-                                    className="px-6 py-3 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        if (activeTab === 'content') setActiveTab('design');
-                                        else handleSave();
-                                    }}
-                                    className="px-8 py-3 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all active:scale-95"
-                                >
-                                    {activeTab === 'content' ? 'Next Step' : 'Save Promotion'}
-                                </button>
-                            </div>
-                        </motion.div>
-                    </div>,
-                    document.body
-                )}
-            </AnimatePresence>
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Theme Style</label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {['luxury', 'amber', 'blue'].map((style) => (
+                                                        <button
+                                                            key={style}
+                                                            onClick={() => setCurrentPromo({ ...currentPromo, style: style as any })}
+                                                            className={`py-3 px-2 rounded-xl capitalize font-bold text-sm border-2 transition-all ${currentPromo.style === style
+                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-md'
+                                                                : 'border-transparent bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}`}
+                                                        >
+                                                            {style}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Preview Hint */}
+                                    <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 flex gap-3 text-sm text-blue-700 dark:text-blue-300">
+                                        <AlertCircle className="shrink-0" size={20} />
+                                        <p>This promotion will appear dynamically based on the priority logic. Use <strong>?promo=true</strong> in your URL to force-show it for testing.</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="p-6 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black/20 flex justify-end gap-3 sticky bottom-0 backdrop-blur-md">
+                            <button
+                                type="button"
+                                onClick={() => setIsEditing(false)}
+                                className="px-6 py-3 rounded-xl font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (activeTab === 'content') setActiveTab('design');
+                                    else handleSave();
+                                }}
+                                className="px-8 py-3 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20 transition-all active:scale-95"
+                            >
+                                {activeTab === 'content' ? 'Next Step' : 'Save Promotion'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>,
+                document.body
+            )}
 
             {/* Empty State */}
             {filteredPromotions.length === 0 && !loading && (

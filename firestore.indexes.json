@@ -23,6 +23,24 @@
                     "order": "ASCENDING"
                 },
                 {
+                    "fieldPath": "position",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "promotions",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "isActive",
+                    "order": "ASCENDING"
+                },
+                {
                     "fieldPath": "createdAt",
                     "order": "DESCENDING"
                 }
