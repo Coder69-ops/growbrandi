@@ -163,7 +163,8 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 50 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        className="relative w-full max-w-5xl overflow-hidden bg-white dark:bg-slate-900 rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 dark:border-white/10 flex flex-col lg:flex-row min-h-[600px]"
+                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900 rounded-[2rem] sm:rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 dark:border-white/10 flex flex-col lg:flex-row min-h-0 sm:min-h-[600px]"
                     >
                         {step === 'success' && <ConfettiEffect />}
 
@@ -247,7 +248,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                         </div>
 
                         {/* --- RIGHT COLUMN: CONVERSION FORM --- */}
-                        <div className="lg:w-7/12 bg-white dark:bg-slate-950 p-8 lg:p-16 flex flex-col justify-center relative">
+                        <div className="lg:w-7/12 bg-white dark:bg-slate-950 p-6 sm:p-8 lg:p-16 flex flex-col justify-center relative">
                             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
 
                             {step === 'details' ? (
