@@ -53,7 +53,10 @@ const HeroSection: React.FC = () => {
                 const positions = Array.isArray(data.positions) ? data.positions : [];
                 return { id: doc.id, ...data, positions } as Promotion;
             });
-            const activeHero = fetched.find(p => p.positions.includes('hero'));
+            const activeHero = fetched.find(p => {
+                const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
+                return p.positions.includes('hero') && !isClaimed;
+            });
             setHeroPromo(activeHero || null);
         });
         return () => unsubscribe();
@@ -504,7 +507,9 @@ const HeroSection: React.FC = () => {
                     buttonText={heroPromo.buttonText}
                     offerImage={heroPromo.imageUrl}
                     style={heroPromo.style}
-                    onSuccess={() => setIsPromoOpen(false)}
+                    onSuccess={() => {
+                        localStorage.setItem(`claimed_promo_${heroPromo.id}`, Date.now().toString());
+                    }}
                 />
             )}
         </>

@@ -42,9 +42,10 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
             // Sort in memory instead of Firestore to stay safe without custom indexes
             const active = fetched
                 .sort((a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
-                .find((p: Promotion) =>
-                    p.positions.includes('in_between_sections')
-                );
+                .find((p: Promotion) => {
+                    const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
+                    return p.positions.includes('in_between_sections') && !isClaimed;
+                });
             setPromo(active || null);
         }, (error) => {
             console.error("PromoSection Snapshot Error:", error);
@@ -232,7 +233,9 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                     buttonText={promo.buttonText}
                     offerImage={promo.imageUrl}
                     style={promo.style}
-                    onSuccess={() => setIsModalOpen(false)}
+                    onSuccess={() => {
+                        localStorage.setItem(`claimed_promo_${promo.id}`, Date.now().toString());
+                    }}
                 />
             </motion.div>
         </section>

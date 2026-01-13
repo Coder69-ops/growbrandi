@@ -118,7 +118,8 @@ const GlobalPromoEffects: React.FC = () => {
 
     const handleClaimSuccess = (id: string) => {
         localStorage.setItem(`claimed_promo_${id}`, Date.now().toString());
-        setModalOpen(false);
+        // Do not close immediately, let the modal show success state
+        // setModalOpen(false); 
         // Clear all slots for this specific promo
         setActiveSlots(prev => {
             const next = { ...prev };
