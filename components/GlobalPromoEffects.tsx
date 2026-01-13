@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Zap, X, Clock, ArrowRight, Sparkles, Users, Gift } from 'lucide-react';
-import { db } from '../src/lib/firebase';
-import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { useGlobalData } from '../src/context/GlobalDataProvider';
 import DiscountBookingModal from './DiscountBookingModal';
 
 interface Promotion {
@@ -26,7 +25,7 @@ interface Promotion {
 
 const GlobalPromoEffects: React.FC = () => {
     const { t } = useTranslation();
-    const [promotions, setPromotions] = useState<Promotion[]>([]);
+    const { promotions } = useGlobalData();
     const [activeSlots, setActiveSlots] = useState<Record<string, string | null>>({
         banner: null,
         popup: null,
@@ -37,27 +36,7 @@ const GlobalPromoEffects: React.FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [hasTriggeredExitIntent, setHasTriggeredExitIntent] = useState(false);
 
-    // 1. Fetch Promotions (Runs once on mount)
-    useEffect(() => {
-        const q = query(collection(db, 'promotions'), where('isActive', '==', true));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const promoList = snapshot.docs.map(doc => {
-                const data = doc.data();
-                const positions = Array.isArray(data.positions)
-                    ? data.positions
-                    : data.position
-                        ? [data.position]
-                        : ['popup'];
-                return { id: doc.id, ...data, positions } as Promotion;
-            });
-            setPromotions(promoList);
-        }, (error) => {
-            console.error("Firebase Snapshot Error:", error);
-        });
-        return () => unsubscribe();
-    }, []);
-
-    // 2. Logic & Slot Assignment (Runs when promotions or hasTriggeredExitIntent changes)
+    // 1. Logic & Slot Assignment (Runs when promotions or hasTriggeredExitIntent changes)
     useEffect(() => {
         if (promotions.length === 0) return;
 
@@ -131,99 +110,97 @@ const GlobalPromoEffects: React.FC = () => {
 
     const themeStyles = {
         luxury: {
-            gradient: "from-slate-950 via-indigo-950 to-slate-950",
-            accent: "from-indigo-400 to-violet-400",
-            button: "bg-gradient-to-r from-indigo-500 to-violet-600 shadow-indigo-500/25",
+            gradient: "from-slate-950 via-[#0F0F16] to-slate-950",
+            accent: "from-indigo-400 via-purple-400 to-indigo-400",
+            button: "bg-white/10 hover:bg-white/20 text-white border border-white/10",
             glass: "bg-white/5 border-white/10",
             glow: "bg-indigo-500/20",
-            shimmer: "via-white/20"
+            border: "border-white/5",
+            badge: "bg-indigo-500/10 text-indigo-300 border-indigo-500/20"
         },
         amber: {
-            gradient: "from-amber-700 via-orange-700 to-amber-800",
-            accent: "from-amber-200 to-orange-100",
-            button: "bg-gradient-to-r from-white to-orange-50 text-orange-700 shadow-orange-500/25",
-            glass: "bg-amber-900/40 border-amber-500/30",
-            glow: "bg-amber-500/30",
-            shimmer: "via-orange-300/30"
+            gradient: "from-amber-950 via-orange-950 to-amber-900", // Darker for premium feel
+            accent: "from-amber-400 via-orange-300 to-amber-400",
+            button: "bg-white/10 hover:bg-white/20 text-white border border-white/10",
+            glass: "bg-amber-950/40 border-amber-500/10",
+            glow: "bg-amber-500/20",
+            border: "border-white/5",
+            badge: "bg-amber-500/10 text-amber-300 border-amber-500/20"
         },
         blue: {
-            gradient: "from-blue-700 via-indigo-800 to-blue-900",
-            accent: "from-blue-100 to-cyan-100",
-            button: "bg-gradient-to-r from-white to-blue-50 text-blue-700 shadow-blue-500/25",
-            glass: "bg-blue-900/40 border-blue-500/30",
-            glow: "bg-blue-500/30",
-            shimmer: "via-blue-300/30"
+            gradient: "from-blue-950 via-slate-900 to-blue-900", // Darker for premium feel
+            accent: "from-blue-400 via-cyan-300 to-blue-400",
+            button: "bg-white/10 hover:bg-white/20 text-white border border-white/10",
+            glass: "bg-blue-950/40 border-blue-500/10",
+            glow: "bg-blue-500/20",
+            border: "border-white/5",
+            badge: "bg-blue-500/10 text-blue-300 border-blue-500/20"
         }
     };
 
     return (
         <>
-            {/* 1. TOP STICKY BANNER - ULTRA PREMIUM */}
+            {/* 1. TOP STICKY BANNER - ULTRA PREMIUM REDESIGN */}
             <AnimatePresence>
                 {bannerPromo && (
                     <motion.div
-                        initial={{ y: -100 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: -100 }}
-                        className={`fixed top-0 left-0 right-0 z-[100] h-14 bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].gradient} border-b border-white/10 shadow-2xl relative overflow-hidden`}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className={`relative z-[100] bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].gradient} border-b ${themeStyles[bannerPromo.style || 'luxury'].border}`}
                     >
+                        {/* Ambient Glow */}
+                        <div className={`absolute top-0 left-1/4 w-1/2 h-full ${themeStyles[bannerPromo.style || 'luxury'].glow} opacity-40 blur-[40px] pointer-events-none`} />
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
-                        <div className={`absolute -inset-[500px] bg-gradient-to-tr ${themeStyles[bannerPromo.style || 'luxury'].glow} opacity-20 blur-3xl pointer-events-none`} />
 
-                        <div className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between gap-6 relative z-10">
-                            <div className="flex items-center gap-4 flex-1">
-                                <motion.div
-                                    animate={{ scale: [1, 1.1, 1] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                    className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500 text-[10px] font-black text-white uppercase tracking-[0.2em] shadow-lg shadow-red-500/20"
-                                >
-                                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                                    Live Global Offer
-                                </motion.div>
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 relative z-10">
 
-                                <div className="flex items-center gap-3">
-                                    {bannerPromo.imageUrl && (
-                                        <div className={`w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-xl bg-black/20 flex items-center justify-center`}>
-                                            <img src={bannerPromo.imageUrl} alt="" className={`w-full h-full ${bannerPromo.imageFit === 'contain' ? 'object-contain' : 'object-cover'}`} />
-                                        </div>
-                                    )}
-                                    {!bannerPromo.hideTextOverlay && (
-                                        <p className="text-white text-xs md:text-sm font-bold tracking-tight line-clamp-1">
-                                            <span className={`bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2 font-black uppercase tracking-wider`}>
-                                                {bannerPromo.title}:
-                                            </span>
-                                            {bannerPromo.description}
-                                        </p>
-                                    )}
+                            {/* Left: Badge & Content */}
+                            <div className="flex items-center gap-4 text-center sm:text-left w-full sm:w-auto justify-center sm:justify-start">
+                                <div className={`hidden md:flex items-center gap-2 px-2.5 py-1 rounded-full border ${themeStyles[bannerPromo.style || 'luxury'].badge} backdrop-blur-md`}>
+                                    <span className="relative flex h-2 w-2">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
+                                    </span>
+                                    <span className="text-[10px] font-black uppercase tracking-wider">Live</span>
+                                </div>
+
+                                <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
+                                    <p className="text-white text-xs sm:text-sm font-medium leading-tight">
+                                        <span className={`font-black uppercase tracking-wide bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2`}>
+                                            {bannerPromo.title}
+                                        </span>
+                                        <span className="opacity-90 hidden sm:inline">{bannerPromo.description}</span>
+                                        <span className="opacity-90 sm:hidden">{bannerPromo.description}</span>
+                                    </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                <div className="hidden lg:flex items-center gap-3 mr-4">
-                                    <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Hurry</span>
-                                    <div className="flex gap-1.5">
-                                        {['00', '42', '15'].map((num, i) => (
-                                            <div key={i} className="bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10 text-[11px] font-mono text-white font-black shadow-inner">
-                                                {num}
-                                                {i < 2 && <span className="absolute -right-3 text-white/20">:</span>}
-                                            </div>
-                                        ))}
-                                    </div>
+                            {/* Right: Timer & Actions */}
+                            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end">
+                                {/* Desktop Timer */}
+                                <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/20 border border-white/5">
+                                    <Clock size={12} className="text-white/50" />
+                                    <span className="text-xs font-mono font-bold text-white/90 tracking-widest">
+                                        00:42:15
+                                    </span>
                                 </div>
 
-                                <button
-                                    onClick={() => { setActiveSlots(prev => ({ ...prev, popup: bannerPromo.id })); setModalOpen(true); }}
-                                    className={`px-6 py-2.5 ${themeStyles[bannerPromo.style || 'luxury'].button} text-xs font-black rounded-xl transition-all hover:scale-105 active:scale-95 shadow-xl whitespace-nowrap group relative overflow-hidden`}
-                                >
-                                    <div className="absolute inset-x-0 h-full w-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                                    <span className="relative z-10">{bannerPromo.buttonText}</span>
-                                </button>
-                                <button
-                                    onClick={() => handleDismiss(bannerPromo.id, 'banner')}
-                                    className="p-2 text-white/40 hover:text-white transition-colors"
-                                >
-                                    <X size={20} />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => { setActiveSlots(prev => ({ ...prev, popup: bannerPromo.id })); setModalOpen(true); }}
+                                        className={`px-5 py-1.5 text-xs font-bold rounded-full transition-all hover:scale-105 active:scale-95 whitespace-nowrap ${themeStyles[bannerPromo.style || 'luxury'].button}`}
+                                    >
+                                        {bannerPromo.buttonText}
+                                    </button>
+
+                                    <button
+                                        onClick={() => handleDismiss(bannerPromo.id, 'banner')}
+                                        className="p-1.5 text-white/40 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </motion.div>
