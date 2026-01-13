@@ -349,10 +349,16 @@ ${servicesDetails}
           title={metadata.title}
           description={metadata.description || ''}
           keywords={metadata.keywords}
-          canonicalUrl={`https://growbrandi.com${currentPath}`} // Using currentPath as metadata.path is not available in SeoContext
+          canonicalUrl={`https://growbrandi.com${currentPath}`}
           siteTitleSuffix={metadata.titleSuffix}
           noIndex={metadata.noIndex}
           ogImage={metadata.ogImage}
+          twitterHandle={metadata.twitterHandle}
+          twitterCard={metadata.twitterCard}
+          // Note for Author: SEO component needs update to accept generic author metadata if not article specific
+          // But looking at SEO.tsx, it only supports 'articleAuthor'. 
+          // We will update SEO.tsx as well to support standard <meta name="author">
+          {...(metadata.author ? { articleAuthor: metadata.author } : {})} // Fallback mapping for now
         />
       )}
       <Suspense fallback={<PageLoader />}>

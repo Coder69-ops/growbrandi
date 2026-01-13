@@ -23,7 +23,9 @@ interface SEOProps {
     articleModifiedTime?: string;
     articleAuthor?: string;
     articleSection?: string;
+    articleSection?: string;
     articleTags?: string[];
+    author?: string; // [NEW]
 }
 
 
@@ -42,9 +44,12 @@ const SEO: React.FC<SEOProps> = ({
     additionalSchemas = [],
     siteTitleSuffix = 'GrowBrandi',
     noIndex = false,
+    siteTitleSuffix = 'GrowBrandi',
+    noIndex = false,
     articlePublishedTime,
     articleModifiedTime,
     articleAuthor,
+    author, // [NEW] Generic Author
     articleSection,
     articleTags
 }) => {
@@ -124,6 +129,7 @@ const SEO: React.FC<SEOProps> = ({
             <title>{fullTitle}</title>
             <meta name="description" content={description} />
             {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+            {author && <meta name="author" content={author} />}
 
             {/* Canonical Tag - Critical for SEO */}
             <link rel="canonical" href={currentUrl} />

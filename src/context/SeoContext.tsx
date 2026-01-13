@@ -9,7 +9,10 @@ interface SeoSettingsDoc {
         titleSuffix?: LocalizedString | string;
         defaultDescription?: LocalizedString | string;
         defaultKeywords?: LocalizedString | string[] | string;
-        defaultOgImage?: string;
+        defaultOgImage?: string; // [NEW]
+        twitterHandle?: string; // [NEW]
+        twitterCard?: string; // [NEW]
+        defaultAuthor?: string; // [NEW]
     };
     routes?: Record<string, {
         title?: LocalizedString | string;
@@ -30,6 +33,9 @@ interface SeoContextType {
         keywords: string[];
         ogImage?: string;
         noIndex?: boolean;
+        twitterHandle?: string;
+        twitterCard?: string;
+        author?: string;
     };
 }
 
@@ -126,7 +132,10 @@ export const SeoProvider = ({ children }: { children: ReactNode }) => {
             description,
             keywords,
             noIndex: routeOverrides.noIndex,
-            ogImage: routeOverrides.ogImage
+            ogImage: routeOverrides.ogImage || globalSettings.defaultOgImage,
+            twitterHandle: globalSettings.twitterHandle,
+            twitterCard: globalSettings.twitterCard,
+            author: globalSettings.defaultAuthor
         };
     };
 
