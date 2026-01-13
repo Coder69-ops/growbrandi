@@ -141,6 +141,15 @@ const Promotions = () => {
                         <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                         {activeCount} Active Now
                     </div>
+                    {activeCount > 0 && (
+                        <button
+                            onClick={handleHideAll}
+                            className="hidden md:flex items-center gap-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-xl font-bold transition-all"
+                            title="Disable all active promotions"
+                        >
+                            <EyeOff size={18} /> Hide All
+                        </button>
+                    )}
                     <button
                         onClick={() => { setCurrentPromo({}); setIsEditing(true); setActiveTab('content'); }}
                         className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-blue-600/30 active:scale-95"
