@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Trash2, Edit2, Save, X, Search, Filter, Eye, EyeOff, LayoutTemplate, Tag, Clock, Image as ImageIcon, Copy, Check, BarChart3, MoreVertical, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Edit2, Save, X, Search, Filter, Eye, EyeOff, LayoutTemplate, Tag, Clock, Image as ImageIcon, Copy, Check, BarChart3, MoreVertical, AlertCircle, Zap, ArrowRight } from 'lucide-react';
 import { db } from '../../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { AssetPickerModal } from '../../components/admin/assets/AssetPickerModal';
@@ -14,7 +14,7 @@ interface Promotion {
     discountCode: string;
     buttonText: string;
     isActive: boolean;
-    position: 'hero' | 'popup' | 'banner' | 'floating_corner';
+    positions: string[];
     style: 'amber' | 'blue' | 'luxury';
     frequency: 'once' | 'always' | 'daily';
     hideIfClaimed: boolean;
@@ -56,7 +56,7 @@ const Promotions = () => {
                 const docRef = await addDoc(collection(db, 'promotions'), {
                     ...currentPromo,
                     isActive: false, // Default inactive
-                    position: currentPromo.position || 'popup',
+                    positions: currentPromo.positions || ['popup'],
                     style: currentPromo.style || 'luxury',
                     frequency: currentPromo.frequency || 'once',
                     hideIfClaimed: currentPromo.hideIfClaimed ?? true,
@@ -268,17 +268,37 @@ const Promotions = () => {
                                         {/* Right: Settings */}
                                         <div className="space-y-6">
                                             <div className="space-y-3">
-                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Display Position</label>
-                                                <select
-                                                    value={currentPromo.position || 'popup'}
-                                                    onChange={e => setCurrentPromo({ ...currentPromo, position: e.target.value as any })}
-                                                    className="w-full p-4 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white appearance-none cursor-pointer"
-                                                >
-                                                    <option value="popup">General Popup (Modal)</option>
-                                                    <option value="hero">Hero Slider (Home)</option>
-                                                    <option value="banner">Top Sticky Banner</option>
-                                                    <option value="floating_corner">Floating Corner Widget</option>
-                                                </select>
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Display Placements</label>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {[
+                                                        { id: 'popup', label: 'General Popup', icon: <LayoutTemplate size={14} /> },
+                                                        { id: 'banner', label: 'Sticky Banner', icon: <Tag size={14} /> },
+                                                        { id: 'floating_corner', label: 'Floating Widget', icon: <Zap size={14} /> },
+                                                        { id: 'hero', label: 'Hero Section', icon: <ImageIcon size={14} /> },
+                                                        { id: 'in_between_sections', label: 'Inline Section', icon: <Filter size={14} /> },
+                                                        { id: 'exit_intent', label: 'Exit Intent', icon: <ArrowRight size={14} /> },
+                                                        { id: 'footer_banner', label: 'Footer Banner', icon: <Clock size={14} /> }
+                                                    ].map((pos) => (
+                                                        <button
+                                                            key={pos.id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                const currentPositions = currentPromo.positions || [];
+                                                                const newPositions = currentPositions.includes(pos.id)
+                                                                    ? currentPositions.filter(p => p !== pos.id)
+                                                                    : [...currentPositions, pos.id];
+                                                                setCurrentPromo({ ...currentPromo, positions: newPositions });
+                                                            }}
+                                                            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border-2 transition-all text-xs font-bold ${(currentPromo.positions || []).includes(pos.id)
+                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                                                                : 'border-transparent bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'
+                                                                }`}
+                                                        >
+                                                            {pos.icon}
+                                                            {pos.label}
+                                                        </button>
+                                                    ))}
+                                                </div>
                                             </div>
 
                                             <div className="space-y-3">
@@ -420,7 +440,11 @@ const Promotions = () => {
                             <div className="absolute top-4 right-4">
                                 <span className="px-2.5 py-1.5 rounded-lg bg-black/40 text-white text-[10px] uppercase font-bold backdrop-blur-md border border-white/10 shadow-sm flex items-center gap-1.5">
                                     <LayoutTemplate size={10} />
-                                    {promo.position.replace('_', ' ')}
+                                    <div className="flex gap-1">
+                                        {(promo.positions || [promo.position as string] || []).map(p => (
+                                            <span key={p}>{p?.replace('_', ' ')}</span>
+                                        ))}
+                                    </div>
                                 </span>
                             </div>
                         </div>
@@ -444,7 +468,7 @@ const Promotions = () => {
                             </div>
 
                             {/* Action Footer */}
-                            <div className="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-white/5">
+                            < div className="flex items-center gap-2 pt-4 border-t border-slate-100 dark:border-white/5" >
                                 <button
                                     onClick={() => toggleActive(promo)}
                                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all ${promo.isActive
@@ -468,10 +492,10 @@ const Promotions = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div >
                 ))}
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

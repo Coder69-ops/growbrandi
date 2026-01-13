@@ -9,6 +9,7 @@ import FloatingActionButtons from './components/FloatingActionButtons';
 import GlobalOfferDisplay from './src/components/GlobalOfferDisplay';
 import GlobalPromoEffects from './components/GlobalPromoEffects';
 import Footer from './components/Footer';
+import PromoSection from './components/PromoSection';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
 // import { CONTACT_INFO } from './constants'; // Removed
 import { db } from './src/lib/firebase';
@@ -386,7 +387,14 @@ ${servicesDetails}
                 <Route path="/" element={<RootRedirect />} />
 
                 {/* Localized Public Routes */}
-                <Route path="/:lang" element={<LanguageWrapper><PageWrapper><HomePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/:lang" element={
+                  <LanguageWrapper>
+                    <PageWrapper>
+                      <HomePage />
+                      <PromoSection />
+                    </PageWrapper>
+                  </LanguageWrapper>
+                } />
                 <Route path="/free-growth-call" element={<PageWrapper><FreeGrowthCall /></PageWrapper>} />
                 <Route path="/:lang/free-growth-call" element={<LanguageWrapper><PageWrapper><FreeGrowthCall /></PageWrapper></LanguageWrapper>} />
                 <Route path="/booking-success" element={<PageWrapper><BookingSuccess /></PageWrapper>} />
