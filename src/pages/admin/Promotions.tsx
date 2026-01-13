@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Trash2, Edit2, Save, X, Search, Filter, Eye, EyeOff, LayoutTemplate, Tag, Clock, Image as ImageIcon, Copy, Check, BarChart3, MoreVertical, AlertCircle } from 'lucide-react';
 import { db } from '../../lib/firebase';
@@ -344,8 +345,8 @@ const Promotions = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredPromotions.map((promo) => (
                     <div key={promo.id} className={`group relative bg-white dark:bg-slate-900 rounded-3xl border transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 ${promo.isActive
-                            ? 'border-slate-200 dark:border-white/10 shadow-lg'
-                            : 'border-slate-200 dark:border-white/5 opacity-80'
+                        ? 'border-slate-200 dark:border-white/10 shadow-lg'
+                        : 'border-slate-200 dark:border-white/5 opacity-80'
                         }`}>
                         {/* Card Image Area */}
                         <div className="h-40 w-full bg-slate-100 dark:bg-black/30 relative overflow-hidden rounded-t-3xl border-b border-slate-100 dark:border-white/5">
@@ -360,8 +361,8 @@ const Promotions = () => {
                             {/* Status Badge */}
                             <div className="absolute top-4 left-4">
                                 <span className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider shadow-sm backdrop-blur-md ${promo.isActive
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-slate-900/50 text-white'
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-slate-900/50 text-white'
                                     }`}>
                                     {promo.isActive ? 'Active' : 'Draft'}
                                 </span>
@@ -399,8 +400,8 @@ const Promotions = () => {
                                 <button
                                     onClick={() => toggleActive(promo)}
                                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all ${promo.isActive
-                                            ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/30'
-                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-400 dark:hover:bg-white/10'
+                                        ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/20 dark:text-green-400 dark:hover:bg-green-900/30'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/5 dark:text-slate-400 dark:hover:bg-white/10'
                                         }`}
                                 >
                                     {promo.isActive ? <><Eye size={16} /> Live</> : <><EyeOff size={16} /> Hidden</>}
