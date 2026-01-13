@@ -23,7 +23,6 @@ interface SEOProps {
     articleModifiedTime?: string;
     articleAuthor?: string;
     articleSection?: string;
-    articleSection?: string;
     articleTags?: string[];
     author?: string; // [NEW]
 }
@@ -42,8 +41,6 @@ const SEO: React.FC<SEOProps> = ({
     twitterHandle = '@growbrandi',
     schema,
     additionalSchemas = [],
-    siteTitleSuffix = 'GrowBrandi',
-    noIndex = false,
     siteTitleSuffix = 'GrowBrandi',
     noIndex = false,
     articlePublishedTime,
