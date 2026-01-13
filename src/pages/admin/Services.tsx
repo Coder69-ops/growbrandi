@@ -269,6 +269,7 @@ const AdminServices = () => {
             price: ensureLocalizedFormat(service.price),
             features: (service.features || []).map((f: any) => ensureLocalizedFormat(f)),
             isPopular: service.isPopular || false,
+            showInMenu: service.showInMenu !== undefined ? service.showInMenu : true,
             category: service.category || 'Design',
             process: (service.process || []).map((p: any) => ({
                 step: ensureLocalizedFormat(p.step),
@@ -671,6 +672,18 @@ const AdminServices = () => {
                                             <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${currentService.isPopular ? 'translate-x-4' : ''}`} />
                                         </div>
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Mark as Popular</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                                        <div className={`w-10 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors ${currentService.showInMenu ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                                            onClick={() => updateField('showInMenu', !currentService.showInMenu)}
+                                        >
+                                            <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${currentService.showInMenu ? 'translate-x-4' : ''}`} />
+                                        </div>
+                                        <div>
+                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-200 block">Show in Header Menu</span>
+                                            <span className="text-[10px] text-slate-500 dark:text-slate-400">If enabled, this service will appear in the top navigation dropdown.</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="bg-white/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200/50 dark:border-slate-800/50 space-y-6">

@@ -11,6 +11,10 @@ import {
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
     FaChevronDown, FaBars, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
+import { db } from '../src/lib/firebase';
+import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
+import { getLocalizedField } from '../src/utils/localization';
 
 interface HeaderProps {
     // No props needed - using router directly
@@ -207,13 +211,55 @@ const MegaMenuSection: React.FC<{
 const Header: React.FC<HeaderProps> = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { getLocalizedPath } = useLocalizedPath();
     const { settings } = useSiteSettings();
     const currentRoute = location.pathname;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<'services' | 'company' | null>(null);
+    const [dynamicServices, setDynamicServices] = useState<any[]>([]);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    // Fetch dynamic services
+    useEffect(() => {
+        const q = query(
+            collection(db, 'services'),
+            orderBy('order', 'asc')
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const services = snapshot.docs
+                .map(doc => {
+                    const data = doc.data();
+                    // Include if showInMenu is not explicitly false
+                    if (data.showInMenu === false) return null;
+
+                    const IconComponent = (FaIcons as any)[data.icon] || FaBriefcase;
+
+                    return {
+                        id: doc.id,
+                        route: `/services/${data.serviceId || doc.id}`,
+                        title: getLocalizedField(data.title, i18n.language),
+                        description: getLocalizedField(data.description, i18n.language),
+                        icon: IconComponent,
+                        isDynamic: true
+                    };
+                })
+                .filter(Boolean) as any[];
+
+            setDynamicServices(services);
+        }, (error) => {
+            console.error("Error fetching menu services:", error);
+        });
+
+        return () => unsubscribe();
+    }, [i18n.language]);
+
+    // Merge static company data with dynamic services
+    const currentMegaMenuData = {
+        services: dynamicServices.length > 0 ? dynamicServices : megaMenuData.services,
+        company: megaMenuData.company
+    };
 
     const handleMouseEnter = (dropdown: 'services' | 'company') => {
         if (timeoutRef.current) {
@@ -377,7 +423,7 @@ const Header: React.FC<HeaderProps> = () => {
                             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                                 {activeDropdown === 'services' && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {megaMenuData.services.map((service) => (
+                                        {currentMegaMenuData.services.map((service) => (
                                             <button
                                                 key={service.route}
                                                 onClick={() => {
@@ -413,7 +459,7 @@ const Header: React.FC<HeaderProps> = () => {
 
                                 {activeDropdown === 'company' && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {megaMenuData.company.map((item) => (
+                                        {currentMegaMenuData.company.map((item) => (
                                             <button
                                                 key={item.route}
                                                 onClick={() => {
@@ -508,7 +554,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     <div className="mb-8">
                                         <MegaMenuSection
                                             title={t('nav.services')}
-                                            items={megaMenuData.services}
+                                            items={currentMegaMenuData.services}
                                             currentRoute={currentRoute}
                                             navigate={navigate}
                                             closeMegaMenu={closeMegaMenu}
@@ -519,7 +565,7 @@ const Header: React.FC<HeaderProps> = () => {
                                     <div className="mb-6">
                                         <MegaMenuSection
                                             title={t('nav.company')}
-                                            items={megaMenuData.company}
+                                            items={currentMegaMenuData.company}
                                             currentRoute={currentRoute}
                                             navigate={navigate}
                                             closeMegaMenu={closeMegaMenu}
