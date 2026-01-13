@@ -7,6 +7,7 @@ import SEO from './components/SEO';
 import PageLoader from './components/PageLoader';
 import FloatingActionButtons from './components/FloatingActionButtons';
 import GlobalOfferDisplay from './src/components/GlobalOfferDisplay';
+import GlobalPromoEffects from './components/GlobalPromoEffects';
 import Footer from './components/Footer';
 import { routeConfig, getRouteMetadata, getRouteFromPath } from './utils/routeConfig';
 // import { CONTACT_INFO } from './constants'; // Removed
@@ -89,6 +90,7 @@ const AdminFreeGrowthCallConfig = React.lazy(() => import('./src/pages/admin/Fre
 import AdminSeoSettings from './src/pages/admin/SeoSettings';
 import AdminPageList from './src/pages/admin/PageList';
 import AdminPageBuilder from './src/pages/admin/PageBuilder';
+const AdminPromotions = React.lazy(() => import('./src/pages/admin/Promotions'));
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
@@ -295,9 +297,9 @@ ${servicesDetails}
     }
 
     switch (currentRoute) {
-      case 'home': return `${baseInstruction} 
+      case 'home': return `${baseInstruction}
 
-**HOMEPAGE CONVERSION STRATEGY**: 
+**HOMEPAGE CONVERSION STRATEGY**:
 • Immediately qualify their business needs
 • Push AI Slogan Generator for instant value demonstration
 • Create urgency: "Try our FREE tools before competitors do!"
@@ -332,6 +334,7 @@ ${servicesDetails}
   return (
     <>
       {!isAdminRoute && <GlobalOfferDisplay />}
+      <GlobalPromoEffects />
       {!isAdminRoute && (
         <SEO
           title={metadata.title}
@@ -470,10 +473,10 @@ ${servicesDetails}
                     <Route path="audit" element={<AdminAuditLog />} />
                     <Route path="online-users" element={<AdminOnlineUsers />} />
                     <Route path="profile" element={<AdminProfile />} />
-                    <Route path="profile" element={<AdminProfile />} />
                     <Route path="free-growth-call" element={<AdminFreeGrowthCallConfig />} />
                     <Route path="ai-config" element={<AdminAIConfig />} />
                     <Route path="seo-settings" element={<AdminSeoSettings />} />
+                    <Route path="promotions" element={<AdminPromotions />} />
                     <Route path="pages" element={<AdminPageList />} />
                     <Route path="pages/new" element={<AdminPageBuilder />} />
                     <Route path="pages/edit/:id" element={<AdminPageBuilder />} />

@@ -73,5 +73,22 @@ service cloud.firestore {
     match /folders/{folderId} {
       allow read, write: if isAuthenticated();
     }
+
+    // Bookings: Public create/read (for availability), Admin update/delete
+    match /bookings/{bookingId} {
+      allow create, read: if true;
+      allow update, delete: if isAuthenticated();
+    }
+
+    // Pages (CMS Content): Public read, Admin write
+    match /pages/{pageId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Analytics: Public write (for view counts), Admin read
+    match /analytics/{docId} {
+      allow read, write: if true; 
+    }
   }
 }

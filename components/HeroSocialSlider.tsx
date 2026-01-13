@@ -14,28 +14,78 @@ interface SliderItem {
     actionUrl?: string;   // Optional CTA link
 }
 
+import { db } from '../src/lib/firebase';
+import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
+
+interface SliderItem {
+    type: 'review' | 'offer' | 'service';
+    content: string;
+    author: string;
+    role: string;
+    image?: string;
+    actionLabel?: string;
+    actionUrl?: string;
+    highlight?: boolean;
+}
+
 interface HeroSocialSliderProps {
     items: SliderItem[];
     onAction?: () => void;
 }
 
-const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onAction }) => {
+const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items: initialItems = [], onAction }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [carouselItems, setCarouselItems] = useState<SliderItem[]>(initialItems);
     const { getLocalizedPath } = useLocalizedPath();
 
+    // Effect to fetch dynamic 'Hero' promotions
     useEffect(() => {
-        if (!items || items.length <= 1) return;
+        const q = query(
+            collection(db, 'promotions'),
+            where('isActive', '==', true),
+            where('position', '==', 'hero'),
+            orderBy('createdAt', 'desc'),
+            limit(1)
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const promos = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    type: 'offer' as const,
+                    content: data.description,
+                    author: data.title,
+                    role: 'Limited Time Offer',
+                    actionLabel: data.buttonText,
+                    actionUrl: '/free-growth-call', // Fixed for now, or dynamic if we add it
+                    highlight: true
+                };
+            });
+
+            if (promos.length > 0) {
+                // Prepend the dynamic promo to the existing items
+                setCarouselItems([promos[0], ...initialItems]);
+            } else {
+                setCarouselItems(initialItems);
+            }
+        });
+
+        return () => unsubscribe();
+    }, [initialItems]); // Re-run if props change
+
+    useEffect(() => {
+        if (!carouselItems || carouselItems.length <= 1) return;
 
         const timer = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % items.length);
-        }, 5000); // 5 seconds per slide
+            setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
+        }, 5000);
 
         return () => clearInterval(timer);
-    }, [items?.length]);
+    }, [carouselItems]);
 
-    if (!items || items.length === 0) return null;
+    if (!carouselItems || carouselItems.length === 0) return null;
 
-    const currentItem = items[currentIndex];
+    const currentItem = carouselItems[currentIndex];
 
     // Animation Variants
     const variants = {
@@ -195,9 +245,9 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onActio
             </AnimatePresence>
 
             {/* Pagination / Indicators */}
-            {items.length > 1 && (
+            {carouselItems.length > 1 && (
                 <div className="hidden sm:flex absolute -bottom-12 left-0 right-0 justify-center items-center gap-3">
-                    {items.map((_, idx) => (
+                    {carouselItems.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => setCurrentIndex(idx)}

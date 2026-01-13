@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, Clock, Zap, Star, ArrowRight, Calendar, Gift } from 'lucide-react';
 import { db } from '../src/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-interface DiscountBookingModalProps {
+export interface DiscountBookingModalProps {
     isOpen: boolean;
     onClose: () => void;
+    offerTitle?: string;
+    offerDescription?: string;
+    discountCode?: string;
+    buttonText?: string;
     offerImage?: string;
+    redirectUrl?: string;
 }
 
-const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onClose, offerImage }) => {
+const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
+    isOpen,
+    onClose,
+    offerTitle = "Claim Your 50% Discount",
+    offerDescription = "Lock in this exclusive rate for your comprehensive strategy session before spots fill up.",
+    discountCode = "LAUNCH50",
+    buttonText = "Claim Offer & Book Now",
+    offerImage,
+    redirectUrl = "/free-growth-call"
+}) => {
     const [step, setStep] = useState<'details' | 'success'>('details');
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
     const [spotsLeft, setSpotsLeft] = useState(3);
 
     // Simulate spots decreasing effect on mount
-    React.useEffect(() => {
+    useEffect(() => {
         if (isOpen && spotsLeft > 1) {
             const timer = setTimeout(() => {
                 if (Math.random() > 0.5) setSpotsLeft(prev => prev - 1);
@@ -30,18 +44,26 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
         e.preventDefault();
         setLoading(true);
         try {
+            // 1. Create Lead/Booking Record
             await addDoc(collection(db, 'leads'), {
                 ...formData,
-                source: 'Discount Popup',
-                offer: '50% OFF',
+                source: 'Dynamic Promo Modal',
+                offer: offerTitle,
+                discountCode: discountCode,
                 createdAt: serverTimestamp(),
                 status: 'new'
             });
+
+            // 2. Show Success
             setStep('success');
+
+            // 3. Redirect after delay
             setTimeout(() => {
                 onClose();
                 setStep('details');
                 setFormData({ name: '', email: '', phone: '' });
+                // navigate(redirectUrl); // Use window.location or navigate hook if available
+                window.location.href = redirectUrl;
             }, 3000);
         } catch (error) {
             console.error(error);
@@ -103,10 +125,10 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
                                         </motion.div>
 
                                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3 leading-tight tracking-tight">
-                                            Claim Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">50% Discount</span>
+                                            {offerTitle}
                                         </h2>
                                         <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs mx-auto leading-relaxed">
-                                            Lock in this exclusive rate for your comprehensive strategy session before spots fill up.
+                                            {offerDescription}
                                         </p>
                                     </div>
 
@@ -143,7 +165,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
                                             disabled={loading}
                                             className="w-full py-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg shadow-xl shadow-blue-600/20 transform hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-2"
                                         >
-                                            {loading ? 'Processing...' : <>Claim Offer & Book Now <ArrowRight size={20} /></>}
+                                            {loading ? 'Processing...' : <>{buttonText} <ArrowRight size={20} /></>}
                                         </button>
 
                                         <p className="text-center text-[10px] text-slate-400 mt-4">
@@ -159,7 +181,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
                                     </div>
                                     <h3 className="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">Discount Secured!</h3>
                                     <p className="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-8">
-                                        The <strong className="text-blue-600 dark:text-blue-400">50% OFF</strong> offer has been locked to your email.
+                                        The <strong className="text-blue-600 dark:text-blue-400">{offerTitle}</strong> offer has been locked to your email.
                                     </p>
 
                                     {/* Success Ticket */}
@@ -175,7 +197,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({ isOpen, onC
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Offer Code</p>
-                                                <p className="font-mono font-bold text-blue-600 dark:text-blue-400">LAUNCH50</p>
+                                                <p className="font-mono font-bold text-blue-600 dark:text-blue-400">{discountCode}</p>
                                             </div>
                                         </div>
                                         <div className="flex justify-between items-center text-xs text-slate-500">
