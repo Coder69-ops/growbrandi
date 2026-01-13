@@ -57,7 +57,8 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items: initialItems
                     author: data.title,
                     role: 'Limited Time Offer',
                     actionLabel: data.buttonText,
-                    actionUrl: '/free-growth-call', // Fixed for now, or dynamic if we add it
+                    actionUrl: '/free-growth-call',
+                    image: data.imageUrl,
                     highlight: true
                 };
             });
