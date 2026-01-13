@@ -153,11 +153,11 @@ const GlobalPromoEffects: React.FC = () => {
                         <div className={`absolute top-0 left-1/4 w-1/2 h-full ${themeStyles[bannerPromo.style || 'luxury'].glow} opacity-40 blur-[40px] pointer-events-none`} />
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-6 relative z-10">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex flex-row items-center justify-between gap-3 relative z-10">
 
                             {/* Left: Badge & Content */}
-                            <div className="flex items-center gap-4 text-center sm:text-left w-full sm:w-auto justify-center sm:justify-start">
-                                <div className={`hidden md:flex items-center gap-2 px-2.5 py-1 rounded-full border ${themeStyles[bannerPromo.style || 'luxury'].badge} backdrop-blur-md`}>
+                            <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                                <div className={`hidden md:flex items-center gap-2 px-2.5 py-1 rounded-full border ${themeStyles[bannerPromo.style || 'luxury'].badge} backdrop-blur-md shrink-0`}>
                                     <span className="relative flex h-2 w-2">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-current opacity-75"></span>
                                         <span className="relative inline-flex rounded-full h-2 w-2 bg-current"></span>
@@ -165,19 +165,18 @@ const GlobalPromoEffects: React.FC = () => {
                                     <span className="text-[10px] font-black uppercase tracking-wider">Live</span>
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3">
-                                    <p className="text-white text-xs sm:text-sm font-medium leading-tight">
+                                <div className="flex items-center gap-2 min-w-0 overflow-hidden">
+                                    <p className="text-white text-xs sm:text-sm font-medium leading-tight truncate">
                                         <span className={`font-black uppercase tracking-wide bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2`}>
                                             {bannerPromo.title}
                                         </span>
                                         <span className="opacity-90 hidden sm:inline">{bannerPromo.description}</span>
-                                        <span className="opacity-90 sm:hidden">{bannerPromo.description}</span>
                                     </p>
                                 </div>
                             </div>
 
                             {/* Right: Timer & Actions */}
-                            <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-center sm:justify-end">
+                            <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                                 {/* Desktop Timer */}
                                 <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/20 border border-white/5">
                                     <Clock size={12} className="text-white/50" />
@@ -189,7 +188,7 @@ const GlobalPromoEffects: React.FC = () => {
                                 <div className="flex items-center gap-2">
                                     <button
                                         onClick={() => { setActiveSlots(prev => ({ ...prev, popup: bannerPromo.id })); setModalOpen(true); }}
-                                        className={`px-5 py-1.5 text-xs font-bold rounded-full transition-all hover:scale-105 active:scale-95 whitespace-nowrap ${themeStyles[bannerPromo.style || 'luxury'].button}`}
+                                        className={`px-3 sm:px-5 py-1.5 text-[10px] sm:text-xs font-bold rounded-full transition-all hover:scale-105 active:scale-95 whitespace-nowrap ${themeStyles[bannerPromo.style || 'luxury'].button}`}
                                     >
                                         {bannerPromo.buttonText}
                                     </button>
