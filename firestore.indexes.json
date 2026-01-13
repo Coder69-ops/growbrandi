@@ -15,6 +15,20 @@
             ]
         },
         {
+            "collectionGroup": "promotions",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "isActive",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
             "collectionGroup": "folders",
             "queryScope": "COLLECTION",
             "fields": [

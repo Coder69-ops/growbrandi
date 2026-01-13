@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, Clock, Zap, Star, ArrowRight, Calendar, Gift, Ticket } from 'lucide-react';
+import { X, CheckCircle, Clock, Zap, Star, ArrowRight, Calendar, Gift, Ticket, Shield, Lock, Users } from 'lucide-react';
 import { db } from '../src/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
@@ -192,10 +192,20 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                                             )}
                                         </button>
 
-                                        <p className="text-center text-[10px] text-slate-400 font-medium">
-                                            <Zap size={10} className="inline mr-1 text-yellow-500 fill-current" />
-                                            Fast-action bonus included for next 3 signups
-                                        </p>
+                                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] text-slate-400">
+                                            <div className="flex items-center gap-1.5">
+                                                <Lock size={10} className="text-green-500" />
+                                                <span>SSL Secure & Encrypted</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Shield size={10} className="text-blue-500" />
+                                                <span>Verified Offer</span>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <Users size={10} className="text-purple-500" />
+                                                <span>500+ Claimed</span>
+                                            </div>
+                                        </div>
                                     </motion.form>
                                 </>
                             ) : (

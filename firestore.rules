@@ -90,5 +90,17 @@ service cloud.firestore {
     match /analytics/{docId} {
       allow read, write: if true; 
     }
+
+    // Promotions: Public read, Admin write
+    match /promotions/{promoId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Leads: Public create, Admin read/update
+    match /leads/{leadId} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
   }
 }
