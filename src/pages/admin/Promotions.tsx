@@ -20,6 +20,8 @@ interface Promotion {
     hideIfClaimed: boolean;
     imageUrl?: string;
     modalImageUrl?: string;
+    imageFit?: 'cover' | 'contain';
+    hideTextOverlay?: boolean;
     createdAt: any;
 }
 
@@ -299,6 +301,46 @@ const Promotions = () => {
                                                         </div>
                                                     </div>
                                                 )}
+                                            </div>
+                                        </div>
+
+                                        {/* Image Controls */}
+                                        <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 dark:bg-white/[0.03] p-6 rounded-2xl border border-slate-200 dark:border-white/10">
+                                            <div className="space-y-4">
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                                    <LayoutTemplate size={16} /> Image Fitting Strategy
+                                                </label>
+                                                <div className="flex p-1 bg-slate-200 dark:bg-slate-800 rounded-xl">
+                                                    {(['cover', 'contain'] as const).map((fit) => (
+                                                        <button
+                                                            key={fit}
+                                                            type="button"
+                                                            onClick={() => setCurrentPromo({ ...currentPromo, imageFit: fit })}
+                                                            className={`flex-1 py-2 px-4 rounded-lg text-xs font-bold transition-all ${currentPromo.imageFit === fit ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' : 'text-slate-500'}`}
+                                                        >
+                                                            {fit === 'cover' ? 'Fill (Cover)' : 'Whole (Contain)'}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <p className="text-[10px] text-slate-500 font-medium italic">Use "Contain" if your image has text near the edges to prevent cropping.</p>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+                                                    <EyeOff size={16} /> Display Options
+                                                </label>
+                                                <div
+                                                    onClick={() => setCurrentPromo({ ...currentPromo, hideTextOverlay: !currentPromo.hideTextOverlay })}
+                                                    className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center justify-between ${currentPromo.hideTextOverlay ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-200 dark:border-white/5 bg-white dark:bg-slate-900'}`}
+                                                >
+                                                    <div>
+                                                        <span className={`text-xs font-bold block ${currentPromo.hideTextOverlay ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300'}`}>Hide Text Overlay</span>
+                                                        <span className="text-[10px] text-slate-500">I used a pre-made flyer with text</span>
+                                                    </div>
+                                                    <div className={`w-10 h-6 rounded-full p-1 transition-all ${currentPromo.hideTextOverlay ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                                                        <div className={`w-4 h-4 bg-white rounded-full transition-transform ${currentPromo.hideTextOverlay ? 'translate-x-4' : 'translate-x-0'}`} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 

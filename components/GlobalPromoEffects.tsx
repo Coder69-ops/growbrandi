@@ -20,6 +20,8 @@ interface Promotion {
     hideIfClaimed?: boolean;
     imageUrl?: string;
     modalImageUrl?: string;
+    imageFit?: 'cover' | 'contain';
+    hideTextOverlay?: boolean;
 }
 
 const GlobalPromoEffects: React.FC = () => {
@@ -342,6 +344,8 @@ const GlobalPromoEffects: React.FC = () => {
                     buttonText={popupPromo.buttonText}
                     offerImage={popupPromo.imageUrl}
                     modalImageUrl={popupPromo.modalImageUrl}
+                    imageFit={popupPromo.imageFit}
+                    hideTextOverlay={popupPromo.hideTextOverlay}
                     style={popupPromo.style}
                     onSuccess={() => handleClaimSuccess(popupPromo.id)}
                 />

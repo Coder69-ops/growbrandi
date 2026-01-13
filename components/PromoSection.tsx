@@ -15,6 +15,8 @@ interface Promotion {
     style: 'amber' | 'blue' | 'luxury';
     imageUrl?: string;
     modalImageUrl?: string;
+    imageFit?: 'cover' | 'contain';
+    hideTextOverlay?: boolean;
     redirectUrl?: string;
 }
 
@@ -107,7 +109,7 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                                 transition={{ duration: 1.5 }}
                                 src={promo.imageUrl}
                                 alt="Promotion Visual"
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+                                className={`w-full h-full ${promo.imageFit === 'contain' ? 'object-contain bg-slate-900' : 'object-cover'} group-hover:scale-105 transition-transform duration-1000`}
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-black/40">
@@ -234,6 +236,8 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                     buttonText={promo.buttonText}
                     offerImage={promo.imageUrl}
                     modalImageUrl={promo.modalImageUrl}
+                    imageFit={promo.imageFit}
+                    hideTextOverlay={promo.hideTextOverlay}
                     style={promo.style}
                     onSuccess={() => {
                         localStorage.setItem(`claimed_promo_${promo.id}`, Date.now().toString());

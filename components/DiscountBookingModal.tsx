@@ -13,6 +13,8 @@ interface DiscountBookingModalProps {
     buttonText?: string;
     offerImage?: string;
     modalImageUrl?: string;
+    imageFit?: 'cover' | 'contain';
+    hideTextOverlay?: boolean;
     redirectUrl?: string;
     onSuccess?: () => void;
     style?: 'luxury' | 'amber' | 'blue';
@@ -63,7 +65,9 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
     modalImageUrl,
     redirectUrl = "/free-growth-call",
     onSuccess,
-    style
+    style = 'luxury',
+    imageFit = 'cover',
+    hideTextOverlay = false
 }) => {
     const themeStyles = {
         luxury: {
@@ -95,7 +99,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
         }
     };
 
-    const s = themeStyles[style || 'luxury'];
+    const s = themeStyles[style];
 
     const [step, setStep] = useState<'details' | 'success'>('details');
     const [loading, setLoading] = useState(false);
@@ -180,14 +184,14 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                                     animate={{ scale: 1, opacity: 1 }}
                                     src={modalImageUrl || offerImage}
                                     alt="Offer"
-                                    className="absolute inset-0 w-full h-full object-cover"
+                                    className={`absolute inset-0 w-full h-full ${imageFit === 'contain' ? 'object-contain' : 'object-cover'}`}
                                 />
                             ) : (
                                 <Zap size={140} className="text-white opacity-20 fill-current animate-pulse" />
                             )}
 
-                            {/* 2. Gradient Overlay for Branding & Legibility (Lower Opacity) */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} ${modalImageUrl || offerImage ? 'opacity-60' : 'opacity-90'} transition-all duration-700`} />
+                            {/* 2. Gradient Overlay for Branding & Legibility (Dynamic Opacity) */}
+                            <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} ${hideTextOverlay ? 'opacity-20' : (modalImageUrl || offerImage ? 'opacity-60' : 'opacity-90')} transition-all duration-700`} />
 
                             {/* Animated Glows */}
                             <motion.div
@@ -199,45 +203,47 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                                 className={`absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none ${s.glow}`}
                             />
 
-                            <div className="absolute inset-0 p-12 flex flex-col justify-end text-white relative z-10">
-                                <motion.div
-                                    initial={{ x: -20, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="flex items-center gap-3 mb-6"
-                                >
-                                    <div className="bg-white/20 backdrop-blur-xl p-3 rounded-2xl border border-white/30">
-                                        <Gift size={32} className="text-white" />
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Exclusive Benefit</span>
-                                        <span className="text-lg font-bold">VIP Growth Pack</span>
-                                    </div>
-                                </motion.div>
+                            {!hideTextOverlay && (
+                                <div className="absolute inset-0 p-12 flex flex-col justify-end text-white relative z-10">
+                                    <motion.div
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="flex items-center gap-3 mb-6"
+                                    >
+                                        <div className="bg-white/20 backdrop-blur-xl p-3 rounded-2xl border border-white/30">
+                                            <Gift size={32} className="text-white" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Exclusive Benefit</span>
+                                            <span className="text-lg font-bold">VIP Growth Pack</span>
+                                        </div>
+                                    </motion.div>
 
-                                <motion.h2
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="text-4xl lg:text-5xl font-black mb-8 leading-[1.1] tracking-tight font-['Outfit'] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
-                                >
-                                    {offerTitle}
-                                </motion.h2>
+                                    <motion.h2
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="text-4xl lg:text-5xl font-black mb-8 leading-[1.1] tracking-tight font-['Outfit'] drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]"
+                                    >
+                                        {offerTitle}
+                                    </motion.h2>
 
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex items-center gap-2 text-xs font-bold text-white/80">
-                                        <Users size={16} className="text-blue-400" />
-                                        <span>Claimed by {claimedCount} owners today</span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {["Premium", "Limited", "Verified"].map((tag) => (
-                                            <span key={tag} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-widest border border-white/20">
-                                                {tag}
-                                            </span>
-                                        ))}
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex items-center gap-2 text-xs font-bold text-white/80">
+                                            <Users size={16} className="text-blue-400" />
+                                            <span>Claimed by {claimedCount} owners today</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {["Premium", "Limited", "Verified"].map((tag) => (
+                                                <span key={tag} className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-[9px] font-black uppercase tracking-widest border border-white/20">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
                         {/* --- RIGHT COLUMN: CONVERSION FORM --- */}

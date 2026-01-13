@@ -31,6 +31,8 @@ interface Promotion {
     style: 'amber' | 'blue' | 'luxury';
     imageUrl?: string;
     modalImageUrl?: string;
+    imageFit?: 'cover' | 'contain';
+    hideTextOverlay?: boolean;
 }
 
 const HeroSection: React.FC = () => {
@@ -508,6 +510,8 @@ const HeroSection: React.FC = () => {
                     buttonText={heroPromo.buttonText}
                     offerImage={heroPromo.imageUrl}
                     modalImageUrl={heroPromo.modalImageUrl}
+                    imageFit={heroPromo.imageFit}
+                    hideTextOverlay={heroPromo.hideTextOverlay}
                     style={heroPromo.style}
                     onSuccess={() => {
                         localStorage.setItem(`claimed_promo_${heroPromo.id}`, Date.now().toString());
