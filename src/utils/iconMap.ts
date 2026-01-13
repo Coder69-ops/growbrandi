@@ -1,0 +1,71 @@
+import {
+    FaCode,
+    FaPalette,
+    FaChartLine,
+    FaBullhorn,
+    FaVideo,
+    FaHeadset,
+    FaComments,
+    FaBuilding,
+    FaCogs,
+    FaBriefcase,
+    FaUsers,
+    FaRocket,
+    FaNewspaper,
+    FaChevronDown,
+    FaBars,
+    FaTimes,
+    FaPaperPlane,
+    FaGlobe,
+    FaSearch,
+    FaMobile,
+    FaLaptop,
+    FaServer,
+    FaDatabase,
+    FaCloud,
+    FaShieldAlt,
+    FaLock,
+    FaUserShield,
+    FaCheck,
+    FaStar,
+    FaHeart
+} from 'react-icons/fa';
+
+// Map of icon names to React components
+export const IconMap: Record<string, React.ElementType> = {
+    FaCode,
+    FaPalette,
+    FaChartLine,
+    FaBullhorn,
+    FaVideo,
+    FaHeadset,
+    FaComments,
+    FaBuilding,
+    FaCogs,
+    FaBriefcase,
+    FaUsers,
+    FaRocket,
+    FaNewspaper,
+    FaChevronDown,
+    FaBars,
+    FaTimes,
+    FaPaperPlane,
+    // Common extras often used in services
+    FaGlobe,
+    FaSearch,
+    FaMobile,
+    FaLaptop,
+    FaServer,
+    FaDatabase,
+    FaCloud,
+    FaShieldAlt,
+    FaLock,
+    FaUserShield,
+    FaCheck,
+    FaStar,
+    FaHeart
+};
+
+export const getIcon = (iconName: string): React.ElementType => {
+    return IconMap[iconName] || FaBriefcase; // Fallback to Briefcase
+};

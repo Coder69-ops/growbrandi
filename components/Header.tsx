@@ -11,7 +11,7 @@ import {
     FaBuilding, FaCogs, FaBriefcase, FaUsers, FaRocket, FaNewspaper,
     FaChevronDown, FaBars, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
-import * as FaIcons from 'react-icons/fa';
+import { getIcon } from '../src/utils/iconMap';
 import { db } from '../src/lib/firebase';
 import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestore';
 import { getLocalizedField } from '../src/utils/localization';
@@ -240,7 +240,7 @@ const Header: React.FC<HeaderProps> = () => {
                     // Include if showInMenu is not explicitly false
                     if (data.showInMenu === false) return null;
 
-                    const IconComponent = (FaIcons as any)[data.icon] || FaBriefcase;
+                    const IconComponent = getIcon(data.icon);
 
                     return {
                         id: doc.id,
