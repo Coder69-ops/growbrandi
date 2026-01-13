@@ -28,7 +28,13 @@ import {
     FaUserShield,
     FaCheck,
     FaStar,
-    FaHeart
+    FaHeart,
+    FaPaintBrush,
+    FaMobileAlt,
+    FaRobot,
+    FaPenNib,
+    FaHandshake,
+    FaLaptopCode
 } from 'react-icons/fa';
 
 // Map of icon names to React components

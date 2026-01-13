@@ -3,7 +3,7 @@ import { db } from '../../lib/firebase';
 import { collection, getDocs, doc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { addDoc, updateDoc, deleteDoc } from '../../lib/firestore-audit';
 import { Plus, Edit2, Trash2, Save, X, Database, ArrowLeft, Briefcase, List, DollarSign, Check, Wand2 } from 'lucide-react';
-import * as FaIcons from 'react-icons/fa';
+import { getIcon, IconMap } from '../../utils/iconMap';
 
 import { LanguageTabs, LocalizedInput, LocalizedArrayInput } from '../../components/admin/LocalizedFormFields';
 import { AdminPageLayout } from '../../components/admin/AdminPageLayout';
@@ -35,7 +35,7 @@ const IconPicker = ({ value, onChange }: { value: string, onChange: (icon: strin
         icon.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const CurrentIcon = (FaIcons as any)[value] || FaIcons.FaBriefcase;
+    const CurrentIcon = getIcon(value);
 
     return (
         <div className="relative">
@@ -64,7 +64,7 @@ const IconPicker = ({ value, onChange }: { value: string, onChange: (icon: strin
                     />
                     <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto custom-scrollbar">
                         {filteredIcons.map(iconName => {
-                            const Icon = (FaIcons as any)[iconName];
+                            const Icon = IconMap[iconName] || getIcon('FaBriefcase');
                             return (
                                 <button
                                     key={iconName}
@@ -741,7 +741,7 @@ const AdminServices = () => {
             ) : (
                 <Reorder.Group axis="y" values={services} onReorder={handleReorder} className="flex flex-col gap-4">
                     {services.map((service) => {
-                        const Icon = (FaIcons as any)[service.icon] || FaIcons.FaBriefcase;
+                        const Icon = getIcon(service.icon);
                         return (
                             <SortableItem key={service.id} item={service}>
                                 <div className="glass-card flex flex-col sm:flex-row h-full sm:h-32 overflow-hidden hover:scale-[1.01] transition-all duration-300 group pl-0">
