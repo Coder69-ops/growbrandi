@@ -12,6 +12,7 @@ export interface DiscountBookingModalProps {
     discountCode?: string;
     buttonText?: string;
     offerImage?: string;
+    modalImageUrl?: string;
     redirectUrl?: string;
     onSuccess?: () => void;
     style?: 'luxury' | 'amber' | 'blue';
@@ -59,6 +60,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
     discountCode = "LAUNCH50",
     buttonText = "Claim Offer & Book Now",
     offerImage,
+    modalImageUrl,
     redirectUrl = "/free-growth-call",
     onSuccess,
     style
@@ -174,11 +176,11 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                             <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-90 transition-all duration-700`} />
 
                             {/* Image or Zap Icon */}
-                            {offerImage ? (
+                            {(modalImageUrl || offerImage) ? (
                                 <motion.img
                                     initial={{ scale: 1.1 }}
                                     animate={{ scale: 1 }}
-                                    src={offerImage}
+                                    src={modalImageUrl || offerImage}
                                     alt="Offer"
                                     className="w-full h-full object-cover mix-blend-overlay"
                                 />

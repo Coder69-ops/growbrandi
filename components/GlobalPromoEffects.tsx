@@ -19,6 +19,7 @@ interface Promotion {
     frequency?: 'once' | 'always' | 'daily';
     hideIfClaimed?: boolean;
     imageUrl?: string;
+    modalImageUrl?: string;
 }
 
 const GlobalPromoEffects: React.FC = () => {
@@ -340,6 +341,7 @@ const GlobalPromoEffects: React.FC = () => {
                     discountCode={popupPromo.discountCode}
                     buttonText={popupPromo.buttonText}
                     offerImage={popupPromo.imageUrl}
+                    modalImageUrl={popupPromo.modalImageUrl}
                     style={popupPromo.style}
                     onSuccess={() => handleClaimSuccess(popupPromo.id)}
                 />

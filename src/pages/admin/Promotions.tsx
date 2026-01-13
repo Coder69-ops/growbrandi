@@ -19,6 +19,7 @@ interface Promotion {
     frequency: 'once' | 'always' | 'daily';
     hideIfClaimed: boolean;
     imageUrl?: string;
+    modalImageUrl?: string;
     createdAt: any;
 }
 
@@ -29,6 +30,7 @@ const Promotions = () => {
     const [currentPromo, setCurrentPromo] = useState<Partial<Promotion>>({});
     const [searchTerm, setSearchTerm] = useState('');
     const [showAssetPicker, setShowAssetPicker] = useState(false);
+    const [pickingFor, setPickingFor] = useState<'imageUrl' | 'modalImageUrl'>('imageUrl');
     const [activeTab, setActiveTab] = useState<'content' | 'design'>('content');
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -133,7 +135,7 @@ const Promotions = () => {
                 isOpen={showAssetPicker}
                 onClose={() => setShowAssetPicker(false)}
                 onSelect={(url) => {
-                    setCurrentPromo(prev => ({ ...prev, imageUrl: url }));
+                    setCurrentPromo(prev => ({ ...prev, [pickingFor]: url }));
                     setShowAssetPicker(false);
                 }}
             />
@@ -247,10 +249,10 @@ const Promotions = () => {
                                             </label>
 
                                             <div
-                                                onClick={() => setShowAssetPicker(true)}
+                                                onClick={() => { setPickingFor('imageUrl'); setShowAssetPicker(true); }}
                                                 className={`aspect-video rounded-2xl border-2 border-dashed transition-all cursor-pointer relative group overflow-hidden ${currentPromo.imageUrl
                                                     ? 'border-blue-500/50 bg-slate-900'
-                                                    : 'border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10'}`}
+                                                    : 'border-slate-300 dark:border-slate-700 hover:border-blue-50 hover:bg-blue-50 dark:hover:bg-blue-900/10'}`}
                                             >
                                                 {currentPromo.imageUrl ? (
                                                     <>
@@ -263,6 +265,38 @@ const Promotions = () => {
                                                     <div className="flex flex-col items-center justify-center h-full text-slate-400 group-hover:text-blue-500">
                                                         <ImageIcon size={32} className="mb-2" />
                                                         <span className="font-medium text-sm">Select Image</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Left: Modal specific Image Picker */}
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-bold text-slate-700 dark:text-slate-300 flex justify-between">
+                                                Modal/Popup Image
+                                                <span className="text-xs font-normal text-slate-500">Vertical Recommended</span>
+                                            </label>
+
+                                            <div
+                                                onClick={() => { setPickingFor('modalImageUrl'); setShowAssetPicker(true); }}
+                                                className={`aspect-[4/5] rounded-2xl border-2 border-dashed transition-all cursor-pointer relative group overflow-hidden ${currentPromo.modalImageUrl
+                                                    ? 'border-indigo-500/50 bg-slate-900'
+                                                    : 'border-slate-300 dark:border-slate-700 hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/10'}`}
+                                            >
+                                                {currentPromo.modalImageUrl ? (
+                                                    <>
+                                                        <img src={currentPromo.modalImageUrl} alt="Preview" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <span className="bg-white text-slate-900 px-4 py-2 rounded-lg font-bold text-sm">Change Image</span>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-full text-slate-400 group-hover:text-indigo-500">
+                                                        <LayoutTemplate size={32} className="mb-2" />
+                                                        <div className="text-center px-4">
+                                                            <span className="font-bold text-sm block">Special Modal Image</span>
+                                                            <span className="text-[10px] opacity-70">Best for the dual-column popup</span>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </div>

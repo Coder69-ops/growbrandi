@@ -30,6 +30,7 @@ interface Promotion {
     positions: string[];
     style: 'amber' | 'blue' | 'luxury';
     imageUrl?: string;
+    modalImageUrl?: string;
 }
 
 const HeroSection: React.FC = () => {
@@ -506,6 +507,7 @@ const HeroSection: React.FC = () => {
                     discountCode={heroPromo.discountCode}
                     buttonText={heroPromo.buttonText}
                     offerImage={heroPromo.imageUrl}
+                    modalImageUrl={heroPromo.modalImageUrl}
                     style={heroPromo.style}
                     onSuccess={() => {
                         localStorage.setItem(`claimed_promo_${heroPromo.id}`, Date.now().toString());

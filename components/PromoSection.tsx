@@ -14,6 +14,7 @@ interface Promotion {
     positions: string[];
     style: 'amber' | 'blue' | 'luxury';
     imageUrl?: string;
+    modalImageUrl?: string;
     redirectUrl?: string;
 }
 
@@ -232,6 +233,7 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                     discountCode={promo.discountCode}
                     buttonText={promo.buttonText}
                     offerImage={promo.imageUrl}
+                    modalImageUrl={promo.modalImageUrl}
                     style={promo.style}
                     onSuccess={() => {
                         localStorage.setItem(`claimed_promo_${promo.id}`, Date.now().toString());
