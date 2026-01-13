@@ -15,6 +15,7 @@ interface Promotion {
     isActive: boolean;
     position: 'hero' | 'popup' | 'banner' | 'floating_corner';
     style: 'amber' | 'blue' | 'luxury';
+    imageUrl?: string;
     createdAt: any;
 }
 
@@ -137,6 +138,16 @@ const Promotions = () => {
                                 </div>
 
                                 <div className="space-y-2">
+                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Offer Image URL (Optional)</label>
+                                    <input
+                                        value={currentPromo.imageUrl || ''}
+                                        onChange={e => setCurrentPromo({ ...currentPromo, imageUrl: e.target.value })}
+                                        placeholder="https://..."
+                                        className="w-full p-3 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
                                     <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Description</label>
                                     <textarea
                                         value={currentPromo.description || ''}
@@ -165,6 +176,7 @@ const Promotions = () => {
                                         >
                                             <option value="popup">General Popup</option>
                                             <option value="hero">Hero Slider (Home)</option>
+                                            <option value="banner">Top Sticky Banner</option>
                                             <option value="floating_corner">Floating Corner Widget</option>
                                         </select>
                                     </div>
@@ -211,8 +223,8 @@ const Promotions = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredPromotions.map((promo) => (
                     <div key={promo.id} className={`relative group p-6 rounded-2xl border transition-all duration-300 ${promo.isActive
-                            ? 'bg-white dark:bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/10'
-                            : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-75 grayscale'
+                        ? 'bg-white dark:bg-slate-900 border-blue-500 shadow-lg shadow-blue-500/10'
+                        : 'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-75 grayscale'
                         }`}>
                         <div className="flex justify-between items-start mb-4">
                             <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${promo.isActive ? 'bg-green-100 text-green-700 dark:bg-green-500/20 dark:text-green-400' : 'bg-slate-200 text-slate-500'

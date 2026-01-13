@@ -31,7 +31,8 @@ import {
     Kanban,
     Clock,
     Bot,
-    Globe
+    Globe,
+    Tag
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -113,6 +114,7 @@ const AdminLayout = () => {
             items: [
                 { path: '/admin/site-content', icon: FileText, label: 'Site Content', permissions: ['manage_content'] },
                 { path: '/admin/pages', icon: FileText, label: 'Page Builder', permissions: ['manage_content'] },
+                { path: '/admin/promotions', icon: Tag, label: 'Promotions', permissions: ['manage_content'] },
                 { path: '/admin/free-growth-call', icon: Zap, label: 'Growth Call Page', permissions: ['manage_content'] },
                 { path: '/admin/blog', icon: BookOpen, label: 'Blog', permissions: ['manage_blog', 'manage_content'] },
                 { path: '/admin/projects', icon: FolderKanban, label: 'Projects', permissions: ['manage_projects', 'manage_content'] },
