@@ -35,21 +35,24 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
             accent: "text-indigo-400",
             button: "bg-gradient-to-r from-indigo-600 to-violet-600 shadow-indigo-500/25",
             badge: "bg-indigo-500",
-            mesh: "rgba(99, 102, 241, 0.15)"
+            mesh: "rgba(99, 102, 241, 0.15)",
+            border: "border-indigo-500/30"
         },
         amber: {
             gradient: "from-amber-600 via-orange-600 to-amber-700",
             accent: "text-amber-500",
             button: "bg-gradient-to-r from-amber-500 to-orange-600 shadow-amber-500/25",
             badge: "bg-amber-500",
-            mesh: "rgba(245, 158, 11, 0.2)"
+            mesh: "rgba(245, 158, 11, 0.2)",
+            border: "border-amber-500/30"
         },
         blue: {
             gradient: "from-blue-600 via-cyan-600 to-blue-700",
             accent: "text-blue-400",
             button: "bg-gradient-to-r from-blue-600 to-cyan-600 shadow-blue-500/25",
             badge: "bg-blue-500",
-            mesh: "rgba(59, 130, 246, 0.2)"
+            mesh: "rgba(59, 130, 246, 0.2)",
+            border: "border-blue-500/30"
         }
     };
 
@@ -111,214 +114,231 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
                         className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
                     />
                     <motion.div
-                        initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                        initial={{ scale: 0.9, opacity: 0, y: 50 }}
                         animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 50 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        className="relative w-full max-w-lg overflow-hidden bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-white/20 dark:border-white/10"
+                        className="relative w-full max-w-5xl overflow-hidden bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/20 dark:border-white/10"
                     >
-                        {/* Premium Mesh Background */}
-                        <div className={`absolute inset-x-0 top-0 h-48 bg-gradient-to-br ${s.gradient} transition-all duration-700`} />
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.2, 1],
-                                rotate: [0, 90, 180, 270, 360],
-                                x: [0, 20, -20, 0],
-                                y: [0, -20, 20, 0]
-                            }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[80px] pointer-events-none opacity-50"
-                            style={{ background: s.mesh }}
-                        />
-                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
-
+                        {/* Close Button */}
                         <button
                             onClick={onClose}
-                            className="absolute top-4 right-4 p-2 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all z-20 backdrop-blur-sm group"
+                            className="absolute top-6 right-6 p-2 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all z-[60] backdrop-blur-md group border border-white/20"
                         >
                             <X size={20} className="group-hover:rotate-90 transition-transform" />
                         </button>
 
-                        <div className="relative z-10 p-8">
-                            {step === 'details' ? (
-                                <>
-                                    <div className="flex justify-center mb-6">
-                                        <motion.div
-                                            initial={{ rotate: -5, scale: 0.8 }}
-                                            animate={{ rotate: 0, scale: 1 }}
-                                            transition={{ type: "spring", delay: 0.1 }}
-                                            className="w-24 h-24 bg-white/10 backdrop-blur-xl rounded-3xl flex items-center justify-center shadow-2xl border border-white/20 overflow-hidden ring-1 ring-white/10 group-hover:scale-105 transition-transform"
-                                        >
-                                            {offerImage ? (
-                                                <img src={offerImage} alt="Offer" className="w-full h-full object-cover" />
-                                            ) : (
-                                                <Zap size={40} className="text-white fill-current animate-pulse" />
-                                            )}
-                                        </motion.div>
+                        <div className="flex flex-col lg:flex-row h-full min-h-[600px]">
+                            {/* --- LEFT COLUMN: MASSIVE IMAGE/OFFER --- */}
+                            <div className="relative lg:w-1/2 h-64 lg:h-auto overflow-hidden">
+                                <div className={`absolute inset-0 bg-gradient-to-br ${s.gradient} opacity-90 transition-all duration-700`} />
+
+                                {/* Image or Zap Icon */}
+                                {offerImage ? (
+                                    <motion.img
+                                        initial={{ scale: 1.1 }}
+                                        animate={{ scale: 1 }}
+                                        src={offerImage}
+                                        alt="Offer"
+                                        className="w-full h-full object-cover mix-blend-overlay"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <Zap size={140} className="text-white opacity-20 fill-current animate-pulse" />
                                     </div>
+                                )}
 
-                                    <div className="text-center mb-8">
-                                        <motion.div
-                                            initial={{ y: 10, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.2 }}
-                                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500 text-white text-[11px] font-bold uppercase tracking-wider mb-4 shadow-lg shadow-red-500/30"
-                                        >
-                                            <Clock size={12} className="animate-pulse" />
-                                            Only {spotsLeft} spots left
-                                        </motion.div>
+                                {/* Animated Mesh Overlays */}
+                                <motion.div
+                                    animate={{
+                                        scale: [1, 1.2, 1],
+                                        rotate: [0, 90, 180, 270, 360],
+                                        x: [0, 20, -20, 0],
+                                        y: [0, -20, 20, 0]
+                                    }}
+                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                    className="absolute -top-24 -right-24 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none opacity-40"
+                                    style={{ background: s.mesh }}
+                                />
 
-                                        <motion.h2
-                                            initial={{ y: 10, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.3 }}
-                                            className="text-3xl font-black text-slate-900 dark:text-white mb-3 leading-tight tracking-tight"
-                                        >
-                                            {offerTitle}
-                                        </motion.h2>
-                                        <motion.p
-                                            initial={{ y: 10, opacity: 0 }}
-                                            animate={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.4 }}
-                                            className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-sm mx-auto font-medium"
-                                        >
-                                            {offerDescription}
-                                        </motion.p>
-                                    </div>
+                                {/* Glass Content Overlay */}
+                                <div className="absolute inset-0 p-12 flex flex-col justify-end text-white relative z-10">
+                                    <motion.div
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="flex items-center gap-3 mb-6"
+                                    >
+                                        <div className="bg-white/20 backdrop-blur-xl p-3 rounded-2xl border border-white/30">
+                                            <Gift size={32} className="text-white" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">Exclusive Benefit</span>
+                                            <span className="text-lg font-bold">Limited Time Release</span>
+                                        </div>
+                                    </motion.div>
 
-                                    <motion.form
+                                    <motion.h2
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.5 }}
-                                        onSubmit={handleSubmit}
-                                        className="space-y-4"
+                                        transition={{ delay: 0.3 }}
+                                        className="text-4xl lg:text-5xl font-black mb-6 leading-[1.1] tracking-tight font-['Outfit']"
                                     >
-                                        <div className="grid grid-cols-1 gap-4">
-                                            <div className="group">
-                                                <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider mb-1 block">Your Name</label>
-                                                <input
-                                                    required
-                                                    type="text"
-                                                    value={formData.name}
-                                                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-semibold text-slate-900 dark:text-white placeholder:text-slate-400/50"
-                                                    placeholder="Enter your name"
-                                                />
-                                            </div>
-                                            <div className="group">
-                                                <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider mb-1 block">Email Address</label>
-                                                <input
-                                                    required
-                                                    type="email"
-                                                    value={formData.email}
-                                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                                    className="w-full px-4 py-3 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-semibold text-slate-900 dark:text-white placeholder:text-slate-400/50"
-                                                    placeholder="Enter your work email"
-                                                />
-                                            </div>
-                                        </div>
+                                        {offerTitle}
+                                    </motion.h2>
 
-                                        <button
-                                            type="submit"
-                                            disabled={loading}
-                                            className={`w-full py-4 ${s.button} text-white rounded-2xl font-black text-xl shadow-2xl transform hover:-translate-y-1 active:scale-95 transition-all flex items-center justify-center gap-3 group relative overflow-hidden`}
-                                        >
-                                            <div className="absolute inset-x-0 h-full w-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
-                                            {loading ? 'Processing...' : (
-                                                <>
-                                                    {buttonText}
-                                                    <ArrowRight size={22} className="group-hover:translate-x-1.5 transition-transform" />
-                                                </>
-                                            )}
-                                        </button>
-
-                                        <div className="mt-4 pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] text-slate-400">
-                                            <div className="flex items-center gap-1.5">
-                                                <Lock size={10} className="text-green-500" />
-                                                <span>SSL Secure & Encrypted</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Shield size={10} className="text-blue-500" />
-                                                <span>Verified Offer</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Users size={10} className="text-purple-500" />
-                                                <span>500+ Claimed</span>
-                                            </div>
-                                        </div>
-                                    </motion.form>
-                                </>
-                            ) : (
-                                <div className="text-center py-8 relative">
-                                    {/* Confetti Explosion Simulation */}
-                                    {[...Array(20)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
-                                            animate={{
-                                                scale: [0, 1, 0.5],
-                                                x: (Math.random() - 0.5) * 400,
-                                                y: (Math.random() - 0.5) * 400 - 100,
-                                                rotate: Math.random() * 360,
-                                                opacity: [1, 1, 0]
-                                            }}
-                                            transition={{ duration: 2, ease: "easeOut" }}
-                                            className="absolute top-1/2 left-1/2 w-3 h-3 rounded-sm z-50"
-                                            style={{ background: i % 2 === 0 ? s.mesh : '#fff' }}
-                                        />
-                                    ))}
-
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={{ scale: 1, rotate: [0, -10, 10, 0] }}
-                                        transition={{ type: "spring", damping: 10 }}
-                                        className={`w-24 h-24 ${s.button} rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl relative z-10`}
-                                    >
-                                        <CheckCircle size={48} className="text-white" />
-                                    </motion.div>
-
-                                    <h3 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">You're In!</h3>
-                                    <p className="text-slate-500 dark:text-slate-400 mb-8 font-bold text-lg">
-                                        Your {offerTitle} is secured.
-                                    </p>
-
-                                    {/* Success Ticket */}
-                                    <motion.div
-                                        initial={{ y: 50, opacity: 0, rotate: 5 }}
-                                        animate={{ y: 0, opacity: 1, rotate: -3 }}
-                                        transition={{ delay: 0.3, type: "spring" }}
-                                        className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-white/10 p-0 relative overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] mx-auto max-w-xs transition-transform duration-500 group cursor-pointer hover:rotate-0"
-                                    >
-                                        {/* Ticket Header */}
-                                        <div className={`${s.gradient} p-6 text-white text-center pb-10 border-b-2 border-dashed border-white/20 relative`}>
-                                            <div className="absolute -left-4 bottom-[-16px] w-8 h-8 bg-white dark:bg-slate-900 rounded-full" />
-                                            <div className="absolute -right-4 bottom-[-16px] w-8 h-8 bg-white dark:bg-slate-900 rounded-full" />
-
-                                            <p className="text-[10px] text-white/60 uppercase tracking-[0.2em] font-black mb-1">Redemption Code</p>
-                                            <p className="text-3xl font-mono font-black text-white tracking-widest drop-shadow-md">{discountCode}</p>
-                                        </div>
-
-                                        {/* Ticket Body */}
-                                        <div className="p-6 pt-8 bg-white dark:bg-slate-800/80 backdrop-blur-md">
-                                            <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                                                <span>Verified Holder</span>
-                                                <span>Vault Status</span>
-                                            </div>
-                                            <div className="flex justify-between items-center font-black text-slate-900 dark:text-white">
-                                                <span className="text-lg">{formData.name.split(' ')[0]}</span>
-                                                <span className="flex items-center gap-1.5 text-green-500 shrink-0">
-                                                    <Shield size={14} /> Locked
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-
-                                    <div className="mt-12 flex items-center justify-center gap-3 text-sm font-bold text-slate-400 animate-pulse">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                        <span>Redirecting to your growth strategy...</span>
+                                    <div className="flex flex-wrap gap-4 mt-4">
+                                        {[
+                                            { icon: <Star size={14} />, label: "Premium Access" },
+                                            { icon: <Zap size={14} />, label: "Instant Activation" },
+                                            { icon: <Users size={14} />, label: "Trusted by 500+" }
+                                        ].map((badge, i) => (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ scale: 0.8, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                transition={{ delay: 0.4 + (i * 0.1) }}
+                                                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-[10px] font-bold uppercase tracking-wider"
+                                            >
+                                                {badge.icon}
+                                                {badge.label}
+                                            </motion.div>
+                                        ))}
                                     </div>
                                 </div>
-                            )}
+                            </div>
+
+                            {/* --- RIGHT COLUMN: CONVERSION FORM --- */}
+                            <div className="lg:w-1/2 bg-white dark:bg-slate-900 overflow-y-auto relative p-8 lg:p-14">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+
+                                {step === 'details' ? (
+                                    <div className="relative z-10">
+                                        <div className="flex justify-between items-start mb-12">
+                                            <motion.div
+                                                initial={{ y: 10, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                className="flex flex-col gap-1"
+                                            >
+                                                <div className="flex items-center gap-2 text-red-500 text-xs font-black uppercase tracking-widest animate-pulse">
+                                                    <Clock size={14} />
+                                                    CRITICAL: {spotsLeft} Spots Available
+                                                </div>
+                                                <p className="text-slate-400 text-sm font-medium">Join our next growth batch today</p>
+                                            </motion.div>
+
+                                            <div className={`px-4 py-2 rounded-2xl bg-slate-100 dark:bg-white/5 border-2 ${s.border} border-dashed flex flex-col items-center`}>
+                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Code</span>
+                                                <span className={`text-sm font-mono font-black ${s.accent}`}>{discountCode}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="mb-10">
+                                            <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed font-medium mb-8">
+                                                {offerDescription}
+                                            </p>
+                                        </div>
+
+                                        <form onSubmit={handleSubmit} className="space-y-6">
+                                            <div className="space-y-4">
+                                                <div className="relative group">
+                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 ml-1 uppercase tracking-widest mb-1.5 block">Full Name</label>
+                                                    <input
+                                                        required
+                                                        type="text"
+                                                        value={formData.name}
+                                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                                        className="w-full px-5 py-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-bold text-slate-900 dark:text-white text-lg"
+                                                        placeholder="John Doe"
+                                                    />
+                                                </div>
+                                                <div className="relative group">
+                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 ml-1 uppercase tracking-widest mb-1.5 block">Business Email</label>
+                                                    <input
+                                                        required
+                                                        type="email"
+                                                        value={formData.email}
+                                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                                        className="w-full px-5 py-4 bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-bold text-slate-900 dark:text-white text-lg"
+                                                        placeholder="john@company.com"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                disabled={loading}
+                                                className={`w-full py-5 ${s.button} text-white rounded-2xl font-black text-xl shadow-2xl transform hover:-translate-y-1.5 active:scale-95 transition-all flex items-center justify-center gap-4 group relative overflow-hidden`}
+                                            >
+                                                <div className="absolute inset-x-0 h-full w-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
+                                                {loading ? 'Securing Spot...' : (
+                                                    <>
+                                                        {buttonText}
+                                                        <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                                                    </>
+                                                )}
+                                            </button>
+
+                                            <div className="flex flex-wrap items-center justify-between gap-4 pt-6 opacity-60">
+                                                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                                    <Lock size={12} className="text-green-500" />
+                                                    <span>AES-256 SECURED</span>
+                                                </div>
+                                                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                                    <Shield size={12} className="text-blue-500" />
+                                                    <span>IDENTITY VERIFIED</span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                ) : (
+                                    <div className="h-full flex flex-col items-center justify-center text-center relative z-10 py-10">
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1, rotate: [0, -10, 10, 0] }}
+                                            className={`w-24 h-24 ${s.button} rounded-full flex items-center justify-center mb-8 shadow-2xl`}
+                                        >
+                                            <CheckCircle size={48} className="text-white" />
+                                        </motion.div>
+
+                                        <h3 className="text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">Access Granted!</h3>
+                                        <p className="text-slate-500 dark:text-slate-400 mb-10 font-bold text-lg max-w-xs">
+                                            Your exclusive growth rate has been applied to your session.
+                                        </p>
+
+                                        {/* Premium Ticket UI */}
+                                        <motion.div
+                                            initial={{ y: 50, opacity: 0, rotate: 5 }}
+                                            animate={{ y: 0, opacity: 1, rotate: -2 }}
+                                            className="w-full max-w-sm bg-slate-50 dark:bg-white/[0.03] rounded-[2rem] border border-slate-200 dark:border-white/10 p-1 shadow-2xl"
+                                        >
+                                            <div className={`${s.gradient} p-8 rounded-[1.8rem] text-white text-center border-b-2 border-dashed border-white/20 relative`}>
+                                                <div className="absolute -left-6 bottom-[-14px] w-8 h-8 bg-white dark:bg-slate-900 rounded-full" />
+                                                <div className="absolute -right-6 bottom-[-14px] w-8 h-8 bg-white dark:bg-slate-900 rounded-full" />
+                                                <p className="text-[10px] text-white/60 uppercase tracking-[0.3em] font-black mb-2">Internal Code</p>
+                                                <p className="text-4xl font-mono font-black tracking-widest">{discountCode}</p>
+                                            </div>
+                                            <div className="p-8 pb-10">
+                                                <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">
+                                                    <span>Verified Profile</span>
+                                                    <span>Status</span>
+                                                </div>
+                                                <div className="flex justify-between items-center font-black">
+                                                    <span className="text-xl dark:text-white">{formData.name.split(' ')[0]}</span>
+                                                    <span className="flex items-center gap-1.5 text-green-500 text-sm">
+                                                        <Shield size={16} /> VALIDATED
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </motion.div>
+
+                                        <div className="mt-12 flex items-center gap-3 text-sm font-bold text-blue-500 animate-pulse">
+                                            <Calendar size={18} />
+                                            <span>Redirecting to scheduler in 3s...</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </motion.div>
                 </div>

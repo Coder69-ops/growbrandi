@@ -29,9 +29,18 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
         );
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
-            const active = fetched.find((p: any) =>
-                (p.positions || []).includes('in_between_sections')
+            const fetched = snapshot.docs.map(doc => {
+                const data = doc.data();
+                const positions = Array.isArray(data.positions)
+                    ? data.positions
+                    : data.position
+                        ? [data.position]
+                        : [];
+                return { id: doc.id, ...data, positions } as Promotion;
+            });
+
+            const active = fetched.find((p: Promotion) =>
+                p.positions.includes('in_between_sections')
             );
             setPromo(active || null);
         });
@@ -41,104 +50,168 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
 
     if (!promo) return null;
 
-    const theme = {
-        luxury: "bg-slate-900 border-indigo-500/20 text-white",
-        amber: "bg-amber-600 border-amber-400 text-white",
-        blue: "bg-blue-600 border-blue-400 text-white"
-    }[promo.style || 'luxury'];
+    const themes = {
+        luxury: {
+            bg: "bg-slate-900",
+            text: "text-white",
+            accent: "text-indigo-400",
+            button: "bg-indigo-600 hover:bg-indigo-700",
+            glow: "bg-indigo-500/20",
+            border: "border-indigo-500/20"
+        },
+        amber: {
+            bg: "bg-amber-600",
+            text: "text-white",
+            accent: "text-amber-200",
+            button: "bg-white text-amber-600 hover:bg-amber-50",
+            glow: "bg-amber-400/30",
+            border: "border-amber-400/30"
+        },
+        blue: {
+            bg: "bg-blue-600",
+            text: "text-white",
+            accent: "text-blue-100",
+            button: "bg-white text-blue-600 hover:bg-blue-50",
+            glow: "bg-blue-400/30",
+            border: "border-blue-400/30"
+        }
+    };
 
-    const accent = {
-        luxury: "text-indigo-400",
-        amber: "text-amber-200",
-        blue: "text-blue-100"
-    }[promo.style || 'luxury'];
+    const s = themes[promo.style || 'luxury'];
 
     return (
-        <section className="py-24 px-6">
+        <section className="py-24 px-6 relative overflow-hidden">
+            {/* Background Decorative Elements */}
+            <div className={`absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]`} />
+
             <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className={`max-w-7xl mx-auto rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border relative group ${theme}`}
+                className={`max-w-7xl mx-auto rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border ${s.border} relative group ${s.bg}`}
             >
-                {/* Visual Flair */}
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
-
-                <div className="flex flex-col lg:flex-row items-center relative z-10">
-                    {/* Left: Content */}
-                    <div className="flex-1 p-12 lg:p-24">
-                        <div className="flex items-center gap-3 mb-8">
-                            <span className="px-3 py-1 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-white/20">
-                                Exclusive Offer
-                            </span>
-                            <div className="flex h-2 w-2 rounded-full bg-red-400 animate-pulse" />
-                        </div>
-
-                        <h2 className="text-5xl lg:text-7xl font-black mb-8 leading-[0.9] tracking-tighter">
-                            {promo.title}
-                        </h2>
-                        <p className={`text-xl lg:text-2xl mb-12 font-medium opacity-90 max-w-xl ${accent}`}>
-                            {promo.description}
-                        </p>
-
-                        <div className="flex flex-col sm:flex-row items-center gap-6 mb-12">
-                            <button
-                                onClick={() => setIsModalOpen(true)}
-                                className="w-full sm:w-auto px-10 py-5 bg-white text-slate-900 rounded-[2rem] font-black text-xl hover:scale-105 transition-transform flex items-center justify-center gap-3 shadow-2xl"
-                            >
-                                {promo.buttonText}
-                                <ArrowRight size={24} />
-                            </button>
-                            <div className="flex items-center gap-3">
-                                <div className="flex -space-x-3">
-                                    {[1, 2, 3].map(i => (
-                                        <div key={i} className="w-10 h-10 rounded-full border-4 border-slate-900 bg-slate-800" />
-                                    ))}
-                                </div>
-                                <p className="text-xs font-bold opacity-70">Joined by 1.2k+ owners</p>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 pt-12 border-t border-white/10">
-                            {[
-                                { icon: <Shield size={18} />, text: "Verified Growth" },
-                                { icon: <Clock size={18} />, text: "48h Expiration" },
-                                { icon: <Zap size={18} />, text: "Instant VIP Status" }
-                            ].map((item, i) => (
-                                <div key={i} className="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity">
-                                    {item.icon}
-                                    <span className="text-xs font-bold uppercase tracking-widest">{item.text}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Right: Media Hook */}
-                    <div className="lg:w-1/3 w-full bg-black/20 self-stretch flex items-center justify-center p-12 lg:border-l border-white/10 relative overflow-hidden">
+                <div className="flex flex-col lg:flex-row min-h-[700px]">
+                    {/* LEFT: MASSIVE MEDIA HOOK (Split Screen) */}
+                    <div className="lg:w-1/2 relative h-[400px] lg:h-auto overflow-hidden">
                         {promo.imageUrl ? (
-                            <img
+                            <motion.img
+                                initial={{ scale: 1.2 }}
+                                whileInView={{ scale: 1 }}
+                                transition={{ duration: 1.5 }}
                                 src={promo.imageUrl}
-                                alt="Offer"
-                                className="w-full h-full object-cover absolute inset-0 opacity-40 group-hover:scale-110 transition-transform duration-1000"
+                                alt="Promotion Visual"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
                             />
                         ) : (
-                            <div className="text-white/10 absolute inset-0 flex items-center justify-center rotate-12 scale-150">
-                                <Zap size={400} />
+                            <div className="w-full h-full flex items-center justify-center bg-black/40">
+                                <Zap size={160} className="text-white opacity-10 fill-current animate-pulse" />
                             </div>
                         )}
 
-                        <div className="relative text-center">
-                            <div className="bg-white/10 backdrop-blur-3xl p-8 rounded-[2rem] border border-white/20 shadow-2xl">
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 opacity-60">Unlock Code</p>
-                                <p className="text-4xl font-mono font-black tracking-[0.3em] mb-2">{promo.discountCode}</p>
-                                <div className="h-1 w-full bg-slate-100/20 rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: "100%" }}
-                                        animate={{ width: "10%" }}
-                                        transition={{ duration: 60, repeat: Infinity }}
-                                        className="h-full bg-white"
-                                    />
+                        {/* Image Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent lg:hidden" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent hidden lg:block" />
+
+                        {/* Floating Badge on Image */}
+                        <motion.div
+                            initial={{ x: -50, opacity: 0 }}
+                            whileInView={{ x: 0, opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="absolute bottom-12 left-12 bg-white/10 backdrop-blur-2xl p-6 rounded-[2rem] border border-white/20 shadow-2xl max-w-[240px]"
+                        >
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className="p-2 bg-green-500 rounded-lg">
+                                    <Shield size={20} className="text-white" />
                                 </div>
+                                <span className="text-[10px] font-black text-white uppercase tracking-widest">Verified Growth</span>
+                            </div>
+                            <p className="text-white/80 text-xs font-bold leading-relaxed">
+                                Join our exclusive network of 1,200+ successful brand owners today.
+                            </p>
+                        </motion.div>
+                    </div>
+
+                    {/* RIGHT: PREMIUM CONTENT */}
+                    <div className="lg:w-1/2 p-12 lg:p-20 flex flex-col justify-center relative">
+                        <div className={`absolute -right-24 -top-24 w-96 h-96 rounded-full blur-[100px] pointer-events-none ${s.glow}`} />
+
+                        <div className="relative z-10">
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                className="flex items-center gap-3 mb-8"
+                            >
+                                <span className="px-4 py-1.5 bg-white/10 rounded-full text-[11px] font-black uppercase tracking-[0.25em] border border-white/20 text-white">
+                                    Special Access Opportunity
+                                </span>
+                                <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                            </motion.div>
+
+                            <motion.h2
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.1 }}
+                                className="text-5xl lg:text-7xl font-black text-white mb-8 leading-[0.95] tracking-tighter font-['Outfit']"
+                            >
+                                {promo.title}
+                            </motion.h2>
+
+                            <motion.p
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                                className={`text-xl lg:text-2xl mb-12 font-medium leading-relaxed max-w-xl opacity-90 ${s.accent}`}
+                            >
+                                {promo.description}
+                            </motion.p>
+
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="flex flex-col sm:flex-row items-center gap-8 mb-16"
+                            >
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className={`w-full sm:w-auto px-12 py-6 ${s.button} text-white lg:text-slate-900 lg:bg-white rounded-[2rem] font-black text-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] group`}
+                                >
+                                    {promo.buttonText}
+                                    <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />
+                                </button>
+
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex -space-x-3">
+                                        {[1, 2, 3, 4].map(i => (
+                                            <div key={i} className="w-12 h-12 rounded-full border-4 border-slate-900 bg-slate-800 overflow-hidden ring-1 ring-white/10">
+                                                <img src={`https://i.pravatar.cc/150?u=${i + 10}`} alt="" className="w-full h-full object-cover" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-[11px] font-black text-white/50 uppercase tracking-widest">Joined by 1.2k+ owners</p>
+                                </div>
+                            </motion.div>
+
+                            {/* Features Grid */}
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 pt-12 border-t border-white/10">
+                                {[
+                                    { icon: <Clock size={20} />, text: "Limited Slots", sub: "Expires in 48h" },
+                                    { icon: <Zap size={20} />, text: "Instant VIP", sub: "Priority access" },
+                                    { icon: <Users size={20} />, text: "Brand Network", sub: "Curated community" }
+                                ].map((item, i) => (
+                                    <motion.div
+                                        key={i}
+                                        whileHover={{ y: -5 }}
+                                        className="flex flex-col gap-3 group/item cursor-default"
+                                    >
+                                        <div className="text-white opacity-40 group-hover/item:opacity-100 transition-opacity">
+                                            {item.icon}
+                                        </div>
+                                        <div>
+                                            <p className="text-xs font-black text-white uppercase tracking-widest mb-1">{item.text}</p>
+                                            <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{item.sub}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
                         </div>
                     </div>

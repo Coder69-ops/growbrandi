@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Zap, X, Clock, ArrowRight, Sparkles, Users } from 'lucide-react';
+import { Zap, X, Clock, ArrowRight, Sparkles, Users, Gift } from 'lucide-react';
 import { db } from '../src/lib/firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import DiscountBookingModal from './DiscountBookingModal';
@@ -21,263 +22,307 @@ interface Promotion {
 }
 
 const GlobalPromoEffects: React.FC = () => {
-    const [activePromo, setActivePromo] = useState<Promotion | null>(null);
-    const [bannerPromo, setBannerPromo] = useState<Promotion | null>(null);
-    const [activeFooter, setActiveFooter] = useState<Promotion | null>(null);
+    const { t } = useTranslation();
+    const [promotions, setPromotions] = useState<Promotion[]>([]);
+    const [activeSlots, setActiveSlots] = useState<Record<string, string | null>>({
+        banner: null,
+        popup: null,
+        floating_corner: null,
+        footer_banner: null
+    });
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [showFloatingWidget, setShowFloatingWidget] = useState(false);
-    const [showBanner, setShowBanner] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [hasTriggeredExitIntent, setHasTriggeredExitIntent] = useState(false);
 
     useEffect(() => {
-        // Query for all active promotions
-        const q = query(
-            collection(db, 'promotions'),
-            where('isActive', '==', true),
-            orderBy('createdAt', 'desc')
-        );
-
+        const q = query(collection(db, 'promotions'), where('isActive', '==', true));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetchedPromos = snapshot.docs.map(doc => {
+            const promoList = snapshot.docs.map(doc => {
                 const data = doc.data();
                 const positions = Array.isArray(data.positions)
                     ? data.positions
                     : data.position
                         ? [data.position]
-                        : [];
+                        : ['popup'];
                 return { id: doc.id, ...data, positions } as Promotion;
             });
+            setPromotions(promoList);
 
-            // Helper to check if a promo should be shown
-            const shouldShowPromo = (promo: Promotion) => {
-                if (promo.hideIfClaimed !== false) {
-                    if (localStorage.getItem(`claimed_promo_${promo.id}`)) return false;
-                }
-                const dismissedAt = localStorage.getItem(`dismissed_promo_${promo.id}`);
+            // Slot Assignment logic
+            const slots: Record<string, string | null> = { banner: null, popup: null, floating_corner: null, footer_banner: null };
+
+            promoList.forEach(p => {
+                // Persistent check: hide if claimed or dismissed (once/daily logic)
+                const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
+                const dismissedAt = localStorage.getItem(`dismissed_promo_${p.id}`);
+                let shouldShow = !isClaimed;
+
                 if (dismissedAt) {
-                    if (promo.frequency === 'once') return false;
-                    if (promo.frequency === 'daily') {
+                    if (p.frequency === 'once') shouldShow = false;
+                    else if (p.frequency === 'daily') {
                         const isToday = Date.now() - parseInt(dismissedAt) < 24 * 60 * 60 * 1000;
-                        if (isToday) return false;
+                        if (isToday) shouldShow = false;
                     }
                 }
-                return true;
-            };
 
-            const visiblePromos = fetchedPromos.filter(shouldShowPromo);
+                if (shouldShow) {
+                    if (p.positions.includes('banner')) slots.banner = p.id;
+                    if (p.positions.includes('popup') && !slots.popup) slots.popup = p.id; // Take first available popup
+                    if (p.positions.includes('floating_corner')) slots.floating_corner = p.id;
+                    if (p.positions.includes('footer_banner')) slots.footer_banner = p.id;
+                }
+            });
 
-            // Slot Assignment
-            const banner = visiblePromos.find(p => p.positions.includes('banner'));
-            const popup = visiblePromos.find(p => p.positions.includes('popup'));
-            const floating = visiblePromos.find(p => p.positions.includes('floating_corner'));
-            const footer = visiblePromos.find(p => p.positions.includes('footer_banner'));
-            const exitIntent = visiblePromos.find(p => p.positions.includes('exit_intent'));
+            setActiveSlots(slots);
 
-            setBannerPromo(banner || null);
-            setShowBanner(!!banner);
-            setActiveFooter(footer || null);
-
-            if (popup) {
-                setActivePromo(popup);
-                setTimeout(() => setIsModalOpen(true), 3000);
-            } else if (floating) {
-                setActivePromo(floating);
-                setShowFloatingWidget(true);
-            } else {
-                setActivePromo(null);
-                setShowFloatingWidget(false);
-                setIsModalOpen(false);
-            }
-
-            if (exitIntent) {
-                const handleExit = (e: MouseEvent) => {
-                    const dismissed = localStorage.getItem(`dismissed_promo_${exitIntent.id}`);
-                    if (e.clientY < 5 && !dismissed && !isModalOpen) {
-                        setActivePromo(exitIntent);
-                        setIsModalOpen(true);
-                        document.removeEventListener('mouseleave', handleExit);
-                    }
-                };
-                document.addEventListener('mouseleave', handleExit);
+            // Auto-trigger first popup if any
+            if (slots.popup && !modalOpen) {
+                setTimeout(() => setModalOpen(true), 3000);
             }
         });
 
-        return () => unsubscribe();
-    }, [isModalOpen]);
+        const handleMouseLeave = (e: MouseEvent) => {
+            if (e.clientY <= 5 && !hasTriggeredExitIntent && !modalOpen) {
+                const exitPromo = promotions.find(p => p.positions.includes('exit_intent'));
+                if (exitPromo) {
+                    const isClaimed = localStorage.getItem(`claimed_promo_${exitPromo.id}`);
+                    if (!isClaimed) {
+                        setActiveSlots(prev => ({ ...prev, popup: exitPromo.id }));
+                        setModalOpen(true);
+                        setHasTriggeredExitIntent(true);
+                    }
+                }
+            }
+        };
 
-    const handleDismiss = (id: string) => {
+        document.addEventListener('mouseleave', handleMouseLeave);
+        return () => {
+            unsubscribe();
+            document.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, [hasTriggeredExitIntent, promotions, modalOpen]);
+
+    const handleDismiss = (id: string, slot: string) => {
         localStorage.setItem(`dismissed_promo_${id}`, Date.now().toString());
-        if (activePromo?.id === id) {
-            setIsModalOpen(false);
-            setShowFloatingWidget(false);
-            setActivePromo(null);
-        }
-        if (bannerPromo?.id === id) setShowBanner(false);
-        if (activeFooter?.id === id) setActiveFooter(null);
+        setActiveSlots(prev => ({ ...prev, [slot]: null }));
+        if (slot === 'popup') setModalOpen(false);
     };
 
-    const handleClaimSuccess = () => {
-        if (activePromo) {
-            localStorage.setItem(`claimed_promo_${activePromo.id}`, Date.now().toString());
-            setIsModalOpen(false);
-            setShowFloatingWidget(false);
-            setActivePromo(null);
-        }
+    const handleClaimSuccess = (id: string) => {
+        localStorage.setItem(`claimed_promo_${id}`, Date.now().toString());
+        setModalOpen(false);
+        // Clear all slots for this specific promo
+        setActiveSlots(prev => {
+            const next = { ...prev };
+            Object.keys(next).forEach(k => {
+                if (next[k] === id) next[k] = null;
+            });
+            return next;
+        });
     };
 
-    const handleWidgetClick = () => {
-        setIsModalOpen(true);
-        setShowFloatingWidget(false);
-    };
+    const bannerPromo = promotions.find(p => p.id === activeSlots.banner);
+    const popupPromo = promotions.find(p => p.id === activeSlots.popup);
+    const floatPromo = promotions.find(p => p.id === activeSlots.floating_corner);
+    const footerPromo = promotions.find(p => p.id === activeSlots.footer_banner);
 
-    const handleBannerClick = () => {
-        if (bannerPromo) {
-            setActivePromo(bannerPromo);
-            setIsModalOpen(true);
+    const themeStyles = {
+        luxury: {
+            gradient: "from-slate-950 via-indigo-950 to-slate-950",
+            accent: "from-indigo-400 to-violet-400",
+            button: "bg-gradient-to-r from-indigo-500 to-violet-600 shadow-indigo-500/25",
+            glass: "bg-white/5 border-white/10",
+            glow: "bg-indigo-500/20"
+        },
+        amber: {
+            gradient: "from-amber-600 via-orange-600 to-amber-700",
+            accent: "from-amber-200 to-orange-100",
+            button: "bg-gradient-to-r from-white to-orange-50 text-orange-600 shadow-orange-500/25",
+            glass: "bg-amber-900/40 border-amber-500/30",
+            glow: "bg-amber-500/30"
+        },
+        blue: {
+            gradient: "from-blue-600 via-cyan-600 to-blue-700",
+            accent: "from-blue-100 to-cyan-100",
+            button: "bg-gradient-to-r from-white to-blue-50 text-blue-600 shadow-blue-500/25",
+            glass: "bg-blue-900/40 border-blue-500/30",
+            glow: "bg-blue-500/30"
         }
     };
 
     return (
         <>
-            {/* --- TOP STICKY BANNER --- */}
+            {/* 1. TOP STICKY BANNER - ULTRA PREMIUM */}
             <AnimatePresence>
-                {showBanner && bannerPromo && (
+                {bannerPromo && (
                     <motion.div
-                        initial={{ y: -100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -100, opacity: 0 }}
-                        className="fixed top-0 left-0 right-0 z-[60] w-full"
+                        initial={{ y: -100 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: -100 }}
+                        className={`fixed top-0 left-0 right-0 z-[100] h-14 bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].gradient} border-b border-white/10 shadow-2xl relative overflow-hidden`}
                     >
-                        <div className={`relative overflow-hidden border-b border-white/20 shadow-2xl`}>
-                            {/* Animated Shimmering Background */}
-                            <div className={`absolute inset-0 bg-gradient-to-r ${bannerPromo.style === 'amber' ? 'from-amber-600 via-orange-500 to-amber-700' : bannerPromo.style === 'blue' ? 'from-blue-600 via-cyan-500 to-blue-700' : 'from-slate-900 via-indigo-900 to-slate-900'} transition-colors duration-1000`} />
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none" />
 
-                            <motion.div
-                                animate={{ x: ['-100%', '100%'] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none"
-                            />
+                        <div className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between gap-6 relative z-10">
+                            <div className="flex items-center gap-4 flex-1">
+                                <motion.div
+                                    animate={{ scale: [1, 1.1, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="hidden md:flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500 text-[9px] font-black text-white uppercase tracking-widest"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                                    Live Offer
+                                </motion.div>
 
-                            <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
-                                <div className="flex items-center gap-4 flex-1">
-                                    <div className="hidden sm:flex w-10 h-10 rounded-2xl bg-white/20 items-center justify-center shrink-0 animate-bounce">
-                                        <Zap size={20} className="text-white fill-current" />
-                                    </div>
-                                    <div className="text-left">
-                                        <div className="flex items-center gap-2 mb-0.5">
-                                            <span className="text-[10px] font-black uppercase text-white/90 bg-white/20 px-2 py-0.5 rounded-full tracking-[0.1em] border border-white/20">
-                                                Special Opportunity
-                                            </span>
-                                            <div className="flex h-2 w-2 rounded-full bg-red-400 animate-pulse" />
+                                <div className="flex items-center gap-3">
+                                    {bannerPromo.imageUrl && (
+                                        <div className="w-8 h-8 rounded-full border border-white/20 overflow-hidden shrink-0 shadow-lg">
+                                            <img src={bannerPromo.imageUrl} alt="" className="w-full h-full object-cover" />
                                         </div>
-                                        <p className="text-white font-bold text-sm sm:text-base tracking-tight leading-tight">
-                                            {bannerPromo.title}: <span className="font-medium text-white/80">{bannerPromo.description}</span>
-                                        </p>
+                                    )}
+                                    <p className="text-white text-xs md:text-sm font-bold tracking-tight line-clamp-1">
+                                        <span className={`bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2 font-black uppercase tracking-wider`}>
+                                            {bannerPromo.title}:
+                                        </span>
+                                        {bannerPromo.description}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-3">
+                                <div className="hidden lg:flex items-center gap-2 mr-4">
+                                    <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Ends in</span>
+                                    <div className="flex gap-1">
+                                        {['00', '45', '08'].map((num, i) => (
+                                            <div key={i} className="bg-black/20 backdrop-blur-md px-1.5 py-0.5 rounded border border-white/10 text-[10px] font-mono text-white font-black">
+                                                {num}
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/20 border border-white/20 backdrop-blur-md">
-                                        <Clock size={14} className="text-white/60" />
-                                        <span className="text-xs font-mono font-black text-white">00:59:59</span>
-                                    </div>
-
-                                    <button
-                                        onClick={handleBannerClick}
-                                        className="px-6 py-2 bg-white text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-slate-100 transition-all transform hover:scale-105 active:scale-95 shadow-xl"
-                                    >
-                                        {bannerPromo.buttonText || 'Claim Now'}
-                                    </button>
-
-                                    <button onClick={() => handleDismiss(bannerPromo.id)} className="p-2 hover:bg-white/20 rounded-full transition-colors text-white/60 hover:text-white">
-                                        <X size={18} />
-                                    </button>
-                                </div>
+                                <button
+                                    onClick={() => { setActiveSlots(prev => ({ ...prev, popup: bannerPromo.id })); setModalOpen(true); }}
+                                    className={`px-5 py-2 ${themeStyles[bannerPromo.style || 'luxury'].button} text-xs font-black rounded-lg transition-all hover:scale-105 active:scale-95 shadow-lg whitespace-nowrap`}
+                                >
+                                    {bannerPromo.buttonText}
+                                </button>
+                                <button
+                                    onClick={() => handleDismiss(bannerPromo.id, 'banner')}
+                                    className="p-2 text-white/40 hover:text-white transition-colors"
+                                >
+                                    <X size={16} />
+                                </button>
                             </div>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* --- MAIN CONVERSION MODAL --- */}
-            {activePromo && (
+            {/* 2. FLOATING CORNER WIDGET - GLASSMORPHISM */}
+            <AnimatePresence>
+                {floatPromo && !modalOpen && (
+                    <motion.div
+                        initial={{ x: 100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 100, opacity: 0 }}
+                        className={`fixed bottom-6 right-6 z-[90] w-72 h-32 backdrop-blur-2xl rounded-3xl border ${themeStyles[floatPromo.style || 'luxury'].glass} shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] p-4 flex gap-4 cursor-pointer group hover:scale-[1.02] transition-transform overflow-hidden`}
+                        onClick={() => { setActiveSlots(prev => ({ ...prev, popup: floatPromo.id })); setModalOpen(true); }}
+                    >
+                        <div className={`absolute -right-8 -top-8 w-32 h-32 rounded-full blur-3xl pointer-events-none ${themeStyles[floatPromo.style || 'luxury'].glow}`} />
+
+                        <div className="w-24 h-full rounded-2xl overflow-hidden shrink-0 shadow-inner bg-black/20 ring-1 ring-white/10 group-hover:scale-110 transition-transform duration-500">
+                            {floatPromo.imageUrl ? (
+                                <img src={floatPromo.imageUrl} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <Zap size={32} className="text-white opacity-20" />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col justify-center relative z-10">
+                            <span className={`text-[10px] font-black uppercase tracking-widest bg-gradient-to-r ${themeStyles[floatPromo.style || 'luxury'].accent} bg-clip-text text-transparent mb-1`}>
+                                New Promotion
+                            </span>
+                            <h4 className="text-white text-sm font-black leading-tight mb-2 line-clamp-2">{floatPromo.title}</h4>
+                            <div className="flex items-center gap-1.5 text-blue-400 text-[10px] font-bold">
+                                <span>Claimed by 48 today</span>
+                                <Users size={10} />
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={(e) => { e.stopPropagation(); handleDismiss(floatPromo.id, 'floating_corner'); }}
+                            className="absolute top-2 right-2 p-1 text-white/20 hover:text-white transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* 3. FOOTER BANNER - THE "FOMO" BAR */}
+            <AnimatePresence>
+                {footerPromo && (
+                    <motion.div
+                        initial={{ y: 200 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: 200 }}
+                        className={`fixed bottom-0 left-0 right-0 z-[100] py-6 bg-gradient-to-r ${themeStyles[footerPromo.style || 'luxury'].gradient} border-t border-white/20 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]`}
+                    >
+                        <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div className="flex items-center gap-6">
+                                <div className="hidden sm:block p-3 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20">
+                                    <Gift size={24} className="text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white text-xl font-black tracking-tight">{footerPromo.title}</h3>
+                                    <p className="text-white/70 text-sm font-medium">{footerPromo.description}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4 w-full md:w-auto">
+                                <div className="flex-1 md:w-48 h-10 bg-black/20 rounded-xl border border-white/10 overflow-hidden p-1">
+                                    <motion.div
+                                        initial={{ width: "0%" }}
+                                        animate={{ width: "65%" }}
+                                        transition={{ duration: 2, ease: "easeOut" }}
+                                        className={`h-full rounded-lg bg-gradient-to-r ${themeStyles[footerPromo.style || 'luxury'].accent} shadow-[0_0_20px_rgba(255,255,255,0.3)]`}
+                                    />
+                                </div>
+                                <button
+                                    onClick={() => { setActiveSlots(prev => ({ ...prev, popup: footerPromo.id })); setModalOpen(true); }}
+                                    className={`px-8 py-3 ${themeStyles[footerPromo.style || 'luxury'].button} text-sm font-black rounded-xl transition-all hover:scale-105 active:scale-95 shadow-xl whitespace-nowrap`}
+                                >
+                                    {footerPromo.buttonText}
+                                </button>
+                                <button
+                                    onClick={() => handleDismiss(footerPromo.id, 'footer_banner')}
+                                    className="p-2 text-white/40 hover:text-white transition-colors"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* MAIN MODAL TRIGGER */}
+            {popupPromo && (
                 <DiscountBookingModal
-                    isOpen={isModalOpen}
-                    onClose={() => handleDismiss(activePromo.id)}
-                    onSuccess={handleClaimSuccess}
-                    offerTitle={activePromo.title}
-                    offerDescription={activePromo.description}
-                    discountCode={activePromo.discountCode}
-                    buttonText={activePromo.buttonText}
-                    offerImage={activePromo.imageUrl}
-                    style={activePromo.style}
+                    isOpen={modalOpen}
+                    onClose={() => handleDismiss(popupPromo.id, 'popup')}
+                    offerTitle={popupPromo.title}
+                    offerDescription={popupPromo.description}
+                    discountCode={popupPromo.discountCode}
+                    buttonText={popupPromo.buttonText}
+                    offerImage={popupPromo.imageUrl}
+                    style={popupPromo.style}
+                    onSuccess={() => handleClaimSuccess(popupPromo.id)}
                 />
             )}
-
-            {/* --- FLOATING WIDGET --- */}
-            <AnimatePresence>
-                {showFloatingWidget && activePromo && activePromo.positions.includes('floating_corner') && !isModalOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, x: 100, scale: 0.8 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        exit={{ opacity: 0, x: 100, scale: 0.8 }}
-                        whileHover={{ y: -5, scale: 1.02 }}
-                        className="fixed bottom-8 right-8 z-[50] w-[320px] cursor-pointer group"
-                        onClick={handleWidgetClick}
-                    >
-                        <div className={`absolute -inset-[2px] bg-gradient-to-r ${activePromo.style === 'amber' ? 'from-amber-400 to-orange-600' : activePromo.style === 'blue' ? 'from-blue-400 to-cyan-600' : 'from-indigo-500 to-purple-600'} rounded-3xl opacity-50 blur-[2px] group-hover:opacity-100 transition-opacity animate-pulse`} />
-                        <div className="relative bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl rounded-[1.5rem] p-5 shadow-2xl border border-white/50 dark:border-white/10 overflow-hidden">
-                            <button onClick={(e) => { e.stopPropagation(); handleDismiss(activePromo.id); }} className="absolute top-3 right-3 p-1.5 text-slate-400 hover:text-red-500 rounded-full transition-all z-20">
-                                <X size={14} />
-                            </button>
-                            <div className="flex items-start gap-4 relative z-10">
-                                <div className="relative shrink-0">
-                                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${activePromo.style === 'amber' ? 'from-amber-500 to-orange-600' : activePromo.style === 'blue' ? 'from-blue-500 to-cyan-600' : 'from-indigo-600 to-violet-600'} p-[2px]`}>
-                                        <div className="w-full h-full rounded-[0.9rem] bg-white dark:bg-slate-800 flex items-center justify-center">
-                                            {activePromo.imageUrl ? <img src={activePromo.imageUrl} className="w-full h-full object-cover rounded-[0.8rem]" /> : <Zap size={24} className="text-indigo-500" />}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex-1 pt-1">
-                                    <h4 className="font-black text-slate-900 dark:text-white leading-tight text-[15px] mb-2">{activePromo.title}</h4>
-                                    <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-full w-fit">
-                                        <Users size={12} className="text-slate-400" />
-                                        <span className="text-[10px] font-bold text-slate-500">Claimed 50+ times</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-            {/* --- FOOTER BANNER --- */}
-            <AnimatePresence>
-                {activeFooter && (
-                    <motion.div
-                        initial={{ y: 100 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: 100 }}
-                        className="fixed bottom-0 left-0 right-0 z-[60] p-4 pointer-events-none"
-                    >
-                        <div className={`max-w-4xl mx-auto pointer-events-auto rounded-2xl overflow-hidden shadow-2xl border border-white/10 relative ${activeFooter.style === 'luxury' ? 'bg-slate-900' : activeFooter.style === 'amber' ? 'bg-orange-600' : 'bg-blue-600'}`}>
-                            <div className="px-6 py-4 flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-white/20 p-2 rounded-lg animate-pulse"><Zap size={18} className="text-white" /></div>
-                                    <div>
-                                        <h4 className="text-white font-black text-sm">{activeFooter.title}</h4>
-                                        <p className="text-white/70 text-[10px] uppercase font-bold tracking-widest">{activeFooter.discountCode}</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <button onClick={() => { setActivePromo(activeFooter); setIsModalOpen(true); }} className="px-5 py-2 bg-white text-slate-900 rounded-full font-black text-xs hover:scale-105 transition-transform shadow-lg">Claim Offer</button>
-                                    <button onClick={() => handleDismiss(activeFooter.id)} className="text-white/50 hover:text-white"><X size={18} /></button>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </>
     );
 };
