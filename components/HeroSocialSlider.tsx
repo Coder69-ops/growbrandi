@@ -89,7 +89,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onActio
     const styles = getTypeStyles(currentItem.type);
 
     return (
-        <div className="pt-6 lg:pt-8 h-[280px] relative w-full max-w-xl mx-auto lg:mx-0 font-sans">
+        <div className="pt-2 lg:pt-4 h-[240px] relative w-full max-w-xl mx-auto lg:mx-0 font-sans">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={currentIndex}
@@ -98,7 +98,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onActio
                     animate="center"
                     exit="exit"
                     transition={{ duration: 0.6, type: "spring", stiffness: 100, damping: 15 }}
-                    className={`absolute inset-0 p-6 rounded-[2.5rem] backdrop-blur-2xl border-[1.5px] shadow-2xl transition-all duration-500 ${styles.container} group`}
+                    className={`absolute inset-0 p-5 rounded-[2rem] backdrop-blur-2xl border-[1.5px] shadow-2xl transition-all duration-500 ${styles.container} group`}
                 >
                     {/* Background Shimmer Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
@@ -115,7 +115,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onActio
 
                     <div className="flex flex-col h-full relative z-10 pt-2">
                         {/* Header: Image + Author + CTA */}
-                        <div className="flex items-center gap-4 pb-4 border-b border-slate-200/50 dark:border-white/5">
+                        <div className="flex items-center gap-3 pb-3 border-b border-slate-200/50 dark:border-white/5">
                             {/* Larger Image Display */}
                             <div className="relative shrink-0">
                                 {currentItem.image ? (
@@ -163,7 +163,7 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items = [], onActio
                         </div>
 
                         {/* Body Content - Bottom */}
-                        <div className="mt-4 relative flex-1 flex flex-col justify-center">
+                        <div className="mt-2 relative flex-1 flex flex-col justify-center">
                             {currentItem.type === 'review' && (
                                 <Quote className="absolute -top-6 -left-2 w-12 h-12 text-slate-400/10 dark:text-slate-600/20 transform -scale-x-100" />
                             )}

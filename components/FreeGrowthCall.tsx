@@ -99,7 +99,7 @@ const FreeGrowthCall = () => {
     return (
         <div className="min-h-screen bg-white dark:bg-[#09090b] font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30 overflow-x-hidden">
             {/* Hero Section */}
-            <section className="relative overflow-visible pt-6 lg:pt-4 pb-16 lg:pb-24">
+            <section className="relative overflow-visible pt-4 lg:pt-0 pb-16 lg:pb-24">
                 {/* Background Gradients & Noise - Matches Hero.tsx */}
                 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                     <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay brightness-100 contrast-150" />
