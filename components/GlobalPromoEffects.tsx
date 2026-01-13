@@ -137,17 +137,17 @@ const GlobalPromoEffects: React.FC = () => {
             shimmer: "via-white/20"
         },
         amber: {
-            gradient: "from-amber-600 via-orange-600 to-amber-700",
+            gradient: "from-amber-700 via-orange-700 to-amber-800",
             accent: "from-amber-200 to-orange-100",
-            button: "bg-gradient-to-r from-white to-orange-50 text-orange-600 shadow-orange-500/25",
+            button: "bg-gradient-to-r from-white to-orange-50 text-orange-700 shadow-orange-500/25",
             glass: "bg-amber-900/40 border-amber-500/30",
             glow: "bg-amber-500/30",
             shimmer: "via-orange-300/30"
         },
         blue: {
-            gradient: "from-blue-600 via-cyan-600 to-blue-700",
+            gradient: "from-blue-700 via-indigo-800 to-blue-900",
             accent: "from-blue-100 to-cyan-100",
-            button: "bg-gradient-to-r from-white to-blue-50 text-blue-600 shadow-blue-500/25",
+            button: "bg-gradient-to-r from-white to-blue-50 text-blue-700 shadow-blue-500/25",
             glass: "bg-blue-900/40 border-blue-500/30",
             glow: "bg-blue-500/30",
             shimmer: "via-blue-300/30"

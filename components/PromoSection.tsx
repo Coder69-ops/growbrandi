@@ -67,18 +67,18 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
             border: "border-indigo-500/20"
         },
         amber: {
-            bg: "bg-amber-600",
+            bg: "bg-amber-700",
             text: "text-white",
             accent: "text-amber-200",
-            button: "bg-white text-amber-600 hover:bg-amber-50",
+            button: "bg-white text-amber-700 hover:bg-amber-50",
             glow: "bg-amber-400/30",
             border: "border-amber-400/30"
         },
         blue: {
-            bg: "bg-blue-600",
+            bg: "bg-blue-800",
             text: "text-white",
             accent: "text-blue-100",
-            button: "bg-white text-blue-600 hover:bg-blue-50",
+            button: "bg-white text-blue-800 hover:bg-blue-50",
             glow: "bg-blue-400/30",
             border: "border-blue-400/30"
         }
