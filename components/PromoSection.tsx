@@ -178,10 +178,11 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                             >
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className={`w-full sm:w-auto px-12 py-6 ${s.button} text-white lg:text-slate-900 lg:bg-white rounded-[2rem] font-black text-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] group`}
+                                    className={`w-full sm:w-auto px-12 py-6 ${s.button} text-white lg:text-slate-900 lg:bg-white rounded-[2rem] font-black text-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] group relative overflow-hidden`}
                                 >
-                                    {promo.buttonText}
-                                    <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform" />
+                                    <div className="absolute inset-x-0 h-full w-full bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 -translate-x-full group-hover:animate-[shimmer_2s_infinite]" />
+                                    <span className="relative z-10">{promo.buttonText}</span>
+                                    <ArrowRight size={28} className="group-hover:translate-x-2 transition-transform relative z-10" />
                                 </button>
 
                                 <div className="flex flex-col gap-2">

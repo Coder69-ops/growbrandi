@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Play, Star, TrendingUp, Code, Zap, BarChart3, Globe, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Play, Star, TrendingUp, Code, Zap, BarChart3, Globe, ShieldCheck, Sparkles } from 'lucide-react';
 import { Logos3 } from './blocks/logos3';
 import ServicesPreview from './ServicesPreview';
 import SloganGenerator from './SloganGenerator';
@@ -13,11 +13,24 @@ import FAQ from './FAQ';
 import LazySection from './LazySection';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { useSiteContentData } from '../src/hooks/useSiteContent';
+import { useSiteContentData, useContactSettings } from '../src/hooks/useSiteContent';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
 import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import { createOrganizationSchema } from '../src/utils/schemas';
-import { useContactSettings } from '../src/hooks/useSiteContent';
+import { db } from '../src/lib/firebase';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import DiscountBookingModal from './DiscountBookingModal';
+
+interface Promotion {
+    id: string;
+    title: string;
+    description: string;
+    discountCode: string;
+    buttonText: string;
+    positions: string[];
+    style: 'amber' | 'blue' | 'luxury';
+    imageUrl?: string;
+}
 
 const HeroSection: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -28,6 +41,23 @@ const HeroSection: React.FC = () => {
     const { scrollY } = useScroll();
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+
+    const [heroPromo, setHeroPromo] = useState<Promotion | null>(null);
+    const [isPromoOpen, setIsPromoOpen] = useState(false);
+
+    useEffect(() => {
+        const q = query(collection(db, 'promotions'), where('isActive', '==', true));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const fetched = snapshot.docs.map(doc => {
+                const data = doc.data();
+                const positions = Array.isArray(data.positions) ? data.positions : [];
+                return { id: doc.id, ...data, positions } as Promotion;
+            });
+            const activeHero = fetched.find(p => p.positions.includes('hero'));
+            setHeroPromo(activeHero || null);
+        });
+        return () => unsubscribe();
+    }, []);
 
     // Helper to get text with fallback to i18next
     const getHeroText = (field: string) => {
@@ -133,6 +163,28 @@ const HeroSection: React.FC = () => {
                             variants={itemVariants}
                             className="lg:col-span-6 flex flex-col justify-center text-center lg:text-left relative z-20"
                         >
+                            <AnimatePresence>
+                                {heroPromo && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        onClick={() => setIsPromoOpen(true)}
+                                        className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600/10 to-indigo-600/10 dark:from-blue-500/20 dark:to-indigo-500/20 border border-blue-500/20 dark:border-blue-400/30 w-fit mx-auto lg:mx-0 mb-8 backdrop-blur-xl cursor-pointer group hover:scale-105 transition-all shadow-xl shadow-blue-500/5 group"
+                                    >
+                                        <div className="relative">
+                                            <Sparkles size={18} className="text-blue-600 dark:text-blue-400 animate-pulse" />
+                                            <div className="absolute inset-0 bg-blue-400 blur-lg opacity-40 animate-pulse" />
+                                        </div>
+                                        <div className="flex flex-col items-start leading-none">
+                                            <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] mb-1">Featured Offer</span>
+                                            <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors uppercase tracking-tight">{heroPromo.title}</span>
+                                        </div>
+                                        <ArrowRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -441,6 +493,20 @@ const HeroSection: React.FC = () => {
                     </motion.div>
                 </div>
             </div>
+
+            {heroPromo && (
+                <DiscountBookingModal
+                    isOpen={isPromoOpen}
+                    onClose={() => setIsPromoOpen(false)}
+                    offerTitle={heroPromo.title}
+                    offerDescription={heroPromo.description}
+                    discountCode={heroPromo.discountCode}
+                    buttonText={heroPromo.buttonText}
+                    offerImage={heroPromo.imageUrl}
+                    style={heroPromo.style}
+                    onSuccess={() => setIsPromoOpen(false)}
+                />
+            )}
         </>
     );
 };
