@@ -15,6 +15,8 @@ interface Promotion {
     isActive: boolean;
     position: 'hero' | 'popup' | 'banner' | 'floating_corner';
     style: 'amber' | 'blue' | 'luxury';
+    frequency?: 'once' | 'always' | 'daily';
+    hideIfClaimed?: boolean;
     imageUrl?: string;
 }
 
@@ -37,16 +39,31 @@ const GlobalPromoEffects: React.FC = () => {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const promos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Promotion));
 
-            // 1. Handle Banner (Always show if active and not dismissed today)
-            const banner = promos.find(p => p.position === 'banner');
-            if (banner) {
-                const dismissed = localStorage.getItem(`dismissed_banner_${banner.id}`);
-                const isDismissedToday = dismissed && (Date.now() - parseInt(dismissed) < 24 * 60 * 60 * 1000);
-
-                if (!isDismissedToday) {
-                    setBannerPromo(banner);
-                    setShowBanner(true);
+            // Helper to check if a promo should be shown
+            const shouldShowPromo = (promo: Promotion) => {
+                // Check if claimed (if configured to hide)
+                if (promo.hideIfClaimed !== false) {
+                    const claimed = localStorage.getItem(`claimed_promo_${promo.id}`);
+                    if (claimed) return false;
                 }
+
+                // Check frequency/dismissal
+                const dismissedAt = localStorage.getItem(`dismissed_promo_${promo.id}`);
+                if (dismissedAt) {
+                    if (promo.frequency === 'once') return false;
+                    if (promo.frequency === 'daily') {
+                        const isToday = Date.now() - parseInt(dismissedAt) < 24 * 60 * 60 * 1000;
+                        if (isToday) return false;
+                    }
+                }
+                return true;
+            };
+
+            // 1. Handle Banner
+            const banner = promos.find(p => p.position === 'banner');
+            if (banner && shouldShowPromo(banner)) {
+                setBannerPromo(banner);
+                setShowBanner(true);
             } else {
                 setShowBanner(false);
             }
@@ -54,20 +71,19 @@ const GlobalPromoEffects: React.FC = () => {
             // 2. Handle Popup / Floating Widget (Priority: Popup > Floating)
             const globalPromo = promos.find(p => p.position === 'popup' || p.position === 'floating_corner');
 
-            if (globalPromo) {
+            if (globalPromo && shouldShowPromo(globalPromo)) {
                 setActivePromo(globalPromo);
 
-                // Check local storage for "seen" status
-                const seen = localStorage.getItem(`seen_promo_${globalPromo.id}`);
-                if (!seen) {
-                    if (globalPromo.position === 'popup') {
-                        // Delay popup slightly
-                        const timer = setTimeout(() => setIsModalOpen(true), 3000);
-                        return () => clearTimeout(timer);
-                    } else if (globalPromo.position === 'floating_corner') {
-                        setShowFloatingWidget(true);
-                    }
+                if (globalPromo.position === 'popup') {
+                    // Delay popup slightly
+                    const timer = setTimeout(() => setIsModalOpen(true), 3000);
+                    return () => clearTimeout(timer);
+                } else if (globalPromo.position === 'floating_corner') {
+                    setShowFloatingWidget(true);
                 }
+            } else {
+                setActivePromo(null);
+                setShowFloatingWidget(false);
             }
         });
 
@@ -78,14 +94,22 @@ const GlobalPromoEffects: React.FC = () => {
         setIsModalOpen(false);
         setShowFloatingWidget(false);
         if (activePromo) {
-            localStorage.setItem(`seen_promo_${activePromo.id}`, 'true');
+            localStorage.setItem(`dismissed_promo_${activePromo.id}`, Date.now().toString());
         }
     };
 
     const handleCloseBanner = () => {
         setShowBanner(false);
         if (bannerPromo) {
-            localStorage.setItem(`dismissed_banner_${bannerPromo.id}`, Date.now().toString());
+            localStorage.setItem(`dismissed_promo_${bannerPromo.id}`, Date.now().toString());
+        }
+    };
+
+    const handleClaimSuccess = () => {
+        if (activePromo) {
+            localStorage.setItem(`claimed_promo_${activePromo.id}`, Date.now().toString());
+            setIsModalOpen(false);
+            setShowFloatingWidget(false);
         }
     };
 
@@ -168,6 +192,7 @@ const GlobalPromoEffects: React.FC = () => {
                 <DiscountBookingModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
+                    onSuccess={handleClaimSuccess}
                     offerTitle={activePromo.title}
                     offerDescription={activePromo.description}
                     discountCode={activePromo.discountCode}

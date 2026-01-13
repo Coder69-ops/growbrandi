@@ -16,6 +16,8 @@ interface Promotion {
     isActive: boolean;
     position: 'hero' | 'popup' | 'banner' | 'floating_corner';
     style: 'amber' | 'blue' | 'luxury';
+    frequency: 'once' | 'always' | 'daily';
+    hideIfClaimed: boolean;
     imageUrl?: string;
     createdAt: any;
 }
@@ -56,6 +58,8 @@ const Promotions = () => {
                     isActive: false, // Default inactive
                     position: currentPromo.position || 'popup',
                     style: currentPromo.style || 'luxury',
+                    frequency: currentPromo.frequency || 'once',
+                    hideIfClaimed: currentPromo.hideIfClaimed ?? true,
                     createdAt: serverTimestamp()
                 });
                 console.log("Promotion created with ID:", docRef.id);
@@ -275,6 +279,43 @@ const Promotions = () => {
                                                     <option value="banner">Top Sticky Banner</option>
                                                     <option value="floating_corner">Floating Corner Widget</option>
                                                 </select>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Display Frequency</label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    {(['once', 'daily', 'always'] as const).map((freq) => (
+                                                        <button
+                                                            key={freq}
+                                                            type="button"
+                                                            onClick={() => setCurrentPromo({ ...currentPromo, frequency: freq })}
+                                                            className={`py-2 px-1 rounded-xl capitalize font-bold text-[10px] border-2 transition-all ${currentPromo.frequency === freq
+                                                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-md'
+                                                                : 'border-transparent bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10'}`}
+                                                        >
+                                                            {freq}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-white/5 border border-transparent hover:border-blue-500/30 transition-all">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                                                        <EyeOff size={16} />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Hide if Claimed</p>
+                                                        <p className="text-[10px] text-slate-500">Don't show after conversion</p>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setCurrentPromo({ ...currentPromo, hideIfClaimed: !currentPromo.hideIfClaimed })}
+                                                    className={`w-10 h-6 rounded-full p-1 transition-all ${currentPromo.hideIfClaimed !== false ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                                                >
+                                                    <div className={`w-4 h-4 bg-white rounded-full transition-transform ${currentPromo.hideIfClaimed !== false ? 'translate-x-4' : 'translate-x-0'}`} />
+                                                </button>
                                             </div>
 
                                             <div className="space-y-3">

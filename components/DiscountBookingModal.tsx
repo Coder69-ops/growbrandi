@@ -13,6 +13,7 @@ export interface DiscountBookingModalProps {
     buttonText?: string;
     offerImage?: string;
     redirectUrl?: string;
+    onSuccess?: () => void;
 }
 
 const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
@@ -23,7 +24,8 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
     discountCode = "LAUNCH50",
     buttonText = "Claim Offer & Book Now",
     offerImage,
-    redirectUrl = "/free-growth-call"
+    redirectUrl = "/free-growth-call",
+    onSuccess
 }) => {
     const [step, setStep] = useState<'details' | 'success'>('details');
     const [loading, setLoading] = useState(false);
@@ -54,6 +56,7 @@ const DiscountBookingModal: React.FC<DiscountBookingModalProps> = ({
             });
 
             setStep('success');
+            if (onSuccess) onSuccess();
 
             setTimeout(() => {
                 onClose();
