@@ -37,6 +37,9 @@ const Promotions = () => {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setPromotions(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Promotion)));
             setLoading(false);
+        }, (error) => {
+            console.error("Promotions Fetch Error:", error);
+            setLoading(false); // Stop loading even on error
         });
         return () => unsubscribe();
     }, []);
@@ -448,8 +451,8 @@ const Promotions = () => {
                             {/* Theme Indicator */}
                             <div className="absolute bottom-6 left-6">
                                 <span className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider backdrop-blur-md border border-white/20 shadow-lg ${promo.style === 'amber' ? 'bg-amber-500 text-white' :
-                                        promo.style === 'blue' ? 'bg-blue-500 text-white' :
-                                            'bg-slate-900 text-indigo-400'
+                                    promo.style === 'blue' ? 'bg-blue-500 text-white' :
+                                        'bg-slate-900 text-indigo-400'
                                     }`}>
                                     {promo.style} theme
                                 </span>

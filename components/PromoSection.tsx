@@ -22,10 +22,10 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
+        // Simple query to avoid index requirements
         const q = query(
             collection(db, 'promotions'),
-            where('isActive', '==', true),
-            orderBy('createdAt', 'desc')
+            where('isActive', '==', true)
         );
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -39,10 +39,15 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
                 return { id: doc.id, ...data, positions } as Promotion;
             });
 
-            const active = fetched.find((p: Promotion) =>
-                p.positions.includes('in_between_sections')
-            );
+            // Sort in memory instead of Firestore to stay safe without custom indexes
+            const active = fetched
+                .sort((a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
+                .find((p: Promotion) =>
+                    p.positions.includes('in_between_sections')
+                );
             setPromo(active || null);
+        }, (error) => {
+            console.error("PromoSection Snapshot Error:", error);
         });
 
         return () => unsubscribe();

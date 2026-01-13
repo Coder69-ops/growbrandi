@@ -34,6 +34,7 @@ const GlobalPromoEffects: React.FC = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [hasTriggeredExitIntent, setHasTriggeredExitIntent] = useState(false);
 
+    // 1. Fetch Promotions (Runs once on mount)
     useEffect(() => {
         const q = query(collection(db, 'promotions'), where('isActive', '==', true));
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -47,40 +48,50 @@ const GlobalPromoEffects: React.FC = () => {
                 return { id: doc.id, ...data, positions } as Promotion;
             });
             setPromotions(promoList);
+        }, (error) => {
+            console.error("Firebase Snapshot Error:", error);
+        });
+        return () => unsubscribe();
+    }, []);
 
-            // Slot Assignment logic
-            const slots: Record<string, string | null> = { banner: null, popup: null, floating_corner: null, footer_banner: null };
+    // 2. Logic & Slot Assignment (Runs when promotions or hasTriggeredExitIntent changes)
+    useEffect(() => {
+        if (promotions.length === 0) return;
 
-            promoList.forEach(p => {
-                // Persistent check: hide if claimed or dismissed (once/daily logic)
-                const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
-                const dismissedAt = localStorage.getItem(`dismissed_promo_${p.id}`);
-                let shouldShow = !isClaimed;
+        const slots: Record<string, string | null> = { banner: null, popup: null, floating_corner: null, footer_banner: null };
 
-                if (dismissedAt) {
-                    if (p.frequency === 'once') shouldShow = false;
-                    else if (p.frequency === 'daily') {
-                        const isToday = Date.now() - parseInt(dismissedAt) < 24 * 60 * 60 * 1000;
-                        if (isToday) shouldShow = false;
-                    }
+        promotions.forEach(p => {
+            const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
+            const dismissedAt = localStorage.getItem(`dismissed_promo_${p.id}`);
+            let shouldShow = !isClaimed;
+
+            if (dismissedAt) {
+                if (p.frequency === 'once') shouldShow = false;
+                else if (p.frequency === 'daily') {
+                    const isToday = Date.now() - parseInt(dismissedAt) < 24 * 60 * 60 * 1000;
+                    if (isToday) shouldShow = false;
                 }
+            }
 
-                if (shouldShow) {
-                    if (p.positions.includes('banner')) slots.banner = p.id;
-                    if (p.positions.includes('popup') && !slots.popup) slots.popup = p.id; // Take first available popup
-                    if (p.positions.includes('floating_corner')) slots.floating_corner = p.id;
-                    if (p.positions.includes('footer_banner')) slots.footer_banner = p.id;
-                }
-            });
-
-            setActiveSlots(slots);
-
-            // Auto-trigger first popup if any
-            if (slots.popup && !modalOpen) {
-                setTimeout(() => setModalOpen(true), 3000);
+            if (shouldShow) {
+                if (p.positions.includes('banner')) slots.banner = p.id;
+                if (p.positions.includes('popup') && !slots.popup) slots.popup = p.id;
+                if (p.positions.includes('floating_corner')) slots.floating_corner = p.id;
+                if (p.positions.includes('footer_banner')) slots.footer_banner = p.id;
             }
         });
 
+        setActiveSlots(slots);
+
+        // Auto-trigger first popup if any
+        if (slots.popup && !modalOpen && !hasTriggeredExitIntent) {
+            const timer = setTimeout(() => setModalOpen(true), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [promotions]);
+
+    // 3. Exit Intent Logic
+    useEffect(() => {
         const handleMouseLeave = (e: MouseEvent) => {
             if (e.clientY <= 5 && !hasTriggeredExitIntent && !modalOpen) {
                 const exitPromo = promotions.find(p => p.positions.includes('exit_intent'));
@@ -96,10 +107,7 @@ const GlobalPromoEffects: React.FC = () => {
         };
 
         document.addEventListener('mouseleave', handleMouseLeave);
-        return () => {
-            unsubscribe();
-            document.removeEventListener('mouseleave', handleMouseLeave);
-        };
+        return () => document.removeEventListener('mouseleave', handleMouseLeave);
     }, [hasTriggeredExitIntent, promotions, modalOpen]);
 
     const handleDismiss = (id: string, slot: string) => {
