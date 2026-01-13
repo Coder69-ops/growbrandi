@@ -68,7 +68,7 @@ const GlobalPromoEffects: React.FC = () => {
         setActiveSlots(slots);
     }, [promotions]);
 
-    // 2. Smart Trigger Logic (Time OR Scroll)
+    // 2. Timer Trigger Logic (30 seconds)
     useEffect(() => {
         if (!activeSlots.popup || modalOpen || hasTriggeredExitIntent) return;
 
@@ -77,21 +77,11 @@ const GlobalPromoEffects: React.FC = () => {
             setHasTriggeredExitIntent(true); // Treat as triggered so it doesn't trigger again
         };
 
-        // A. Time Trigger (15 seconds)
-        const timer = setTimeout(handleTrigger, 15000);
-
-        // B. Scroll Trigger (> 800px / Services Section)
-        const handleScroll = () => {
-            if (window.scrollY > 800) {
-                handleTrigger();
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        // Time Trigger (30 seconds)
+        const timer = setTimeout(handleTrigger, 30000);
 
         return () => {
             clearTimeout(timer);
-            window.removeEventListener('scroll', handleScroll);
         };
     }, [activeSlots.popup, modalOpen, hasTriggeredExitIntent]);
 
