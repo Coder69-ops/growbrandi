@@ -28,6 +28,9 @@ export const LanguageWrapper: React.FC<LanguageWrapperProps> = ({ children }) =>
         // Sync i18n language with URL parameter
         if (lang && i18n.language !== lang) {
             i18n.changeLanguage(lang);
+        } else if (!lang && i18n.language !== DEFAULT_LANGUAGE) {
+            // If no lang param, assume default (en) and switch if needed
+            i18n.changeLanguage(DEFAULT_LANGUAGE);
         }
     }, [lang, i18n, navigate, location.pathname]);
 

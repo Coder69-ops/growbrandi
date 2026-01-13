@@ -72,6 +72,9 @@ const SEO: React.FC<SEOProps> = ({
     const getLangUrl = (lang: string) => {
         // Handle root path edge case if needed, but basePath starts with /
         const path = basePath === '/' ? '' : basePath;
+        if (lang === 'en') {
+            return `${origin}${path === '' ? '/' : path}`;
+        }
         return `${origin}/${lang}${path}`;
     };
 

@@ -51,9 +51,15 @@ function generateSitemap() {
     // 1. Static Routes
     STATIC_ROUTES.forEach(route => {
         LANGUAGES.forEach(lang => {
-            const urlPath = route.path ? `${lang}/${route.path}` : lang;
+            let urlPath = '';
+            if (lang === 'en') {
+                urlPath = route.path;
+            } else {
+                urlPath = route.path ? `${lang}/${route.path}` : lang;
+            }
+
             xml += `  <url>\n`;
-            xml += `    <loc>${BASE_URL}/${urlPath}</loc>\n`;
+            xml += `    <loc>${BASE_URL}${urlPath ? `/${urlPath}` : ''}</loc>\n`;
             xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
             xml += `    <priority>${route.priority.toFixed(1)}</priority>\n`;
             xml += `  </url>\n`;
@@ -63,8 +69,9 @@ function generateSitemap() {
     // 2. Team Members
     TEAM_MEMBERS.forEach(slug => {
         LANGUAGES.forEach(lang => {
+            const urlPath = lang === 'en' ? `team/${slug}` : `${lang}/team/${slug}`;
             xml += `  <url>\n`;
-            xml += `    <loc>${BASE_URL}/${lang}/team/${slug}</loc>\n`;
+            xml += `    <loc>${BASE_URL}/${urlPath}</loc>\n`;
             xml += `    <changefreq>weekly</changefreq>\n`;
             xml += `    <priority>0.8</priority>\n`;
             xml += `  </url>\n`;
@@ -80,8 +87,9 @@ function generateSitemap() {
         posts.forEach(post => {
             if (post.status === 'published' && post.slug) {
                 LANGUAGES.forEach(lang => {
+                    const urlPath = lang === 'en' ? `blog/${post.slug}` : `${lang}/blog/${post.slug}`;
                     xml += `  <url>\n`;
-                    xml += `    <loc>${BASE_URL}/${lang}/blog/${post.slug}</loc>\n`;
+                    xml += `    <loc>${BASE_URL}/${urlPath}</loc>\n`;
                     xml += `    <changefreq>weekly</changefreq>\n`;
                     xml += `    <priority>0.7</priority>\n`;
                     xml += `  </url>\n`;

@@ -388,10 +388,47 @@ ${servicesDetails}
               <Routes
                 location={location}
               >
-                {/* Root Redirect */}
-                <Route path="/" element={<RootRedirect />} />
+                {/* --- 1. Root Routes (Default English) --- */}
+                <Route path="/" element={
+                  <LanguageWrapper>
+                    <PageWrapper>
+                      <HomePage />
+                      <PromoSection />
+                    </PageWrapper>
+                  </LanguageWrapper>
+                } />
+                <Route path="/free-growth-call" element={<LanguageWrapper><PageWrapper><FreeGrowthCall /></PageWrapper></LanguageWrapper>} />
+                <Route path="/booking-success" element={<LanguageWrapper><PageWrapper><BookingSuccess /></PageWrapper></LanguageWrapper>} />
 
-                {/* Localized Public Routes */}
+                {/* Services (Root) */}
+                <Route path="/services" element={<LanguageWrapper><PageWrapper><ServicesPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/brand-growth" element={<LanguageWrapper><PageWrapper><BrandGrowthPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/social-media-content" element={<LanguageWrapper><PageWrapper><SocialMediaContentPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/ui-ux-design" element={<LanguageWrapper><PageWrapper><UIUXDesignPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/web-development" element={<LanguageWrapper><PageWrapper><WebDevelopmentPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/virtual-assistance" element={<LanguageWrapper><PageWrapper><VirtualAssistancePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/customer-support" element={<LanguageWrapper><PageWrapper><CustomerSupportPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/services/:serviceId" element={<LanguageWrapper><PageWrapper><DynamicServicePage /></PageWrapper></LanguageWrapper>} />
+
+                {/* Company (Root) */}
+                <Route path="/portfolio" element={<LanguageWrapper><PageWrapper><PortfolioPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/about" element={<LanguageWrapper><PageWrapper><AboutUsPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/process" element={<LanguageWrapper><PageWrapper><ProcessPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/case-studies" element={<LanguageWrapper><PageWrapper><CaseStudiesPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/team" element={<LanguageWrapper><PageWrapper><TeamPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/team/:slug" element={<LanguageWrapper><PageWrapper><TeamMemberProfile /></PageWrapper></LanguageWrapper>} />
+                <Route path="/careers" element={<LanguageWrapper><PageWrapper><CareersPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/careers/:id" element={<LanguageWrapper><PageWrapper><JobDetailsPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/blog" element={<LanguageWrapper><PageWrapper><BlogPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/blog/:slug" element={<LanguageWrapper><PageWrapper><BlogPostPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/contact" element={<LanguageWrapper><PageWrapper><ContactPage /></PageWrapper></LanguageWrapper>} />
+
+                {/* Legal (Root) */}
+                <Route path="/legal/privacy-policy" element={<LanguageWrapper><PageWrapper><PrivacyPolicyPage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/legal/terms-of-service" element={<LanguageWrapper><PageWrapper><TermsOfServicePage /></PageWrapper></LanguageWrapper>} />
+                <Route path="/legal/cookie-policy" element={<LanguageWrapper><PageWrapper><CookiePolicyPage /></PageWrapper></LanguageWrapper>} />
+
+                {/* --- 2. Localized Routes (/:lang/...) --- */}
                 <Route path="/:lang" element={
                   <LanguageWrapper>
                     <PageWrapper>
@@ -400,11 +437,10 @@ ${servicesDetails}
                     </PageWrapper>
                   </LanguageWrapper>
                 } />
-                <Route path="/free-growth-call" element={<PageWrapper><FreeGrowthCall /></PageWrapper>} />
                 <Route path="/:lang/free-growth-call" element={<LanguageWrapper><PageWrapper><FreeGrowthCall /></PageWrapper></LanguageWrapper>} />
-                <Route path="/booking-success" element={<PageWrapper><BookingSuccess /></PageWrapper>} />
+                {/* Note: booking-success probably doesn't need localized specific handling if it's generic, but consistent URL valid */}
 
-                {/* Services */}
+                {/* Services (Localized) */}
                 <Route path="/:lang/services/brand-growth" element={<LanguageWrapper><PageWrapper><BrandGrowthPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/services/social-media-content" element={<LanguageWrapper><PageWrapper><SocialMediaContentPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/services/ui-ux-design" element={<LanguageWrapper><PageWrapper><UIUXDesignPage /></PageWrapper></LanguageWrapper>} />
@@ -413,7 +449,7 @@ ${servicesDetails}
                 <Route path="/:lang/services/customer-support" element={<LanguageWrapper><PageWrapper><CustomerSupportPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/services/:serviceId" element={<LanguageWrapper><PageWrapper><DynamicServicePage /></PageWrapper></LanguageWrapper>} />
 
-                {/* Company */}
+                {/* Company (Localized) */}
                 <Route path="/:lang/about" element={<LanguageWrapper><PageWrapper><AboutUsPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/process" element={<LanguageWrapper><PageWrapper><ProcessPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/case-studies" element={<LanguageWrapper><PageWrapper><CaseStudiesPage /></PageWrapper></LanguageWrapper>} />
@@ -424,31 +460,26 @@ ${servicesDetails}
                 <Route path="/:lang/blog" element={<LanguageWrapper><PageWrapper><BlogPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/blog/:slug" element={<LanguageWrapper><PageWrapper><BlogPostPage /></PageWrapper></LanguageWrapper>} />
 
-                {/* Legal */}
+                {/* Legal (Localized) */}
                 <Route path="/:lang/legal/privacy-policy" element={<LanguageWrapper><PageWrapper><PrivacyPolicyPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/legal/terms-of-service" element={<LanguageWrapper><PageWrapper><TermsOfServicePage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/legal/cookie-policy" element={<LanguageWrapper><PageWrapper><CookiePolicyPage /></PageWrapper></LanguageWrapper>} />
 
-                {/* Contact */}
+                {/* Contact (Localized) */}
                 <Route path="/:lang/contact" element={<LanguageWrapper><PageWrapper><ContactPage /></PageWrapper></LanguageWrapper>} />
 
-                {/* Legacy/Redirects/Other */}
+                {/* Other (Localized) */}
                 <Route path="/:lang/services" element={<LanguageWrapper><PageWrapper><ServicesPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="/:lang/portfolio" element={<LanguageWrapper><PageWrapper><PortfolioPage /></PageWrapper></LanguageWrapper>} />
 
-                {/* GSC Fixes: Deep Link Redirects for non-localized paths */}
-                <Route path="/team/*" element={<DeepLinkRedirect />} />
-                <Route path="/services/*" element={<DeepLinkRedirect />} />
-                <Route path="/about" element={<DeepLinkRedirect />} />
-                <Route path="/process" element={<DeepLinkRedirect />} />
-                <Route path="/case-studies" element={<DeepLinkRedirect />} />
-                <Route path="/careers/*" element={<DeepLinkRedirect />} />
-                <Route path="/blog/*" element={<DeepLinkRedirect />} />
-                <Route path="/contact" element={<DeepLinkRedirect />} />
-                <Route path="/legal/*" element={<DeepLinkRedirect />} />
-                <Route path="/Home" element={<Navigate to="/" replace />} />
-
-                {/* Custom Pages - Dynamic page routing */}
+                {/* Dynamic Pages (Root & Localized) */}
+                <Route path="/:customSlug" element={
+                  <LanguageWrapper>
+                    <PageWrapper>
+                      <DynamicPage />
+                    </PageWrapper>
+                  </LanguageWrapper>
+                } />
                 <Route path="/:lang/:customSlug" element={
                   <LanguageWrapper>
                     <PageWrapper>
@@ -457,7 +488,7 @@ ${servicesDetails}
                   </LanguageWrapper>
                 } />
 
-                {/* 404 - Global catch-all should still work, but ideally we want localized 404 */}
+                {/* 404 - Global catch-all */}
                 <Route path="/:lang/*" element={<LanguageWrapper><PageWrapper><NotFoundPage /></PageWrapper></LanguageWrapper>} />
                 <Route path="*" element={<PageWrapper><NotFoundPage /></PageWrapper>} />
 

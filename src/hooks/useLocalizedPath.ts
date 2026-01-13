@@ -35,7 +35,10 @@ export const useLocalizedPath = () => {
         const cleanPath = path.replace(/^\/[a-z]{2}(\/|$)/, '/');
         const normalizedPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
 
-        // Create localized path - Always include lang prefix as App routes require it
+        // Create localized path
+        if (currentLang === 'en') {
+            return normalizedPath === '/' ? '/' : normalizedPath;
+        }
         return `/${currentLang}${normalizedPath === '/' ? '' : normalizedPath}`;
     }, [currentLang]);
 

@@ -36,16 +36,28 @@ export function LanguageSwitcher() {
 
     const changeLanguage = (lng: string) => {
         const currentPath = location.pathname;
-        const parts = currentPath.split('/').filter(p => p);
+        const currentLang = i18n.language;
 
-        // If the first part is a known language code, replace it
-        if (parts.length > 0 && languages.some(l => l.code === parts[0])) {
-            parts[0] = lng;
-            navigate(`/${parts.join('/')}`);
-        } else {
-            // Otherwise/Fallback: Navigate to the homepage of the selected language
-            navigate(`/${lng}`);
+        // Strip existing language prefix if present (e.g. /es/about -> /about)
+        let cleanPath = currentPath;
+        if (currentLang !== 'en' && currentPath.startsWith(`/${currentLang}`)) {
+            cleanPath = currentPath.replace(`/${currentLang}`, '');
         }
+
+        // Handle root path normalize
+        if (cleanPath === '') cleanPath = '/';
+
+        // Construct new path
+        let newPath;
+        if (lng === 'en') {
+            // Target is English -> use clean path (e.g. /about)
+            newPath = cleanPath;
+        } else {
+            // Target is other -> add prefix (e.g. /es/about)
+            newPath = `/${lng}${cleanPath === '/' ? '' : cleanPath}`;
+        }
+
+        navigate(newPath);
         setIsOpen(false);
     };
 
