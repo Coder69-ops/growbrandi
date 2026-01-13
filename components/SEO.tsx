@@ -33,15 +33,15 @@ const SEO: React.FC<SEOProps> = ({
     description,
     keywords = [],
     canonicalUrl,
-    ogImage = 'https://growbrandi.com/og-image.jpg',
+    ogImage,
     ogImageWidth = '1200',
     ogImageHeight = '630',
     ogType = 'website',
     twitterCard = 'summary_large_image',
-    twitterHandle = '@growbrandi',
+    twitterHandle,
     schema,
     additionalSchemas = [],
-    siteTitleSuffix = 'GrowBrandi',
+    siteTitleSuffix,
     noIndex = false,
     articlePublishedTime,
     articleModifiedTime,
@@ -53,7 +53,21 @@ const SEO: React.FC<SEOProps> = ({
     const location = useLocation();
     const { settings } = useSiteSettings();
 
-    const fullTitle = title === siteTitleSuffix ? title : `${title} | ${siteTitleSuffix}`;
+    // Determine Suffix: Use prop if provided, else potentially fallback to settings if hook provided it? 
+    // Actually, App.tsx passes it from Context. If it comes as undefined, we might want a hard ultimate fallback or just empty.
+    // Let's default to empty string if not provided to strictly follow "no hardcoded junk".
+    // But for a valid title tag, having the Brand Name is usually desired. 
+    // If the user wants to remove it, they can set it to empty string in Admin. 
+    // If they haven't set it yet, 'GrowBrandi' is a safe reasonable default for the code base.
+    // However, user said "remove hardcoded one". So we will NOT default it here.
+
+    // Logic: If siteTitleSuffix is provided and not empty, append it.
+    const effectiveSuffix = siteTitleSuffix || '';
+
+    let fullTitle = title;
+    if (effectiveSuffix && title !== effectiveSuffix) {
+        fullTitle = `${title} | ${effectiveSuffix}`;
+    }
 
     // Base Origin - Hardcoded to master domain to prevent duplicates (www vs non-www, http vs https)
     const origin = 'https://www.growbrandi.com';
