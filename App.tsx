@@ -165,17 +165,20 @@ function AppContent() {
     /* 
        Refactored: Service fetching moved to GlobalDataProvider.
        This effect now only handles loader removal.
+       Updated: Now waits for globalLoading to be false before removing loader.
     */
 
-    // Remove simple loader once React apps starts mounting/handling content
-    const loader = document.getElementById('initial-loader');
-    if (loader) {
-      loader.style.opacity = '0';
-      setTimeout(() => {
-        loader.remove();
-      }, 500);
+    if (!globalLoading.settings && !globalLoading.services) {
+      // Remove simple loader once React apps starts mounting/handling content
+      const loader = document.getElementById('initial-loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.remove();
+        }, 500);
+      }
     }
-  }, []);
+  }, [globalLoading.settings, globalLoading.services]);
 
   // Preload chat on app startup
   useEffect(() => {

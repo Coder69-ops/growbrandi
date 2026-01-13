@@ -224,6 +224,7 @@ const Header: React.FC<HeaderProps> = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<'services' | 'company' | null>(null);
     const [dynamicServices, setDynamicServices] = useState<any[]>([]);
+    const [isLoadingServices, setIsLoadingServices] = useState(true);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Fetch dynamic services
@@ -254,16 +255,19 @@ const Header: React.FC<HeaderProps> = () => {
                 .filter(Boolean) as any[];
 
             setDynamicServices(services);
+            setIsLoadingServices(false);
         }, (error) => {
             console.error("Error fetching menu services:", error);
+            setIsLoadingServices(false);
         });
 
         return () => unsubscribe();
     }, [i18n.language]);
 
-    // Merge static company data with dynamic services
+    // Use dynamic services if available, otherwise empty (don't show stale demo data)
+    // Only show static company data which is not dynamic
     const currentMegaMenuData = {
-        services: dynamicServices.length > 0 ? dynamicServices : megaMenuData.services,
+        services: dynamicServices,
         company: megaMenuData.company
     };
 
@@ -435,37 +439,57 @@ const Header: React.FC<HeaderProps> = () => {
                             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
                                 {activeDropdown === 'services' && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {currentMegaMenuData.services.map((service) => (
-                                            <button
-                                                key={service.route}
-                                                onClick={() => {
-                                                    navigate(getLocalizedPath(service.route));
-                                                    closeMegaMenu();
-                                                }}
-                                                className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === getLocalizedPath(service.route)
-                                                    ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
-                                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
-                                                    }`}
-                                            >
-                                                <div className="flex items-start gap-4">
-                                                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === service.route
-                                                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                                                        : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
-                                                        }`}>
-                                                        <service.icon className={`w-6 h-6 ${currentRoute === getLocalizedPath(service.route) ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <h4 className={`font-bold text-base mb-2 ${currentRoute === getLocalizedPath(service.route) ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
-                                                            }`}>
-                                                            {truncate(service.title, 40)}
-                                                        </h4>
-                                                        <p className="text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
-                                                            {truncate(service.description, 90)}
-                                                        </p>
+                                        {isLoadingServices ? (
+                                            // Skeleton Loading State
+                                            [...Array(6)].map((_, i) => (
+                                                <div key={i} className="p-4 rounded-xl border border-slate-100 dark:border-white/5 bg-slate-50 dark:bg-white/5 animate-pulse">
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-white/10" />
+                                                        <div className="flex-1 space-y-2">
+                                                            <div className="h-4 w-2/3 bg-slate-200 dark:bg-white/10 rounded" />
+                                                            <div className="h-3 w-full bg-slate-200 dark:bg-white/10 rounded" />
+                                                            <div className="h-3 w-4/5 bg-slate-200 dark:bg-white/10 rounded" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </button>
-                                        ))}
+                                            ))
+                                        ) : currentMegaMenuData.services.length > 0 ? (
+                                            currentMegaMenuData.services.map((service) => (
+                                                <button
+                                                    key={service.route}
+                                                    onClick={() => {
+                                                        navigate(getLocalizedPath(service.route));
+                                                        closeMegaMenu();
+                                                    }}
+                                                    className={`text-left p-4 rounded-xl transition-all duration-200 group ${currentRoute === getLocalizedPath(service.route)
+                                                        ? 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20 dark:border-blue-500/30'
+                                                        : 'hover:bg-slate-50 dark:hover:bg-white/5 border border-transparent hover:border-slate-200 dark:hover:border-white/10'
+                                                        }`}
+                                                >
+                                                    <div className="flex items-start gap-4">
+                                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${currentRoute === service.route
+                                                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                                                            : 'bg-slate-100 dark:bg-white/10 group-hover:bg-blue-500/10 dark:group-hover:bg-blue-500/20'
+                                                            }`}>
+                                                            <service.icon className={`w-6 h-6 ${currentRoute === getLocalizedPath(service.route) ? 'text-white' : 'text-slate-600 dark:text-white group-hover:text-blue-600 dark:group-hover:text-white'}`} />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <h4 className={`font-bold text-base mb-2 ${currentRoute === getLocalizedPath(service.route) ? 'text-blue-600 dark:text-white' : 'text-slate-900 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-white'
+                                                                }`}>
+                                                                {truncate(service.title, 40)}
+                                                            </h4>
+                                                            <p className="text-sm text-slate-500 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 leading-relaxed">
+                                                                {truncate(service.description, 90)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="col-span-full py-8 text-center text-slate-500 dark:text-slate-400">
+                                                No services available at the moment.
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
