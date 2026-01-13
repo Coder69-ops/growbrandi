@@ -183,16 +183,18 @@ const GlobalPromoEffects: React.FC = () => {
 
                                 <div className="flex items-center gap-3">
                                     {bannerPromo.imageUrl && (
-                                        <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-xl">
-                                            <img src={bannerPromo.imageUrl} alt="" className="w-full h-full object-cover" />
+                                        <div className={`w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-xl bg-black/20 flex items-center justify-center`}>
+                                            <img src={bannerPromo.imageUrl} alt="" className={`w-full h-full ${bannerPromo.imageFit === 'contain' ? 'object-contain' : 'object-cover'}`} />
                                         </div>
                                     )}
-                                    <p className="text-white text-xs md:text-sm font-bold tracking-tight line-clamp-1">
-                                        <span className={`bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2 font-black uppercase tracking-wider`}>
-                                            {bannerPromo.title}:
-                                        </span>
-                                        {bannerPromo.description}
-                                    </p>
+                                    {!bannerPromo.hideTextOverlay && (
+                                        <p className="text-white text-xs md:text-sm font-bold tracking-tight line-clamp-1">
+                                            <span className={`bg-gradient-to-r ${themeStyles[bannerPromo.style || 'luxury'].accent} bg-clip-text text-transparent mr-2 font-black uppercase tracking-wider`}>
+                                                {bannerPromo.title}:
+                                            </span>
+                                            {bannerPromo.description}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
 
@@ -240,26 +242,26 @@ const GlobalPromoEffects: React.FC = () => {
                     >
                         <div className={`absolute -right-12 -top-12 w-48 h-48 rounded-full blur-[60px] pointer-events-none ${themeStyles[floatPromo.style || 'luxury'].glow} opacity-60`} />
 
-                        <div className="w-28 h-28 rounded-3xl overflow-hidden shrink-0 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] ring-2 ring-white/10 group-hover:scale-110 transition-transform duration-700 bg-black/40">
+                        <div className={`${floatPromo.hideTextOverlay ? 'w-full' : 'w-28'} h-28 rounded-3xl overflow-hidden shrink-0 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] ring-2 ring-white/10 group-hover:scale-110 transition-all duration-700 bg-black/40 flex items-center justify-center`}>
                             {floatPromo.imageUrl ? (
-                                <img src={floatPromo.imageUrl} alt="" className="w-full h-full object-cover" />
+                                <img src={floatPromo.imageUrl} alt="" className={`w-full h-full ${floatPromo.imageFit === 'contain' ? 'object-contain' : 'object-cover'}`} />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <Zap size={40} className="text-white opacity-20 fill-current" />
-                                </div>
+                                <Zap size={40} className="text-white opacity-20 fill-current" />
                             )}
                         </div>
 
-                        <div className="flex flex-col justify-center relative z-10">
-                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] bg-gradient-to-r ${themeStyles[floatPromo.style || 'luxury'].accent} bg-clip-text text-transparent mb-2`}>
-                                Verified Offer
-                            </span>
-                            <h4 className="text-white text-base font-black leading-tight mb-3 line-clamp-2 drop-shadow-md">{floatPromo.title}</h4>
-                            <div className="flex items-center gap-2 text-indigo-400 text-[10px] font-black uppercase tracking-wider bg-white/5 py-1 px-2.5 rounded-full w-fit">
-                                <Sparkles size={12} className="animate-pulse" />
-                                <span>Claimed by 52 today</span>
+                        {!floatPromo.hideTextOverlay && (
+                            <div className="flex flex-col justify-center relative z-10">
+                                <span className={`text-[10px] font-black uppercase tracking-[0.2em] bg-gradient-to-r ${themeStyles[floatPromo.style || 'luxury'].accent} bg-clip-text text-transparent mb-2`}>
+                                    Verified Offer
+                                </span>
+                                <h4 className="text-white text-base font-black leading-tight mb-3 line-clamp-2 drop-shadow-md">{floatPromo.title}</h4>
+                                <div className="flex items-center gap-2 text-indigo-400 text-[10px] font-black uppercase tracking-wider bg-white/5 py-1 px-2.5 rounded-full w-fit">
+                                    <Sparkles size={12} className="animate-pulse" />
+                                    <span>Claimed by 52 today</span>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <button
                             onClick={(e) => { e.stopPropagation(); handleDismiss(floatPromo.id, 'floating_corner'); }}
