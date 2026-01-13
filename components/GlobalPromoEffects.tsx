@@ -65,12 +65,35 @@ const GlobalPromoEffects: React.FC = () => {
 
         setActiveSlots(slots);
 
-        // Auto-trigger first popup if any
-        if (slots.popup && !modalOpen && !hasTriggeredExitIntent) {
-            const timer = setTimeout(() => setModalOpen(true), 3000);
-            return () => clearTimeout(timer);
-        }
+        setActiveSlots(slots);
     }, [promotions]);
+
+    // 2. Smart Trigger Logic (Time OR Scroll)
+    useEffect(() => {
+        if (!activeSlots.popup || modalOpen || hasTriggeredExitIntent) return;
+
+        const handleTrigger = () => {
+            setModalOpen(true);
+            setHasTriggeredExitIntent(true); // Treat as triggered so it doesn't trigger again
+        };
+
+        // A. Time Trigger (15 seconds)
+        const timer = setTimeout(handleTrigger, 15000);
+
+        // B. Scroll Trigger (> 800px / Services Section)
+        const handleScroll = () => {
+            if (window.scrollY > 800) {
+                handleTrigger();
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [activeSlots.popup, modalOpen, hasTriggeredExitIntent]);
 
     // 3. Exit Intent Logic
     useEffect(() => {
