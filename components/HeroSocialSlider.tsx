@@ -164,6 +164,8 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items: initialItems
                                     <img
                                         src={currentItem.image}
                                         alt={currentItem.author}
+                                        width="80"
+                                        height="80"
                                         className={`w-20 h-20 object-cover shadow-lg border-2 border-white dark:border-slate-700 ring-2 ring-transparent group-hover:ring-offset-2 group-hover:ring-blue-500/20 transition-all duration-300 ${currentItem.type === 'review' ? 'rounded-full' : 'rounded-2xl'}`}
                                     />
                                 ) : (

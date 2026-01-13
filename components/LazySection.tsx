@@ -3,9 +3,11 @@ import React, { useState, useEffect, useRef, Suspense } from 'react';
 interface LazySectionProps {
     children: React.ReactNode;
     fallback?: React.ReactNode;
+    minHeight?: string; // Add minHeight prop to prevent CLS
+    className?: string;
 }
 
-const LazySection: React.FC<LazySectionProps> = ({ children, fallback = null }) => {
+const LazySection: React.FC<LazySectionProps> = ({ children, fallback = null, minHeight = '100px', className = '' }) => {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -28,11 +30,11 @@ const LazySection: React.FC<LazySectionProps> = ({ children, fallback = null }) 
     }, []);
 
     return (
-        <div ref={ref}>
+        <div ref={ref} className={className} style={{ minHeight: !isVisible ? minHeight : undefined }}>
             {isVisible ? (
                 children
             ) : (
-                fallback || <div className="min-h-[100px]" />
+                fallback || <div style={{ height: minHeight }} />
             )}
         </div>
     );
