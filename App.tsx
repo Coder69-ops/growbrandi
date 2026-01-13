@@ -18,14 +18,15 @@ import { ThemeProvider } from './components/ThemeContext';
 import { SeoProvider, useSeo } from './src/context/SeoContext';
 import { useSiteSettings } from './src/hooks/useSiteSettings';
 
+import { lazyWithRetry } from './src/utils/lazyWithRetry';
 // Lazy load components
 import { HomePage } from './components/Hero';
 import FreeGrowthCall from './components/FreeGrowthCall'; // Direct Import
 import BookingSuccess from './src/pages/BookingSuccess';
-const ServicesPage = React.lazy(() => import('./components/Services').then(module => ({ default: module.ServicesPage })));
-const PortfolioPage = React.lazy(() => import('./components/Portfolio').then(module => ({ default: module.PortfolioPage })));
-const ContactPage = React.lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
-const ChatInterface = React.lazy(() => import('./components/ChatInterface'));
+const ServicesPage = lazyWithRetry(() => import('./components/Services').then(module => ({ default: module.ServicesPage })));
+const PortfolioPage = lazyWithRetry(() => import('./components/Portfolio').then(module => ({ default: module.PortfolioPage })));
+const ContactPage = lazyWithRetry(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
+const ChatInterface = lazyWithRetry(() => import('./components/ChatInterface'));
 const AnimatedBackground = React.lazy(() => import('./components/AnimatedBackground'));
 
 const ContactAssistant = React.lazy(() => import('./components/ContactAssistant'));
@@ -92,7 +93,7 @@ const AdminFreeGrowthCallConfig = React.lazy(() => import('./src/pages/admin/Fre
 import AdminSeoSettings from './src/pages/admin/SeoSettings';
 import AdminPageList from './src/pages/admin/PageList';
 import AdminPageBuilder from './src/pages/admin/PageBuilder';
-const AdminPromotions = React.lazy(() => import('./src/pages/admin/Promotions'));
+const AdminPromotions = lazyWithRetry(() => import('./src/pages/admin/Promotions'));
 import { LanguageWrapper } from './src/components/LanguageWrapper';
 import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
