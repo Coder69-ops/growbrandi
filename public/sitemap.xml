@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.growbrandi.com/en</loc>
+    <loc>https://www.growbrandi.com</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -26,7 +26,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/about</loc>
+    <loc>https://www.growbrandi.com/about</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -51,7 +51,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services</loc>
+    <loc>https://www.growbrandi.com/services</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -76,7 +76,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/portfolio</loc>
+    <loc>https://www.growbrandi.com/portfolio</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -101,7 +101,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team</loc>
+    <loc>https://www.growbrandi.com/team</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -126,7 +126,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/process</loc>
+    <loc>https://www.growbrandi.com/process</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -151,7 +151,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/case-studies</loc>
+    <loc>https://www.growbrandi.com/case-studies</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -176,7 +176,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/careers</loc>
+    <loc>https://www.growbrandi.com/careers</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -201,7 +201,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog</loc>
+    <loc>https://www.growbrandi.com/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -226,7 +226,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/contact</loc>
+    <loc>https://www.growbrandi.com/contact</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -251,7 +251,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/free-growth-call</loc>
+    <loc>https://www.growbrandi.com/free-growth-call</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -276,7 +276,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/legal/privacy-policy</loc>
+    <loc>https://www.growbrandi.com/legal/privacy-policy</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -301,7 +301,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/legal/terms-of-service</loc>
+    <loc>https://www.growbrandi.com/legal/terms-of-service</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -326,7 +326,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/legal/cookie-policy</loc>
+    <loc>https://www.growbrandi.com/legal/cookie-policy</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -351,7 +351,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/brand-growth</loc>
+    <loc>https://www.growbrandi.com/services/brand-growth</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -376,7 +376,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/social-media-content</loc>
+    <loc>https://www.growbrandi.com/services/social-media-content</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -401,7 +401,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/ui-ux-design</loc>
+    <loc>https://www.growbrandi.com/services/ui-ux-design</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -426,7 +426,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/web-development</loc>
+    <loc>https://www.growbrandi.com/services/web-development</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -451,7 +451,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/virtual-assistance</loc>
+    <loc>https://www.growbrandi.com/services/virtual-assistance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -476,7 +476,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/services/customer-support</loc>
+    <loc>https://www.growbrandi.com/services/customer-support</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -501,7 +501,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/shuvo-mallick</loc>
+    <loc>https://www.growbrandi.com/team/shuvo-mallick</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -526,7 +526,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/riaz-shahriar</loc>
+    <loc>https://www.growbrandi.com/team/riaz-shahriar</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -551,7 +551,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/binita-biswas</loc>
+    <loc>https://www.growbrandi.com/team/binita-biswas</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -576,7 +576,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/nijhum-nur</loc>
+    <loc>https://www.growbrandi.com/team/nijhum-nur</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -601,7 +601,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/sabrina-jui</loc>
+    <loc>https://www.growbrandi.com/team/sabrina-jui</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -626,7 +626,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/team/ovejit-das</loc>
+    <loc>https://www.growbrandi.com/team/ovejit-das</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -651,7 +651,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/future-ai-branding-trends-2025</loc>
+    <loc>https://www.growbrandi.com/blog/future-ai-branding-trends-2025</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -676,7 +676,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/ai-automation-marketing-efficiency</loc>
+    <loc>https://www.growbrandi.com/blog/ai-automation-marketing-efficiency</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -701,7 +701,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/seo-strategy-ai-age</loc>
+    <loc>https://www.growbrandi.com/blog/seo-strategy-ai-age</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -726,7 +726,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/building-brand-voice-gen-ai</loc>
+    <loc>https://www.growbrandi.com/blog/building-brand-voice-gen-ai</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -751,7 +751,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/ai-video-content-creation</loc>
+    <loc>https://www.growbrandi.com/blog/ai-video-content-creation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -776,7 +776,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/data-driven-brand-design</loc>
+    <loc>https://www.growbrandi.com/blog/data-driven-brand-design</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -801,7 +801,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/micro-influencers-ai-era</loc>
+    <loc>https://www.growbrandi.com/blog/micro-influencers-ai-era</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -826,7 +826,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/ai-email-marketing-segmentation</loc>
+    <loc>https://www.growbrandi.com/blog/ai-email-marketing-segmentation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -851,7 +851,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/ethical-ai-copyright-guide</loc>
+    <loc>https://www.growbrandi.com/blog/ethical-ai-copyright-guide</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -876,7 +876,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.growbrandi.com/en/blog/scaling-agency-with-ai</loc>
+    <loc>https://www.growbrandi.com/blog/scaling-agency-with-ai</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
