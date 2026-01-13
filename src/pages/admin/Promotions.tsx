@@ -98,6 +98,24 @@ const Promotions = () => {
         setTimeout(() => setCopiedId(null), 2000);
     };
 
+    const handleHideAll = async () => {
+        if (confirm('Are you sure you want to HIDE ALL promotions? This will set all active promotions to inactive.')) {
+            const batch = [];
+            // We can't batch too many, so let's just do it individually for now or small batches
+            // For simplicity and safety in this context, promises all
+            const activePromotions = promotions.filter(p => p.isActive);
+            try {
+                await Promise.all(activePromotions.map(p =>
+                    updateDoc(doc(db, 'promotions', p.id), { isActive: false })
+                ));
+                alert('All promotions have been hidden.');
+            } catch (error) {
+                console.error("Error hiding all:", error);
+                alert("Failed to hide all promotions.");
+            }
+        }
+    };
+
     const filteredPromotions = promotions.filter(p =>
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.discountCode.toLowerCase().includes(searchTerm.toLowerCase())
