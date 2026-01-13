@@ -17,7 +17,7 @@ const LazySection: React.FC<LazySectionProps> = ({ children, fallback = null }) 
                     observer.disconnect();
                 }
             },
-            { rootMargin: '300px' } // Load 300px before it comes into view
+            { rootMargin: '600px' } // Load 600px before it comes into view
         );
 
         if (ref.current) {
@@ -30,7 +30,7 @@ const LazySection: React.FC<LazySectionProps> = ({ children, fallback = null }) 
     return (
         <div ref={ref}>
             {isVisible ? (
-                <Suspense fallback={fallback}>{children}</Suspense>
+                children
             ) : (
                 fallback || <div className="min-h-[100px]" />
             )}

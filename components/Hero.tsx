@@ -526,8 +526,6 @@ export const HomePage: React.FC = () => {
     // Helper to check if a section should be shown (default to true)
     const isVisible = (id: string) => sections[id as keyof typeof sections] !== false;
 
-    if (loading) return <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]" />;
-
     return (
         <div className="bg-slate-50 dark:bg-[#09090b] transition-colors duration-300">
             <HeroSection />
