@@ -98,6 +98,7 @@ import { RootRedirect } from './src/components/RootRedirect';
 import { useLocalizedPath } from './src/hooks/useLocalizedPath';
 import { ToastProvider } from './src/context/ToastContext';
 import { DeepLinkRedirect } from './src/components/DeepLinkRedirect';
+import { GlobalDataProvider, useGlobalData } from './src/context/GlobalDataProvider';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -150,18 +151,20 @@ function AppContent() {
   const seoMetadata = getSeoMetadata(currentRoute, currentPath, currentLang);
   // Replaces the static call: const metadata = getRouteMetadata(currentRoute, currentPath);
 
-  // Fetch services for AI context
+  const { services, loading: globalLoading } = useGlobalData();
+
+  // Use global services instead of local fetch
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'services'));
-        const data = querySnapshot.docs.map(doc => doc.data());
-        setServicesData(data);
-      } catch (error) {
-        console.error("Failed to fetch services:", error);
-      }
-    };
-    fetchServices();
+    if (services.length > 0) {
+      setServicesData(services);
+    }
+  }, [services]);
+
+  useEffect(() => {
+    /* 
+       Refactored: Service fetching moved to GlobalDataProvider.
+       This effect now only handles loader removal.
+    */
 
     // Remove simple loader once React apps starts mounting/handling content
     const loader = document.getElementById('initial-loader');
@@ -545,13 +548,15 @@ function App() {
     <HelmetProvider>
       <ThemeProvider>
         <AuthProvider>
-          <ToastProvider>
-            <SeoProvider>
-              <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                <AppContent />
-              </BrowserRouter>
-            </SeoProvider>
-          </ToastProvider>
+          <GlobalDataProvider>
+            <ToastProvider>
+              <SeoProvider>
+                <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                  <AppContent />
+                </BrowserRouter>
+              </SeoProvider>
+            </ToastProvider>
+          </GlobalDataProvider>
         </AuthProvider>
       </ThemeProvider>
     </HelmetProvider>

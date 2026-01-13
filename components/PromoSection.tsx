@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { db } from '../src/lib/firebase';
-import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { useGlobalData } from '../src/context/GlobalDataProvider';
 import { Zap, ArrowRight, Shield, Users, Clock } from 'lucide-react';
 import DiscountBookingModal from './DiscountBookingModal';
 
@@ -24,38 +23,21 @@ const PromoSection: React.FC<{ slotId?: string }> = ({ slotId }) => {
     const [promo, setPromo] = useState<Promotion | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // Get promotions from global context
+    const { promotions } = useGlobalData();
+
     useEffect(() => {
-        // Simple query to avoid index requirements
-        const q = query(
-            collection(db, 'promotions'),
-            where('isActive', '==', true)
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetched = snapshot.docs.map(doc => {
-                const data = doc.data();
-                const positions = Array.isArray(data.positions)
-                    ? data.positions
-                    : data.position
-                        ? [data.position]
-                        : [];
-                return { id: doc.id, ...data, positions } as Promotion;
-            });
-
-            // Sort in memory instead of Firestore to stay safe without custom indexes
-            const active = fetched
-                .sort((a: any, b: any) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0))
-                .find((p: Promotion) => {
+        if (promotions.length > 0) {
+            // Sort in memory (already sorted in provider, but double check if needed)
+            const active = promotions
+                .find((p: any) => {
+                    const positions = Array.isArray(p.positions) ? p.positions : [];
                     const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
-                    return p.positions.includes('in_between_sections') && !isClaimed;
+                    return positions.includes('in_between_sections') && !isClaimed;
                 });
-            setPromo(active || null);
-        }, (error) => {
-            console.error("PromoSection Snapshot Error:", error);
-        });
-
-        return () => unsubscribe();
-    }, []);
+            setPromo((active as Promotion) || null);
+        }
+    }, [promotions]);
 
     if (!promo) return null;
 

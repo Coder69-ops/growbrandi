@@ -15,10 +15,9 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSiteContentData, useContactSettings } from '../src/hooks/useSiteContent';
 import { useLocalizedPath } from '../src/hooks/useLocalizedPath';
+import { useGlobalData } from '../src/context/GlobalDataProvider';
 import { useSiteSettings } from '../src/hooks/useSiteSettings';
 import { createOrganizationSchema } from '../src/utils/schemas';
-import { db } from '../src/lib/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import DiscountBookingModal from './DiscountBookingModal';
 
 interface Promotion {
@@ -48,22 +47,20 @@ const HeroSection: React.FC = () => {
     const [heroPromo, setHeroPromo] = useState<Promotion | null>(null);
     const [isPromoOpen, setIsPromoOpen] = useState(false);
 
+    // Get promotions from global context
+    const { promotions } = useGlobalData();
+
     useEffect(() => {
-        const q = query(collection(db, 'promotions'), where('isActive', '==', true));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const fetched = snapshot.docs.map(doc => {
-                const data = doc.data();
-                const positions = Array.isArray(data.positions) ? data.positions : [];
-                return { id: doc.id, ...data, positions } as Promotion;
-            });
-            const activeHero = fetched.find(p => {
+        if (promotions.length > 0) {
+            const activeHero = promotions.find((p: any) => {
+                const positions = Array.isArray(p.positions) ? p.positions : [];
+                // Check local storage for claimed status
                 const isClaimed = localStorage.getItem(`claimed_promo_${p.id}`);
-                return p.positions.includes('hero') && !isClaimed;
+                return positions.includes('hero') && !isClaimed;
             });
-            setHeroPromo(activeHero || null);
-        });
-        return () => unsubscribe();
-    }, []);
+            setHeroPromo((activeHero as Promotion) || null);
+        }
+    }, [promotions]);
 
     // Helper to get text with fallback to i18next
     const getHeroText = (field: string) => {

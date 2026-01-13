@@ -1,7 +1,4 @@
-
-import { useState, useEffect } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { useGlobalData } from '../context/GlobalDataProvider';
 
 export interface SiteSettings {
     branding: {
@@ -39,25 +36,10 @@ export interface SiteSettings {
 }
 
 export const useSiteSettings = () => {
-    const [settings, setSettings] = useState<SiteSettings | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const docRef = doc(db, 'site_settings', 'main');
-        const unsubscribe = onSnapshot(docRef, (docSnap) => {
-            if (docSnap.exists()) {
-                setSettings(docSnap.data() as SiteSettings);
-            } else {
-                setSettings(null);
-            }
-            setLoading(false);
-        }, (error) => {
-            console.error("Error fetching site settings:", error);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, []);
-
-    return { settings, loading };
+    const { settings, loading } = useGlobalData();
+    // Return typed settings
+    return {
+        settings: settings as SiteSettings | null,
+        loading: loading.settings
+    };
 };

@@ -14,8 +14,7 @@ interface SliderItem {
     actionUrl?: string;   // Optional CTA link
 }
 
-import { db } from '../src/lib/firebase';
-import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
+import { useGlobalData } from '../src/context/GlobalDataProvider';
 
 interface SliderItem {
     type: 'review' | 'offer' | 'service';
@@ -39,40 +38,32 @@ const HeroSocialSlider: React.FC<HeroSocialSliderProps> = ({ items: initialItems
     const { getLocalizedPath } = useLocalizedPath();
 
     // Effect to fetch dynamic 'Hero' promotions
+    // Get promotions from global context
+    const { promotions } = useGlobalData();
+
+    // Effect to fetch dynamic 'Hero' promotions
     useEffect(() => {
-        const q = query(
-            collection(db, 'promotions'),
-            where('isActive', '==', true),
-            where('position', '==', 'hero'),
-            orderBy('createdAt', 'desc'),
-            limit(1)
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const promos = snapshot.docs.map(doc => {
-                const data = doc.data();
-                return {
-                    type: 'offer' as const,
-                    content: data.description,
-                    author: data.title,
-                    role: 'Limited Time Offer',
-                    actionLabel: data.buttonText,
-                    actionUrl: '/free-growth-call',
-                    image: data.imageUrl,
-                    highlight: true
-                };
-            });
-
-            if (promos.length > 0) {
-                // Prepend the dynamic promo to the existing items
-                setCarouselItems([promos[0], ...initialItems]);
-            } else {
-                setCarouselItems(initialItems);
-            }
+        const heroPromo = promotions.find((p: any) => {
+            const positions = Array.isArray(p.positions) ? p.positions : [];
+            return positions.includes('hero');
         });
 
-        return () => unsubscribe();
-    }, [initialItems]); // Re-run if props change
+        if (heroPromo) {
+            const promoItem: SliderItem = {
+                type: 'offer',
+                content: heroPromo.description,
+                author: heroPromo.title,
+                role: 'Limited Time Offer',
+                actionLabel: heroPromo.buttonText,
+                actionUrl: '/free-growth-call',
+                image: heroPromo.imageUrl,
+                highlight: true
+            };
+            setCarouselItems([promoItem, ...initialItems]);
+        } else {
+            setCarouselItems(initialItems);
+        }
+    }, [initialItems, promotions]);
 
     useEffect(() => {
         if (!carouselItems || carouselItems.length <= 1) return;
