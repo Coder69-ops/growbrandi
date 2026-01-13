@@ -182,14 +182,14 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
     }
 
     return (
-        <div className={`w-full relative bg-gradient-to-br from-white/90 via-slate-50/90 to-blue-50/20 dark:from-slate-900/90 dark:via-[#0B1120]/90 dark:to-slate-900/90 backdrop-blur-xl rounded-[2rem] overflow-hidden flex flex-col shadow-2xl shadow-blue-500/5 dark:shadow-none border border-white/50 dark:border-white/10 ring-1 ring-slate-200/50 dark:ring-white/5 ${className}`}>
+        <div className={`w-full relative bg-gradient-to-br from-white/90 via-slate-50/90 to-blue-50/20 dark:from-slate-900/90 dark:via-[#0B1120]/90 dark:to-slate-900/90 backdrop-blur-xl rounded-[1.5rem] overflow-hidden flex flex-col shadow-2xl shadow-blue-500/5 dark:shadow-none border border-white/50 dark:border-white/10 ring-1 ring-slate-200/50 dark:ring-white/5 ${className}`}>
             {/* Ambient Background Noise & Glow */}
             <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat mix-blend-overlay pointer-events-none z-0" />
             <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none z-0" />
             <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none z-0" />
 
             {/* Header Section */}
-            <div className="bg-white/50 dark:bg-white/[0.02] p-6 lg:p-8 backdrop-blur-md border-b border-slate-100 dark:border-white/5 relative overflow-hidden z-10">
+            <div className="bg-white/50 dark:bg-white/[0.02] p-4 lg:p-5 backdrop-blur-md border-b border-slate-100 dark:border-white/5 relative overflow-hidden z-10">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -198,7 +198,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                                 {[1, 2, 3, 4, 5].map(i => <Star key={i} size={10} fill="currentColor" />)}
                             </div>
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-white leading-tight mb-2">
                             Discovery Session
                         </h2>
 
@@ -227,7 +227,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
 
                     {/* Mini Slider - Right Side */}
                     <div className="w-full md:w-auto self-stretch md:self-center flex items-center gap-3">
-                        <div className="relative flex-1 md:flex-none md:w-56 lg:w-64 h-14 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm">
+                        <div className="relative flex-1 md:flex-none md:w-56 lg:w-60 h-12 bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-xl overflow-hidden shadow-sm">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={sliderIndex}
@@ -254,7 +254,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
 
                         <button
                             onClick={onClaimDiscount}
-                            className="flex h-14 px-5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-2xl font-bold text-xs shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex-col items-center justify-center leading-tight whitespace-nowrap border border-white/20"
+                            className="flex h-12 px-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-amber-500/20 active:scale-95 transition-all flex-col items-center justify-center leading-tight whitespace-nowrap border border-white/20"
                         >
                             <span className="flex items-center gap-1">Claim Offer <ArrowRight size={12} /></span>
                             <span className="text-[9px] opacity-90 font-medium">Limited Availability</span>
@@ -270,7 +270,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
             </div>
 
             {/* Main Content Area */}
-            <div className="p-6 lg:p-8 flex-1 relative min-h-[400px]">
+            <div className="p-4 lg:p-5 flex-1 relative min-h-[350px]">
                 <AnimatePresence mode="wait">
                     {view === 'calendar' ? (
                         <motion.div
@@ -278,7 +278,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -20 }}
-                            className="space-y-8"
+                            className="space-y-6"
                         >
                             {/* Date Selector */}
                             <div className="space-y-3">
@@ -301,13 +301,13 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                                             <button
                                                 key={day.toISOString()}
                                                 onClick={() => { setSelectedDate(day); setSelectedSlot(null); }}
-                                                className={`flex-shrink-0 snap-start w-14 h-[4.5rem] rounded-xl flex flex-col items-center justify-center border transition-all duration-200 relative group overflow-hidden ${isSelected
+                                                className={`flex-shrink-0 snap-start w-12 h-[3.5rem] rounded-lg flex flex-col items-center justify-center border transition-all duration-200 relative group overflow-hidden ${isSelected
                                                     ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-600/20'
                                                     : 'bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-blue-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                                                     }`}
                                             >
                                                 <span className="text-[10px] font-bold uppercase mb-0.5">{format(day, 'EEE')}</span>
-                                                <span className={`text-lg font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{format(day, 'd')}</span>
+                                                <span className={`text-base font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{format(day, 'd')}</span>
                                                 {isToday && !isSelected && <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-blue-500 rounded-full" />}
                                             </button>
                                         );
@@ -335,7 +335,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                                 </div>
 
                                 {!isCustomTime ? (
-                                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[240px] overflow-y-auto custom-scrollbar pr-1">
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 max-h-[200px] overflow-y-auto custom-scrollbar pr-1">
                                         {loading ? (
                                             <div className="col-span-full py-12 flex justify-center"><Loader2 className="animate-spin text-blue-500" /></div>
                                         ) : slots.length > 0 ? (
@@ -347,7 +347,7 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                                                         key={slot}
                                                         disabled={disabled}
                                                         onClick={() => setSelectedSlot(slot)}
-                                                        className={`py-2.5 px-1 rounded-lg text-xs sm:text-sm font-semibold border transition-all ${isActive
+                                                        className={`py-2 px-1 rounded-md text-xs sm:text-xs font-semibold border transition-all ${isActive
                                                             ? 'bg-blue-600 border-blue-600 text-white shadow-md'
                                                             : disabled
                                                                 ? 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-300 dark:text-slate-700 opacity-50 cursor-not-allowed'
@@ -383,11 +383,11 @@ const BookingCalendar: React.FC<BookingCalendarProps> = ({ className, onClaimDis
                             </div>
 
                             {/* Sticky Bottom Action */}
-                            <div className="pt-4 mt-auto">
+                            <div className="pt-2 mt-auto">
                                 <button
                                     disabled={!selectedSlot}
                                     onClick={() => setView('form')}
-                                    className="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-base shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:translate-y-0 transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 hover:shadow-2xl hover:-translate-y-1 disabled:opacity-50 disabled:translate-y-0 transition-all flex items-center justify-center gap-2"
                                 >
                                     Continue <ArrowRight size={18} />
                                 </button>
