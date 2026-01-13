@@ -336,6 +336,15 @@ const Header: React.FC<HeaderProps> = () => {
                                 {t('common.book_free_call', 'Book Your Free Call')}
                             </button>
 
+                            {/* Mobile CTA (Compact) */}
+                            <button
+                                onClick={() => navigate(getLocalizedPath('/free-growth-call'))}
+                                className="lg:hidden flex items-center gap-1.5 bg-blue-600 text-white font-bold px-3 py-1.5 rounded-full transition-all duration-300 shadow-sm text-xs"
+                            >
+                                <FaPaperPlane className="w-3 h-3" />
+                                <span>Book</span>
+                            </button>
+
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
