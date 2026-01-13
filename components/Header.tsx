@@ -520,13 +520,13 @@ const Header: React.FC<HeaderProps> = () => {
                                     {/* Mobile CTA */}
                                     <button
                                         onClick={() => {
-                                            navigate(getLocalizedPath('/contact'));
+                                            navigate(getLocalizedPath('/free-growth-call'));
                                             closeMegaMenu();
                                         }}
-                                        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-lg"
+                                        className="w-full flex items-center justify-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-zinc-200 font-bold px-6 py-3 rounded-xl transition-all duration-300 shadow-lg"
                                     >
                                         <FaPaperPlane className="w-5 h-5" />
-                                        {t('common.get_started')}
+                                        {t('common.book_free_call', 'Book Your Free Call')}
                                     </button>
                                 </div>
                             </motion.div>
